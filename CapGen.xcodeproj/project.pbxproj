@@ -59,6 +59,7 @@
 		D4056E15295C0E2A00D3894D /* GraphikExtralight.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4056E03295C0E2A00D3894D /* GraphikExtralight.otf */; };
 		D4056E16295C0E2A00D3894D /* GraphikLightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4056E04295C0E2A00D3894D /* GraphikLightItalic.otf */; };
 		D4056E20295CCA1C00D3894D /* Pill.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E1F295CCA1C00D3894D /* Pill.swift */; };
+		D4056E24295E296600D3894D /* TextAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E23295E296600D3894D /* TextAreaView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +136,7 @@
 		D4056E03295C0E2A00D3894D /* GraphikExtralight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GraphikExtralight.otf; sourceTree = "<group>"; };
 		D4056E04295C0E2A00D3894D /* GraphikLightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GraphikLightItalic.otf; sourceTree = "<group>"; };
 		D4056E1F295CCA1C00D3894D /* Pill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pill.swift; sourceTree = "<group>"; };
+		D4056E23295E296600D3894D /* TextAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				D4056E1F295CCA1C00D3894D /* Pill.swift */,
+				D4056E23295E296600D3894D /* TextAreaView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 			files = (
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
+				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,

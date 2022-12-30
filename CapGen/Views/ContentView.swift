@@ -21,6 +21,8 @@ struct SocialMediaPlatforms {
 struct ContentView: View {
     let socialMediaPlatforms = SocialMediaPlatforms()
     @State var platformSelected: String
+    @FocusState private var isKeyboardFocused: Bool
+    @State var promptText: String = ""
     
     func platformSelect(platform: String) {
         platformSelected = platform
@@ -30,13 +32,15 @@ struct ContentView: View {
         ZStack {
             Color.ui.lighterLavBlue.ignoresSafeArea()
             VStack {
-                VStack {
+                VStack(alignment: .leading) {
                     Text("Which social media platform is this for?")
+                        .padding(.leading, 16)
+                        .padding(.top, 6)
                         .font(.ui.graphikSemibold)
                         .foregroundColor(Color.ui.richBlack)
                     
                     ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(alignment: .top, spacing: 20) {
+                        LazyHStack(alignment: .top, spacing: 16) {
                             ForEach(socialMediaPlatforms.platforms, id: \.self) { platform in
                                 Button {
                                     platformSelect(platform: platform)
@@ -48,10 +52,17 @@ struct ContentView: View {
                         .padding()
                     }
                     .frame(height: 75)
+                    
+                    // Create a Text Area view that is the main place for typing input
+                    TextAreaView(text: $promptText, isKeyboardFocused: $isKeyboardFocused)
                 }
                 
                 Spacer()
             }
+           
+        }
+        .onTapGesture {
+            isKeyboardFocused = false
         }
     }
 }
