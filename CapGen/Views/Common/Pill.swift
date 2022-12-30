@@ -13,7 +13,7 @@ struct Pill: View {
     
     var body: some View {
         Text(title)
-            .font(.ui.graphikMedium )
+            .font(.ui.graphikMedium)
             .foregroundColor(isToggled ? Color.ui.richBlack : Color.ui.cadetBlueCrayola)
             .padding(10)
             .overlay(

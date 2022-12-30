@@ -17,7 +17,7 @@ import Foundation
 import SwiftUI
 
 struct Sizes {
-    let REGULAR = CGFloat(20)
+    let REGULAR = CGFloat(18)
 }
 
 extension Font {
