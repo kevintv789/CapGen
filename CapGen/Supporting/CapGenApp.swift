@@ -11,7 +11,8 @@ import SwiftUI
 struct CapGenApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0],
+                        toneSelected: tones[0].title)
         }
     }
 }

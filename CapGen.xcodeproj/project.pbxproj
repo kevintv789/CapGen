@@ -60,6 +60,11 @@
 		D4056E16295C0E2A00D3894D /* GraphikLightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4056E04295C0E2A00D3894D /* GraphikLightItalic.otf */; };
 		D4056E20295CCA1C00D3894D /* Pill.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E1F295CCA1C00D3894D /* Pill.swift */; };
 		D4056E24295E296600D3894D /* TextAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E23295E296600D3894D /* TextAreaView.swift */; };
+		D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E25295F639100D3894D /* BottomAreaView.swift */; };
+		D4056E28295F659B00D3894D /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E27295F659B00D3894D /* View.swift */; };
+		D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E29295F8EA700D3894D /* RectangleCard.swift */; };
+		D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E2B295F8F0100D3894D /* ToneModel.swift */; };
+		D4056E2E295F8F3A00D3894D /* Tones.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056E2D295F8F3A00D3894D /* Tones.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +142,11 @@
 		D4056E04295C0E2A00D3894D /* GraphikLightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GraphikLightItalic.otf; sourceTree = "<group>"; };
 		D4056E1F295CCA1C00D3894D /* Pill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pill.swift; sourceTree = "<group>"; };
 		D4056E23295E296600D3894D /* TextAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaView.swift; sourceTree = "<group>"; };
+		D4056E25295F639100D3894D /* BottomAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomAreaView.swift; sourceTree = "<group>"; };
+		D4056E27295F659B00D3894D /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		D4056E29295F8EA700D3894D /* RectangleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleCard.swift; sourceTree = "<group>"; };
+		D4056E2B295F8F0100D3894D /* ToneModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToneModel.swift; sourceTree = "<group>"; };
+		D4056E2D295F8F3A00D3894D /* Tones.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Tones.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +237,7 @@
 		D4005DDE295C024A004D695D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D4056E2B295F8F0100D3894D /* ToneModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -262,6 +273,7 @@
 			children = (
 				D4005DE3295C042F004D695D /* Color.swift */,
 				D4005DEB295C09EE004D695D /* Font.swift */,
+				D4056E27295F659B00D3894D /* View.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -334,6 +346,7 @@
 		D4056E19295CC59800D3894D /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				D4056E2D295F8F3A00D3894D /* Tones.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -343,6 +356,8 @@
 			children = (
 				D4056E1F295CCA1C00D3894D /* Pill.swift */,
 				D4056E23295E296600D3894D /* TextAreaView.swift */,
+				D4056E25295F639100D3894D /* BottomAreaView.swift */,
+				D4056E29295F8EA700D3894D /* RectangleCard.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -464,6 +479,7 @@
 				D4056E13295C0E2A00D3894D /* GraphikBlack.otf in Resources */,
 				D4056DDA295C0DFB00D3894D /* Blacker-Display-Regular-trial.ttf in Resources */,
 				D4056DDC295C0DFB00D3894D /* Blacker-Text-Heavy-Italic-trial.ttf in Resources */,
+				D4056E2E295F8F3A00D3894D /* Tones.json in Resources */,
 				D4056DED295C0DFB00D3894D /* Blacker-Text-Regular-Italic-trial.ttf in Resources */,
 				D4056DEF295C0DFB00D3894D /* Blacker-Display-Light-trial.ttf in Resources */,
 				D4056E0A295C0E2A00D3894D /* GraphikExtralightItalic.otf in Resources */,
@@ -519,10 +535,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4056E28295F659B00D3894D /* View.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
+				D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
+				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
+				D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */,
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
 			);
