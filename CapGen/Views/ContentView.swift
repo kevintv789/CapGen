@@ -31,35 +31,41 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             Color.ui.lighterLavBlue.ignoresSafeArea()
-            VStack {
-                VStack(alignment: .leading) {
-                    Text("Which social media platform is this for?")
-                        .padding(.leading, 16)
-                        .padding(.top, 6)
-                        .font(.ui.graphikSemibold)
-                        .foregroundColor(Color.ui.richBlack)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(alignment: .top, spacing: 16) {
-                            ForEach(socialMediaPlatforms.platforms, id: \.self) { platform in
-                                Button {
-                                    platformSelect(platform: platform)
-                                } label: {
-                                    Pill(title: platform, isToggled: platform == platformSelected)
+            
+            GeometryReader { geo in
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack {
+                        VStack(alignment: .leading) {
+                            Text("Which social media platform is this for?")
+                                .padding(.leading, 16)
+                                .padding(.top, 6)
+                                .font(.ui.graphikSemibold)
+                                .foregroundColor(Color.ui.richBlack)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(alignment: .top, spacing: 16) {
+                                    ForEach(socialMediaPlatforms.platforms, id: \.self) { platform in
+                                        Button {
+                                            platformSelect(platform: platform)
+                                        } label: {
+                                            Pill(title: platform, isToggled: platform == platformSelected)
+                                        }
+                                    }
                                 }
+                                .padding()
                             }
+                            .frame(height: 75)
+                            
+                            // Create a Text Area view that is the main place for typing input
+                            TextAreaView(text: $promptText, isKeyboardFocused: $isKeyboardFocused)
+                                .frame(width: geo.size.width / 1.15, height: geo.size.height / 1.6)
+                                .position(x: geo.size.width / 2, y: geo.size.height / 3.1)
                         }
-                        .padding()
                     }
-                    .frame(height: 75)
-                    
-                    // Create a Text Area view that is the main place for typing input
-                    TextAreaView(text: $promptText, isKeyboardFocused: $isKeyboardFocused)
                 }
-                
-                Spacer()
+                .frame(height: geo.size.height)
             }
-           
+            
         }
         .onTapGesture {
             isKeyboardFocused = false
