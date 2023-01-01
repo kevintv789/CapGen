@@ -58,8 +58,8 @@ struct ContentView: View {
                     
                     // Create a Text Area view that is the main place for typing input
                     TextAreaView(text: $promptText, isKeyboardFocused: $isKeyboardFocused)
-                        .frame(width: geo.size.width / 1.1, height: geo.size.height / 2.2)
-                        .position(x: geo.size.width / 2, y: geo.size.height / 4.5)
+                        .frame(width: geo.size.width / 1.1, height: geo.size.height / 1.5)
+                        .position(x: geo.size.width / 2, y: geo.size.height / 3)
                     
               
                     BottomAreaView(toneSelected: $toneSelected)

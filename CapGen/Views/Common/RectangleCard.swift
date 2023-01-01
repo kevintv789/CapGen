@@ -15,7 +15,7 @@ struct RectangleCard: View {
     var body: some View {
         Color.ui.cultured
             .cornerRadius(16)
-            .frame(width: 120, height: 120)
+            .frame(width: 110, height: 120)
             .overlay(
                 VStack(alignment: .leading) {
                     Text(title)
