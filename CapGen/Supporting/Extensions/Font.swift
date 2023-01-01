@@ -30,6 +30,7 @@ extension Font {
         let graphikSemibold = Font.custom("Graphik-Semibold", size: sizes.REGULAR)
         let graphikMedium = Font.custom("Graphik-Medium", size: sizes.REGULAR)
         let graphikBold = Font.custom("Graphik-Bold", size: sizes.REGULAR)
+        let graphikLightItalic = Font.custom("Graphik-LightItalic", size: sizes.SMALL)
         let blackerTextMediumSmall = Font.custom("BlackerText-Medium", size: sizes.SMALL)
     }
 }
