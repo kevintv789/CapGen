@@ -12,7 +12,7 @@ let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 1.2
 
 extension View {
     func dropInAndOutAnimation(value: Bool) -> some View {
-        self.animation(.easeInOut(duration: 0.4), value: value)
+        self.animation(.easeInOut(duration: 0.35), value: value)
     }
 }
 
@@ -27,6 +27,7 @@ extension Text {
 
 struct BottomAreaView: View {
     @State private var expandArea: Bool = true
+    @State private var lengthValue: String = ""
     @Binding var toneSelected: String
     
     var body: some View {
@@ -46,7 +47,7 @@ struct BottomAreaView: View {
                                     .offset(x: 0, y: expandArea ? 0 : geo.size.height)
                                     .dropInAndOutAnimation(value: expandArea)
                                 
-                                LengthSelectionSection()
+                                LengthSelectionSection(lengthValue: $lengthValue)
                                     .dropInAndOutAnimation(value: expandArea)
                             }
                             .offset(x: 0, y: expandArea ? -geo.size.height / 1.8 : geo.size.height / 1.67)
@@ -109,15 +110,16 @@ struct ToneSelectionSection: View {
 }
 
 struct LengthSelectionSection: View {
-    @State var sliderValues: [Int] = [1, 2, 3, 4, 5]
+    @State var sliderValues: [Int] = [0, 1, 2, 3, 4]
     @State var selectedValue: Int = 0
+    @Binding var lengthValue: String
     
     var body: some View {
         VStack(alignment: .leading) {
             Text("How lengthy should your caption be?")
                 .headerStyle()
             
-            Text("")
+            Text("\(captionLengths[selectedValue].title)")
                 .foregroundColor(Color.ui.cultured)
                 .font(Font.ui.graphikLightItalic)
                 .padding(.leading, 15)
@@ -125,6 +127,7 @@ struct LengthSelectionSection: View {
             
             SnappableSliderView(values: $sliderValues) { value in
                 self.selectedValue = Int(value)
+                self.lengthValue = captionLengths[Int(value)].value
             }
             .overlay(
                 GeometryReader { geo in
