@@ -23,8 +23,9 @@ struct ContentView: View {
     @State var platformSelected: String
     @FocusState private var isKeyboardFocused: Bool
     @State var promptText: String = ""
-    @State var isSheetPresented: Bool = true
     @State var toneSelected: String
+    @State var expandBottomArea: Bool = true
+    @State var lengthValue: String = ""
     
     func platformSelect(platform: String) {
         platformSelected = platform
@@ -56,20 +57,22 @@ struct ContentView: View {
                     }
                     .frame(height: 75)
                     
-                    // Create a Text Area view that is the main place for typing input
+                    // Create a Text Area view that is the main component for typing input
                     TextAreaView(text: $promptText, isKeyboardFocused: $isKeyboardFocused)
                         .frame(width: geo.size.width / 1.1, height: geo.size.height / 1.5)
                         .position(x: geo.size.width / 2, y: geo.size.height / 3)
                     
               
-                    BottomAreaView(toneSelected: $toneSelected)
+                    BottomAreaView(expandArea: $expandBottomArea, lengthValue: $lengthValue, toneSelected: $toneSelected)
                         .frame(maxHeight: geo.size.height)
+                        .animation(.default, value: expandBottomArea)
                 }
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
         }
         .onTapGesture {
             isKeyboardFocused = false
+            expandBottomArea = false
         }
     }
 }

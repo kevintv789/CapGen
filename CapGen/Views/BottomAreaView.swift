@@ -8,7 +8,7 @@
 import SwiftUI
 
 let MIN_HEIGHT: CGFloat = 50.0
-let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 1.2
+let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 1.3
 
 extension View {
     func dropInAndOutAnimation(value: Bool) -> some View {
@@ -26,8 +26,8 @@ extension Text {
 }
 
 struct BottomAreaView: View {
-    @State private var expandArea: Bool = true
-    @State private var lengthValue: String = ""
+    @Binding var expandArea: Bool
+    @Binding var lengthValue: String
     @Binding var toneSelected: String
     
     var body: some View {
@@ -38,23 +38,41 @@ struct BottomAreaView: View {
                     .frame(height: max(MIN_HEIGHT, expandArea ? MAX_HEIGHT : geo.size.height / 3))
                     .position(x: geo.size.width / 2, y: geo.size.height)
                     .overlay(
-                        ScrollView(.vertical, showsIndicators: false) {
-                            VStack(alignment: .leading) {
-                                ExpandButton(expandArea: $expandArea)
-                                    .offset(x: geo.size.width / 1.15, y: expandArea ? 10 : MIN_HEIGHT)
-                                
-                                ToneSelectionSection(toneSelected: $toneSelected)
-                                    .offset(x: 0, y: expandArea ? 0 : geo.size.height)
-                                    .dropInAndOutAnimation(value: expandArea)
-                                
-                                LengthSelectionSection(lengthValue: $lengthValue)
-                                    .dropInAndOutAnimation(value: expandArea)
+                        VStack(alignment: .leading) {
+                            ExpandButton(expandArea: $expandArea)
+                                .offset(x: geo.size.width / 1.15, y: expandArea ? 10 : MIN_HEIGHT * 2.6)
+                            
+                            ToneSelectionSection(toneSelected: $toneSelected)
+                                .offset(x: 0, y: expandArea ? 0 : geo.size.height)
+                                .dropInAndOutAnimation(value: expandArea)
+                            
+                            LengthSelectionSection(lengthValue: $lengthValue)
+                                .padding(.top, 20)
+                                .dropInAndOutAnimation(value: expandArea)
+                            
+                            Button {
+                                // Kick off navigation
+                                // And GPT-3 API call
+                            } label: {
+                                Image("submit-btn-1")
+                                    .resizable()
+                                    .frame(width: 90, height: 90)
                             }
-                            .offset(x: 0, y: expandArea ? -geo.size.height / 1.8 : geo.size.height / 1.67)
-                            .frame(height: MAX_HEIGHT)
+                            .offset(x: geo.size.width / 2.4, y: expandArea ? 20 : geo.size.height)
+                            
                         }
-                            .frame(width: geo.size.width, height: MAX_HEIGHT)
+                            .offset(x: 0, y: expandArea ? -geo.size.height / 2.2 : geo.size.height / 1.67)
+                            .frame(height: MAX_HEIGHT)
+                        
                     )
+                    // Make the entire black area with minimal height tappable -- not just the button
+                    .onTapGesture(perform: {
+                        if (!expandArea) {
+                            withAnimation {
+                                expandArea.toggle()
+                            }
+                        }
+                    })
             }
         }
         .ignoresSafeArea(.all)
