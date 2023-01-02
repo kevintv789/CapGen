@@ -26,54 +26,60 @@ struct ContentView: View {
     @State var toneSelected: String
     @State var expandBottomArea: Bool = true
     @State var lengthValue: String = ""
+    @State var showCaptionView: Bool = false
+    
+    @StateObject var navCoordinator = NavigationCoordinator()
     
     func platformSelect(platform: String) {
         platformSelected = platform
     }
     
     var body: some View {
-        ZStack {
-            Color.ui.lighterLavBlue.ignoresSafeArea()
-            
-            GeometryReader { geo in
-                VStack(alignment: .leading) {
-                    Text("Which social media platform is this for?")
-                        .padding(.leading, 16)
-                        .padding(.top, 6)
-                        .font(.ui.graphikSemibold)
-                        .foregroundColor(Color.ui.richBlack)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(alignment: .top, spacing: 16) {
-                            ForEach(socialMediaPlatforms.platforms, id: \.self) { platform in
-                                Button {
-                                    platformSelect(platform: platform)
-                                } label: {
-                                    Pill(title: platform, isToggled: platform == platformSelected)
+        NavigationStack(path: $navCoordinator.path) {
+            ZStack {
+                Color.ui.lighterLavBlue.ignoresSafeArea()
+                
+                GeometryReader { geo in
+                    VStack(alignment: .leading) {
+                        Text("Which social media platform is this for?")
+                            .padding(.leading, 16)
+                            .padding(.top, 6)
+                            .font(.ui.graphikSemibold)
+                            .foregroundColor(Color.ui.richBlack)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(alignment: .top, spacing: 16) {
+                                ForEach(socialMediaPlatforms.platforms, id: \.self) { platform in
+                                    Button {
+                                        platformSelect(platform: platform)
+                                    } label: {
+                                        Pill(title: platform, isToggled: platform == platformSelected)
+                                    }
                                 }
                             }
+                            .padding()
                         }
-                        .padding()
+                        .frame(height: 75)
+                        
+                        // Create a Text Area view that is the main component for typing input
+                        TextAreaView(text: $promptText, isKeyboardFocused: $isKeyboardFocused)
+                            .frame(width: geo.size.width / 1.1, height: geo.size.height / 1.5)
+                            .position(x: geo.size.width / 2, y: geo.size.height / 3)
+                        
+                        
+                        BottomAreaView(expandArea: $expandBottomArea, lengthValue: $lengthValue, toneSelected: $toneSelected)
+                            .frame(maxHeight: geo.size.height)
+                            .animation(.default, value: expandBottomArea)
                     }
-                    .frame(height: 75)
-                    
-                    // Create a Text Area view that is the main component for typing input
-                    TextAreaView(text: $promptText, isKeyboardFocused: $isKeyboardFocused)
-                        .frame(width: geo.size.width / 1.1, height: geo.size.height / 1.5)
-                        .position(x: geo.size.width / 2, y: geo.size.height / 3)
-                    
-              
-                    BottomAreaView(expandArea: $expandBottomArea, lengthValue: $lengthValue, toneSelected: $toneSelected)
-                        .frame(maxHeight: geo.size.height)
-                        .animation(.default, value: expandBottomArea)
                 }
+                .ignoresSafeArea(.keyboard, edges: .bottom)
             }
-            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .onTapGesture {
+                isKeyboardFocused = false
+                expandBottomArea = false
+            }
         }
-        .onTapGesture {
-            isKeyboardFocused = false
-            expandBottomArea = false
-        }
+        
     }
 }
 

@@ -17,6 +17,7 @@ import Foundation
 import SwiftUI
 
 struct Sizes {
+    let LARGE = CGFloat(28)
     let REGULAR = CGFloat(18)
     let SMALL = CGFloat(14)
 }
@@ -28,6 +29,7 @@ extension Font {
     struct UI {
         let graphikRegular = Font.custom("Graphik-Regular", size: sizes.REGULAR)
         let graphikSemibold = Font.custom("Graphik-Semibold", size: sizes.REGULAR)
+        let graphikSemiboldLarge = Font.custom("Graphik-Semibold", size: sizes.LARGE)
         let graphikMedium = Font.custom("Graphik-Medium", size: sizes.REGULAR)
         let graphikBold = Font.custom("Graphik-Bold", size: sizes.REGULAR)
         let graphikLightItalic = Font.custom("Graphik-LightItalic", size: sizes.SMALL)

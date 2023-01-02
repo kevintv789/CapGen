@@ -50,16 +50,15 @@ struct BottomAreaView: View {
                                 .padding(.top, 20)
                                 .dropInAndOutAnimation(value: expandArea)
                             
-                            Button {
-                                // Kick off navigation
-                                // And GPT-3 API call
+                            NavigationLink {
+                                CaptionView()
                             } label: {
                                 Image("submit-btn-1")
                                     .resizable()
                                     .frame(width: 90, height: 90)
+                                
                             }
                             .offset(x: geo.size.width / 2.4, y: expandArea ? 20 : geo.size.height)
-                            
                         }
                             .offset(x: 0, y: expandArea ? -geo.size.height / 2.2 : geo.size.height / 1.67)
                             .frame(height: MAX_HEIGHT)
@@ -73,7 +72,9 @@ struct BottomAreaView: View {
                             }
                         }
                     })
+                
             }
+            
         }
         .ignoresSafeArea(.all)
     }
