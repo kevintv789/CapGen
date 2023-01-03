@@ -72,6 +72,7 @@
 		D4056E3A29632A4E00D3894D /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3929632A4E00D3894D /* NavigationCoordinator.swift */; };
 		D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
+		D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3F2963AB3B00D3894D /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -161,6 +162,7 @@
 		D4056E3929632A4E00D3894D /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		D4056E3B2963450D00D3894D /* OpenAIConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIConnector.swift; sourceTree = "<group>"; };
 		D4056E3D2963487500D3894D /* OpenAIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIModel.swift; sourceTree = "<group>"; };
+		D4056E3F2963AB3B00D3894D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +265,7 @@
 			children = (
 				D4005DB6295BE0E0004D695D /* ContentView.swift */,
 				D4056E25295F639100D3894D /* BottomAreaView.swift */,
+				D4056E3F2963AB3B00D3894D /* LoadingView.swift */,
 				D4056E372963178D00D3894D /* CaptionView.swift */,
 				D4056E1E295CC92100D3894D /* Common */,
 			);
@@ -561,6 +564,7 @@
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
 				D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */,
+				D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */,
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
