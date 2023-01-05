@@ -161,6 +161,7 @@
 		D4056E3B2963450D00D3894D /* OpenAIConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIConnector.swift; sourceTree = "<group>"; };
 		D4056E3D2963487500D3894D /* OpenAIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIModel.swift; sourceTree = "<group>"; };
 		D4056E3F2963AB3B00D3894D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		D4056E412967283D00D3894D /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,6 +285,7 @@
 				D4005DB4295BE0E0004D695D /* CapGenApp.swift */,
 				D4005DE5295C0736004D695D /* Fonts */,
 				D4005DE2295C041C004D695D /* Extensions */,
+				D4056E412967283D00D3894D /* Config.xcconfig */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -611,6 +613,7 @@
 /* Begin XCBuildConfiguration section */
 		D4005DD3295BE0E1004D695D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4056E412967283D00D3894D /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -671,6 +674,7 @@
 		};
 		D4005DD4295BE0E1004D695D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4056E412967283D00D3894D /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

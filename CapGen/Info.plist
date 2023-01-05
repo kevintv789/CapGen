@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>${API_KEY}</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Blacker-Display-Bold-italic-trial.ttf</string>
+		<string>Blacker-Display-Bold-trial.ttf</string>
+		<string>Blacker-Display-ExtraBold-Italic-trial.ttf</string>
+		<string>Blacker-Display-ExtraBold-trial.ttf</string>
+		<string>Blacker-Display-Heavy-Italic-trial.ttf</string>
+		<string>Blacker-Display-Heavy-trial.ttf</string>
+		<string>Blacker-Display-Light-Italic-trial.ttf</string>
+		<string>Blacker-Display-Light-trial.ttf</string>
+		<string>Blacker-Display-Medium-Italic-trial.ttf</string>
+		<string>Blacker-Display-Medium-trial.ttf</string>
+		<string>Blacker-Display-Regular-Italic-trial.ttf</string>
+		<string>Blacker-Display-Regular-trial.ttf</string>
+		<string>Blacker-Text-Bold-Italic-trial.ttf</string>
+		<string>Blacker-Text-Bold-trial.ttf</string>
+		<string>Blacker-Text-Book-Italic-trial.ttf</string>
+		<string>Blacker-Text-Book-trial.ttf</string>
+		<string>Blacker-Text-Heavy-Italic-trial.ttf</string>
+		<string>Blacker-Text-Heavy-trial.ttf</string>
+		<string>Blacker-Text-Light-Italic-trial.ttf</string>
+		<string>Blacker-Text-Light-trial.ttf</string>
+		<string>Blacker-Text-Medium-Italic-trial.ttf</string>
+		<string>Blacker-Text-Medium-trial.ttf</string>
+		<string>Blacker-Text-Regular-Italic-trial.ttf</string>
+		<string>Blacker-Text-Regular-trial.ttf</string>
+		<string>GraphikBlack.otf</string>
+		<string>GraphikBlackItalic.otf</string>
+		<string>GraphikBold.otf</string>
+		<string>GraphikBoldItalic.otf</string>
+		<string>GraphikExtralight.otf</string>
+		<string>GraphikExtralightItalic.otf</string>
+		<string>GraphikLight.otf</string>
+		<string>GraphikLightItalic.otf</string>
+		<string>GraphikMedium.otf</string>
+		<string>GraphikMediumItalic.otf</string>
+		<string>GraphikRegular.otf</string>
+		<string>GraphikRegularItalic.otf</string>
+		<string>GraphikSemibold.otf</string>
+		<string>GraphikSemiboldItalic.otf</string>
+		<string>GraphikSuper.otf</string>
+		<string>GraphikSuperItalic.otf</string>
+		<string>GraphikThin.otf</string>
+		<string>GraphikThinItalic.otf</string>
+	</array>
+</dict>
+</plist>
