@@ -9,36 +9,43 @@ import SwiftUI
 
 struct RectangleCard: View {
     let title: String
-    let description: String
+    let description: String?
     let isSelected: Bool
     
     var body: some View {
-        Color.ui.cultured
-            .cornerRadius(16)
-            .frame(width: 110, height: 120)
-            .overlay(
-                VStack(alignment: .leading) {
-                    Text(title)
-                        .foregroundColor(Color.ui.richBlack)
-                        .font(.ui.graphikBold)
-                        .padding(.top, 10)
-                    
-                    Spacer()
-                    
-                    Text(description)
-                        .foregroundColor(Color.ui.cadetBlueCrayola)
-                        .font(.ui.blackerTextMediumSmall)
-                        .multilineTextAlignment(.leading)
-                    
-                    Spacer()
-                    
-                    Circle()
-                        .strokeBorder(.black, lineWidth: 1)
-                        .background(Circle().fill(isSelected ? Color.ui.middleYellowRed : Color.ui.cultured))
-                        .frame(width: 15, height: 15)
-                }
-                    .padding(5)
-                
-            )
+        ZStack {
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.ui.cultured, lineWidth: isSelected ? 3 : 1)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(isSelected ? Color.ui.middleYellowRed : Color.ui.cultured)
+                )
+                .overlay(
+                    VStack(alignment: .leading) {
+                        Text(title)
+                            .foregroundColor(Color.ui.richBlack)
+                            .font(.ui.graphikBold)
+                            .padding(.top, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Spacer()
+                            .frame(height: 10)
+                        
+                        if (description != nil) {
+                            Text(description!)
+                                .foregroundColor(isSelected ? Color.ui.richBlack : Color.ui.cadetBlueCrayola)
+                                .font(.ui.blackerTextMediumSmall)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        
+                        Spacer()
+                        
+                    }
+                        .padding(5)
+                )
+            
+        }
+        
     }
 }
