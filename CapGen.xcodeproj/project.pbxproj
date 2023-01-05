@@ -69,7 +69,6 @@
 		D4056E34296202E900D3894D /* CaptionLengths.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056E33296202E900D3894D /* CaptionLengths.json */; };
 		D4056E362962030800D3894D /* CaptionLengthsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E352962030800D3894D /* CaptionLengthsModel.swift */; };
 		D4056E382963178D00D3894D /* CaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E372963178D00D3894D /* CaptionView.swift */; };
-		D4056E3A29632A4E00D3894D /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3929632A4E00D3894D /* NavigationCoordinator.swift */; };
 		D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
 		D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3F2963AB3B00D3894D /* LoadingView.swift */; };
@@ -159,7 +158,6 @@
 		D4056E33296202E900D3894D /* CaptionLengths.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionLengths.json; sourceTree = "<group>"; };
 		D4056E352962030800D3894D /* CaptionLengthsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionLengthsModel.swift; sourceTree = "<group>"; };
 		D4056E372963178D00D3894D /* CaptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionView.swift; sourceTree = "<group>"; };
-		D4056E3929632A4E00D3894D /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		D4056E3B2963450D00D3894D /* OpenAIConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIConnector.swift; sourceTree = "<group>"; };
 		D4056E3D2963487500D3894D /* OpenAIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIModel.swift; sourceTree = "<group>"; };
 		D4056E3F2963AB3B00D3894D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -275,7 +273,6 @@
 		D4005DE0295C0258004D695D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				D4056E3929632A4E00D3894D /* NavigationCoordinator.swift */,
 				D4056E3B2963450D00D3894D /* OpenAIConnector.swift */,
 			);
 			path = Controllers;
@@ -568,7 +565,6 @@
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
-				D4056E3A29632A4E00D3894D /* NavigationCoordinator.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
