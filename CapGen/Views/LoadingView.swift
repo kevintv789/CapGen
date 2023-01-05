@@ -81,6 +81,12 @@ struct LoadingView: View {
                     )
             }
             .onAppear() {
+                self.animateSpinner()
+                
+                Timer.scheduledTimer(withTimeInterval: animationTime, repeats: true) { _ in
+                    self.animateSpinner()
+                }
+                
                 Task {
                     openAiResponse = await openAiRequest.processPrompt(prompt: "Generate 5 captions for a photo of my dog playing in the park. She's a rescue and brings so much joy to my life. Please come up with a caption that celebrates the love and happiness that pets bring into our lives. This should have a minimum of 21 words and a max of 40 words, the word count should be excluding emojis. Use emojis. This is for an YouTube caption only.")
                     
@@ -89,13 +95,6 @@ struct LoadingView: View {
                     if (openAiResponse != nil && !openAiResponse!.isEmpty) {
                         showCaptionView = true
                     }
-                }
-               
-                
-                self.animateSpinner()
-                
-                Timer.scheduledTimer(withTimeInterval: animationTime, repeats: true) { _ in
-                    self.animateSpinner()
                 }
             }
             .navigationDestination(isPresented: $showCaptionView) {

@@ -9,7 +9,7 @@ import Foundation
 
 public class OpenAIConnector {
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
-    let openAIKey: String = "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"
+    let openAIKey: String = Bundle.main.infoDictionary?["API_KEY"] as! String
     
     @MainActor
     public func processPrompt(prompt: String) async -> String? {
