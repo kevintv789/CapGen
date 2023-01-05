@@ -8,7 +8,7 @@
 import SwiftUI
 
 let MIN_HEIGHT: CGFloat = 50.0
-let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 1.3
+let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 1.5
 
 extension View {
     func dropInAndOutAnimation(value: Bool) -> some View {
@@ -29,6 +29,8 @@ struct BottomAreaView: View {
     @Binding var expandArea: Bool
     @Binding var lengthValue: String
     @Binding var toneSelected: String
+    @Binding var includeEmojis: Bool
+    @Binding var includeHashtags: Bool
     
     @State var displayLoadView: Bool = false
     
@@ -42,14 +44,17 @@ struct BottomAreaView: View {
                     .overlay(
                         VStack(alignment: .leading) {
                             ExpandButton(expandArea: $expandArea)
-                                .offset(x: geo.size.width / 1.15, y: expandArea ? 10 : MIN_HEIGHT * 2.6)
+                                .offset(x: geo.size.width / 1.15, y: expandArea ? 0 : MIN_HEIGHT * 3.8)
                             
                             ToneSelectionSection(toneSelected: $toneSelected)
-                                .offset(x: 0, y: expandArea ? 0 : geo.size.height)
+                                .offset(x: 0, y: expandArea ? -20 : geo.size.height)
+                                .dropInAndOutAnimation(value: expandArea)
+                            
+                            EmojisAndHashtagSection(includeEmoji: $includeEmojis, includeHashtag: $includeHashtags)
+                                .offset(x: 0, y: expandArea ? -20 : geo.size.height)
                                 .dropInAndOutAnimation(value: expandArea)
                             
                             LengthSelectionSection(lengthValue: $lengthValue)
-                                .padding(.top, 20)
                                 .dropInAndOutAnimation(value: expandArea)
                             
                             Button {
@@ -119,6 +124,7 @@ struct ToneSelectionSection: View {
                             toneSelect(tone: tone)
                         } label: {
                             RectangleCard(title: tone.title, description: tone.description, isSelected: toneSelected == tone.title)
+                                .frame(width: 110, height: 120)
                         }
                         .padding(.leading, 15)
                     }
@@ -130,6 +136,78 @@ struct ToneSelectionSection: View {
         
     }
 }
+
+struct EmojisAndHashtagSection: View {
+    @Binding var includeEmoji: Bool
+    @Binding var includeHashtag: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Include emojis and hashtags?")
+                .headerStyle()
+            
+            HStack {
+                HStack(spacing: 15) {
+                    Button {
+                        includeEmoji = false
+                    } label: {
+                        RectangleCard(title: "", description: nil, isSelected: !includeEmoji)
+                            .frame(width: 70, height: 70)
+                            .overlay(
+                                Image("no-emoji")
+                                    .resizable()
+                                    .frame(width: 45, height: 45)
+                            )
+                    }
+                    
+                    Button {
+                        includeEmoji = true
+                    } label: {
+                        RectangleCard(title: "", description: nil, isSelected: includeEmoji)
+                            .frame(width: 70, height: 70)
+                            .overlay(
+                                Image("yes-emoji")
+                                    .resizable()
+                                    .frame(width: 45, height: 45)
+                            )
+                    }
+                }
+                .padding(.leading, 15)
+                
+                Spacer()
+                
+                HStack(spacing: 15) {
+                    Button {
+                        includeHashtag = false
+                    } label: {
+                        RectangleCard(title: "", description: nil, isSelected: !includeHashtag)
+                            .frame(width: 70, height: 70)
+                            .overlay(
+                                Image("no-hashtag")
+                                    .resizable()
+                                    .frame(width: 45, height: 45)
+                            )
+                    }
+                    
+                    Button {
+                        includeHashtag = true
+                    } label: {
+                        RectangleCard(title: "", description: nil, isSelected: includeHashtag)
+                            .frame(width: 70, height: 70)
+                            .overlay(
+                                Image(systemName: "number.circle.fill")
+                                    .resizable()
+                                    .frame(width: 45, height: 45)
+                                    .foregroundColor(.ui.richBlack)
+                            )
+                    }
+                }
+                .padding(.trailing, 15)
+            }
+        }
+    }
+}
+
 
 struct LengthSelectionSection: View {
     @State var sliderValues: [Int] = [0, 1, 2, 3, 4]

@@ -27,6 +27,8 @@ struct ContentView: View {
     @State var expandBottomArea: Bool = true
     @State var lengthValue: String = ""
     @State var showCaptionView: Bool = false
+    @State var includeEmojis: Bool = false
+    @State var includeHashtags: Bool = false
     
     func platformSelect(platform: String) {
         platformSelected = platform
@@ -65,7 +67,8 @@ struct ContentView: View {
                             .position(x: geo.size.width / 2, y: geo.size.height / 3)
                         
                         
-                        BottomAreaView(expandArea: $expandBottomArea, lengthValue: $lengthValue, toneSelected: $toneSelected)
+                        BottomAreaView(expandArea: $expandBottomArea, lengthValue: $lengthValue, toneSelected: $toneSelected,
+                                       includeEmojis: $includeEmojis, includeHashtags: $includeHashtags)
                             .frame(maxHeight: geo.size.height)
                             .animation(.default, value: expandBottomArea)
                     }
