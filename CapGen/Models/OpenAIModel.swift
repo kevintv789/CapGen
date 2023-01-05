@@ -21,19 +21,3 @@ struct Choice: Codable {
     var logprobs: String?
     var finish_reason: String
 }
-
-struct OpenAIResponseHandler {
-    func decodeJson(jsonString: String) -> OpenAIResponseModel? {
-        let json = jsonString.data(using: .utf8)!
-        
-        let decoder = JSONDecoder()
-        do {
-            let product = try decoder.decode(OpenAIResponseModel.self, from: json)
-            return product
-        } catch {
-            print("Error decoding OpenAI API Response \(error)")
-        }
-        
-        return nil
-    }
-}

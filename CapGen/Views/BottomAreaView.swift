@@ -30,6 +30,8 @@ struct BottomAreaView: View {
     @Binding var lengthValue: String
     @Binding var toneSelected: String
     
+    @State var displayLoadView: Bool = false
+    
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
@@ -50,21 +52,19 @@ struct BottomAreaView: View {
                                 .padding(.top, 20)
                                 .dropInAndOutAnimation(value: expandArea)
                             
-                            NavigationLink {
-                                CaptionView()
+                            Button {
+                                displayLoadView.toggle()
                             } label: {
                                 Image("submit-btn-1")
                                     .resizable()
                                     .frame(width: 90, height: 90)
-                                
-                            }
-                            .offset(x: geo.size.width / 2.4, y: expandArea ? 20 : geo.size.height)
+                            } .offset(x: geo.size.width / 2.4, y: expandArea ? 20 : geo.size.height)
                         }
                             .offset(x: 0, y: expandArea ? -geo.size.height / 2.2 : geo.size.height / 1.67)
                             .frame(height: MAX_HEIGHT)
                         
                     )
-                    // Make the entire black area with minimal height tappable -- not just the button
+                // Make the entire black area with minimal height tappable -- not just the button
                     .onTapGesture(perform: {
                         if (!expandArea) {
                             withAnimation {
@@ -72,9 +72,12 @@ struct BottomAreaView: View {
                             }
                         }
                     })
-                
             }
             
+        }
+        .navigationDestination(isPresented: $displayLoadView) {
+            LoadingView()
+                .navigationBarBackButtonHidden(true)
         }
         .ignoresSafeArea(.all)
     }

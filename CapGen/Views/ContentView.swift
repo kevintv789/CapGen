@@ -28,14 +28,12 @@ struct ContentView: View {
     @State var lengthValue: String = ""
     @State var showCaptionView: Bool = false
     
-    @StateObject var navCoordinator = NavigationCoordinator()
-    
     func platformSelect(platform: String) {
         platformSelected = platform
     }
     
     var body: some View {
-        NavigationStack(path: $navCoordinator.path) {
+        NavigationStack {
             ZStack {
                 Color.ui.lighterLavBlue.ignoresSafeArea()
                 
@@ -79,7 +77,6 @@ struct ContentView: View {
                 expandBottomArea = false
             }
         }
-        
     }
 }
 

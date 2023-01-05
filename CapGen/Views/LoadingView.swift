@@ -18,8 +18,14 @@ struct LoadingView: View {
     @State var spinnerEndS1: CGFloat = 0.03
     @State var spinnerEndS2S3: CGFloat = 0.03
     @State var rotationDegreeS1 = initialDegree
-    @State var rotationDegreeS2 = initialDegree
-    @State var rotationDegreeS3 = initialDegree
+    @State var rotationDegreeS2: Angle = initialDegree
+    @State var rotationDegreeS3: Angle = initialDegree
+    
+    @State var showCaptionView: Bool = false
+    
+    @State var openAiResponse: String?
+    
+    private var openAiRequest = OpenAIConnector()
     
     func animateSpinner(with timeInterval: Double, completion: @escaping (() -> Void)) {
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
@@ -73,16 +79,30 @@ struct LoadingView: View {
                                 .font(.ui.graphikMediumMed)
                         }.frame(width: geo.size.width * 0.8, height: geo.size.height * 0.8)
                     )
+            }
+            .onAppear() {
+                Task {
+                    openAiResponse = await openAiRequest.processPrompt(prompt: "Generate 5 captions for a photo of my dog playing in the park. She's a rescue and brings so much joy to my life. Please come up with a caption that celebrates the love and happiness that pets bring into our lives. This should have a minimum of 21 words and a max of 40 words, the word count should be excluding emojis. Use emojis. This is for an YouTube caption only.")
+                    
+                    print(openAiResponse ?? "nil")
+                    
+                    if (openAiResponse != nil && !openAiResponse!.isEmpty) {
+                        showCaptionView = true
+                    }
+                }
+               
                 
-            }
-        }
-        
-        .onAppear() {
-            Timer.scheduledTimer(withTimeInterval: animationTime, repeats: true) { timer in
                 self.animateSpinner()
+                
+                Timer.scheduledTimer(withTimeInterval: animationTime, repeats: true) { _ in
+                    self.animateSpinner()
+                }
+            }
+            .navigationDestination(isPresented: $showCaptionView) {
+                CaptionView(captionStr: $openAiResponse)
+                    .navigationBarBackButtonHidden(true)
             }
         }
-        
     }
 }
 

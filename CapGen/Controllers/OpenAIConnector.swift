@@ -9,9 +9,10 @@ import Foundation
 
 public class OpenAIConnector {
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
-    let openAIKey: String = "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"
+    let openAIKey: String = "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"
     
-    public func processPrompt(prompt: String) -> String? {
+    @MainActor
+    public func processPrompt(prompt: String) async -> String? {
         var request = URLRequest(url: self.openAIURL!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -33,20 +34,14 @@ public class OpenAIConnector {
         }
         
         request.httpBody = httpBodyJson
-        if let requestData = executeRequest(request: request, withSessionConfig: nil) {
-            let jsonStr = String(data: requestData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
-            print(jsonStr)
-            
-            let responseHandler = OpenAIResponseHandler()
-            return responseHandler.decodeJson(jsonString: jsonStr)?.choices[0].text
+        if let requestData =  await executeRequest(request: request, withSessionConfig: nil) {
+            return requestData.choices[0].text
         }
         
         return nil
     }
     
-    private func executeRequest(request: URLRequest, withSessionConfig sessionConfig: URLSessionConfiguration?) -> Data? {
-        // Use semaphore to keep track of waiting threads, this creates a queue of sequential actions starting from 0 counter
-        let semaphore = DispatchSemaphore(value: 0)
+    private func executeRequest(request: URLRequest, withSessionConfig sessionConfig: URLSessionConfiguration?) async -> OpenAIResponseModel? {
         let session: URLSession
         
         // Starts a URL session to request data from an external API source
@@ -57,26 +52,31 @@ public class OpenAIConnector {
             session = URLSession.shared
         }
         
-        var requestData: Data?
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if (error != nil) {
-                print("Error: \(error!.localizedDescription)")
-            } else if (data != nil) {
-                requestData = data
+        do {
+            let (data, response) = try await session.data(for: request as URLRequest)
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                return nil
             }
             
-            print("Semaphore signaled")
-            semaphore.signal()
+            if let requestData = self.parseJSON(data) {
+                return requestData
+            }
+            
+        } catch {
+            print("Error: \(error.localizedDescription)")
         }
         
-        task.resume()
+        return nil
+    }
+    
+    private func parseJSON(_ data: Data) -> OpenAIResponseModel? {
+        let decoder = JSONDecoder()
         
-        // Handle async with semaphores with a max wait of 20 seconds
-        let timeout = DispatchTime.now() + .seconds(20)
-        print("Waiting for semaphore signal")
-        let retVal = semaphore.wait(timeout: timeout)
-        print("Done waiting, obtained \(retVal)")
-        
-        return requestData
+        do {
+            let decodedData = try decoder.decode(OpenAIResponseModel.self, from: data)
+            return decodedData
+        } catch {
+            return nil
+        }
     }
 }
