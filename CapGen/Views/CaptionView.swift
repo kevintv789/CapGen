@@ -11,6 +11,8 @@ struct CaptionView: View {
     @State var backBtnClicked: Bool = false
     @Binding var captionStr: String?
     @State var captionsParsed: [String] = []
+    @State var captionSelected: String = ""
+    @State var cardColorFill: [Color] = [.ui.middleYellowRed, .ui.darkSalmon, .ui.frenchBlueSky, .ui.lightCyan, .ui.middleBluePurple]
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -35,9 +37,16 @@ struct CaptionView: View {
                         
                         Spacer()
                         
-                        ForEach(captionsParsed, id: \.self) {caption in
-                            CaptionCard(caption: caption)
-                                .padding(10)
+                        ForEach(Array(captionsParsed.enumerated()), id: \.element) { index, caption in
+                            Button {
+                                self.captionSelected = caption
+                                UIPasteboard.general.string = String(caption.dropFirst(3))
+                            } label: {
+                                CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index])
+                                    .padding(10)
+                            }
+                            
+                            
                         }
                         
                     }
@@ -48,9 +57,8 @@ struct CaptionView: View {
             
         }
         .navigationDestination(isPresented: $backBtnClicked) {
-            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0],
-                        toneSelected: tones[0].title)
-            .navigationBarBackButtonHidden(true)
+            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+                .navigationBarBackButtonHidden(true)
         }
         .onAppear() {
             captionsParsed = captionStr?
@@ -65,30 +73,54 @@ struct CaptionView: View {
 
 struct CaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        CaptionView(captionStr: .constant("\n\n1. 🐶My rescue pup brings so much joy and love into my life! 💕 Playing in the park is one of our favorite things to do together. 🤗\n2. 🐶Rescue dogs are the best! 💗 My pup and I are having a blast playing in the park and celebrating all the love and happiness that pets bring into our lives. 🤗\n3. 🐶I'm so thankful for my rescue pup! 💗 Playing in the park together is our favorite way to celebrate the joy and love that pets bring into our lives. 🤗\n4. 🐶My rescue pup is always making me smile! 💕 Playing in the park is one of our favorite things to do together and reminds me of all the love and happiness that pets bring into our lives. 🤗\n5. 🐶Rescue pups are the best! 💗 Having a blast playing in the park with my pup and celebrating all the love and happiness that pets bring into our lives. 🤗"))
+        CaptionView(captionStr: .constant("\n\n1. the love and hap 🤗"))
     }
 }
 
 struct CaptionCard: View {
     var caption: String
+    var isCaptionSelected: Bool
+    @State private var phase = 0.0
+    @Binding var colorFilled: Color
     
     var body: some View {
-        ZStack {
-            Text(caption.dropFirst(3))
-                .padding(10)
-                .padding(.top, 5)
-                .font(.ui.graphikRegular)
-                .lineSpacing(4)
-                .foregroundColor(.ui.richBlack)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        ZStack(alignment: .topLeading) {
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(.black, lineWidth: 2)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
-                        .stroke(.black, lineWidth: 3)
-                        .background(
-                            RoundedRectangle(cornerRadius: 14)
-                                .fill(Color.ui.lightOldPaper)
-                        )
+                        .fill(colorFilled)
                 )
+            
+            VStack(alignment: .trailing, spacing: 0) {
+                Text(caption.dropFirst(3))
+                    .padding(EdgeInsets.init(top: 15, leading: 10, bottom: 15, trailing: 10))
+                    .font(.ui.graphikRegular)
+                    .lineSpacing(4)
+                    .foregroundColor(.ui.richBlack)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                if (isCaptionSelected) {
+                    Text("Copied!")
+                        .foregroundColor(Color.ui.richBlack)
+                        .font(.ui.graphikMediumMed)
+                        .padding(EdgeInsets.init(top: 10, leading: 10, bottom: 10, trailing: 10))
+                        .frame(height: 30)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 100)
+                                .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [4], dashPhase: phase))
+                                .foregroundColor(Color.ui.richBlack)
+                                .onAppear {
+                                    withAnimation(.linear.repeatForever(autoreverses: false).speed(0.1)) {
+                                        phase += 20
+                                    }
+                                }
+                            
+                        )
+                        .padding(EdgeInsets.init(top: 10, leading: 10, bottom: 10, trailing: 12))
+                }
+            }
         }
     }
 }

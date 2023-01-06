@@ -15,7 +15,7 @@ struct RectangleCard: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.ui.cultured, lineWidth: isSelected ? 3 : 1)
+                .stroke(Color.ui.cultured, lineWidth: 3)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
                         .fill(isSelected ? Color.ui.middleYellowRed : Color.ui.cultured)
