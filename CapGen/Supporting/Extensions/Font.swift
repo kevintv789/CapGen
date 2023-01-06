@@ -29,7 +29,9 @@ extension Font {
 
     struct UI {
         let graphikRegular = Font.custom("Graphik-Regular", size: sizes.REGULAR)
+        let graphikRegularSmall = Font.custom("Graphik-Regular", size: sizes.SMALL)
         let graphikSemibold = Font.custom("Graphik-Semibold", size: sizes.REGULAR)
+        let graphikSemiboldMed = Font.custom("Graphik-Semibold", size: sizes.MEDIUM)
         let graphikSemiboldLarge = Font.custom("Graphik-Semibold", size: sizes.LARGE)
         let graphikMedium = Font.custom("Graphik-Medium", size: sizes.REGULAR)
         let graphikMediumMed = Font.custom("Graphik-Medium", size: sizes.MEDIUM)

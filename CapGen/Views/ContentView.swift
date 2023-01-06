@@ -20,15 +20,12 @@ struct SocialMediaPlatforms {
 
 struct ContentView: View {
     let socialMediaPlatforms = SocialMediaPlatforms()
-    @State var platformSelected: String
+    
     @FocusState private var isKeyboardFocused: Bool
+    @State var expandBottomArea: Bool = false
+
+    @State var platformSelected: String
     @State var promptText: String = ""
-    @State var toneSelected: String
-    @State var expandBottomArea: Bool = true
-    @State var lengthValue: String = ""
-    @State var showCaptionView: Bool = false
-    @State var includeEmojis: Bool = false
-    @State var includeHashtags: Bool = false
     
     func platformSelect(platform: String) {
         platformSelected = platform
@@ -67,8 +64,7 @@ struct ContentView: View {
                             .position(x: geo.size.width / 2, y: geo.size.height / 3)
                         
                         
-                        BottomAreaView(expandArea: $expandBottomArea, lengthValue: $lengthValue, toneSelected: $toneSelected,
-                                       includeEmojis: $includeEmojis, includeHashtags: $includeHashtags)
+                        BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText)
                             .frame(maxHeight: geo.size.height)
                             .animation(.default, value: expandBottomArea)
                     }
@@ -85,7 +81,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0],
-                    toneSelected: tones[0].title)
+        ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
     }
 }

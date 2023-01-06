@@ -12,20 +12,19 @@ struct LoadingView: View {
     let animationTime: Double = 1.9
     
     let fullRotation: Angle = .degrees(360)
-    static let initialDegree: Angle = .degrees(270)
     
-    @State var spinnerStart: CGFloat = 0.0
-    @State var spinnerEndS1: CGFloat = 0.03
-    @State var spinnerEndS2S3: CGFloat = 0.03
-    @State var rotationDegreeS1 = initialDegree
-    @State var rotationDegreeS2: Angle = initialDegree
-    @State var rotationDegreeS3: Angle = initialDegree
-    
+    @State var spinnerStart: CGFloat
+    @State var spinnerEndS1: CGFloat
+    @State var spinnerEndS2S3: CGFloat
+    @State var rotationDegreeS1: Angle
+    @State var rotationDegreeS2: Angle
+    @State var rotationDegreeS3: Angle
     @State var showCaptionView: Bool = false
-    
     @State var openAiResponse: String?
     
-    private var openAiRequest = OpenAIConnector()
+    @Binding var promptRequestStr: AIRequest?
+    
+    var openAiRequest = OpenAIConnector()
     
     func animateSpinner(with timeInterval: Double, completion: @escaping (() -> Void)) {
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
@@ -82,19 +81,21 @@ struct LoadingView: View {
             }
             .onAppear() {
                 self.animateSpinner()
+                showCaptionView = false
                 
                 Timer.scheduledTimer(withTimeInterval: animationTime, repeats: true) { _ in
                     self.animateSpinner()
                 }
-                
+ 
                 Task {
-                    openAiResponse = await openAiRequest.processPrompt(prompt: "Generate 5 captions for a photo of my dog playing in the park. She's a rescue and brings so much joy to my life. Please come up with a caption that celebrates the love and happiness that pets bring into our lives. This should have a minimum of 21 words and a max of 40 words, the word count should be excluding emojis. Use emojis. This is for an YouTube caption only.")
-                    
-                    print(openAiResponse ?? "nil")
-                    
-                    if (openAiResponse != nil && !openAiResponse!.isEmpty) {
-                        showCaptionView = true
+                    if (promptRequestStr != nil) {
+                        openAiResponse = await openAiRequest.processPrompt(prompt: promptRequestStr!.generatedPromptString)
+                        
+                        if (openAiResponse != nil && !openAiResponse!.isEmpty) {
+                            showCaptionView = true
+                        }
                     }
+                   
                 }
             }
             .navigationDestination(isPresented: $showCaptionView) {
@@ -102,12 +103,6 @@ struct LoadingView: View {
                     .navigationBarBackButtonHidden(true)
             }
         }
-    }
-}
-
-struct LoadingView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoadingView()
     }
 }
 

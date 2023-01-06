@@ -27,12 +27,21 @@ extension Text {
 
 struct BottomAreaView: View {
     @Binding var expandArea: Bool
-    @Binding var lengthValue: String
-    @Binding var toneSelected: String
-    @Binding var includeEmojis: Bool
-    @Binding var includeHashtags: Bool
+    @Binding var platformSelected: String
+    @Binding var promptText: String
+    
+    @State var lengthValue: String = ""
+    @State var toneSelected: String = tones[0].title
+    @State var includeEmojis: Bool = false
+    @State var includeHashtags: Bool = false
     
     @State var displayLoadView: Bool = false
+    
+    @State var promptRequestStr: AIRequest?
+    
+    func mapAllRequests() {
+        promptRequestStr = AIRequest(platform: self.platformSelected, prompt: self.promptText, tone: self.toneSelected, includeEmojis: self.includeEmojis, includeHashtags: self.includeHashtags, captionLength: self.lengthValue)
+    }
     
     var body: some View {
         GeometryReader { geo in
@@ -58,6 +67,7 @@ struct BottomAreaView: View {
                                 .dropInAndOutAnimation(value: expandArea)
                             
                             Button {
+                                mapAllRequests()
                                 displayLoadView.toggle()
                             } label: {
                                 Image("submit-btn-1")
@@ -81,7 +91,7 @@ struct BottomAreaView: View {
             
         }
         .navigationDestination(isPresented: $displayLoadView) {
-            LoadingView()
+            LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270), promptRequestStr: $promptRequestStr)
                 .navigationBarBackButtonHidden(true)
         }
         .ignoresSafeArea(.all)
@@ -124,7 +134,7 @@ struct ToneSelectionSection: View {
                             toneSelect(tone: tone)
                         } label: {
                             RectangleCard(title: tone.title, description: tone.description, isSelected: toneSelected == tone.title)
-                                .frame(width: 110, height: 120)
+                                .frame(width: 110, height: 110)
                         }
                         .padding(.leading, 15)
                     }
