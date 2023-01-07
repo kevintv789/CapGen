@@ -91,7 +91,7 @@ platform :ios do
     gym(
       scheme: ENV["SCHEME_NAME"], 
       output_name: output_name,
-      configuration: "Release",
+      configuration: ENV["CONFIG_NAME"],
       export_options: {
         method: export_method,
         provisioningProfiles: {
