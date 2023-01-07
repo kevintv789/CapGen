@@ -36,5 +36,5 @@ jobs:
        with:
          name: app-store ipa & dsyms
          path: |
-           ${{ github.workspace }}/CapGenDev-iOS.ipa
+           ${{ github.workspace }}/CapGenDev.ipa
            ${{ github.workspace }}/*.app.dSYM.zip
