@@ -715,7 +715,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		D4005DD3295BE0E1004D695D /* Debug - DEV */ = {
+		D4005DD3295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D4056E412967283D00D3894D /* Config-dev.xcconfig */;
 			buildSettings = {
@@ -774,9 +774,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = "Debug - DEV";
+			name = "Debug-DEV";
 		};
-		D4005DD4295BE0E1004D695D /* Release - DEV */ = {
+		D4005DD4295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D4056E412967283D00D3894D /* Config-dev.xcconfig */;
 			buildSettings = {
@@ -829,9 +829,9 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = "Release - DEV";
+			name = "Release-DEV";
 		};
-		D4005DD6295BE0E1004D695D /* Debug - DEV */ = {
+		D4005DD6295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -860,9 +860,9 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = "Debug - DEV";
+			name = "Debug-DEV";
 		};
-		D4005DD7295BE0E1004D695D /* Release - DEV */ = {
+		D4005DD7295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -891,9 +891,9 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = "Release - DEV";
+			name = "Release-DEV";
 		};
-		D4005DD9295BE0E1004D695D /* Debug - DEV */ = {
+		D4005DD9295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -911,9 +911,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CapGen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CapGen";
 			};
-			name = "Debug - DEV";
+			name = "Debug-DEV";
 		};
-		D4005DDA295BE0E1004D695D /* Release - DEV */ = {
+		D4005DDA295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -931,9 +931,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CapGen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CapGen";
 			};
-			name = "Release - DEV";
+			name = "Release-DEV";
 		};
-		D4005DDC295BE0E1004D695D /* Debug - DEV */ = {
+		D4005DDC295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -949,9 +949,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = CapGen;
 			};
-			name = "Debug - DEV";
+			name = "Debug-DEV";
 		};
-		D4005DDD295BE0E1004D695D /* Release - DEV */ = {
+		D4005DDD295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -967,9 +967,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = CapGen;
 			};
-			name = "Release - DEV";
+			name = "Release-DEV";
 		};
-		D4056E422968C90100D3894D /* Debug - PROD */ = {
+		D4056E422968C90100D3894D /* Debug-PROD */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D4056E4E2968D72F00D3894D /* Config-prod.xcconfig */;
 			buildSettings = {
@@ -1028,9 +1028,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = "Debug - PROD";
+			name = "Debug-PROD";
 		};
-		D4056E432968C90100D3894D /* Debug - PROD */ = {
+		D4056E432968C90100D3894D /* Debug-PROD */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1059,9 +1059,9 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = "Debug - PROD";
+			name = "Debug-PROD";
 		};
-		D4056E442968C90100D3894D /* Debug - PROD */ = {
+		D4056E442968C90100D3894D /* Debug-PROD */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -1079,9 +1079,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CapGen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CapGen";
 			};
-			name = "Debug - PROD";
+			name = "Debug-PROD";
 		};
-		D4056E452968C90100D3894D /* Debug - PROD */ = {
+		D4056E452968C90100D3894D /* Debug-PROD */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -1097,9 +1097,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = CapGen;
 			};
-			name = "Debug - PROD";
+			name = "Debug-PROD";
 		};
-		D4056E462968C90600D3894D /* Release - PROD */ = {
+		D4056E462968C90600D3894D /* Release-PROD */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D4056E4E2968D72F00D3894D /* Config-prod.xcconfig */;
 			buildSettings = {
@@ -1152,9 +1152,9 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = "Release - PROD";
+			name = "Release-PROD";
 		};
-		D4056E472968C90600D3894D /* Release - PROD */ = {
+		D4056E472968C90600D3894D /* Release-PROD */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1183,9 +1183,9 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = "Release - PROD";
+			name = "Release-PROD";
 		};
-		D4056E482968C90600D3894D /* Release - PROD */ = {
+		D4056E482968C90600D3894D /* Release-PROD */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -1203,9 +1203,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CapGen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CapGen";
 			};
-			name = "Release - PROD";
+			name = "Release-PROD";
 		};
-		D4056E492968C90600D3894D /* Release - PROD */ = {
+		D4056E492968C90600D3894D /* Release-PROD */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -1221,7 +1221,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = CapGen;
 			};
-			name = "Release - PROD";
+			name = "Release-PROD";
 		};
 /* End XCBuildConfiguration section */
 
@@ -1229,46 +1229,46 @@
 		D4005DAC295BE0E0004D695D /* Build configuration list for PBXProject "CapGen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4005DD3295BE0E1004D695D /* Debug - DEV */,
-				D4056E422968C90100D3894D /* Debug - PROD */,
-				D4005DD4295BE0E1004D695D /* Release - DEV */,
-				D4056E462968C90600D3894D /* Release - PROD */,
+				D4005DD3295BE0E1004D695D /* Debug-DEV */,
+				D4056E422968C90100D3894D /* Debug-PROD */,
+				D4005DD4295BE0E1004D695D /* Release-DEV */,
+				D4056E462968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release - PROD";
+			defaultConfigurationName = "Release-PROD";
 		};
 		D4005DD5295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4005DD6295BE0E1004D695D /* Debug - DEV */,
-				D4056E432968C90100D3894D /* Debug - PROD */,
-				D4005DD7295BE0E1004D695D /* Release - DEV */,
-				D4056E472968C90600D3894D /* Release - PROD */,
+				D4005DD6295BE0E1004D695D /* Debug-DEV */,
+				D4056E432968C90100D3894D /* Debug-PROD */,
+				D4005DD7295BE0E1004D695D /* Release-DEV */,
+				D4056E472968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release - PROD";
+			defaultConfigurationName = "Release-PROD";
 		};
 		D4005DD8295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4005DD9295BE0E1004D695D /* Debug - DEV */,
-				D4056E442968C90100D3894D /* Debug - PROD */,
-				D4005DDA295BE0E1004D695D /* Release - DEV */,
-				D4056E482968C90600D3894D /* Release - PROD */,
+				D4005DD9295BE0E1004D695D /* Debug-DEV */,
+				D4056E442968C90100D3894D /* Debug-PROD */,
+				D4005DDA295BE0E1004D695D /* Release-DEV */,
+				D4056E482968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release - PROD";
+			defaultConfigurationName = "Release-PROD";
 		};
 		D4005DDB295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4005DDC295BE0E1004D695D /* Debug - DEV */,
-				D4056E452968C90100D3894D /* Debug - PROD */,
-				D4005DDD295BE0E1004D695D /* Release - DEV */,
-				D4056E492968C90600D3894D /* Release - PROD */,
+				D4005DDC295BE0E1004D695D /* Debug-DEV */,
+				D4056E452968C90100D3894D /* Debug-PROD */,
+				D4005DDD295BE0E1004D695D /* Release-DEV */,
+				D4056E492968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release - PROD";
+			defaultConfigurationName = "Release-PROD";
 		};
 /* End XCConfigurationList section */
 
