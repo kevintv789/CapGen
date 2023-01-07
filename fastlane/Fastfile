@@ -95,7 +95,7 @@ platform :ios do
       export_options: {
         method: export_method,
         provisioningProfiles: {
-          app_identifier => app_profile_name
+          app_identifier => profile_name
         },
         compileBitcode: compile_bitcode
       }
