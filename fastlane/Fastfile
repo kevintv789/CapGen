@@ -19,7 +19,7 @@ platform :ios do
   desc "Install pod dependencies"
   lane :install_pods do
     cocoapods(
-      podfile: ../Podfile,
+      podfile: "../Podfile",
       use_bundle_exec: false
     )
   end
