@@ -16,6 +16,13 @@
 default_platform(:ios)
 
 platform :ios do
+  desc "Install pod dependencies"
+  lane :install_pods do
+    cocoapods(
+        podfile: ../Podfile,
+        use_bundle_exec: false)
+  end
+
   desc "Load ASC API Key"
   lane :load_asc_api_key do
     app_store_connect_api_key(
