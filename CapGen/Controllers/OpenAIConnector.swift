@@ -9,10 +9,14 @@ import Foundation
 
 public class OpenAIConnector {
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
-    let openAIKey: String = Bundle.main.infoDictionary?["API_KEY"] as! String
+    var openAIKey: String = ""
+    let firestoreManager: FirestoreManager = FirestoreManager()
+
     
     @MainActor
     public func processPrompt(prompt: String) async -> String? {
+        self.openAIKey = firestoreManager.openAiKey
+        
         var request = URLRequest(url: self.openAIURL!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
