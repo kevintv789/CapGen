@@ -1,0 +1,8 @@
+//
+//  Config-prod.xcconfig
+//  CapGen
+//
+//  Created by Kevin Vu on 1/6/23.
+//
+
+ENV = prod
