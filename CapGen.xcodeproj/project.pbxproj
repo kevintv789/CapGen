@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A1C03EB5B3A84FB81EEC28A /* Pods_CapGenTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */; };
+		8A81E2B66D4A4B40A38F8EBC /* Pods_CapGen.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CEBA44EC84514881211F4BC /* Pods_CapGen.framework */; };
 		D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4005DB4295BE0E0004D695D /* CapGenApp.swift */; };
 		D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4005DB6295BE0E0004D695D /* ContentView.swift */; };
 		D4005DB9295BE0E1004D695D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4005DB8295BE0E1004D695D /* Assets.xcassets */; };
@@ -88,6 +90,7 @@
 		D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
 		D4056E762968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
 		D4056E772968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
+		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +111,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1AF88CA598FE8C209FBD9A5D /* Pods-CapGen-CapGenUITests.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.debug-dev.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.debug-dev.xcconfig"; sourceTree = "<group>"; };
+		2BA998B1DC08276C917ED069 /* Pods-CapGenTests.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.debug-prod.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.debug-prod.xcconfig"; sourceTree = "<group>"; };
+		40F09B5E4FF3E885BCAFCEFC /* Pods-CapGenTests.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.debug-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.debug-dev.xcconfig"; sourceTree = "<group>"; };
+		4121C9C7CE4AAE31E939436B /* Pods-CapGen.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen/Pods-CapGen.release-prod.xcconfig"; sourceTree = "<group>"; };
+		46BCEADB9FFBE08A6CB850F2 /* Pods-CapGenTests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-prod.xcconfig"; sourceTree = "<group>"; };
+		4790F1CB0DFD004B63E09FFD /* Pods-CapGen-CapGenUITests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-dev.xcconfig"; sourceTree = "<group>"; };
+		5CEBA44EC84514881211F4BC /* Pods_CapGen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C9946635145A2266EDE9B79 /* Pods-CapGen.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen.debug-prod.xcconfig"; path = "Target Support Files/Pods-CapGen/Pods-CapGen.debug-prod.xcconfig"; sourceTree = "<group>"; };
+		792681B5F0DCC8EC6CB3E203 /* Pods-CapGen.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGen/Pods-CapGen.release-dev.xcconfig"; sourceTree = "<group>"; };
+		85C9CC8367869CB283B926D6 /* Pods-CapGen-CapGenUITests.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.debug-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.debug-prod.xcconfig"; sourceTree = "<group>"; };
+		86EF02864C9C41B5EE9104B4 /* Pods-CapGen.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen.debug-dev.xcconfig"; path = "Target Support Files/Pods-CapGen/Pods-CapGen.debug-dev.xcconfig"; sourceTree = "<group>"; };
 		D4005DB1295BE0E0004D695D /* CapGen Beta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CapGen Beta.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4005DB4295BE0E0004D695D /* CapGenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapGenApp.swift; sourceTree = "<group>"; };
 		D4005DB6295BE0E0004D695D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -182,6 +196,10 @@
 		D4056E4F2968E0C100D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D4056E712968E71300D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D4056E742968E94300D3894D /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
+		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
+		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +220,7 @@
 				D4056E552968E17700D3894D /* FirebaseAnalytics in Frameworks */,
 				D4056E692968E17700D3894D /* FirebaseFunctions in Frameworks */,
 				D4056E5B2968E17700D3894D /* FirebaseAuthCombine-Community in Frameworks */,
+				8A81E2B66D4A4B40A38F8EBC /* Pods_CapGen.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +228,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A1C03EB5B3A84FB81EEC28A /* Pods_CapGenTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,12 +236,43 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		593F3ABDC0E5374BB6741D6D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				86EF02864C9C41B5EE9104B4 /* Pods-CapGen.debug-dev.xcconfig */,
+				6C9946635145A2266EDE9B79 /* Pods-CapGen.debug-prod.xcconfig */,
+				792681B5F0DCC8EC6CB3E203 /* Pods-CapGen.release-dev.xcconfig */,
+				4121C9C7CE4AAE31E939436B /* Pods-CapGen.release-prod.xcconfig */,
+				1AF88CA598FE8C209FBD9A5D /* Pods-CapGen-CapGenUITests.debug-dev.xcconfig */,
+				85C9CC8367869CB283B926D6 /* Pods-CapGen-CapGenUITests.debug-prod.xcconfig */,
+				4790F1CB0DFD004B63E09FFD /* Pods-CapGen-CapGenUITests.release-dev.xcconfig */,
+				D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */,
+				40F09B5E4FF3E885BCAFCEFC /* Pods-CapGenTests.debug-dev.xcconfig */,
+				2BA998B1DC08276C917ED069 /* Pods-CapGenTests.debug-prod.xcconfig */,
+				EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */,
+				46BCEADB9FFBE08A6CB850F2 /* Pods-CapGenTests.release-prod.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		71EDB11601156D4ABBEFD1F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5CEBA44EC84514881211F4BC /* Pods_CapGen.framework */,
+				D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */,
+				DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D4005DA8295BE0E0004D695D = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +280,8 @@
 				D4005DC4295BE0E1004D695D /* CapGenTests */,
 				D4005DCE295BE0E1004D695D /* CapGenUITests */,
 				D4005DB2295BE0E0004D695D /* Products */,
+				593F3ABDC0E5374BB6741D6D /* Pods */,
+				71EDB11601156D4ABBEFD1F3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -453,6 +506,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4005DD5295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGen" */;
 			buildPhases = (
+				A5E736975D43B0C377446941 /* [CP] Check Pods Manifest.lock */,
 				D4005DAD295BE0E0004D695D /* Sources */,
 				D4005DAE295BE0E0004D695D /* Frameworks */,
 				D4056E722968E78400D3894D /* Setup Firebase Environment GoogleService-Info.plist */,
@@ -486,6 +540,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4005DD8295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenTests" */;
 			buildPhases = (
+				12997D51B3FF953F7894914B /* [CP] Check Pods Manifest.lock */,
 				D4005DBD295BE0E1004D695D /* Sources */,
 				D4005DBE295BE0E1004D695D /* Frameworks */,
 				D4005DBF295BE0E1004D695D /* Resources */,
@@ -504,6 +559,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4005DDB295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenUITests" */;
 			buildPhases = (
+				AF8A3DC18CF8C3A58E60576F /* [CP] Check Pods Manifest.lock */,
 				D4005DC7295BE0E1004D695D /* Sources */,
 				D4005DC8295BE0E1004D695D /* Frameworks */,
 				D4005DC9295BE0E1004D695D /* Resources */,
@@ -635,6 +691,72 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		12997D51B3FF953F7894914B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CapGenTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A5E736975D43B0C377446941 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CapGen-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AF8A3DC18CF8C3A58E60576F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CapGen-CapGenUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D4056E722968E78400D3894D /* Setup Firebase Environment GoogleService-Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -834,6 +956,7 @@
 		};
 		D4005DD6295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 86EF02864C9C41B5EE9104B4 /* Pods-CapGen.debug-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -869,6 +992,7 @@
 		};
 		D4005DD7295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 792681B5F0DCC8EC6CB3E203 /* Pods-CapGen.release-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -904,6 +1028,7 @@
 		};
 		D4005DD9295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40F09B5E4FF3E885BCAFCEFC /* Pods-CapGenTests.debug-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -924,6 +1049,7 @@
 		};
 		D4005DDA295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -944,6 +1070,7 @@
 		};
 		D4005DDC295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1AF88CA598FE8C209FBD9A5D /* Pods-CapGen-CapGenUITests.debug-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -962,6 +1089,7 @@
 		};
 		D4005DDD295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4790F1CB0DFD004B63E09FFD /* Pods-CapGen-CapGenUITests.release-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1041,6 +1169,7 @@
 		};
 		D4056E432968C90100D3894D /* Debug-PROD */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C9946635145A2266EDE9B79 /* Pods-CapGen.debug-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1076,6 +1205,7 @@
 		};
 		D4056E442968C90100D3894D /* Debug-PROD */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2BA998B1DC08276C917ED069 /* Pods-CapGenTests.debug-prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1096,6 +1226,7 @@
 		};
 		D4056E452968C90100D3894D /* Debug-PROD */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85C9CC8367869CB283B926D6 /* Pods-CapGen-CapGenUITests.debug-prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1169,6 +1300,7 @@
 		};
 		D4056E472968C90600D3894D /* Release-PROD */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4121C9C7CE4AAE31E939436B /* Pods-CapGen.release-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1204,6 +1336,7 @@
 		};
 		D4056E482968C90600D3894D /* Release-PROD */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 46BCEADB9FFBE08A6CB850F2 /* Pods-CapGenTests.release-prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1224,6 +1357,7 @@
 		};
 		D4056E492968C90600D3894D /* Release-PROD */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
