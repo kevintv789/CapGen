@@ -27,7 +27,7 @@ platform :ios do
 
   desc "Set XCode version"
   lane :set_xcode_version do
-    xcode_select("/Applications/Xcode-14.0.1.app")
+    xcode_select("/Applications/Xcode-14.2.app")
   end
 
   desc "Load ASC API Key"
