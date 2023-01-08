@@ -96,6 +96,8 @@ platform :ios do
       build_configurations: ENV["CONFIG_NAME"] # only toggle code signing settings for Release configurations
     )
     
+    xcversion(version: "14.0.1")
+
     # build the app
     gym(
       clean: true,
