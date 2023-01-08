@@ -49,14 +49,10 @@ struct TextAreaView: View {
                     TextEditor(text: $placeholderText)
                         .customStyle()
                         .disabled(true)
-                        .frame(width: geo.size.width / 1.15, height: geo.size.height / 1.5)
-                        .position(x: geo.size.width / 2, y: geo.size.height / 3)
                 }
                 
                 TextEditor(text: $text)
                     .customStyle()
-                    .frame(width: geo.size.width / 1.15, height: geo.size.height / 1.5)
-                    .position(x: geo.size.width / 2, y: geo.size.height / 3)
                     .opacity(text.isEmpty ? 0.75 : 1)
                     .focused(isKeyboardFocused)
                     .onChange(of: text) { text in
@@ -70,7 +66,7 @@ struct TextAreaView: View {
                 Text("\(text.count)/\(charLimit)")
                     .font(.ui.graphikRegular)
                     .foregroundColor(.ui.cadetBlueCrayola)
-                    .position(x: geo.size.width / 1.2, y: geo.size.height / 1.6)
+                    .position(x: geo.size.width / 1.12, y: geo.size.height / 1.05)
                     
             }
         }
