@@ -98,11 +98,12 @@ platform :ios do
     
     # build the app
     gym(
+      clean: true,
       scheme: ENV["SCHEME_NAME"], 
       output_name: output_name,
       configuration: ENV["CONFIG_NAME"],
-      # derived_data_path: "tmp/data",
-      cloned_source_packages_path: "tmp/data",
+      derived_data_path: "$PWD/derivedData",
+      cloned_source_packages_path: "$HOME/Library/Developer/Xcode/DerivedData/$XCODE_SCHEME",
       export_options: {
         method: export_method,
         provisioningProfiles: {
