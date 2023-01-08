@@ -102,7 +102,8 @@ platform :ios do
       scheme: ENV["SCHEME_NAME"], 
       output_name: output_name,
       configuration: ENV["CONFIG_NAME"],
-      xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=Y5N6F2G6M7",
+      skip_codesigning: true,
+      cloned_source_packages_path: "~/Library/Developer/Xcode/DerivedData",
       export_options: {
         method: export_method,
         provisioningProfiles: {
