@@ -101,6 +101,7 @@ platform :ios do
       scheme: ENV["SCHEME_NAME"], 
       output_name: output_name,
       configuration: ENV["CONFIG_NAME"],
+      derived_data_path: "tmp/data"
       export_options: {
         method: export_method,
         provisioningProfiles: {
@@ -113,17 +114,16 @@ platform :ios do
 
   desc "Upload to TestFlight / ASC"
   lane :upload_release do
-    pilot
-    # api_key = lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+    api_key = lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
     
-    # deliver(
-    #     api_key: api_key,
-    #     skip_screenshots: true,
-    #     skip_metadata: true,
-    #     skip_app_version_update: true,
-    #     force: true, # skips verification of HTML preview file (since this will be run from a CI machine)
-    #     run_precheck_before_submit: false # not supported through ASC API yet
-    # )
+    deliver(
+        api_key: api_key,
+        skip_screenshots: true,
+        skip_metadata: true,
+        skip_app_version_update: true,
+        force: true, # skips verification of HTML preview file (since this will be run from a CI machine)
+        run_precheck_before_submit: false # not supported through ASC API yet
+    )
   end
 
   desc "Build and upload to TestFlight"
