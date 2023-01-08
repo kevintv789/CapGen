@@ -102,8 +102,8 @@ platform :ios do
       scheme: ENV["SCHEME_NAME"], 
       output_name: output_name,
       configuration: ENV["CONFIG_NAME"],
-      derived_data_path: "$PWD/derivedData",
-      cloned_source_packages_path: "$HOME/Library/Developer/Xcode/DerivedData/$XCODE_SCHEME",
+      # derived_data_path: "$PWD/derivedData",
+      cloned_source_packages_path: "~/Library/Developer/Xcode/DerivedData",
       export_options: {
         method: export_method,
         provisioningProfiles: {
