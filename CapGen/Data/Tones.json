@@ -1,0 +1,8 @@
+[
+    {"id": 1, "title": "Formal", "description": "Professional, respectful, and polite."},
+    {"id": 2, "title": "Friendly", "description": "Warm, open, and casual."},
+    {"id": 3, "title": "Witty", "description": "Sarcastic, and humorous."},
+    {"id": 4, "title": "Inspiring", "description": "Motivating, encouraging, uplifting."},
+    {"id": 5, "title": "Passionate", "description": "Heartfelt, enthusiastic, dedicated."},
+]
+

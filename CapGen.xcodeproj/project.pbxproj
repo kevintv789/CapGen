@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A1C03EB5B3A84FB81EEC28A /* Pods_CapGenTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */; };
+		8A81E2B66D4A4B40A38F8EBC /* Pods_CapGen.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CEBA44EC84514881211F4BC /* Pods_CapGen.framework */; };
 		D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4005DB4295BE0E0004D695D /* CapGenApp.swift */; };
 		D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4005DB6295BE0E0004D695D /* ContentView.swift */; };
 		D4005DB9295BE0E1004D695D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4005DB8295BE0E1004D695D /* Assets.xcassets */; };
@@ -60,6 +62,35 @@
 		D4056E16295C0E2A00D3894D /* GraphikLightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4056E04295C0E2A00D3894D /* GraphikLightItalic.otf */; };
 		D4056E20295CCA1C00D3894D /* Pill.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E1F295CCA1C00D3894D /* Pill.swift */; };
 		D4056E24295E296600D3894D /* TextAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E23295E296600D3894D /* TextAreaView.swift */; };
+		D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E25295F639100D3894D /* BottomAreaView.swift */; };
+		D4056E28295F659B00D3894D /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E27295F659B00D3894D /* View.swift */; };
+		D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E29295F8EA700D3894D /* RectangleCard.swift */; };
+		D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E2B295F8F0100D3894D /* ToneModel.swift */; };
+		D4056E2E295F8F3A00D3894D /* Tones.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056E2D295F8F3A00D3894D /* Tones.json */; };
+		D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E2F2960F54900D3894D /* SnappableSliderView.swift */; };
+		D4056E34296202E900D3894D /* CaptionLengths.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056E33296202E900D3894D /* CaptionLengths.json */; };
+		D4056E362962030800D3894D /* CaptionLengthsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E352962030800D3894D /* CaptionLengthsModel.swift */; };
+		D4056E382963178D00D3894D /* CaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E372963178D00D3894D /* CaptionView.swift */; };
+		D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
+		D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
+		D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3F2963AB3B00D3894D /* LoadingView.swift */; };
+		D4056E552968E17700D3894D /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E542968E17700D3894D /* FirebaseAnalytics */; };
+		D4056E572968E17700D3894D /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E562968E17700D3894D /* FirebaseAnalyticsSwift */; };
+		D4056E592968E17700D3894D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E582968E17700D3894D /* FirebaseAuth */; };
+		D4056E5B2968E17700D3894D /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E5A2968E17700D3894D /* FirebaseAuthCombine-Community */; };
+		D4056E5D2968E17700D3894D /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E5C2968E17700D3894D /* FirebaseCrashlytics */; };
+		D4056E5F2968E17700D3894D /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E5E2968E17700D3894D /* FirebaseDatabase */; };
+		D4056E612968E17700D3894D /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E602968E17700D3894D /* FirebaseDatabaseSwift */; };
+		D4056E632968E17700D3894D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E622968E17700D3894D /* FirebaseFirestore */; };
+		D4056E652968E17700D3894D /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E642968E17700D3894D /* FirebaseFirestoreCombine-Community */; };
+		D4056E672968E17700D3894D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E662968E17700D3894D /* FirebaseFirestoreSwift */; };
+		D4056E692968E17700D3894D /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E682968E17700D3894D /* FirebaseFunctions */; };
+		D4056E6B2968E17700D3894D /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E6A2968E17700D3894D /* FirebaseStorage */; };
+		D4056E6D2968E17700D3894D /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E6C2968E17700D3894D /* FirebaseStorageCombine-Community */; };
+		D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
+		D4056E762968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
+		D4056E772968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
+		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,7 +111,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D4005DB1295BE0E0004D695D /* CapGen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CapGen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AF88CA598FE8C209FBD9A5D /* Pods-CapGen-CapGenUITests.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.debug-dev.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.debug-dev.xcconfig"; sourceTree = "<group>"; };
+		2BA998B1DC08276C917ED069 /* Pods-CapGenTests.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.debug-prod.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.debug-prod.xcconfig"; sourceTree = "<group>"; };
+		40F09B5E4FF3E885BCAFCEFC /* Pods-CapGenTests.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.debug-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.debug-dev.xcconfig"; sourceTree = "<group>"; };
+		4121C9C7CE4AAE31E939436B /* Pods-CapGen.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen/Pods-CapGen.release-prod.xcconfig"; sourceTree = "<group>"; };
+		46BCEADB9FFBE08A6CB850F2 /* Pods-CapGenTests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-prod.xcconfig"; sourceTree = "<group>"; };
+		4790F1CB0DFD004B63E09FFD /* Pods-CapGen-CapGenUITests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-dev.xcconfig"; sourceTree = "<group>"; };
+		5CEBA44EC84514881211F4BC /* Pods_CapGen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C9946635145A2266EDE9B79 /* Pods-CapGen.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen.debug-prod.xcconfig"; path = "Target Support Files/Pods-CapGen/Pods-CapGen.debug-prod.xcconfig"; sourceTree = "<group>"; };
+		792681B5F0DCC8EC6CB3E203 /* Pods-CapGen.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGen/Pods-CapGen.release-dev.xcconfig"; sourceTree = "<group>"; };
+		85C9CC8367869CB283B926D6 /* Pods-CapGen-CapGenUITests.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.debug-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.debug-prod.xcconfig"; sourceTree = "<group>"; };
+		86EF02864C9C41B5EE9104B4 /* Pods-CapGen.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen.debug-dev.xcconfig"; path = "Target Support Files/Pods-CapGen/Pods-CapGen.debug-dev.xcconfig"; sourceTree = "<group>"; };
+		D4005DB1295BE0E0004D695D /* CapGen Beta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CapGen Beta.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4005DB4295BE0E0004D695D /* CapGenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapGenApp.swift; sourceTree = "<group>"; };
 		D4005DB6295BE0E0004D695D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D4005DB8295BE0E1004D695D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -137,6 +179,27 @@
 		D4056E04295C0E2A00D3894D /* GraphikLightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GraphikLightItalic.otf; sourceTree = "<group>"; };
 		D4056E1F295CCA1C00D3894D /* Pill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pill.swift; sourceTree = "<group>"; };
 		D4056E23295E296600D3894D /* TextAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaView.swift; sourceTree = "<group>"; };
+		D4056E25295F639100D3894D /* BottomAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomAreaView.swift; sourceTree = "<group>"; };
+		D4056E27295F659B00D3894D /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		D4056E29295F8EA700D3894D /* RectangleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleCard.swift; sourceTree = "<group>"; };
+		D4056E2B295F8F0100D3894D /* ToneModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToneModel.swift; sourceTree = "<group>"; };
+		D4056E2D295F8F3A00D3894D /* Tones.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Tones.json; sourceTree = "<group>"; };
+		D4056E2F2960F54900D3894D /* SnappableSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappableSliderView.swift; sourceTree = "<group>"; };
+		D4056E33296202E900D3894D /* CaptionLengths.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionLengths.json; sourceTree = "<group>"; };
+		D4056E352962030800D3894D /* CaptionLengthsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionLengthsModel.swift; sourceTree = "<group>"; };
+		D4056E372963178D00D3894D /* CaptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionView.swift; sourceTree = "<group>"; };
+		D4056E3B2963450D00D3894D /* OpenAIConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIConnector.swift; sourceTree = "<group>"; };
+		D4056E3D2963487500D3894D /* OpenAIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIModel.swift; sourceTree = "<group>"; };
+		D4056E3F2963AB3B00D3894D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		D4056E412967283D00D3894D /* Config-dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-dev.xcconfig"; sourceTree = "<group>"; };
+		D4056E4E2968D72F00D3894D /* Config-prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-prod.xcconfig"; sourceTree = "<group>"; };
+		D4056E4F2968E0C100D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D4056E712968E71300D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D4056E742968E94300D3894D /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
+		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
+		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +207,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4056E612968E17700D3894D /* FirebaseDatabaseSwift in Frameworks */,
+				D4056E5F2968E17700D3894D /* FirebaseDatabase in Frameworks */,
+				D4056E572968E17700D3894D /* FirebaseAnalyticsSwift in Frameworks */,
+				D4056E6D2968E17700D3894D /* FirebaseStorageCombine-Community in Frameworks */,
+				D4056E652968E17700D3894D /* FirebaseFirestoreCombine-Community in Frameworks */,
+				D4056E592968E17700D3894D /* FirebaseAuth in Frameworks */,
+				D4056E6B2968E17700D3894D /* FirebaseStorage in Frameworks */,
+				D4056E672968E17700D3894D /* FirebaseFirestoreSwift in Frameworks */,
+				D4056E5D2968E17700D3894D /* FirebaseCrashlytics in Frameworks */,
+				D4056E632968E17700D3894D /* FirebaseFirestore in Frameworks */,
+				D4056E552968E17700D3894D /* FirebaseAnalytics in Frameworks */,
+				D4056E692968E17700D3894D /* FirebaseFunctions in Frameworks */,
+				D4056E5B2968E17700D3894D /* FirebaseAuthCombine-Community in Frameworks */,
+				8A81E2B66D4A4B40A38F8EBC /* Pods_CapGen.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +228,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A1C03EB5B3A84FB81EEC28A /* Pods_CapGenTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,12 +236,42 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		593F3ABDC0E5374BB6741D6D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				86EF02864C9C41B5EE9104B4 /* Pods-CapGen.debug-dev.xcconfig */,
+				6C9946635145A2266EDE9B79 /* Pods-CapGen.debug-prod.xcconfig */,
+				792681B5F0DCC8EC6CB3E203 /* Pods-CapGen.release-dev.xcconfig */,
+				4121C9C7CE4AAE31E939436B /* Pods-CapGen.release-prod.xcconfig */,
+				1AF88CA598FE8C209FBD9A5D /* Pods-CapGen-CapGenUITests.debug-dev.xcconfig */,
+				85C9CC8367869CB283B926D6 /* Pods-CapGen-CapGenUITests.debug-prod.xcconfig */,
+				4790F1CB0DFD004B63E09FFD /* Pods-CapGen-CapGenUITests.release-dev.xcconfig */,
+				D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */,
+				40F09B5E4FF3E885BCAFCEFC /* Pods-CapGenTests.debug-dev.xcconfig */,
+				2BA998B1DC08276C917ED069 /* Pods-CapGenTests.debug-prod.xcconfig */,
+				EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */,
+				46BCEADB9FFBE08A6CB850F2 /* Pods-CapGenTests.release-prod.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		71EDB11601156D4ABBEFD1F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5CEBA44EC84514881211F4BC /* Pods_CapGen.framework */,
+				D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */,
+				DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D4005DA8295BE0E0004D695D = {
 			isa = PBXGroup;
 			children = (
@@ -171,13 +279,15 @@
 				D4005DC4295BE0E1004D695D /* CapGenTests */,
 				D4005DCE295BE0E1004D695D /* CapGenUITests */,
 				D4005DB2295BE0E0004D695D /* Products */,
+				593F3ABDC0E5374BB6741D6D /* Pods */,
+				71EDB11601156D4ABBEFD1F3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		D4005DB2295BE0E0004D695D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D4005DB1295BE0E0004D695D /* CapGen.app */,
+				D4005DB1295BE0E0004D695D /* CapGen Beta.app */,
 				D4005DC1295BE0E1004D695D /* CapGenTests.xctest */,
 				D4005DCB295BE0E1004D695D /* CapGenUITests.xctest */,
 			);
@@ -187,6 +297,7 @@
 		D4005DB3295BE0E0004D695D /* CapGen */ = {
 			isa = PBXGroup;
 			children = (
+				D4056E6E2968E6CE00D3894D /* Firebase */,
 				D4005DEA295C086A004D695D /* Info.plist */,
 				D4056E19295CC59800D3894D /* Data */,
 				D4005DDE295C024A004D695D /* Models */,
@@ -227,6 +338,9 @@
 		D4005DDE295C024A004D695D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D4056E2B295F8F0100D3894D /* ToneModel.swift */,
+				D4056E352962030800D3894D /* CaptionLengthsModel.swift */,
+				D4056E3D2963487500D3894D /* OpenAIModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -235,6 +349,9 @@
 			isa = PBXGroup;
 			children = (
 				D4005DB6295BE0E0004D695D /* ContentView.swift */,
+				D4056E25295F639100D3894D /* BottomAreaView.swift */,
+				D4056E3F2963AB3B00D3894D /* LoadingView.swift */,
+				D4056E372963178D00D3894D /* CaptionView.swift */,
 				D4056E1E295CC92100D3894D /* Common */,
 			);
 			path = Views;
@@ -243,6 +360,8 @@
 		D4005DE0295C0258004D695D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D4056E3B2963450D00D3894D /* OpenAIConnector.swift */,
+				D4056E742968E94300D3894D /* FirestoreManager.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -253,6 +372,8 @@
 				D4005DB4295BE0E0004D695D /* CapGenApp.swift */,
 				D4005DE5295C0736004D695D /* Fonts */,
 				D4005DE2295C041C004D695D /* Extensions */,
+				D4056E412967283D00D3894D /* Config-dev.xcconfig */,
+				D4056E4E2968D72F00D3894D /* Config-prod.xcconfig */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -262,6 +383,7 @@
 			children = (
 				D4005DE3295C042F004D695D /* Color.swift */,
 				D4005DEB295C09EE004D695D /* Font.swift */,
+				D4056E27295F659B00D3894D /* View.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -334,6 +456,8 @@
 		D4056E19295CC59800D3894D /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				D4056E2D295F8F3A00D3894D /* Tones.json */,
+				D4056E33296202E900D3894D /* CaptionLengths.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -343,8 +467,35 @@
 			children = (
 				D4056E1F295CCA1C00D3894D /* Pill.swift */,
 				D4056E23295E296600D3894D /* TextAreaView.swift */,
+				D4056E29295F8EA700D3894D /* RectangleCard.swift */,
+				D4056E2F2960F54900D3894D /* SnappableSliderView.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		D4056E6E2968E6CE00D3894D /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E6F2968E6D600D3894D /* Dev */,
+				D4056E702968E6DA00D3894D /* Prod */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		D4056E6F2968E6D600D3894D /* Dev */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E4F2968E0C100D3894D /* GoogleService-Info.plist */,
+			);
+			path = Dev;
+			sourceTree = "<group>";
+		};
+		D4056E702968E6DA00D3894D /* Prod */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E712968E71300D3894D /* GoogleService-Info.plist */,
+			);
+			path = Prod;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -354,8 +505,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4005DD5295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGen" */;
 			buildPhases = (
+				A5E736975D43B0C377446941 /* [CP] Check Pods Manifest.lock */,
 				D4005DAD295BE0E0004D695D /* Sources */,
 				D4005DAE295BE0E0004D695D /* Frameworks */,
+				D4056E722968E78400D3894D /* Setup Firebase Environment GoogleService-Info.plist */,
 				D4005DAF295BE0E0004D695D /* Resources */,
 			);
 			buildRules = (
@@ -363,14 +516,30 @@
 			dependencies = (
 			);
 			name = CapGen;
+			packageProductDependencies = (
+				D4056E542968E17700D3894D /* FirebaseAnalytics */,
+				D4056E562968E17700D3894D /* FirebaseAnalyticsSwift */,
+				D4056E582968E17700D3894D /* FirebaseAuth */,
+				D4056E5A2968E17700D3894D /* FirebaseAuthCombine-Community */,
+				D4056E5C2968E17700D3894D /* FirebaseCrashlytics */,
+				D4056E5E2968E17700D3894D /* FirebaseDatabase */,
+				D4056E602968E17700D3894D /* FirebaseDatabaseSwift */,
+				D4056E622968E17700D3894D /* FirebaseFirestore */,
+				D4056E642968E17700D3894D /* FirebaseFirestoreCombine-Community */,
+				D4056E662968E17700D3894D /* FirebaseFirestoreSwift */,
+				D4056E682968E17700D3894D /* FirebaseFunctions */,
+				D4056E6A2968E17700D3894D /* FirebaseStorage */,
+				D4056E6C2968E17700D3894D /* FirebaseStorageCombine-Community */,
+			);
 			productName = CapGen;
-			productReference = D4005DB1295BE0E0004D695D /* CapGen.app */;
+			productReference = D4005DB1295BE0E0004D695D /* CapGen Beta.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D4005DC0295BE0E1004D695D /* CapGenTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4005DD8295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenTests" */;
 			buildPhases = (
+				12997D51B3FF953F7894914B /* [CP] Check Pods Manifest.lock */,
 				D4005DBD295BE0E1004D695D /* Sources */,
 				D4005DBE295BE0E1004D695D /* Frameworks */,
 				D4005DBF295BE0E1004D695D /* Resources */,
@@ -389,6 +558,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4005DDB295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenUITests" */;
 			buildPhases = (
+				AF8A3DC18CF8C3A58E60576F /* [CP] Check Pods Manifest.lock */,
 				D4005DC7295BE0E1004D695D /* Sources */,
 				D4005DC8295BE0E1004D695D /* Frameworks */,
 				D4005DC9295BE0E1004D695D /* Resources */,
@@ -435,6 +605,9 @@
 				Base,
 			);
 			mainGroup = D4005DA8295BE0E0004D695D;
+			packageReferences = (
+				D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = D4005DB2295BE0E0004D695D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -463,7 +636,9 @@
 				D4056E0D295C0E2A00D3894D /* GraphikRegularItalic.otf in Resources */,
 				D4056E13295C0E2A00D3894D /* GraphikBlack.otf in Resources */,
 				D4056DDA295C0DFB00D3894D /* Blacker-Display-Regular-trial.ttf in Resources */,
+				D4056E34296202E900D3894D /* CaptionLengths.json in Resources */,
 				D4056DDC295C0DFB00D3894D /* Blacker-Text-Heavy-Italic-trial.ttf in Resources */,
+				D4056E2E295F8F3A00D3894D /* Tones.json in Resources */,
 				D4056DED295C0DFB00D3894D /* Blacker-Text-Regular-Italic-trial.ttf in Resources */,
 				D4056DEF295C0DFB00D3894D /* Blacker-Display-Light-trial.ttf in Resources */,
 				D4056E0A295C0E2A00D3894D /* GraphikExtralightItalic.otf in Resources */,
@@ -514,17 +689,116 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		12997D51B3FF953F7894914B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CapGenTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A5E736975D43B0C377446941 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CapGen-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AF8A3DC18CF8C3A58E60576F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CapGen-CapGenUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4056E722968E78400D3894D /* Setup Firebase Environment GoogleService-Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Firebase Environment GoogleService-Info.plist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist\n\n# Get references to dev and prod versions of the GoogleService-Info.plist\n# NOTE: These should only live on the file system and should NOT be part of the target (since we'll be adding them to the target manually)\nGOOGLESERVICE_INFO_DEV=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Dev/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_PROD=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Prod/${GOOGLESERVICE_INFO_PLIST}\n\n# Make sure the dev version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_DEV}\"\nif [ ! -f $GOOGLESERVICE_INFO_DEV ]\nthen\n    echo \"No Development GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Make sure the prod version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_PROD}\"\nif [ ! -f $GOOGLESERVICE_INFO_PROD ]\nthen\n    echo \"No Production GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Get a reference to the destination location for the GoogleService-Info.plist\nPLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\necho \"Will copy ${GOOGLESERVICE_INFO_PLIST} to final destination: ${PLIST_DESTINATION}\"\n\n# Copy over the prod GoogleService-Info.plist for Release builds\nif [ \"${CONFIGURATION}\" == \"Release - PROD\" ] ||  [ \"${CONFIGURATION}\" == \"Debug - PROD\" ] \nthen\n    echo \"Using ${GOOGLESERVICE_INFO_PROD}\"\n    cp \"${GOOGLESERVICE_INFO_PROD}\" \"${PLIST_DESTINATION}\"\nelse\n    echo \"Using ${GOOGLESERVICE_INFO_DEV}\"\n    cp \"${GOOGLESERVICE_INFO_DEV}\" \"${PLIST_DESTINATION}\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D4005DAD295BE0E0004D695D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4056E362962030800D3894D /* CaptionLengthsModel.swift in Sources */,
+				D4056E28295F659B00D3894D /* View.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
+				D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */,
+				D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */,
+				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
+				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
+				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
+				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
+				D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */,
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
+				D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */,
+				D4056E382963178D00D3894D /* CaptionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,6 +807,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4005DC6295BE0E1004D695D /* CapGenTests.swift in Sources */,
+				D4056E762968E94300D3894D /* FirestoreManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -541,6 +816,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4005DD2295BE0E1004D695D /* CapGenUITestsLaunchTests.swift in Sources */,
+				D4056E772968E94300D3894D /* FirestoreManager.swift in Sources */,
 				D4005DD0295BE0E1004D695D /* CapGenUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -561,8 +837,9 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		D4005DD3295BE0E1004D695D /* Debug */ = {
+		D4005DD3295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4056E412967283D00D3894D /* Config-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -619,10 +896,11 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = Debug;
+			name = "Debug-DEV";
 		};
-		D4005DD4295BE0E1004D695D /* Release */ = {
+		D4005DD4295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4056E412967283D00D3894D /* Config-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -673,72 +951,87 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = "Release-DEV";
 		};
-		D4005DD6295BE0E1004D695D /* Debug */ = {
+		D4005DD6295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 86EF02864C9C41B5EE9104B4 /* Pods-CapGen.debug-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CapGen/Preview Content\"";
-				DEVELOPMENT_TEAM = Y5N6F2G6M7;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5N6F2G6M7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
+				PRODUCT_NAME = "CapGen Beta";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Provisioning Profile Dev";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Debug;
+			name = "Debug-DEV";
 		};
-		D4005DD7295BE0E1004D695D /* Release */ = {
+		D4005DD7295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 792681B5F0DCC8EC6CB3E203 /* Pods-CapGen.release-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CapGen/Preview Content\"";
-				DEVELOPMENT_TEAM = Y5N6F2G6M7;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5N6F2G6M7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
+				PRODUCT_NAME = "CapGen Beta";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Provisioning Profile Dev 1673192299";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Release;
+			name = "Release-DEV";
 		};
-		D4005DD9295BE0E1004D695D /* Debug */ = {
+		D4005DD9295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40F09B5E4FF3E885BCAFCEFC /* Pods-CapGenTests.debug-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -755,10 +1048,11 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CapGen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CapGen";
 			};
-			name = Debug;
+			name = "Debug-DEV";
 		};
-		D4005DDA295BE0E1004D695D /* Release */ = {
+		D4005DDA295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -775,10 +1069,11 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CapGen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CapGen";
 			};
-			name = Release;
+			name = "Release-DEV";
 		};
-		D4005DDC295BE0E1004D695D /* Debug */ = {
+		D4005DDC295BE0E1004D695D /* Debug-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1AF88CA598FE8C209FBD9A5D /* Pods-CapGen-CapGenUITests.debug-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -793,10 +1088,11 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = CapGen;
 			};
-			name = Debug;
+			name = "Debug-DEV";
 		};
-		D4005DDD295BE0E1004D695D /* Release */ = {
+		D4005DDD295BE0E1004D695D /* Release-DEV */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4790F1CB0DFD004B63E09FFD /* Pods-CapGen-CapGenUITests.release-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -811,7 +1107,279 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = CapGen;
 			};
-			name = Release;
+			name = "Release-DEV";
+		};
+		D4056E422968C90100D3894D /* Debug-PROD */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4056E4E2968D72F00D3894D /* Config-prod.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Debug-PROD";
+		};
+		D4056E432968C90100D3894D /* Debug-PROD */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C9946635145A2266EDE9B79 /* Pods-CapGen.debug-prod.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CapGen/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5N6F2G6M7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CapGen/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Provisioning Profile Prod";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-PROD";
+		};
+		D4056E442968C90100D3894D /* Debug-PROD */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2BA998B1DC08276C917ED069 /* Pods-CapGenTests.debug-prod.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y5N6F2G6M7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGenTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CapGen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CapGen";
+			};
+			name = "Debug-PROD";
+		};
+		D4056E452968C90100D3894D /* Debug-PROD */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85C9CC8367869CB283B926D6 /* Pods-CapGen-CapGenUITests.debug-prod.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y5N6F2G6M7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGenUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CapGen;
+			};
+			name = "Debug-PROD";
+		};
+		D4056E462968C90600D3894D /* Release-PROD */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4056E4E2968D72F00D3894D /* Config-prod.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-PROD";
+		};
+		D4056E472968C90600D3894D /* Release-PROD */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4121C9C7CE4AAE31E939436B /* Pods-CapGen.release-prod.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CapGen/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5N6F2G6M7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CapGen/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Provisioning Profile Prod Dist";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Release-PROD";
+		};
+		D4056E482968C90600D3894D /* Release-PROD */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 46BCEADB9FFBE08A6CB850F2 /* Pods-CapGenTests.release-prod.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y5N6F2G6M7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGenTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CapGen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CapGen";
+			};
+			name = "Release-PROD";
+		};
+		D4056E492968C90600D3894D /* Release-PROD */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y5N6F2G6M7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGenUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CapGen;
+			};
+			name = "Release-PROD";
 		};
 /* End XCBuildConfiguration section */
 
@@ -819,40 +1387,127 @@
 		D4005DAC295BE0E0004D695D /* Build configuration list for PBXProject "CapGen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4005DD3295BE0E1004D695D /* Debug */,
-				D4005DD4295BE0E1004D695D /* Release */,
+				D4005DD3295BE0E1004D695D /* Debug-DEV */,
+				D4056E422968C90100D3894D /* Debug-PROD */,
+				D4005DD4295BE0E1004D695D /* Release-DEV */,
+				D4056E462968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-PROD";
 		};
 		D4005DD5295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4005DD6295BE0E1004D695D /* Debug */,
-				D4005DD7295BE0E1004D695D /* Release */,
+				D4005DD6295BE0E1004D695D /* Debug-DEV */,
+				D4056E432968C90100D3894D /* Debug-PROD */,
+				D4005DD7295BE0E1004D695D /* Release-DEV */,
+				D4056E472968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-PROD";
 		};
 		D4005DD8295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4005DD9295BE0E1004D695D /* Debug */,
-				D4005DDA295BE0E1004D695D /* Release */,
+				D4005DD9295BE0E1004D695D /* Debug-DEV */,
+				D4056E442968C90100D3894D /* Debug-PROD */,
+				D4005DDA295BE0E1004D695D /* Release-DEV */,
+				D4056E482968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-PROD";
 		};
 		D4005DDB295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4005DDC295BE0E1004D695D /* Debug */,
-				D4005DDD295BE0E1004D695D /* Release */,
+				D4005DDC295BE0E1004D695D /* Debug-DEV */,
+				D4056E452968C90100D3894D /* Debug-PROD */,
+				D4005DDD295BE0E1004D695D /* Release-DEV */,
+				D4056E492968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-PROD";
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D4056E542968E17700D3894D /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		D4056E562968E17700D3894D /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		D4056E582968E17700D3894D /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		D4056E5A2968E17700D3894D /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAuthCombine-Community";
+		};
+		D4056E5C2968E17700D3894D /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		D4056E5E2968E17700D3894D /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		D4056E602968E17700D3894D /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabaseSwift;
+		};
+		D4056E622968E17700D3894D /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		D4056E642968E17700D3894D /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
+		D4056E662968E17700D3894D /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
+		};
+		D4056E682968E17700D3894D /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+		D4056E6A2968E17700D3894D /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		D4056E6C2968E17700D3894D /* FirebaseStorageCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseStorageCombine-Community";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D4005DA9295BE0E0004D695D /* Project object */;
 }
