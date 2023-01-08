@@ -101,7 +101,7 @@ platform :ios do
       scheme: ENV["SCHEME_NAME"], 
       output_name: output_name,
       configuration: ENV["CONFIG_NAME"],
-      derived_data_path: "tmp/data"
+      derived_data_path: "tmp/data",
       export_options: {
         method: export_method,
         provisioningProfiles: {
