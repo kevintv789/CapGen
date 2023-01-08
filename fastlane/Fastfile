@@ -93,7 +93,7 @@ platform :ios do
       code_sign_identity: "Apple Distribution", # replace with name of code signing identity if different
       bundle_identifier: app_identifier,
       profile_name: profile_name,
-      build_configurations: ["Release"] # only toggle code signing settings for Release configurations
+      build_configurations: ENV["CONFIG_NAME"] # only toggle code signing settings for Release configurations
     )
     
     # build the app
