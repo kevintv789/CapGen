@@ -104,6 +104,7 @@ platform :ios do
       configuration: ENV["CONFIG_NAME"],
       skip_codesigning: true,
       cloned_source_packages_path: "~/Library/Developer/Xcode/DerivedData",
+      export_team_id: ENV['TEAM_ID'],
       export_options: {
         method: export_method,
         provisioningProfiles: {
