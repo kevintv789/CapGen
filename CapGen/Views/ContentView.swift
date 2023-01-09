@@ -69,13 +69,12 @@ struct ContentView: View {
                         
                         // Create a Text Area view that is the main component for typing input
                         TextAreaView(text: $promptText, isKeyboardFocused: $isKeyboardFocused)
-                            .frame(width: geo.size.width / 1.1, height: geo.size.height / 1.5)
-                            .position(x: geo.size.width / 2, y: geo.size.height / 3)
+                            .frame(width: geo.size.width / 1.1, height: geo.size.height / 2)
+                            .position(x: geo.size.width / 2, y: geo.size.height / 4)
                         
                         
                         BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText)
                             .frame(maxHeight: geo.size.height)
-                            .animation(.default, value: expandBottomArea)
                     }
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -91,5 +90,15 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+                .previewDevice("iPhone 14 Pro Max")
+                .previewDisplayName("iPhone 14 Pro Max")
+            
+            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+                .previewDevice("iPhone SE (3rd generation)")
+                .previewDisplayName("iPhone SE (3rd generation)")
+
+            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+                .previewDevice("iPad (10th generation)")
+                .previewDisplayName("iPad (10th generation)")
     }
 }
