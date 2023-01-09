@@ -36,6 +36,7 @@ extension Font {
         let graphikMedium = Font.custom("Graphik-Medium", size: sizes.REGULAR)
         let graphikMediumMed = Font.custom("Graphik-Medium", size: sizes.MEDIUM)
         let graphikBold = Font.custom("Graphik-Bold", size: sizes.REGULAR)
+        let graphikBoldMed = Font.custom("Graphik-Bold", size: sizes.MEDIUM)
         let graphikLightItalic = Font.custom("Graphik-LightItalic", size: sizes.SMALL)
         let blackerTextMediumSmall = Font.custom("BlackerText-Medium", size: sizes.SMALL)
     }

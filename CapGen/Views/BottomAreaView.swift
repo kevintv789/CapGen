@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-let MIN_HEIGHT: CGFloat = 50.0
-let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 1.5
+let MIN_HEIGHT: CGFloat = UIScreen.main.bounds.height * 0.2
+let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 0.7
+let SCREEN_WIDTH: CGFloat = UIScreen.main.bounds.width
+let SCREEN_HEIGHT: CGFloat = UIScreen.main.bounds.height
 
 extension View {
     func dropInAndOutAnimation(value: Bool) -> some View {
@@ -44,52 +46,58 @@ struct BottomAreaView: View {
     }
     
     var body: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                Color.ui.richBlack
-                    .cornerRadius(24, corners: [.topLeft, .topRight])
-                    .frame(height: max(MIN_HEIGHT, expandArea ? MAX_HEIGHT : geo.size.height / 3))
-                    .position(x: geo.size.width / 2, y: geo.size.height)
-                    .overlay(
-                        VStack(alignment: .leading) {
-                            ExpandButton(expandArea: $expandArea)
-                                .offset(x: geo.size.width / 1.15, y: expandArea ? 0 : MIN_HEIGHT * 3.8)
-                            
-                            ToneSelectionSection(toneSelected: $toneSelected)
-                                .offset(x: 0, y: expandArea ? -20 : geo.size.height)
+        ZStack(alignment: .leading) {
+            Color.ui.richBlack
+                .cornerRadius(24, corners: [.topLeft, .topRight])
+                .overlay(
+                    ZStack {
+                        ScrollView(.vertical, showsIndicators: false) {
+                            VStack(spacing: 20) {
+                                ToneSelectionSection(toneSelected: $toneSelected)
+                                    .dropInAndOutAnimation(value: expandArea)
+                                
+                                EmojisAndHashtagSection(includeEmoji: $includeEmojis, includeHashtag: $includeHashtags)
+                                    .dropInAndOutAnimation(value: expandArea)
+                                
+                                LengthSelectionSection(lengthValue: $lengthValue)
+                                    .dropInAndOutAnimation(value: expandArea)
+                                
+                                Button {
+                                    mapAllRequests()
+                                    displayLoadView.toggle()
+                                } label: {
+                                    Image("submit-btn-1")
+                                        .resizable()
+                                        .frame(width: 90, height: 90)
+                                }
                                 .dropInAndOutAnimation(value: expandArea)
-                            
-                            EmojisAndHashtagSection(includeEmoji: $includeEmojis, includeHashtag: $includeHashtags)
-                                .offset(x: 0, y: expandArea ? -20 : geo.size.height)
-                                .dropInAndOutAnimation(value: expandArea)
-                            
-                            LengthSelectionSection(lengthValue: $lengthValue)
-                                .dropInAndOutAnimation(value: expandArea)
-                            
-                            Button {
-                                mapAllRequests()
-                                displayLoadView.toggle()
-                            } label: {
-                                Image("submit-btn-1")
-                                    .resizable()
-                                    .frame(width: 90, height: 90)
-                            } .offset(x: geo.size.width / 2.4, y: expandArea ? 20 : geo.size.height)
-                        }
-                            .offset(x: 0, y: expandArea ? -geo.size.height / 2.2 : geo.size.height / 1.67)
-                            .frame(height: MAX_HEIGHT)
-                        
-                    )
-                // Make the entire black area with minimal height tappable -- not just the button
-                    .onTapGesture(perform: {
-                        if (!expandArea) {
-                            withAnimation {
-                                expandArea.toggle()
                             }
+                            .offset(x: 0, y: expandArea ? 0 : SCREEN_HEIGHT)
+                            .padding(.top, 50)
                         }
-                    })
-            }
-            
+                        .padding(.bottom, 50)
+                        .scrollDisabled(!expandArea)
+                        .clipped()
+                        
+                        ExpandButton(expandArea: $expandArea)
+                            .offset(x: 0, y: expandArea ? -MAX_HEIGHT / 2 : -MIN_HEIGHT / 2)
+                            .dropInAndOutAnimation(value: expandArea)
+                    }
+                    
+                )
+                .frame(height: expandArea ? MAX_HEIGHT : MIN_HEIGHT)
+                .offset(x: 0, y: expandArea ? 50 : MIN_HEIGHT / 1.2)
+            // Make the entire black area with minimal height tappable -- not just the button
+                .onTapGesture(perform: {
+                    if (!expandArea) {
+                        withAnimation {
+                            expandArea.toggle()
+                        }
+                    }
+                })
         }
+        
+        //        }
         .navigationDestination(isPresented: $displayLoadView) {
             LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270), promptRequestStr: $promptRequestStr)
                 .navigationBarBackButtonHidden(true)
@@ -100,17 +108,48 @@ struct BottomAreaView: View {
 
 struct ExpandButton: View {
     @Binding var expandArea: Bool
+    @State var showText: Bool = false
     
     var body: some View {
         Button {
-            withAnimation {
+            withAnimation() {
                 expandArea.toggle()
             }
         } label: {
-            Image("chevron-up")
-                .resizable()
-                .frame(width: 40, height: 40)
-                .rotationEffect(.degrees(expandArea ? -180 : 0))
+            Circle()
+                .strokeBorder(Color.ui.lighterLavBlue, lineWidth: 4)
+                .background(
+                    Circle()
+                        .foregroundColor(Color.ui.richBlack)
+                )
+                .overlay(
+                    VStack(spacing: 3) {
+                        Image("chevron-up-white")
+                            .resizable()
+                            .frame(width: expandArea ? 40 : 30, height: expandArea ? 40 : 30)
+                            .rotationEffect(.degrees(expandArea ? -180 : 0))
+                        
+ 
+                        if (showText) {
+                            Text("Next")
+                                .foregroundColor(.ui.cultured)
+                                .font(.ui.graphikBoldMed)
+                        }
+                        
+                    }
+                        .offset(y: expandArea ? 0 : -5)
+                    
+                )
+                .frame(width: 80, height: 80)
+            
+        }
+        .animation(.spring(), value: expandArea)
+        .onAppear() {
+            Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { _ in
+                withAnimation {
+                    self.showText = !expandArea
+                }
+            }
         }
     }
 }
@@ -143,7 +182,6 @@ struct ToneSelectionSection: View {
             
             .frame(height: 120)
         }
-        
     }
 }
 
