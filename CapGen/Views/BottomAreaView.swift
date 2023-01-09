@@ -87,6 +87,7 @@ struct BottomAreaView: View {
                 )
                 .frame(height: expandArea ? MAX_HEIGHT : MIN_HEIGHT)
                 .offset(x: 0, y: expandArea ? 50 : MIN_HEIGHT / 1.2)
+            
             // Make the entire black area with minimal height tappable -- not just the button
                 .onTapGesture(perform: {
                     if (!expandArea) {
