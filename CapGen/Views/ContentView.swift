@@ -24,9 +24,11 @@ struct ContentView: View {
     
     @FocusState private var isKeyboardFocused: Bool
     @State var expandBottomArea: Bool = false
-
+    
     @State var platformSelected: String
     @State var promptText: String = ""
+    
+    @FocusState private var isFocused: Bool
     
     func platformSelect(platform: String) {
         platformSelected = platform
@@ -36,6 +38,9 @@ struct ContentView: View {
         NavigationStack {
             ZStack {
                 Color.ui.lighterLavBlue.ignoresSafeArea()
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
                 
                 GeometryReader { geo in
                     VStack(alignment: .leading) {
@@ -63,25 +68,36 @@ struct ContentView: View {
                                     }
                                 }
                             }
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
                             .padding()
                         }
                         .frame(height: 75)
+                            // Create a Text Area view that is the main component for typing input
+                            TextAreaView(text: $promptText)
+                            .frame(width: geo.size.width / 1.1, height: geo.size.height / 1.7)
+                            .position(x: geo.size.width / 2, y: geo.size.height / 3.5)
+                                .focused($isFocused)
+                            
+                            BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText)
+                                .frame(maxHeight: geo.size.height)
+                        }
                         
-                        // Create a Text Area view that is the main component for typing input
-                        TextAreaView(text: $promptText, isKeyboardFocused: $isKeyboardFocused)
-                            .frame(width: geo.size.width / 1.1, height: geo.size.height / 2)
-                            .position(x: geo.size.width / 2, y: geo.size.height / 4)
-                        
-                        
-                        BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText)
-                            .frame(maxHeight: geo.size.height)
                     }
-                }
+                .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
             .onTapGesture {
-                isKeyboardFocused = false
                 expandBottomArea = false
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        hideKeyboard()
+                    }
+                }
             }
         }
     }
@@ -90,15 +106,15 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
-                .previewDevice("iPhone 14 Pro Max")
-                .previewDisplayName("iPhone 14 Pro Max")
-            
-            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
-                .previewDevice("iPhone SE (3rd generation)")
-                .previewDisplayName("iPhone SE (3rd generation)")
-
-            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
-                .previewDevice("iPad (10th generation)")
-                .previewDisplayName("iPad (10th generation)")
+            .previewDevice("iPhone 14 Pro Max")
+            .previewDisplayName("iPhone 14 Pro Max")
+        
+        ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+            .previewDevice("iPhone SE (3rd generation)")
+            .previewDisplayName("iPhone SE (3rd generation)")
+        
+        ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+            .previewDevice("iPad (10th generation)")
+            .previewDisplayName("iPad (10th generation)")
     }
 }

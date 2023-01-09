@@ -40,8 +40,6 @@ struct TextAreaView: View {
     
     @State private var lastText: String = ""
     
-    var isKeyboardFocused: FocusState<Bool>.Binding
-    
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -54,7 +52,6 @@ struct TextAreaView: View {
                 TextEditor(text: $text)
                     .customStyle()
                     .opacity(text.isEmpty ? 0.75 : 1)
-                    .focused(isKeyboardFocused)
                     .onChange(of: text) { text in
                         if (text.count <= charLimit) {
                             lastText = text

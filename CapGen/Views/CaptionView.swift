@@ -14,6 +14,8 @@ struct CaptionView: View {
     @State var captionSelected: String = ""
     @State var cardColorFill: [Color] = [.ui.middleYellowRed, .ui.darkSalmon, .ui.frenchBlueSky, .ui.lightCyan, .ui.middleBluePurple]
     
+    let promptText: String
+    
     var body: some View {
         ZStack(alignment: .leading) {
             Color.ui.lighterLavBlue.ignoresSafeArea()
@@ -57,7 +59,7 @@ struct CaptionView: View {
             
         }
         .navigationDestination(isPresented: $backBtnClicked) {
-            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0], promptText: promptText)
                 .navigationBarBackButtonHidden(true)
         }
         .onAppear() {
@@ -73,7 +75,7 @@ struct CaptionView: View {
 
 struct CaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        CaptionView(captionStr: .constant("\n\n1. the love and hap 🤗"))
+        CaptionView(captionStr: .constant("\n\n1. the love and hap 🤗"), promptText: "")
     }
 }
 
