@@ -41,6 +41,24 @@ struct SnappableSliderView: UIViewRepresentable {
                 self.callback(Float(actualValue))
             }
         }
+        
+        @objc func handleTap(_ sender: UIGestureRecognizer) {
+            let location = sender.location(in: nil)
+            if let slider = sender.view as? UISlider {
+                // round up to the nearest index from a maximum value of 4
+                let newIndex = Int(Float(location.x / UIScreen.main.bounds.width) * slider.maximumValue + 0.5)
+                
+                slider.setValue(Float(newIndex), animated: false)
+                
+                let didChange = self.lastIndex == nil || newIndex != self.lastIndex!
+                if didChange {
+                    self.lastIndex = newIndex
+                    let actualValue = self.value[newIndex].wrappedValue
+                    self.value.wrappedValue[newIndex] = actualValue
+                    self.callback(Float(actualValue))
+                }
+            }
+        }
     }
     
     // Initialize coordinator
@@ -64,6 +82,10 @@ struct SnappableSliderView: UIViewRepresentable {
             action: #selector(Coordinator.valueChanged(_:)),
             for: .valueChanged
         )
+        
+        let longPress = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleTap(_:)))
+        longPress.minimumPressDuration = 0
+        slider.addGestureRecognizer(longPress)
         
         return slider
     }
