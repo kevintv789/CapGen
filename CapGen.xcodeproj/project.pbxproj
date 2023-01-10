@@ -90,6 +90,7 @@
 		D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
 		D4056E762968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
 		D4056E772968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
+		D4056E79296E2C1700D3894D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E78296E2C1700D3894D /* String.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -196,6 +197,7 @@
 		D4056E4F2968E0C100D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D4056E712968E71300D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D4056E742968E94300D3894D /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
+		D4056E78296E2C1700D3894D /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -384,6 +386,7 @@
 				D4005DE3295C042F004D695D /* Color.swift */,
 				D4005DEB295C09EE004D695D /* Font.swift */,
 				D4056E27295F659B00D3894D /* View.swift */,
+				D4056E78296E2C1700D3894D /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -794,6 +797,7 @@
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
+				D4056E79296E2C1700D3894D /* String.swift in Sources */,
 				D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */,
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,

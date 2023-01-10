@@ -39,6 +39,7 @@ public class OpenAIConnector {
         
         request.httpBody = httpBodyJson
         if let requestData =  await executeRequest(request: request, withSessionConfig: nil) {
+            print(requestData)
             return requestData.choices[0].text
         }
         

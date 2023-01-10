@@ -64,18 +64,26 @@ struct CaptionView: View {
         }
         .onAppear() {
             captionsParsed = captionStr?
-                .components(separatedBy: "\n")
+                .components(separatedBy: "\n\n")
                 .filter { element in
                     return !element.isEmpty
                 } ?? []
             
+            // TODO -- Find a better solution to this using regular expression that matches for both \n\n#. and \n#.
+            if (captionsParsed.count < 5) {
+                captionsParsed = captionStr?
+                    .components(separatedBy: "\n")
+                    .filter { element in
+                        return !element.isEmpty
+                    } ?? []
+            }
         }
     }
 }
 
 struct CaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        CaptionView(captionStr: .constant("\n\n1. the love and hap 🤗"), promptText: "")
+        CaptionView(captionStr: .constant("\n\n1. 🐶My rescue pup brings so much joy and love into my life! 💕 Playing in the park is one of our favorite things to do together. 🤗\n2. 🐶Rescue dogs are the best! 💗 My pup and I are having a blast playing in the park and celebrating all the love and happiness that pets bring into our lives. 🤗\n3. 🐶I'm so thankful for my rescue pup! 💗 Playing in the park together is our favorite way to celebrate the joy and love that pets bring into our lives. 🤗\n4. 🐶My rescue pup is always making me smile! 💕 Playing in the park is one of our favorite things to do together and reminds me of all the love and happiness that pets bring into our lives. 🤗\n5. 🐶Rescue pups are the best! 💗 Having a blast playing in the park with my pup and celebrating all the love and happiness that pets bring into our lives. 🤗"), promptText: "")
     }
 }
 
