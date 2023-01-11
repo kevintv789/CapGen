@@ -91,6 +91,9 @@
 		D4056E762968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
 		D4056E772968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
 		D4056E79296E2C1700D3894D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E78296E2C1700D3894D /* String.swift */; };
+		D4056E7C296F0C7000D3894D /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E7B296F0C7000D3894D /* Lottie */; };
+		D4056E7F296F0C9900D3894D /* hand_click_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056E7E296F0C9900D3894D /* hand_click_lottie.json */; };
+		D4056E81296F0CB900D3894D /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E80296F0CB900D3894D /* LottieView.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -198,6 +201,8 @@
 		D4056E712968E71300D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D4056E742968E94300D3894D /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		D4056E78296E2C1700D3894D /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		D4056E7E296F0C9900D3894D /* hand_click_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = hand_click_lottie.json; sourceTree = "<group>"; };
+		D4056E80296F0CB900D3894D /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -214,6 +219,7 @@
 				D4056E572968E17700D3894D /* FirebaseAnalyticsSwift in Frameworks */,
 				D4056E6D2968E17700D3894D /* FirebaseStorageCombine-Community in Frameworks */,
 				D4056E652968E17700D3894D /* FirebaseFirestoreCombine-Community in Frameworks */,
+				D4056E7C296F0C7000D3894D /* Lottie in Frameworks */,
 				D4056E592968E17700D3894D /* FirebaseAuth in Frameworks */,
 				D4056E6B2968E17700D3894D /* FirebaseStorage in Frameworks */,
 				D4056E672968E17700D3894D /* FirebaseFirestoreSwift in Frameworks */,
@@ -299,6 +305,7 @@
 		D4005DB3295BE0E0004D695D /* CapGen */ = {
 			isa = PBXGroup;
 			children = (
+				D4056E7D296F0C7E00D3894D /* Lottie */,
 				D4056E6E2968E6CE00D3894D /* Firebase */,
 				D4005DEA295C086A004D695D /* Info.plist */,
 				D4056E19295CC59800D3894D /* Data */,
@@ -472,6 +479,7 @@
 				D4056E23295E296600D3894D /* TextAreaView.swift */,
 				D4056E29295F8EA700D3894D /* RectangleCard.swift */,
 				D4056E2F2960F54900D3894D /* SnappableSliderView.swift */,
+				D4056E80296F0CB900D3894D /* LottieView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -499,6 +507,14 @@
 				D4056E712968E71300D3894D /* GoogleService-Info.plist */,
 			);
 			path = Prod;
+			sourceTree = "<group>";
+		};
+		D4056E7D296F0C7E00D3894D /* Lottie */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E7E296F0C9900D3894D /* hand_click_lottie.json */,
+			);
+			path = Lottie;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -533,6 +549,7 @@
 				D4056E682968E17700D3894D /* FirebaseFunctions */,
 				D4056E6A2968E17700D3894D /* FirebaseStorage */,
 				D4056E6C2968E17700D3894D /* FirebaseStorageCombine-Community */,
+				D4056E7B296F0C7000D3894D /* Lottie */,
 			);
 			productName = CapGen;
 			productReference = D4005DB1295BE0E0004D695D /* CapGen Beta.app */;
@@ -610,6 +627,7 @@
 			mainGroup = D4005DA8295BE0E0004D695D;
 			packageReferences = (
 				D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D4056E7A296F0C7000D3894D /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = D4005DB2295BE0E0004D695D /* Products */;
 			projectDirPath = "";
@@ -632,6 +650,7 @@
 				D4056E12295C0E2A00D3894D /* GraphikBoldItalic.otf in Resources */,
 				D4056E15295C0E2A00D3894D /* GraphikExtralight.otf in Resources */,
 				D4056E09295C0E2A00D3894D /* GraphikSemibold.otf in Resources */,
+				D4056E7F296F0C9900D3894D /* hand_click_lottie.json in Resources */,
 				D4056DEE295C0DFB00D3894D /* Blacker-Text-Bold-trial.ttf in Resources */,
 				D4005DBC295BE0E1004D695D /* Preview Assets.xcassets in Resources */,
 				D4056DE3295C0DFB00D3894D /* Blacker-Text-Book-trial.ttf in Resources */,
@@ -793,6 +812,7 @@
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
+				D4056E81296F0CB900D3894D /* LottieView.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
@@ -1444,6 +1464,14 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		D4056E7A296F0C7000D3894D /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1511,6 +1539,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		D4056E7B296F0C7000D3894D /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E7A296F0C7000D3894D /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
