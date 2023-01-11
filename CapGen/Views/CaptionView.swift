@@ -42,7 +42,7 @@ struct CaptionView: View {
                         ForEach(Array(captionsParsed.enumerated()), id: \.element) { index, caption in
                             Button {
                                 self.captionSelected = caption
-                                UIPasteboard.general.string = String(caption.dropFirst(3))
+                                UIPasteboard.general.string = String(caption)
                             } label: {
                                 CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index])
                                     .padding(10)
@@ -63,20 +63,17 @@ struct CaptionView: View {
                 .navigationBarBackButtonHidden(true)
         }
         .onAppear() {
-            captionsParsed = captionStr?
-                .components(separatedBy: "\n\n")
-                .filter { element in
-                    return !element.isEmpty
-                } ?? []
-            
-            // TODO -- Find a better solution to this using regular expression that matches for both \n\n#. and \n#.
-            if (captionsParsed.count < 5) {
-                captionsParsed = captionStr?
-                    .components(separatedBy: "\n")
-                    .filter { element in
-                        return !element.isEmpty
-                    } ?? []
+            if let originalString = captionStr {
+                let uniqueStr = UUID().uuidString
+                
+                let regex = try! NSRegularExpression(pattern: "(?m)^\\n\\d\\.|\\n\\d\\.", options: [])
+                let modifiedString = regex.stringByReplacingMatches(in: originalString, options: [], range: NSRange(location: 0, length: originalString.utf16.count), withTemplate: uniqueStr)
+                let stringArray = modifiedString.components(separatedBy: uniqueStr)
+                captionsParsed = stringArray.filter({ ele in
+                    return ele != "" && ele != "\n" && ele != "\n\n"
+                })
             }
+         
         }
     }
 }
@@ -103,7 +100,7 @@ struct CaptionCard: View {
                 )
             
             VStack(alignment: .trailing, spacing: 0) {
-                Text(caption.dropFirst(3))
+                Text(caption.dropFirst())
                     .padding(EdgeInsets.init(top: 15, leading: 10, bottom: 15, trailing: 10))
                     .font(.ui.graphikRegular)
                     .lineSpacing(4)
