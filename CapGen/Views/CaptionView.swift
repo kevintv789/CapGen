@@ -16,6 +16,25 @@ struct CaptionView: View {
     
     let promptText: String
     
+    @State var initialText: String = ""
+    let finalText: String = "Tap a card to copy 😏"
+    @State private var isTextCopied: Bool = false
+    
+    func typeWriter(at position: Int = 0) {
+        if position == 0 {
+            initialText = ""
+        }
+        
+        if position < finalText.count {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                // get the character from finalText and append it to text
+                initialText.append(finalText[position])
+                // call this function again with the character at the next position
+                typeWriter(at: position + 1)
+            }
+        }
+    }
+    
     var body: some View {
         ZStack(alignment: .leading) {
             Color.ui.lighterLavBlue.ignoresSafeArea()
@@ -32,20 +51,43 @@ struct CaptionView: View {
                 }
                 
                 ScrollView(.vertical, showsIndicators: false) {
-                    VStack(alignment: .leading) {
-                        Text("Your results")
-                            .font(.ui.graphikSemiboldLarge)
-                            .foregroundColor(.ui.richBlack)
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Text("Your results")
+                                .font(.ui.graphikSemiboldLarge)
+                                .foregroundColor(.ui.richBlack)
+                            
+                            Spacer()
+                            
+                            if (!isTextCopied) {
+                                RoundedRectangle(cornerRadius: 100)
+                                    .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [4], dashPhase: 0))
+                                    .foregroundColor(Color.ui.richBlack)
+                                    .overlay(
+                                        Text(initialText)
+                                            .font(.ui.graphikMedium)
+                                            .foregroundColor(.ui.richBlack)
+                                            .frame(width: 1000, alignment: .center)
+                                    )
+                                    .frame(width: 220)
+                            }
+                        }
                         
                         Spacer()
+                            .frame(height: 20)
+                        
                         
                         ForEach(Array(captionsParsed.enumerated()), id: \.element) { index, caption in
                             Button {
-                                self.captionSelected = caption
-                                UIPasteboard.general.string = String(caption)
+                                withAnimation {
+                                    self.captionSelected = caption
+                                    self.isTextCopied = true
+                                    UIPasteboard.general.string = String(caption)
+                                }
                             } label: {
                                 CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index])
                                     .padding(10)
+                                
                             }
                             
                             
@@ -73,7 +115,12 @@ struct CaptionView: View {
                     return ele != "" && ele != "\n" && ele != "\n\n"
                 })
             }
-         
+        }
+        .onAppear() {
+            typeWriter()
+            Timer.scheduledTimer(withTimeInterval: 5, repeats: !self.isTextCopied) { _ in
+                typeWriter()
+            }
         }
     }
 }

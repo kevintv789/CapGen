@@ -39,6 +39,6 @@ struct AIRequest: Hashable {
         self.includeHashtags = includeHashtags
         self.captionLength = captionLength
         
-        self.generatedPromptString = "Generate 5 captions for \(platform) with prompt: \(prompt). Captions should have a \(tone) voice. This should have a \(captionLength). Exclude word count from emojis. \(includeEmojis ? "Use emojis" : "Do not use emojis"). \(includeHashtags ? "Use hashtags" : "Do not use hashtags")."
+        self.generatedPromptString = "Generate only 5 captions for \(platform) with prompt: \(prompt). Captions should have a \(tone) voice. This should have a \(captionLength). Exclude word count from emojis. \(includeEmojis ? "Use emojis" : "Do not use emojis"). \(includeHashtags ? "Use hashtags" : "Do not use hashtags")."
     }
 }
