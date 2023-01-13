@@ -113,9 +113,11 @@ struct FacebookSignInView: View {
 }
 
 struct GoogleSignInView: View {
+    @EnvironmentObject var googleAuthMan: GoogleAuthManager
+    
     var body: some View {
         Button {
-            
+            googleAuthMan.signIn()
         } label: {
             Circle()
                 .strokeBorder(Color.ui.cadetBlueCrayola, lineWidth: 1)
