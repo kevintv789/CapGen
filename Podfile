@@ -6,6 +6,9 @@ target 'CapGen' do
   use_frameworks!
 
   # Pods for CapGen
+  pod 'FacebookCore'
+  pod 'FacebookLogin'
+  pod 'FacebookShare'
 
   target 'CapGenTests' do
     inherit! :search_paths
