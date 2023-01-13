@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseAuth
 
 struct SocialMediaPlatforms {
     let platforms: [String] =
@@ -28,7 +30,16 @@ struct ContentView: View {
             } else {
                 LaunchView()
             }
-            
+        }
+        .onAppear {
+            Auth.auth().addStateDidChangeListener { (auth, user) in
+                if user != nil {
+                    // User is signed in
+                    self.isLoggedIn = true
+                } else {
+                    self.isLoggedIn = false
+                }
+            }
         }
     }
 }

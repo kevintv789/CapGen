@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import AuthenticationServices
 import CryptoKit
+import Firebase
 import FirebaseAuth
 
 /**
@@ -69,18 +70,6 @@ class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate {
         self.onError = onError
     }
     
-    func signIn() {
-        let request = ASAuthorizationAppleIDProvider().createRequest()
-        request.requestedScopes = [.fullName, .email]
-        request.nonce = randomNonceString()
-        
-        controller = ASAuthorizationController(authorizationRequests: [request])
-      
-        controller?.delegate = self
-        controller?.performRequests()
-    }
-    
-    
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             onComplete(appleIDCredential)
@@ -95,27 +84,59 @@ class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate {
 }
 
 class SignInWithApple: ObservableObject {
-    var delegate: SignInWithAppleDelegate
+    var delegate: SignInWithAppleDelegate?
+    var currentNonce: String
     
     init() {
-        let signInWithAppleDelegate = SignInWithAppleDelegate { credential in
-            print("ONCOMPLETE", credential)
+        currentNonce = randomNonceString()
+    }
+    
+    func setDelegate() {
+        delegate = SignInWithAppleDelegate { credential in
+            SignInWithApple.authenticate(credential: credential, currentNonce: self.currentNonce)
             // Plug in firebase code here
         } onCompletePassword: { credential in
             print("ONPASSWORD", credential)
         } onError: { error in
             print(error)
         }
-        
-        delegate = signInWithAppleDelegate
     }
     
     func signIn() {
         let request = ASAuthorizationAppleIDProvider().createRequest()
         request.requestedScopes = [.fullName, .email]
+        request.nonce = sha256(currentNonce)
         
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = delegate
         controller.performRequests()
+    }
+    
+    static func authenticate(credential: ASAuthorizationAppleIDCredential, currentNonce: String) {
+        // Retrieving token
+        guard let token = credential.identityToken else {
+            print("Unable to retrieve identityToken with Apple Sign In")
+            return
+        }
+        
+        // Token string
+        guard let idTokenString = String(data: token, encoding: .utf8) else {
+            print("Unable to convert token data to String")
+            return
+        }
+        
+        let firebaseCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: currentNonce)
+        
+        Auth.auth().signIn(with: firebaseCredential) { (response, error) in
+            if (error != nil) {
+                // Error. If error.code == .MissingOrInvalidNonce, make sure
+                // you're sending the SHA256-hashed nonce as a hex string with
+                // your request to Apple.
+                print(error?.localizedDescription as Any)
+                return
+            }
+            // User is signed in
+            // Add additional functions here, i.e., create a database store for them to track credits
+        }
     }
 }
