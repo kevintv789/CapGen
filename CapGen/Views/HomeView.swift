@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct HomeView: View {
     let socialMediaPlatforms = SocialMediaPlatforms()
@@ -23,6 +24,12 @@ struct HomeView: View {
         platformSelected = platform
     }
     
+    func logout() {
+        DispatchQueue.global(qos: .background).async {
+            try? Auth.auth().signOut()
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -33,6 +40,15 @@ struct HomeView: View {
                 
                 GeometryReader { geo in
                     VStack(alignment: .leading) {
+                        
+                        // TEMP LOGOUT BUTTON
+                        Button {
+                            logout()
+                        } label: {
+                            Text("Logout")
+                        }
+                        .padding(.leading, 50)
+                        
                         if (envName != "prod") {
                             Text("\(envName)")
                                 .padding(.leading, 16)
