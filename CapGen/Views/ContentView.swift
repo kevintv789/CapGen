@@ -38,7 +38,7 @@ struct ContentView: View {
                         // User is signed in
                         self.isLoggedIn = true
                     } else {
-                        self.isLoggedIn = false
+                        self.isLoggedIn = false // CHANGE VALUE BACK TO FALSE
                     }
                 }
             }

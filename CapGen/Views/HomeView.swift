@@ -45,6 +45,8 @@ struct HomeView: View {
                         hideKeyboard()
                     }
                 
+                
+                
                 GeometryReader { geo in
                     VStack(alignment: .leading) {
                         
@@ -86,17 +88,17 @@ struct HomeView: View {
                             .padding()
                         }
                         .frame(height: 75)
-                            // Create a Text Area view that is the main component for typing input
-                            TextAreaView(text: $promptText)
+                        // Create a Text Area view that is the main component for typing input
+                        TextAreaView(text: $promptText)
                             .frame(width: geo.size.width / 1.1, height: geo.size.height / 1.7)
                             .position(x: geo.size.width / 2, y: geo.size.height / 3.5)
-                                .focused($isFocused)
-                            
-                            BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText)
-                                .frame(maxHeight: geo.size.height)
-                        }
+                            .focused($isFocused)
                         
+                        BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText)
+                            .frame(maxHeight: geo.size.height)
                     }
+                    
+                }
                 .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
@@ -118,5 +120,9 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+        
+        HomeView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+            .previewDevice("iPhone SE (3rd generation)")
+            .previewDisplayName("iPhone SE (3rd generation)")
     }
 }
