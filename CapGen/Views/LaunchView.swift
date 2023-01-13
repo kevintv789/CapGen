@@ -98,9 +98,11 @@ struct SignInWithAppleView: View {
 }
 
 struct FacebookSignInView: View {
+    @ObservedObject var signInWithFB = FBAuthManager()
+    
     var body: some View {
         Button {
-            
+            signInWithFB.login()
         } label: {
             Image("facebook-circle-icon")
                 .resizable()

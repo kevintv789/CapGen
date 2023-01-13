@@ -127,16 +127,10 @@ class SignInWithApple: ObservableObject {
         
         let firebaseCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: currentNonce)
         
-        Auth.auth().signIn(with: firebaseCredential) { (response, error) in
-            if (error != nil) {
-                // Error. If error.code == .MissingOrInvalidNonce, make sure
-                // you're sending the SHA256-hashed nonce as a hex string with
-                // your request to Apple.
-                print(error?.localizedDescription as Any)
-                return
+        AuthManager().login(credential: firebaseCredential) { isSuccess in
+            if (isSuccess) {
+                print("Apple sign in success!")
             }
-            // User is signed in
-            // Add additional functions here, i.e., create a database store for them to track credits
         }
     }
 }

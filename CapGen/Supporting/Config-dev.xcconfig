@@ -9,3 +9,6 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 ENV = dev
+FB_APP_ID = 1312452242935892
+FB_CLIENT_TOKEN = b608fbf759606d84eab5669d2844b256
+FB_APP_NAME = CapGen Dev

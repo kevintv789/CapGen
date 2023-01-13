@@ -33,11 +33,13 @@ struct ContentView: View {
         }
         .onAppear {
             Auth.auth().addStateDidChangeListener { (auth, user) in
-                if user != nil {
-                    // User is signed in
-                    self.isLoggedIn = true
-                } else {
-                    self.isLoggedIn = false
+                withAnimation {
+                    if user != nil {
+                        // User is signed in
+                        self.isLoggedIn = true
+                    } else {
+                        self.isLoggedIn = false
+                    }
                 }
             }
         }
