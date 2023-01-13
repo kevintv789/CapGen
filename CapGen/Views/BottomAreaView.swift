@@ -7,10 +7,8 @@
 
 import SwiftUI
 
-let MIN_HEIGHT: CGFloat = UIScreen.main.bounds.height * 0.2
-let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 0.7
-let SCREEN_WIDTH: CGFloat = UIScreen.main.bounds.width
-let SCREEN_HEIGHT: CGFloat = UIScreen.main.bounds.height
+let MIN_HEIGHT: CGFloat = SCREEN_HEIGHT * 0.2
+let MAX_HEIGHT: CGFloat = SCREEN_HEIGHT * 0.7
 
 extension View {
     func dropInAndOutAnimation(value: Bool) -> some View {

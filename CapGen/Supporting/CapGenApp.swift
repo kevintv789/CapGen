@@ -8,6 +8,9 @@
 import SwiftUI
 import FirebaseCore
 
+let SCREEN_WIDTH = UIScreen.main.bounds.width
+let SCREEN_HEIGHT = UIScreen.main.bounds.height
+
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -25,7 +28,7 @@ struct CapGenApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+            ContentView()
         }
     }
 }

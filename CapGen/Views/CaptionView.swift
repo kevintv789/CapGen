@@ -20,21 +20,6 @@ struct CaptionView: View {
     let finalText: String = "Tap a card to copy 😏"
     @State private var isTextCopied: Bool = false
     
-    func typeWriter(at position: Int = 0) {
-        if position == 0 {
-            initialText = ""
-        }
-        
-        if position < finalText.count {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                // get the character from finalText and append it to text
-                initialText.append(finalText[position])
-                // call this function again with the character at the next position
-                typeWriter(at: position + 1)
-            }
-        }
-    }
-    
     var body: some View {
         ZStack(alignment: .leading) {
             Color.ui.lighterLavBlue.ignoresSafeArea()
@@ -64,7 +49,7 @@ struct CaptionView: View {
                                     .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [4], dashPhase: 0))
                                     .foregroundColor(Color.ui.richBlack)
                                     .overlay(
-                                        Text(initialText)
+                                        AnimatedTextView(initialText: $initialText, finalText: self.finalText, isRepeat: true, timeInterval: 5, typingSpeed: 0.05)
                                             .font(.ui.graphikMedium)
                                             .foregroundColor(.ui.richBlack)
                                             .frame(width: 1000, alignment: .center)
@@ -101,7 +86,7 @@ struct CaptionView: View {
             
         }
         .navigationDestination(isPresented: $backBtnClicked) {
-            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0], promptText: promptText)
+            HomeView(platformSelected: SocialMediaPlatforms.init().platforms[0], promptText: promptText)
                 .navigationBarBackButtonHidden(true)
         }
         .onAppear() {
@@ -118,12 +103,6 @@ struct CaptionView: View {
                 captionsParsed = stringArray.filter({ ele in
                     return ele != "" && ele != "\n" && ele != "\n\n"
                 })
-            }
-        }
-        .onAppear() {
-            typeWriter()
-            Timer.scheduledTimer(withTimeInterval: 5, repeats: !self.isTextCopied) { _ in
-                typeWriter()
             }
         }
     }
@@ -144,11 +123,12 @@ struct CaptionCard: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14)
-                .stroke(.black, lineWidth: 2)
+                .stroke(.black, lineWidth: isCaptionSelected ? 2 : 0)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
                         .fill(colorFilled)
                 )
+                .shadow(radius: isCaptionSelected ? 0 : 3)
             
             VStack(alignment: .trailing, spacing: 0) {
                 Text(caption.dropFirst())
