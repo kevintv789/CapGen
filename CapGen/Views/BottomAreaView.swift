@@ -39,6 +39,9 @@ struct BottomAreaView: View {
     
     @State var promptRequestStr: AIRequest?
     
+    @State var showCaptionView: Bool = false
+    @State var showProfileView: Bool = false
+    
     func mapAllRequests() {
         promptRequestStr = AIRequest(platform: self.platformSelected, prompt: self.promptText, tone: self.toneSelected, includeEmojis: self.includeEmojis, includeHashtags: self.includeHashtags, captionLength: self.lengthValue)
     }
@@ -80,6 +83,11 @@ struct BottomAreaView: View {
                         ExpandButton(expandArea: $expandArea)
                             .offset(x: 0, y: expandArea ? -MAX_HEIGHT / 2 : -MIN_HEIGHT / 2)
                             .dropInAndOutAnimation(value: expandArea)
+                        
+                        if (!expandArea) {
+                            TabButtonsView(showCaptionView: $showCaptionView, showProfileView: $showProfileView)
+                                .padding(.bottom, SCREEN_HEIGHT < 700 ? 50 : 80)
+                        }
                     }
                     
                 )
@@ -95,13 +103,47 @@ struct BottomAreaView: View {
                     }
                 })
         }
-        
-        //        }
         .navigationDestination(isPresented: $displayLoadView) {
             LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270), promptRequestStr: $promptRequestStr)
                 .navigationBarBackButtonHidden(true)
         }
+        .navigationDestination(isPresented: $showCaptionView) {
+            SavedCaptionsView()
+        }
+        .navigationDestination(isPresented: $showProfileView) {
+            ProfileView()
+        }
         .ignoresSafeArea(.all)
+    }
+}
+
+struct TabButtonsView: View {
+    @Binding var showCaptionView: Bool
+    @Binding var showProfileView: Bool
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            Button {
+                showCaptionView = true
+            } label: {
+                Image("hashtag-tab-icon")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+            }
+            
+            Spacer()
+                .frame(width: SCREEN_WIDTH / 2)
+            
+            
+            Button {
+                showProfileView = true
+            } label: {
+                Image(systemName: "person.circle")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(.ui.cultured)
+            }
+        }
     }
 }
 
@@ -128,7 +170,7 @@ struct ExpandButton: View {
                             .frame(width: expandArea ? 40 : 30, height: expandArea ? 40 : 30)
                             .rotationEffect(.degrees(expandArea ? -180 : 0))
                         
- 
+                        
                         if (showText) {
                             Text("Next")
                                 .foregroundColor(.ui.cultured)

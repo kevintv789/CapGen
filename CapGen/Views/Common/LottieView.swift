@@ -16,6 +16,7 @@ import SwiftUI
 struct LottieView: UIViewRepresentable {
     var name: String
     var loopMode: LottieLoopMode
+    let animationView = LottieAnimationView()
     
     func makeUIView(context: UIViewRepresentableContext<LottieView>) -> UIView {
         let view = UIView(frame: .zero)
@@ -24,7 +25,6 @@ struct LottieView: UIViewRepresentable {
         // Set the content mode to scaleAspectFit  to maintain aspect ratio while fitting the view
         // sets the loopMode of animationView to the passed loopMode, it can be loop or playOnce
         // And plays the animation on animationView
-        let animationView = LottieAnimationView()
         let animation = LottieAnimation.named(name)
         animationView.animation = animation
         animationView.contentMode = .scaleAspectFit
