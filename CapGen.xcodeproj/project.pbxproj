@@ -106,6 +106,10 @@
 		D4056EA22971FD6200D3894D /* GoogleAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */; };
 		D4056EA829721BC300D3894D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA729721BC300D3894D /* ProfileView.swift */; };
 		D4056EAA29721DA800D3894D /* SavedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA929721DA800D3894D /* SavedCaptionsView.swift */; };
+		D4056EAC2972297000D3894D /* robot_plain_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EAB2972297000D3894D /* robot_plain_lottie.json */; };
+		D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EAD2972716D00D3894D /* BackArrowView.swift */; };
+		D4056EB02972872600D3894D /* speech_bubble.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EAF2972872500D3894D /* speech_bubble.json */; };
+		D4056EB629728E8D00D3894D /* gold_coin_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EB529728E8C00D3894D /* gold_coin_lottie.json */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -226,6 +230,10 @@
 		D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthManager.swift; sourceTree = "<group>"; };
 		D4056EA729721BC300D3894D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		D4056EA929721DA800D3894D /* SavedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionsView.swift; sourceTree = "<group>"; };
+		D4056EAB2972297000D3894D /* robot_plain_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = robot_plain_lottie.json; sourceTree = "<group>"; };
+		D4056EAD2972716D00D3894D /* BackArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackArrowView.swift; sourceTree = "<group>"; };
+		D4056EAF2972872500D3894D /* speech_bubble.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = speech_bubble.json; sourceTree = "<group>"; };
+		D4056EB529728E8C00D3894D /* gold_coin_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gold_coin_lottie.json; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -509,6 +517,7 @@
 		D4056E1E295CC92100D3894D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				D4056EAD2972716D00D3894D /* BackArrowView.swift */,
 				D4056E1F295CCA1C00D3894D /* Pill.swift */,
 				D4056E23295E296600D3894D /* TextAreaView.swift */,
 				D4056E29295F8EA700D3894D /* RectangleCard.swift */,
@@ -548,6 +557,9 @@
 			isa = PBXGroup;
 			children = (
 				D4056E86296F87F700D3894D /* robot_lottie.json */,
+				D4056EAB2972297000D3894D /* robot_plain_lottie.json */,
+				D4056EB529728E8C00D3894D /* gold_coin_lottie.json */,
+				D4056EAF2972872500D3894D /* speech_bubble.json */,
 				D4056E7E296F0C9900D3894D /* hand_click_lottie.json */,
 			);
 			path = Lottie;
@@ -705,6 +717,7 @@
 				D4056DED295C0DFB00D3894D /* Blacker-Text-Regular-Italic-trial.ttf in Resources */,
 				D4056DEF295C0DFB00D3894D /* Blacker-Display-Light-trial.ttf in Resources */,
 				D4056E0A295C0E2A00D3894D /* GraphikExtralightItalic.otf in Resources */,
+				D4056EAC2972297000D3894D /* robot_plain_lottie.json in Resources */,
 				D4056E05295C0E2A00D3894D /* GraphikSuperItalic.otf in Resources */,
 				D4056E10295C0E2A00D3894D /* GraphikMediumItalic.otf in Resources */,
 				D4056DE0295C0DFB00D3894D /* Blacker-Display-ExtraBold-trial.ttf in Resources */,
@@ -722,8 +735,10 @@
 				D4056E08295C0E2A00D3894D /* GraphikSuper.otf in Resources */,
 				D4056DF0295C0DFB00D3894D /* Blacker-Text-Regular-trial.ttf in Resources */,
 				D4056E06295C0E2A00D3894D /* GraphikThin.otf in Resources */,
+				D4056EB629728E8D00D3894D /* gold_coin_lottie.json in Resources */,
 				D4056E07295C0E2A00D3894D /* GraphikBold.otf in Resources */,
 				D4056DE1295C0DFB00D3894D /* Blacker-Text-Heavy-trial.ttf in Resources */,
+				D4056EB02972872600D3894D /* speech_bubble.json in Resources */,
 				D4056DE6295C0DFB00D3894D /* Blacker-Text-Book-Italic-trial.ttf in Resources */,
 				D4056E0F295C0E2A00D3894D /* GraphikRegular.otf in Resources */,
 				D4056DDF295C0DFB00D3894D /* Blacker-Text-Bold-Italic-trial.ttf in Resources */,
@@ -907,6 +922,7 @@
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
 				D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */,
+				D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */,
 				D4056E382963178D00D3894D /* CaptionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

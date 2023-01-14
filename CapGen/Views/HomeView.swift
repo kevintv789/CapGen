@@ -11,7 +11,6 @@ import FirebaseAuth
 struct HomeView: View {
     let socialMediaPlatforms = SocialMediaPlatforms()
     let envName: String = Bundle.main.infoDictionary?["ENV"] as! String
-    @EnvironmentObject var googleAuthMan: GoogleAuthManager
     
     @FocusState private var isKeyboardFocused: Bool
     @State var expandBottomArea: Bool = false
@@ -25,18 +24,6 @@ struct HomeView: View {
         platformSelected = platform
     }
     
-    func logout() {
-        DispatchQueue.global(qos: .background).async {
-            if (googleAuthMan.googleSignInState == .signedIn) {
-                // We know Google SSO was used, sign out using Google
-                // so that users can login into a different account
-                googleAuthMan.signOut()
-            }
-            
-            try? Auth.auth().signOut()
-        }
-    }
-    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -48,16 +35,7 @@ struct HomeView: View {
                 
                 
                 GeometryReader { geo in
-                    VStack(alignment: .leading) {
-                        
-                        // TEMP LOGOUT BUTTON
-                        Button {
-                            logout()
-                        } label: {
-                            Text("Logout")
-                        }
-                        .padding(.leading, 50)
-                        
+                    VStack(alignment: .leading) {                        
                         if (envName != "prod") {
                             Text("\(envName)")
                                 .padding(.leading, 16)

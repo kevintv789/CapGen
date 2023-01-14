@@ -127,7 +127,7 @@ class SignInWithApple: ObservableObject {
         
         let firebaseCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: currentNonce)
         
-        AuthManager().login(credential: firebaseCredential) { isSuccess in
+        AuthManager.shared.login(credential: firebaseCredential) { isSuccess in
             if (isSuccess) {
                 print("Apple sign in success!")
             }

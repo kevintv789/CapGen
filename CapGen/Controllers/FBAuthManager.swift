@@ -41,7 +41,7 @@ class FBAuthManager: ObservableObject {
     
     func authenticateWithFirebase(accessToken: AccessToken) {
         if let accessToken = AccessToken.current {
-            AuthManager().login(credential: FacebookAuthProvider.credential(withAccessToken: accessToken.tokenString)) { success in
+            AuthManager.shared.login(credential: FacebookAuthProvider.credential(withAccessToken: accessToken.tokenString)) { success in
                 if (success) {
                     print("Facebook login successful!")
                 }

@@ -25,15 +25,10 @@ struct CaptionView: View {
             Color.ui.lighterLavBlue.ignoresSafeArea()
             
             VStack(alignment: .leading) {
-                Button {
+                BackArrowView {
                     backBtnClicked.toggle()
-                } label: {
-                    Image("back_arrow")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .padding(-30)
-                        .padding(.leading, 15)
                 }
+                .padding(.leading, 8)
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 5) {

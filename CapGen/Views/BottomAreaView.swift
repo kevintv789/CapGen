@@ -109,9 +109,11 @@ struct BottomAreaView: View {
         }
         .navigationDestination(isPresented: $showCaptionView) {
             SavedCaptionsView()
+                .navigationBarBackButtonHidden(true)
         }
         .navigationDestination(isPresented: $showProfileView) {
-            ProfileView()
+            ProfileView(isPresented: $showProfileView)
+                .navigationBarBackButtonHidden(true)
         }
         .ignoresSafeArea(.all)
     }
@@ -138,7 +140,7 @@ struct TabButtonsView: View {
             Button {
                 showProfileView = true
             } label: {
-                Image(systemName: "person.circle")
+                Image(systemName: "person.fill")
                     .resizable()
                     .frame(width: 40, height: 40)
                     .foregroundColor(.ui.cultured)

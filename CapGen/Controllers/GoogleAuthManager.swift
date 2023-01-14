@@ -58,7 +58,7 @@ class GoogleAuthManager: ObservableObject {
         
         let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
         
-        AuthManager().login(credential: credential) { (success) in
+        AuthManager.shared.login(credential: credential) { (success) in
             if (success) {
                 self.googleSignInState = .signedIn
                 print("Google login was a success!")
