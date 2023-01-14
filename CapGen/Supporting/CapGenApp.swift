@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseCore
+import Firebase
 
 let SCREEN_WIDTH = UIScreen.main.bounds.width
 let SCREEN_HEIGHT = UIScreen.main.bounds.height
@@ -28,7 +29,8 @@ struct CapGenApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(authManager: AuthManager.shared)
+                .environmentObject(AuthManager.shared)
                 .environmentObject(GoogleAuthManager())
         }
     }

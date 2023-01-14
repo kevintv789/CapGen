@@ -24,7 +24,7 @@ struct LaunchView: View {
                 .ignoresSafeArea(.all)
             
             VStack(spacing: 0) {
-                LottieView(name: "robot_lottie", loopMode: .loop)
+                LottieView(name: "robot_lottie", loopMode: .loop, isAnimating: true)
                     .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT / 2)
                 
                 AnimatedTextView(initialText: $initialText, finalText: self.finalText, isRepeat: false, timeInterval: 10, typingSpeed: 0.01)
@@ -113,11 +113,12 @@ struct FacebookSignInView: View {
 }
 
 struct GoogleSignInView: View {
-    @EnvironmentObject var googleAuthMan: GoogleAuthManager
+    @EnvironmentObject var authManager: AuthManager
     
     var body: some View {
         Button {
-            googleAuthMan.signIn()
+            // Need to reference google auth inside authManager to get the logged in status of googleAuthMan
+            authManager.googleAuthMan.signIn()
         } label: {
             Circle()
                 .strokeBorder(Color.ui.cadetBlueCrayola, lineWidth: 1)
