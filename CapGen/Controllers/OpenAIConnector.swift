@@ -25,7 +25,7 @@ public class OpenAIConnector {
         let httpBody: [String: Any] = [
             "prompt": prompt,
             "max_tokens": 2000,
-            "temperature": 0.5
+            "temperature": 0.7
         ]
         
         var httpBodyJson: Data
@@ -38,7 +38,7 @@ public class OpenAIConnector {
         }
         
         request.httpBody = httpBodyJson
-        if let requestData =  await executeRequest(request: request, withSessionConfig: nil) {
+        if let requestData = await executeRequest(request: request, withSessionConfig: nil) {
             print(requestData)
             return requestData.choices[0].text
         }

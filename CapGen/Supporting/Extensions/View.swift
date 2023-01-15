@@ -30,4 +30,42 @@ extension View {
         let resign = #selector(UIResponder.resignFirstResponder)
         UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
     }
+    
+    // Create extension for pop-up view
+    // use the @ViewBuilder to create child views for a specific SwiftUI view in a readable way without having to use any return keywords.
+    func modalView<Content: View>(horizontalPadding: CGFloat = 40.0, show: Binding<Bool>, @ViewBuilder content: @escaping () -> Content, onClickExit: @escaping () -> Void) -> some View {
+        return self
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .overlay {
+                if show.wrappedValue {
+                    Color.ui.richBlack.opacity(0.35).ignoresSafeArea(.all)
+                        .onTapGesture {
+                            onClickExit()
+                        }
+                    GeometryReader { geo in
+                        let size = geo.size
+                        
+                        ZStack {
+                            
+                            content()
+                            
+                            Button {
+                                onClickExit()
+                            } label: {
+                                Image(systemName: "x.circle")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.ui.cadetBlueCrayola)
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                            
+                        }
+                        .cornerRadius(16)
+                        .frame(width: size.width - horizontalPadding, height: size.height / 2.5, alignment: .center)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    }
+                }
+            }
+    }
 }
