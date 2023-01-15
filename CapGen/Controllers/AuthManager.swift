@@ -32,14 +32,20 @@ class AuthManager: NSObject, ObservableObject {
     }
     
     func logout() {
-        if (googleAuthMan.googleSignInState == .signedIn) {
-            // We know Google SSO was used, sign out using Google
-            // so that users can login into a different account
-            googleAuthMan.signOut()
+        do {
+            if (googleAuthMan.googleSignInState == .signedIn) {
+                // We know Google SSO was used, sign out using Google
+                // so that users can login into a different account
+                googleAuthMan.signOut()
+            }
+            
+            if (googleAuthMan.googleSignInState == .signedOut) {
+                try Auth.auth().signOut()
+            }
+            
+        } catch let error as NSError {
+            print("Failed to sign out", error)
         }
-        
-        try? Auth.auth().signOut()
-        self.isSignedIn = false
     }
     
     private func authStateChanged(with auth: Auth, user: User?) {

@@ -21,6 +21,7 @@ struct SocialMediaPlatforms {
 }
 
 struct ContentView: View {
+    @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @ObservedObject var authManager: AuthManager
     
     var body: some View {
@@ -30,6 +31,9 @@ struct ContentView: View {
             } else {
                 LaunchView()
             }
+        }
+        .onAppear {
+            rewardedAd.loadAd()
         }
     }
 }

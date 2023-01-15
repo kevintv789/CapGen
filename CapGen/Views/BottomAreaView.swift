@@ -301,7 +301,7 @@ struct EmojisAndHashtagSection: View {
 
 
 struct LengthSelectionSection: View {
-    @State var sliderValues: [Int] = [0, 1, 2, 3, 4]
+    @State var sliderValues: [Int] = [0, 1, 2, 3, 4, 5]
     @State var selectedValue: Int = 0
     @Binding var lengthValue: String
     

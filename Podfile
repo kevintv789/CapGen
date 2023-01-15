@@ -9,6 +9,7 @@ target 'CapGen' do
   pod 'FacebookCore'
   pod 'FacebookLogin'
   pod 'FacebookShare'
+  pod 'Google-Mobile-Ads-SDK'
 
   target 'CapGenTests' do
     inherit! :search_paths

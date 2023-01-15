@@ -45,7 +45,7 @@ struct SnappableSliderView: UIViewRepresentable {
         @objc func handleTap(_ sender: UIGestureRecognizer) {
             let location = sender.location(in: nil)
             if let slider = sender.view as? UISlider {
-                // round up to the nearest index from a maximum value of 4
+                // round up to the nearest index from a maximum value 
                 let newIndex = Int(Float(location.x / UIScreen.main.bounds.width) * slider.maximumValue + 0.5)
                 
                 slider.setValue(Float(newIndex), animated: false)

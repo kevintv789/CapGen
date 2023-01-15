@@ -10,7 +10,6 @@ import FirebaseAuth
 
 struct HomeView: View {
     let socialMediaPlatforms = SocialMediaPlatforms()
-    let envName: String = Bundle.main.infoDictionary?["ENV"] as! String
     
     @FocusState private var isKeyboardFocused: Bool
     @State var expandBottomArea: Bool = false
@@ -35,15 +34,7 @@ struct HomeView: View {
                 
                 
                 GeometryReader { geo in
-                    VStack(alignment: .leading) {                        
-                        if (envName != "prod") {
-                            Text("\(envName)")
-                                .padding(.leading, 16)
-                                .padding(.top, 6)
-                                .font(.ui.graphikLightItalic)
-                                .foregroundColor(Color.ui.richBlack)
-                        }
-                        
+                    VStack(alignment: .leading) {         
                         Text("Which social media platform is this for?")
                             .padding(.leading, 16)
                             .padding(.top, 6)

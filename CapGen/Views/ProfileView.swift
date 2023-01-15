@@ -19,8 +19,11 @@ extension Text {
 }
 
 struct ProfileView: View {
+    let envName: String = Bundle.main.infoDictionary?["ENV"] as! String
     @State var backBtnClicked: Bool = false
+    @State var showCongratsModal: Bool = false
     @Binding var isPresented: Bool
+    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
     var dividerText: String = {
         if (SCREEN_WIDTH > 400) {
@@ -63,7 +66,7 @@ struct ProfileView: View {
                             .opacity(0.4)
                         
                         VStack {
-                            ContentSectionView()
+                            ContentSectionView(showCongratsModal: $showCongratsModal)
                             ConnectSectionView()
                             AccountManagementSectionView(isPresented: $isPresented)
                             
@@ -73,15 +76,31 @@ struct ProfileView: View {
                                 Text("CapGen")
                                     .foregroundColor(.ui.cadetBlueCrayola)
                                     .font(.ui.headline)
-                                Text("Version: 1.0.0")
-                                    .foregroundColor(.ui.cadetBlueCrayola)
+                                
+                                HStack {
+                                    if (envName != "prod") {
+                                        Text("\(envName)")
+                                            .foregroundColor(.ui.cadetBlueCrayola)
+                                    }
+                                    Text("Version: \(appVersion ?? "")")
+                                        .foregroundColor(.ui.cadetBlueCrayola)
+                                }
+                               
                             }
                             .frame(height: 150)
                             
                         }
+                        
                     }
                 }
                 .ignoresSafeArea(.all)
+            }
+        }
+        .modalView(horizontalPadding: 40, show: $showCongratsModal) {
+            CongratsModalView(showView: $showCongratsModal)
+        } onClickExit: {
+            withAnimation {
+                self.showCongratsModal = false
             }
         }
     }
@@ -154,7 +173,6 @@ struct CreditAndCaptionsAnimatedView: View {
                         .customProfileHeadline()
                     
                 }
-                
             }
             
             Button {
@@ -221,14 +239,17 @@ struct OptionButtonView: View {
                                 .padding(.leading, 25)
                         }
                         
-                    }
+                    }      .offset(x: 3, y: subTitle != nil ? 0 : 5)
                 )
         }
-        .frame(height: 100)
+        .frame(height: subTitle != nil ? 100 : 50)
     }
 }
 
 struct ContentSectionView: View {
+    @State var showBottomSheet: Bool = false
+    @Binding var showCongratsModal: Bool
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Content")
@@ -248,10 +269,13 @@ struct ContentSectionView: View {
                     .frame(width: SCREEN_WIDTH / 1.1)
             }
             
-            OptionButtonView(title: "🎁 Get more credits", subTitle: "Unlock endless 🔥 captions with CapGen - Watch ads, earn 💰, create more 🌟") {
-                print("Saved captions")
+            OptionButtonView(title: "🎁 Get more credits", subTitle: "Unlock endless 🔥 captions with CapGen - Watch ads, earn credits ⭐, create more 🎨") {
+                showBottomSheet = true
             }
-            
+            .sheet(isPresented: $showBottomSheet) {
+                RewardedAdView(isViewPresented: $showBottomSheet, showCongratsModal: $showCongratsModal)
+                    .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
+            }
         }
     }
 }
@@ -296,10 +320,7 @@ struct AccountManagementSectionView: View {
                 .offset(y: 10)
             
             OptionButtonView(title: "🔐 Logout") {
-                withAnimation {
-                    AuthManager.shared.logout()
-                    isPresented = false
-                }
+                AuthManager.shared.logout()
             }
             
             ZStack {
@@ -311,6 +332,13 @@ struct AccountManagementSectionView: View {
             
             OptionButtonView(title: "🔨 Delete profile", subTitle: "Deleting your profile will permanently remove all credits and captions. This action is irreversible, please proceed with caution.", dangerField: true) {
                 print("Saved captions")
+            }
+        }
+        .onReceive(AuthManager.shared.$isSignedIn) { isSignedIn in
+            guard let isSignedIn = isSignedIn else { return }
+            
+            if (!isSignedIn) {
+                isPresented = false
             }
         }
     }

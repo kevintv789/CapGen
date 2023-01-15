@@ -41,6 +41,8 @@ extension Font {
         let blackerTextMediumSmall = Font.custom("BlackerText-Medium", size: sizes.SMALL)
         
         let largeTitle = Font.custom("Graphik-Black", size: 34, relativeTo: .largeTitle)
+        let largeTitleMd = Font.custom("Graphik-Black", size: 28, relativeTo: .largeTitle)
+        let largeTitleSm = Font.custom("Graphik-Bold", size: 26, relativeTo: .largeTitle)
         let title = Font.custom("Graphik-Semibold", size: 28, relativeTo: .title)
         let title2 = Font.custom("Graphik-Medium", size: 22, relativeTo: .title2)
         let title3 = Font.custom("Graphik-Light", size: 20, relativeTo: .title3)
@@ -48,6 +50,7 @@ extension Font {
         let headlineMd = Font.custom("Graphik-Medium", size: 15, relativeTo: .headline)
         let headlineSm = Font.custom("Graphik-Medium", size: 13, relativeTo: .headline)
         let subheadline = Font.custom("Graphik-RegularItalic", size: 15, relativeTo: .subheadline)
+        let bodyLarge = Font.custom("Graphik-Regular", size: 16, relativeTo: .body)
         let body = Font.custom("Graphik-Regular", size: 13, relativeTo: .body)
         let bodyLight = Font.custom("Graphik-Light", size: 13, relativeTo: .body)
         let callout = Font.custom("Graphik-SemiboldItalic", size: 11, relativeTo: .callout)
