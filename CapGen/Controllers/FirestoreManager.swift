@@ -34,9 +34,14 @@ class FirestoreManager: ObservableObject {
         }
     }
     
-    func increaseCredit(for uid: String) {
-        let docRef = db.collection("Users").document("\(uid)")
+    func incrementCredit(for uid: String?) {
+        guard let userId = uid else { return }
         
+        let docRef = db.collection("Users").document("\(userId)")
+        docRef.updateData([
+            "credits": FieldValue.increment(Int64(1))
+        ])
         
     }
+    
 }

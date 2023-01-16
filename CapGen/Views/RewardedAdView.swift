@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RewardedAdView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @Binding var isViewPresented: Bool
     @State var isAdDone: Bool = false
@@ -37,8 +38,7 @@ struct RewardedAdView: View {
                 
                 Button {
                     self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                        print("REWARDEDDDD")
-                        // Give users their credit
+                        firestoreMan.incrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
                     })
                 } label: {
                     RoundedRectangle(cornerRadius: 16)
