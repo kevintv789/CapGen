@@ -13,6 +13,9 @@ import SwiftUI
 class AuthManager: NSObject, ObservableObject {
     @Published var isSignedIn: Bool?
     @Published var googleAuthMan: GoogleAuthManager = GoogleAuthManager()
+    @Published var fbAuthManager: FBAuthManager = FBAuthManager()
+    @Published var appleAuthManager: SignInWithApple = SignInWithApple()
+    @Published var userManager: UserManager = UserManager()
     
     private let auth = Auth.auth()
     static let shared = AuthManager()
@@ -25,8 +28,17 @@ class AuthManager: NSObject, ObservableObject {
     }
     
     func login(credential: AuthCredential, completionBlock: @escaping (_ success: Bool) -> Void) {
-        Auth.auth().signIn(with: credential, completion: { (user, error) in
+        Auth.auth().signIn(with: credential, completion: { (result, error) in
+            if error != nil {
+                print("ERROR logging into Firebase", error!.localizedDescription)
+                return
+            }
+            
+            guard let userId = self.auth.currentUser?.uid else { return }
+
             completionBlock(error == nil)
+            self.userManager.createUserDoc(auth: self.auth)
+            self.userManager.getUser(with: userId)
             self.isSignedIn = true
         })
     }
@@ -51,6 +63,9 @@ class AuthManager: NSObject, ObservableObject {
     private func authStateChanged(with auth: Auth, user: User?) {
         if user != nil {
             // User is signed in
+            let userId = user!.uid
+            self.userManager.getUser(with: userId)
+            
             self.isSignedIn = true
         } else {
             self.isSignedIn = false

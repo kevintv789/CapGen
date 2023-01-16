@@ -10,8 +10,14 @@ import FacebookLogin
 import FacebookCore
 import UIKit
 import FirebaseAuth
+import FBSDKCoreKit
+
+enum FBSignedInStatus {
+    case sigednOut, signedIn
+}
 
 class FBAuthManager: ObservableObject {
+    @Published var fbSignedInStatus: FBSignedInStatus = .sigednOut
     let loginManager = LoginManager()
     
     func login() {
@@ -43,10 +49,23 @@ class FBAuthManager: ObservableObject {
         if let accessToken = AccessToken.current {
             AuthManager.shared.login(credential: FacebookAuthProvider.credential(withAccessToken: accessToken.tokenString)) { success in
                 if (success) {
+                    self.fbSignedInStatus = .signedIn
                     print("Facebook login successful!")
                 }
             }
         }
-     
+    }
+    
+    func getFBProfile(completion: @escaping (_ fbUser: [String: Any]?) -> Void) {
+        GraphRequest(graphPath: "me", parameters: ["fields":"name, email"]).start { (connection, result, error) in
+            if error != nil {
+                print("ERROR retrieving FB profile", error!.localizedDescription)
+                return
+            }
+            
+            guard let userDict = result as? [String:Any] else { return }
+            
+            completion(userDict)
+        }
     }
 }

@@ -29,7 +29,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct CapGenApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject var firestoreManager = FirestoreManager()
     
     var body: some Scene {
         WindowGroup {
@@ -37,6 +36,10 @@ struct CapGenApp: App {
                 .environmentObject(AuthManager.shared)
                 .environmentObject(GoogleAuthManager())
                 .environmentObject(GoogleRewardedAds())
+                .environmentObject(FBAuthManager())
+                .environmentObject(SignInWithApple())
+                .environmentObject(FirestoreManager())
+                .environmentObject(UserManager())
         }
     }
 }

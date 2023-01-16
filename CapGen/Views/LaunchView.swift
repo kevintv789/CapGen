@@ -80,8 +80,8 @@ struct SignInWithAppleView: View {
     
     var body: some View {
         Button {
-            signInWithApple.setDelegate()
-            signInWithApple.signIn()
+            AuthManager.shared.appleAuthManager.setDelegate()
+            AuthManager.shared.appleAuthManager.signIn()
         } label: {
             Circle()
                 .fill(Color.ui.richBlack)
@@ -98,11 +98,9 @@ struct SignInWithAppleView: View {
 }
 
 struct FacebookSignInView: View {
-    @ObservedObject var signInWithFB = FBAuthManager()
-    
     var body: some View {
         Button {
-            signInWithFB.login()
+            AuthManager.shared.fbAuthManager.login()
         } label: {
             Image("facebook-circle-icon")
                 .resizable()

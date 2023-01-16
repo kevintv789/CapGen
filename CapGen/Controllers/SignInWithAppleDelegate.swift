@@ -83,7 +83,15 @@ class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate {
     }
 }
 
+enum AppleSignInStatus {
+    case signedIn, signedOut
+}
+
 class SignInWithApple: ObservableObject {
+    @Published var appleSignedInStatus: AppleSignInStatus = .signedOut
+    @Published var email: String?
+    @Published var fullName: String?
+    
     var delegate: SignInWithAppleDelegate?
     var currentNonce: String
     
@@ -94,7 +102,15 @@ class SignInWithApple: ObservableObject {
     func setDelegate() {
         delegate = SignInWithAppleDelegate { credential in
             SignInWithApple.authenticate(credential: credential, currentNonce: self.currentNonce)
-            // Plug in firebase code here
+            
+            // Signed in was a success
+            self.email = credential.email ?? "N/A"
+            
+            let firstName = credential.fullName?.givenName ?? "user"
+            let lastName = credential.fullName?.familyName ?? "userLastNameUndefined"
+            
+            self.fullName = "\(firstName) \(lastName)"
+            
         } onCompletePassword: { credential in
             print("ONPASSWORD", credential)
         } onError: { error in
@@ -110,6 +126,7 @@ class SignInWithApple: ObservableObject {
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = delegate
         controller.performRequests()
+        self.appleSignedInStatus = .signedIn
     }
     
     static func authenticate(credential: ASAuthorizationAppleIDCredential, currentNonce: String) {
