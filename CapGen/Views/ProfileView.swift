@@ -176,8 +176,6 @@ struct CreditAndCaptionsAnimatedView: View {
                 if (!animateCoin) {
                     animateCoin = true
                 }
-                
-                
             } label: {
                 VStack {
                     LottieView(name: "gold_coin_lottie", loopMode: .playOnce, isAnimating: animateCoin)

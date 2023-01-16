@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CongratsModalView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @Binding var showView: Bool
     
@@ -39,8 +40,7 @@ struct CongratsModalView: View {
                 
                 Button {
                     self.rewardedAd.showAd(rewardFunction: {
-                        print("REWARDEDDDD")
-                        // Give users their credit
+                        firestoreMan.incrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
                     })
                 } label: {
                     RoundedRectangle(cornerRadius: 16)
@@ -54,7 +54,9 @@ struct CongratsModalView: View {
                 }
                 
                 Button {
-                    showView = false
+                    withAnimation {
+                        showView = false
+                    }
                 } label: {
                     Text("Don’t show again")
                         .foregroundColor(.ui.cadetBlueCrayola)
