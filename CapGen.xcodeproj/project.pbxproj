@@ -92,7 +92,6 @@
 		D4056E772968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
 		D4056E79296E2C1700D3894D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E78296E2C1700D3894D /* String.swift */; };
 		D4056E7C296F0C7000D3894D /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E7B296F0C7000D3894D /* Lottie */; };
-		D4056E7F296F0C9900D3894D /* hand_click_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056E7E296F0C9900D3894D /* hand_click_lottie.json */; };
 		D4056E81296F0CB900D3894D /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E80296F0CB900D3894D /* LottieView.swift */; };
 		D4056E83296F867D00D3894D /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E82296F867D00D3894D /* LaunchView.swift */; };
 		D4056E85296F868800D3894D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E84296F868800D3894D /* HomeView.swift */; };
@@ -115,6 +114,8 @@
 		D4056EBD2974931D00D3894D /* coin_pile_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EBB2974931D00D3894D /* coin_pile_lottie.json */; };
 		D4056EBE2974931D00D3894D /* coin_wallet_purple_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EBC2974931D00D3894D /* coin_wallet_purple_lottie.json */; };
 		D4056EC02974AF6D00D3894D /* CongratsModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EBF2974AF6D00D3894D /* CongratsModalView.swift */; };
+		D4056EC229751ACA00D3894D /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC129751ACA00D3894D /* UserModel.swift */; };
+		D4056EC429751BD200D3894D /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC329751BD200D3894D /* UserManager.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -222,7 +223,6 @@
 		D4056E712968E71300D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D4056E742968E94300D3894D /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		D4056E78296E2C1700D3894D /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		D4056E7E296F0C9900D3894D /* hand_click_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = hand_click_lottie.json; sourceTree = "<group>"; };
 		D4056E80296F0CB900D3894D /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		D4056E82296F867D00D3894D /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		D4056E84296F868800D3894D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -244,6 +244,8 @@
 		D4056EBB2974931D00D3894D /* coin_pile_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = coin_pile_lottie.json; sourceTree = "<group>"; };
 		D4056EBC2974931D00D3894D /* coin_wallet_purple_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = coin_wallet_purple_lottie.json; sourceTree = "<group>"; };
 		D4056EBF2974AF6D00D3894D /* CongratsModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CongratsModalView.swift; sourceTree = "<group>"; };
+		D4056EC129751ACA00D3894D /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		D4056EC329751BD200D3894D /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -394,6 +396,7 @@
 				D4056E2B295F8F0100D3894D /* ToneModel.swift */,
 				D4056E352962030800D3894D /* CaptionLengthsModel.swift */,
 				D4056E3D2963487500D3894D /* OpenAIModel.swift */,
+				D4056EC129751ACA00D3894D /* UserModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 				D4056E3B2963450D00D3894D /* OpenAIConnector.swift */,
 				D4056E742968E94300D3894D /* FirestoreManager.swift */,
 				D4056E982971EB9600D3894D /* AuthManager.swift */,
+				D4056EC329751BD200D3894D /* UserManager.swift */,
 				D4056E962970F33E00D3894D /* SignInWithAppleDelegate.swift */,
 				D4056E9A2971EF6F00D3894D /* FBAuthManager.swift */,
 				D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */,
@@ -575,7 +579,6 @@
 				D4056EAB2972297000D3894D /* robot_plain_lottie.json */,
 				D4056EB529728E8C00D3894D /* gold_coin_lottie.json */,
 				D4056EAF2972872500D3894D /* speech_bubble.json */,
-				D4056E7E296F0C9900D3894D /* hand_click_lottie.json */,
 			);
 			path = Lottie;
 			sourceTree = "<group>";
@@ -718,7 +721,6 @@
 				D4056E12295C0E2A00D3894D /* GraphikBoldItalic.otf in Resources */,
 				D4056E15295C0E2A00D3894D /* GraphikExtralight.otf in Resources */,
 				D4056E09295C0E2A00D3894D /* GraphikSemibold.otf in Resources */,
-				D4056E7F296F0C9900D3894D /* hand_click_lottie.json in Resources */,
 				D4056DEE295C0DFB00D3894D /* Blacker-Text-Bold-trial.ttf in Resources */,
 				D4005DBC295BE0E1004D695D /* Preview Assets.xcassets in Resources */,
 				D4056DE3295C0DFB00D3894D /* Blacker-Text-Book-trial.ttf in Resources */,
@@ -928,6 +930,7 @@
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
+				D4056EC429751BD200D3894D /* UserManager.swift in Sources */,
 				D4056E81296F0CB900D3894D /* LottieView.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
 				D4056EAA29721DA800D3894D /* SavedCaptionsView.swift in Sources */,
@@ -944,6 +947,7 @@
 				D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */,
 				D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */,
 				D4056E382963178D00D3894D /* CaptionView.swift in Sources */,
+				D4056EC229751ACA00D3894D /* UserModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,6 +19,7 @@ extension Text {
 }
 
 struct ProfileView: View {
+    @EnvironmentObject var authManager: AuthManager
     let envName: String = Bundle.main.infoDictionary?["ENV"] as! String
     @State var backBtnClicked: Bool = false
     @State var showCongratsModal: Bool = false
@@ -49,7 +50,7 @@ struct ProfileView: View {
                     LottieView(name: "robot_plain_lottie", loopMode: .loop, isAnimating: true)
                         .frame(width: SCREEN_WIDTH, height: 130, alignment: .center)
                     
-                    GreetingsTextView()
+                    GreetingsTextView().environmentObject(authManager)
                     
                     CreditAndCaptionsAnimatedView()
                     
@@ -85,7 +86,7 @@ struct ProfileView: View {
                                     Text("Version: \(appVersion ?? "")")
                                         .foregroundColor(.ui.cadetBlueCrayola)
                                 }
-                               
+                                
                             }
                             .frame(height: 150)
                             
@@ -110,9 +111,11 @@ struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView(isPresented: .constant(true))
             .environmentObject(GoogleAuthManager())
+            .environmentObject(AuthManager.shared)
         
         ProfileView(isPresented: .constant(true))
             .environmentObject(GoogleAuthManager())
+            .environmentObject(AuthManager.shared)
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
         
@@ -121,11 +124,12 @@ struct ProfileView_Previews: PreviewProvider {
 
 struct GreetingsTextView: View {
     @State var initialText: String = ""
-    @State var finalText: String = {
+    
+    func createGreeting() -> String {
         let hour: Int = Calendar.current.component(.hour, from: Date())
         var resultStr: String = ""
         var secondaryStr: String = ""
-        
+
         // 6PM - 4AM = Good evening
         if (18...23).contains(hour) || (0...3).contains(hour) {
             resultStr += "Good evening,"
@@ -138,25 +142,33 @@ struct GreetingsTextView: View {
             resultStr += "Good afternoon,"
             secondaryStr = "today"
         }
-        
-        resultStr += " user!\nHow may I be of service \(secondaryStr)? 💡"
-        
+
+        if let user = AuthManager.shared.userManager.user {
+            let firstName = user.fullName.components(separatedBy: " ")[0]
+            resultStr += " \(firstName)!\nHow may I be of service \(secondaryStr)? 💡"
+        } else {
+            resultStr += " user!\nHow may I be of service \(secondaryStr)? 💡"
+        }
+
         return resultStr
-    }()
+    }
     
     var body: some View {
-        AnimatedTextView(initialText: $initialText, finalText: self.finalText, isRepeat: false, timeInterval: 10, typingSpeed: 0.02)
-            .font(.ui.headline)
-            .foregroundColor(.ui.richBlack)
-            .frame(width: SCREEN_WIDTH, height: 50, alignment: .center)
-            .multilineTextAlignment(.center)
-            .lineSpacing(10)
+        VStack {
+            AnimatedTextView(initialText: $initialText, finalText: self.createGreeting(), isRepeat: false, timeInterval: 10, typingSpeed: 0.02)
+                .font(.ui.headline)
+                .foregroundColor(.ui.richBlack)
+                .frame(width: SCREEN_WIDTH, height: 50, alignment: .center)
+                .multilineTextAlignment(.center)
+                .lineSpacing(10)
+        }
     }
 }
 
 struct CreditAndCaptionsAnimatedView: View {
     @State var animateCoin: Bool = false
     @State var animateSpeechBubble: Bool = false
+    @State var creditAmount: Int = 0
     
     var body: some View {
         HStack(spacing: 50) {
@@ -164,12 +176,14 @@ struct CreditAndCaptionsAnimatedView: View {
                 if (!animateCoin) {
                     animateCoin = true
                 }
+                
+                
             } label: {
                 VStack {
                     LottieView(name: "gold_coin_lottie", loopMode: .playOnce, isAnimating: animateCoin)
                         .frame(width: 100, height: 100)
                     
-                    Text("1\ncredit left")
+                    Text("\(creditAmount <= 1000000 ? "\(creditAmount)" : "1000000+")\n\(creditAmount > 1 ? "credits" : "credit") left")
                         .customProfileHeadline()
                     
                 }
@@ -203,6 +217,11 @@ struct CreditAndCaptionsAnimatedView: View {
                 Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
                     animateSpeechBubble = false
                 }
+            }
+        }
+        .onReceive(AuthManager.shared.userManager.$user) { user in
+            if (user != nil) {
+                self.creditAmount = user!.credits
             }
         }
     }
