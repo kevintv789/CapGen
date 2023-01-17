@@ -19,9 +19,9 @@ extension Text {
 }
 
 struct ProfileView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var authManager: AuthManager
     let envName: String = Bundle.main.infoDictionary?["ENV"] as! String
-    @State var backBtnClicked: Bool = false
     @State var showCongratsModal: Bool = false
     @Binding var isPresented: Bool
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
@@ -42,7 +42,7 @@ struct ProfileView: View {
             
             VStack(alignment: .leading) {
                 BackArrowView {
-                    self.isPresented = false
+                    self.presentationMode.wrappedValue.dismiss()
                 }
                 .padding(.leading, 8)
                 
