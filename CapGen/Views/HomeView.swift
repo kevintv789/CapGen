@@ -10,6 +10,7 @@ import FirebaseAuth
 
 struct HomeView: View {
     let socialMediaPlatforms = SocialMediaPlatforms()
+    @State var credits: Int = AuthManager.shared.userManager.user?.credits ?? 0
     
     @FocusState private var isKeyboardFocused: Bool
     @State var expandBottomArea: Bool = false
@@ -23,23 +24,38 @@ struct HomeView: View {
         platformSelected = platform
     }
     
+    func getWidthDivisorForCreditCounter() -> CGFloat {
+        if (credits < 10) {
+            return 2.5
+        } else if (credits > 10) {
+            return 2.3
+        }
+        
+        return 2.1
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
+                Color.ui.cultured.ignoresSafeArea()
                 Color.ui.lighterLavBlue.ignoresSafeArea()
+                    .opacity(0.5)
                     .onTapGesture {
                         hideKeyboard()
                     }
                 
-                
-                
                 GeometryReader { geo in
-                    VStack(alignment: .leading) {         
+                    VStack(alignment: .trailing) {
+                        CreditCounterView(credits: $credits)
+                            .frame(width: geo.size.width / getWidthDivisorForCreditCounter(), height: 40)
+                            .padding(.trailing, 15)
+                        
                         Text("Which social media platform is this for?")
                             .padding(.leading, 16)
                             .padding(.top, 6)
                             .font(.ui.graphikSemibold)
                             .foregroundColor(Color.ui.richBlack)
+                            .frame(width: geo.size.width, alignment: .center)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(alignment: .top, spacing: 16) {
@@ -80,6 +96,11 @@ struct HomeView: View {
                     Button("Done") {
                         hideKeyboard()
                     }
+                }
+            }
+            .onReceive(AuthManager.shared.userManager.$user) { user in
+                if user != nil {
+                    self.credits = user!.credits 
                 }
             }
         }
