@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoadingView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
     let rotationTime: Double = 0.75 // seconds to complete a full rotation
     let animationTime: Double = 1.9
     
@@ -92,6 +93,8 @@ struct LoadingView: View {
                         openAiResponse = await openAiRequest.processPrompt(prompt: promptRequestStr!.generatedPromptString)
                         
                         if (openAiResponse != nil && !openAiResponse!.isEmpty) {
+                            // decrement credit on success
+                            firestoreMan.decrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
                             showCaptionView = true
                         }
                     }

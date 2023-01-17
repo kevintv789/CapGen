@@ -15,6 +15,7 @@ public class OpenAIConnector {
     
     @MainActor
     public func processPrompt(prompt: String) async -> String? {
+        print("PROMPT", prompt)
         self.openAIKey = firestoreManager.openAiKey
         
         var request = URLRequest(url: self.openAIURL!)

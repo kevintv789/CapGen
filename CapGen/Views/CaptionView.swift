@@ -26,7 +26,7 @@ struct CaptionView: View {
             
             VStack(alignment: .leading) {
                 BackArrowView {
-                    backBtnClicked.toggle()
+                    backBtnClicked = true
                 }
                 .padding(.leading, 8)
                 

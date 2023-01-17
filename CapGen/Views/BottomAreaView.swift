@@ -93,15 +93,6 @@ struct BottomAreaView: View {
                 )
                 .frame(height: expandArea ? MAX_HEIGHT : MIN_HEIGHT)
                 .offset(x: 0, y: expandArea ? 50 : MIN_HEIGHT / 1.2)
-            
-            // Make the entire black area with minimal height tappable -- not just the button
-                .onTapGesture(perform: {
-                    if (!expandArea) {
-                        withAnimation {
-                            expandArea.toggle()
-                        }
-                    }
-                })
         }
         .navigationDestination(isPresented: $displayLoadView) {
             LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270), promptRequestStr: $promptRequestStr)
@@ -114,6 +105,9 @@ struct BottomAreaView: View {
         .navigationDestination(isPresented: $showProfileView) {
             ProfileView(isPresented: $showProfileView)
                 .navigationBarBackButtonHidden(true)
+        }
+        .onAppear() {
+            self.expandArea = false
         }
         .ignoresSafeArea(.all)
     }
@@ -340,7 +334,8 @@ struct LengthSelectionSection: View {
             .padding(.leading, 15)
         }
         .onAppear() {
-            selectedValue = sliderValues[0]
+            self.selectedValue = sliderValues[0]
+            self.lengthValue = captionLengths[0].value
         }
     }
 }
