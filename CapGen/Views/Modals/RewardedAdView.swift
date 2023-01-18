@@ -14,6 +14,8 @@ struct RewardedAdView: View {
     @State var isAdDone: Bool = false
     @Binding var showCongratsModal: Bool
     
+    let authManager = AuthManager.shared.userManager
+    
     var body: some View {
         ZStack(alignment: .top) {
             Color.ui.cultured
@@ -38,7 +40,7 @@ struct RewardedAdView: View {
                 
                 Button {
                     self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                        firestoreMan.incrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
+                        firestoreMan.incrementCredit(for: authManager.user?.id as? String ?? nil)
                     })
                 } label: {
                     RoundedRectangle(cornerRadius: 16)
@@ -68,7 +70,10 @@ struct RewardedAdView: View {
                 self.rewardedAd.loadAd() // load new ads
                 
                 withAnimation {
-                    self.showCongratsModal = true
+                    guard let showCongratsModal = authManager.user?.userPrefs.showCongratsModal else { return }
+                    if (showCongratsModal) {
+                        self.showCongratsModal = true
+                    }
                 }
                
             }

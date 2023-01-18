@@ -52,4 +52,22 @@ class FirestoreManager: ObservableObject {
         ])
     }
     
+    func setShowCongratsModal(for uid: String?, to boolValue: Bool) {
+        guard let userId = uid else { return }
+        
+        let docRef = db.collection("Users").document("\(userId)")
+        docRef.updateData([
+            "userPrefs.showCongratsModal": boolValue
+        ])
+    }
+    
+    func setShowCreditDepletedModal(for uid: String?, to boolValue: Bool) {
+        guard let userId = uid else { return }
+        
+        let docRef = db.collection("Users").document("\(userId)")
+        docRef.updateData([
+            "userPrefs.showCreditDepletedModal": boolValue
+        ])
+    }
+    
 }

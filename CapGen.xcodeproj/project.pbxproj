@@ -117,6 +117,9 @@
 		D4056EC229751ACA00D3894D /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC129751ACA00D3894D /* UserModel.swift */; };
 		D4056EC429751BD200D3894D /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC329751BD200D3894D /* UserManager.swift */; };
 		D4056EC62977460200D3894D /* CreditCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC52977460200D3894D /* CreditCounterView.swift */; };
+		D4056EC829775B7D00D3894D /* piggy_bank_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EC729775B7C00D3894D /* piggy_bank_lottie.json */; };
+		D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC929778FB700D3894D /* RefillModalView.swift */; };
+		D4056ECD297796B900D3894D /* CreditsDepletedModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056ECC297796B900D3894D /* CreditsDepletedModalView.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -248,6 +251,9 @@
 		D4056EC129751ACA00D3894D /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		D4056EC329751BD200D3894D /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		D4056EC52977460200D3894D /* CreditCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCounterView.swift; sourceTree = "<group>"; };
+		D4056EC729775B7C00D3894D /* piggy_bank_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = piggy_bank_lottie.json; sourceTree = "<group>"; };
+		D4056EC929778FB700D3894D /* RefillModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefillModalView.swift; sourceTree = "<group>"; };
+		D4056ECC297796B900D3894D /* CreditsDepletedModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsDepletedModalView.swift; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -358,7 +364,7 @@
 				D4005DEA295C086A004D695D /* Info.plist */,
 				D4056E19295CC59800D3894D /* Data */,
 				D4005DDE295C024A004D695D /* Models */,
-				D4005DE0295C0258004D695D /* Controllers */,
+				D4005DE0295C0258004D695D /* View Models */,
 				D4005DDF295C0252004D695D /* Views */,
 				D4005DE1295C0268004D695D /* Supporting */,
 				D4005DB8295BE0E1004D695D /* Assets.xcassets */,
@@ -413,15 +419,14 @@
 				D4056E3F2963AB3B00D3894D /* LoadingView.swift */,
 				D4056E372963178D00D3894D /* CaptionView.swift */,
 				D4056EA729721BC300D3894D /* ProfileView.swift */,
-				D4056EB9297373E400D3894D /* RewardedAdView.swift */,
-				D4056EBF2974AF6D00D3894D /* CongratsModalView.swift */,
 				D4056EA929721DA800D3894D /* SavedCaptionsView.swift */,
+				D4056ECB2977968D00D3894D /* Modals */,
 				D4056E1E295CC92100D3894D /* Common */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		D4005DE0295C0258004D695D /* Controllers */ = {
+		D4005DE0295C0258004D695D /* View Models */ = {
 			isa = PBXGroup;
 			children = (
 				D4056E3B2963450D00D3894D /* OpenAIConnector.swift */,
@@ -433,7 +438,7 @@
 				D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */,
 				D4056EB729736F6E00D3894D /* GoogleRewardedAds.swift */,
 			);
-			path = Controllers;
+			path = "View Models";
 			sourceTree = "<group>";
 		};
 		D4005DE1295C0268004D695D /* Supporting */ = {
@@ -576,6 +581,7 @@
 		D4056E7D296F0C7E00D3894D /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
+				D4056EC729775B7C00D3894D /* piggy_bank_lottie.json */,
 				D4056EBB2974931D00D3894D /* coin_pile_lottie.json */,
 				D4056EBC2974931D00D3894D /* coin_wallet_purple_lottie.json */,
 				D4056E86296F87F700D3894D /* robot_lottie.json */,
@@ -584,6 +590,17 @@
 				D4056EAF2972872500D3894D /* speech_bubble.json */,
 			);
 			path = Lottie;
+			sourceTree = "<group>";
+		};
+		D4056ECB2977968D00D3894D /* Modals */ = {
+			isa = PBXGroup;
+			children = (
+				D4056EBF2974AF6D00D3894D /* CongratsModalView.swift */,
+				D4056EC929778FB700D3894D /* RefillModalView.swift */,
+				D4056EB9297373E400D3894D /* RewardedAdView.swift */,
+				D4056ECC297796B900D3894D /* CreditsDepletedModalView.swift */,
+			);
+			path = Modals;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -755,6 +772,7 @@
 				D4056E87296F87F700D3894D /* robot_lottie.json in Resources */,
 				D4056DEB295C0DFB00D3894D /* Blacker-Display-Bold-trial.ttf in Resources */,
 				D4056E08295C0E2A00D3894D /* GraphikSuper.otf in Resources */,
+				D4056EC829775B7D00D3894D /* piggy_bank_lottie.json in Resources */,
 				D4056DF0295C0DFB00D3894D /* Blacker-Text-Regular-trial.ttf in Resources */,
 				D4056E06295C0E2A00D3894D /* GraphikThin.otf in Resources */,
 				D4056EB629728E8D00D3894D /* gold_coin_lottie.json in Resources */,
@@ -922,6 +940,7 @@
 				D4056E362962030800D3894D /* CaptionLengthsModel.swift in Sources */,
 				D4056E992971EB9600D3894D /* AuthManager.swift in Sources */,
 				D4056EBA297373E400D3894D /* RewardedAdView.swift in Sources */,
+				D4056ECD297796B900D3894D /* CreditsDepletedModalView.swift in Sources */,
 				D4056EC62977460200D3894D /* CreditCounterView.swift in Sources */,
 				D4056E972970F33E00D3894D /* SignInWithAppleDelegate.swift in Sources */,
 				D4056E83296F867D00D3894D /* LaunchView.swift in Sources */,
@@ -941,6 +960,7 @@
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4056EB829736F6E00D3894D /* GoogleRewardedAds.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
+				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
 				D4056E79296E2C1700D3894D /* String.swift in Sources */,
 				D4056E85296F868800D3894D /* HomeView.swift in Sources */,

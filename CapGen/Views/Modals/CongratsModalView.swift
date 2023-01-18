@@ -12,6 +12,8 @@ struct CongratsModalView: View {
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @Binding var showView: Bool
     
+    let userManager = AuthManager.shared.userManager
+    
     var body: some View {
         ZStack(alignment: .top) {
             Color.ui.cultured
@@ -40,7 +42,7 @@ struct CongratsModalView: View {
                 
                 Button {
                     self.rewardedAd.showAd(rewardFunction: {
-                        firestoreMan.incrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
+                        firestoreMan.incrementCredit(for: userManager.user?.id as? String ?? nil)
                     })
                 } label: {
                     RoundedRectangle(cornerRadius: 16)
@@ -56,6 +58,7 @@ struct CongratsModalView: View {
                 Button {
                     withAnimation {
                         showView = false
+                        firestoreMan.setShowCongratsModal(for: userManager.user?.id as? String ?? nil, to: false)
                     }
                 } label: {
                     Text("Don’t show again")

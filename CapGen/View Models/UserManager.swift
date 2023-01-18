@@ -19,7 +19,7 @@ class UserManager: ObservableObject {
         checkIfUserExist(uid: uid) { doesExist in
             // Only create new user document if they don't already exist in the 'Users' collection
             if (!doesExist) {
-                let usersPref = UserPreferences(showCongratsModal: true)
+                let usersPref = UserPreferences(showCongratsModal: true, showCreditDepletedModal: true)
                 let dateCreated = Date.now
                 let credit = 1
                 

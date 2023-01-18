@@ -20,4 +20,5 @@ struct UserModel: Codable {
 
 struct UserPreferences: Codable {
     var showCongratsModal: Bool
+    var showCreditDepletedModal: Bool
 }
