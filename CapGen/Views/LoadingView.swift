@@ -90,7 +90,7 @@ struct LoadingView: View {
  
                 Task {
                     if (promptRequestStr != nil) {
-                        openAiResponse = await openAiRequest.processPrompt(prompt: promptRequestStr!.generatedPromptString)
+                        openAiResponse = await openAiRequest.processPrompt(prompt: promptRequestStr!.generatedPromptString, apiKey: firestoreMan.openAiKey)
                         
                         if (openAiResponse != nil && !openAiResponse!.isEmpty) {
                             // decrement credit on success

@@ -7,21 +7,22 @@
 
 import Foundation
 
-public class OpenAIConnector {
+public class OpenAIConnector: ObservableObject {
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
-    var openAIKey: String = ""
-    let firestoreManager: FirestoreManager = FirestoreManager()
 
-    
     @MainActor
-    public func processPrompt(prompt: String) async -> String? {
+    public func processPrompt(prompt: String, apiKey: String?) async -> String? {
         print("PROMPT", prompt)
-        self.openAIKey = firestoreManager.openAiKey
+        
+        guard let openAIKey = apiKey else {
+            print("Error retrieving Open AI Key")
+            return nil
+        }
         
         var request = URLRequest(url: self.openAIURL!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("Bearer \(self.openAIKey)", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer \(openAIKey)", forHTTPHeaderField: "Authorization")
         
         let httpBody: [String: Any] = [
             "prompt": prompt,
@@ -61,6 +62,7 @@ public class OpenAIConnector {
         do {
             let (data, response) = try await session.data(for: request as URLRequest)
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                print("ERROR OpenAIConnect HttpResponse:", response)
                 return nil
             }
             

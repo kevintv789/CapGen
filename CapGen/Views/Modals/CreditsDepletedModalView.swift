@@ -13,7 +13,8 @@ struct CreditsDepletedModalView: View {
     @Binding var isViewPresented: Bool
     @Binding var displayLoadView: Bool
     
-    @State var isAdDone: Bool = false
+    @State var isAdDone: Bool? = false
+    @State var isAdLoading: Bool = false
     
     let userId: String? = AuthManager.shared.userManager.user?.id as? String ?? nil
     
@@ -39,43 +40,38 @@ struct CreditsDepletedModalView: View {
                     .frame(width: SCREEN_WIDTH, height: 250)
                     .padding(.bottom, -70)
                 
-                Button {
-                    self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                        firestoreMan.incrementCredit(for: userId)
-                    })
-                } label: {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.ui.orangeWeb)
-                        .frame(width: SCREEN_WIDTH / 1.2, height: 55)
-                        .overlay(
-                            Text("Collect Credits")
-                                .foregroundColor(.ui.cultured)
-                                .font(.ui.title2)
-                        )
-                }
+                DisplayAdBtnView(title: "Collect Credits", isAdDone: $isAdDone)
                 
                 Button {
                     // Update data field in firestore
                     firestoreMan.setShowCreditDepletedModal(for: userId, to: false)
                     
                     // Play ad
-                    self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                        firestoreMan.incrementCredit(for: userId)
-                    })
+                    self.isAdLoading = true
+                    self.rewardedAd.loadAd() { isLoadDone in
+                        if (isLoadDone) {
+                            self.isAdLoading = false
+                            self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
+                                firestoreMan.incrementCredit(for: userId)
+                            })
+                        }
+                    }
+                    
                 } label: {
                     Text("Just play ad next time")
                         .foregroundColor(.ui.cadetBlueCrayola)
                         .font(.ui.headline)
                 }
+                .disabled(self.isAdLoading)
             }
             .padding(.top, 35)
         }
         .onAppear {
             // Dismiss bottom sheet modal when ad is exited
+            guard let isAdDone = self.isAdDone else { return }
             if (isAdDone) {
                 self.isViewPresented = false
                 self.displayLoadView = true
-                self.rewardedAd.loadAd() // load new ads
             }
         }
     }

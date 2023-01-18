@@ -9,26 +9,22 @@ import Foundation
 import Firebase
 
 class FirestoreManager: ObservableObject {
-    @Published var openAiKey: String = ""
+    @Published var openAiKey: String?
     let db = Firestore.firestore()
-    
-    init() {
-        fetchKey()
-    }
     
     func fetchKey() {
         let docRef = db.collection("Secrets").document("OpenAI")
         
         docRef.getDocument { (document, error) in
-            guard error == nil else {
-                print("Can't retrieve key", error ?? "")
+            if error != nil {
+                print("Can't retrieve key", error!.localizedDescription)
                 return
             }
             
             if let document = document, document.exists {
                 let data = document.data()
                 if let data = data {
-                    self.openAiKey = data["Key"] as? String ?? ""
+                    self.openAiKey = data["Key"] as? String ?? nil
                 }
             }
         }

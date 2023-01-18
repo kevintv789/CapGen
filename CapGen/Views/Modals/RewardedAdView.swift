@@ -11,7 +11,8 @@ struct RewardedAdView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @Binding var isViewPresented: Bool
-    @State var isAdDone: Bool = false
+    @State var isAdDone: Bool? = false
+    @State var isAdLoading: Bool = false
     @Binding var showCongratsModal: Bool
     
     let authManager = AuthManager.shared.userManager
@@ -38,21 +39,8 @@ struct RewardedAdView: View {
                     .frame(width: SCREEN_WIDTH, height: 250)
                     .padding(.bottom, -70)
                 
-                Button {
-                    self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                        firestoreMan.incrementCredit(for: authManager.user?.id as? String ?? nil)
-                    })
-                } label: {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.ui.orangeWeb)
-                        .frame(width: SCREEN_WIDTH / 1.2, height: 55)
-                        .overlay(
-                            Text("Collect Credits")
-                                .foregroundColor(.ui.cultured)
-                                .font(.ui.title2)
-                        )
-                }
-                
+                DisplayAdBtnView(title: "Collect Credits", isAdDone: $isAdDone)
+
                 Button {
                     isViewPresented = false
                 } label: {
@@ -65,9 +53,9 @@ struct RewardedAdView: View {
         }
         .onAppear {
             // Dismiss bottom sheet modal when ad is exited
+            guard let isAdDone = self.isAdDone else { return }
             if (isAdDone) {
                 self.isViewPresented = false
-                self.rewardedAd.loadAd() // load new ads
                 
                 withAnimation {
                     guard let showCongratsModal = authManager.user?.userPrefs.showCongratsModal else { return }
@@ -75,7 +63,7 @@ struct RewardedAdView: View {
                         self.showCongratsModal = true
                     }
                 }
-               
+                
             }
         }
     }

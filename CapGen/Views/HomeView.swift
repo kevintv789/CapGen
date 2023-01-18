@@ -19,6 +19,7 @@ struct HomeView: View {
     @State var promptText: String = ""
     @State var showRefillModal: Bool = false
     @State var showCongratsModal: Bool = false
+    @State var isAdLoading: Bool = false
     
     @FocusState private var isFocused: Bool
     
@@ -81,7 +82,7 @@ struct HomeView: View {
                             .position(x: geo.size.width / 2, y: geo.size.height / 3.5)
                             .focused($isFocused)
                         
-                        BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText, credits: $credits)
+                        BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText, credits: $credits, isAdLoading: $isAdLoading)
                             .frame(maxHeight: geo.size.height)
                     }
                     
@@ -116,6 +117,9 @@ struct HomeView: View {
                     self.showCongratsModal = false
                 }
             }
+            .modalView(horizontalPadding: 80, show: $isAdLoading, content: {
+                OverlayedLoaderView()
+            }, onClickExit: nil)
         }
     }
 }
