@@ -23,6 +23,7 @@ struct CongratsModalView: View {
                 Text("Congrats! 🎉")
                     .font(.ui.largeTitleSm)
                     .foregroundColor(.ui.richBlack)
+                    .padding(.top, 10)
                 
                 Text("You’ve collected ")
                     .foregroundColor(.ui.richBlack)
@@ -40,20 +41,7 @@ struct CongratsModalView: View {
                     .frame(width: SCREEN_WIDTH / 2, height: 200)
                     .padding(-60)
                 
-                Button {
-                    self.rewardedAd.showAd(rewardFunction: {
-                        firestoreMan.incrementCredit(for: userManager.user?.id as? String ?? nil)
-                    })
-                } label: {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.ui.orangeWeb)
-                        .frame(width: SCREEN_WIDTH / 1.4, height: 55)
-                        .overlay(
-                            Text("Collect More")
-                                .foregroundColor(.ui.cultured)
-                                .font(.ui.title2)
-                        )
-                }
+                DisplayAdBtnView(btnLength: .short, title: "Collect More", isAdDone: .constant(nil))
                 
                 Button {
                     withAnimation {

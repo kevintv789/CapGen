@@ -33,14 +33,14 @@ extension View {
     
     // Create extension for pop-up view
     // use the @ViewBuilder to create child views for a specific SwiftUI view in a readable way without having to use any return keywords.
-    func modalView<Content: View>(horizontalPadding: CGFloat = 40.0, show: Binding<Bool>, @ViewBuilder content: @escaping () -> Content, onClickExit: @escaping () -> Void) -> some View {
+    func modalView<Content: View>(horizontalPadding: CGFloat = 40.0, show: Binding<Bool>, @ViewBuilder content: @escaping () -> Content, onClickExit: (() -> ())?) -> some View {
         return self
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .overlay {
                 if show.wrappedValue {
                     Color.ui.richBlack.opacity(0.35).ignoresSafeArea(.all)
                         .onTapGesture {
-                            onClickExit()
+                            onClickExit?()
                         }
                     GeometryReader { geo in
                         let size = geo.size
@@ -50,7 +50,7 @@ extension View {
                             content()
                             
                             Button {
-                                onClickExit()
+                                onClickExit?()
                             } label: {
                                 Image(systemName: "x.circle")
                                     .resizable()
@@ -59,6 +59,8 @@ extension View {
                             }
                             .padding()
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                            .opacity(onClickExit?() != nil ? 1 : 0)
+                            .disabled(onClickExit?() == nil)
                             
                         }
                         .cornerRadius(16)

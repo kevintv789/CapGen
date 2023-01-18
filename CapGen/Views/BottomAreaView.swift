@@ -32,6 +32,7 @@ struct BottomAreaView: View {
     @Binding var platformSelected: String
     @Binding var promptText: String
     @Binding var credits: Int
+    @Binding var isAdLoading: Bool
     
     @State var lengthValue: String = ""
     @State var toneSelected: String = tones[0].title
@@ -79,9 +80,17 @@ struct BottomAreaView: View {
                                             self.showCreditsDepletedBottomSheet = true
                                         } else {
                                             // play ad and display load view
-                                            self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                                                firestoreMan.incrementCredit(for: userManager.id)
-                                            })
+                                            self.isAdLoading = true
+                                            self.rewardedAd.loadAd() { isLoadDone in
+                                                if (isLoadDone) {
+                                                    self.isAdLoading = false
+                                                    self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
+                                                        self.displayLoadView = true
+                                                        firestoreMan.incrementCredit(for: userManager.id)
+                                                    })
+                                                }
+                                            }
+                                            
                                         }
                                     }
                                     else {
@@ -93,6 +102,7 @@ struct BottomAreaView: View {
                                         .resizable()
                                         .frame(width: 90, height: 90)
                                 }
+                                .disabled(self.isAdLoading)
                                 .dropInAndOutAnimation(value: expandArea)
                             }
                             .offset(x: 0, y: expandArea ? 0 : SCREEN_HEIGHT)
@@ -133,11 +143,6 @@ struct BottomAreaView: View {
         }
         .onAppear() {
             self.expandArea = false
-            
-            // Once ad is done playing, display load view
-            if (self.isAdDone) {
-                self.displayLoadView = true
-            }
         }
         .ignoresSafeArea(.all)
     }

@@ -15,25 +15,27 @@ final class GoogleRewardedAds: ObservableObject {
     @Published var rewardedAd: GADRewardedAd?
     
     init() {
-        loadAd()
+        loadAd() { _ in }
     }
     
-    func loadAd() {
+    func loadAd(completion: @escaping (Bool) -> Void) {
         let request = GADRequest()
         // add extras here to the request, for example, for not presonalized Ads
         GADRewardedAd.load(withAdUnitID: adUnitId, request: request, completionHandler: {rewardedAd, error in
             if error != nil {
                 // loading the rewarded Ad failed :(
                 print("Failed to load rewarded ad", error!.localizedDescription)
+                completion(false)
                 return
             }
             self.rewardedAd = rewardedAd
+            completion(true)
         })
     }
     
     func showAd(rewardFunction: @escaping () -> Void) -> Bool {
         guard let rewardedAd = self.rewardedAd else {
-            self.loadAd()
+            print("Reward ad is nil")
             return false
         }
         

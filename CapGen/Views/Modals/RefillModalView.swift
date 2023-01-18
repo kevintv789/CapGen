@@ -15,7 +15,7 @@ struct RefillModalView: View {
     
     let authManager = AuthManager.shared.userManager
     
-    @State var isAdDone: Bool = false
+    @State var isAdDone: Bool? = false
     
     var body: some View {
         ZStack {
@@ -38,29 +38,15 @@ struct RefillModalView: View {
                     .frame(width: 200, height: 200)
                     .padding(-20)
                 
-                Button {
-                    self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                        firestoreMan.incrementCredit(for: authManager.user?.id as? String ?? nil)
-                    })
-                } label: {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.ui.orangeWeb)
-                        .frame(width: SCREEN_WIDTH / 1.4, height: 55)
-                        .overlay(
-                            Text("Collect Credits")
-                                .foregroundColor(.ui.cultured)
-                                .font(.ui.title2)
-                        )
-                }
-                .padding(.top, 15)
+                DisplayAdBtnView(btnLength: .short, title: "Collect Credits", isAdDone: $isAdDone)
             }
             .padding(30)
         }
         .onAppear {
             // Dismiss bottom sheet modal when ad is exited
+            guard let isAdDone = self.isAdDone else { return }
             if (isAdDone) {
                 self.isViewPresented = false
-                self.rewardedAd.loadAd() // load new ads
                 
                 withAnimation {
                     guard let showCongratsModal = authManager.user?.userPrefs.showCongratsModal else { return }

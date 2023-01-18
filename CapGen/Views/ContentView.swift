@@ -23,6 +23,7 @@ struct SocialMediaPlatforms {
 struct ContentView: View {
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @ObservedObject var authManager: AuthManager
+    @EnvironmentObject var firestoreManager: FirestoreManager
     
     var body: some View {
         NavigationStack {
@@ -33,7 +34,7 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            rewardedAd.loadAd()
+            firestoreManager.fetchKey()
         }
     }
 }

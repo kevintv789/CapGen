@@ -40,6 +40,7 @@ struct CapGenApp: App {
                 .environmentObject(SignInWithApple())
                 .environmentObject(FirestoreManager())
                 .environmentObject(UserManager())
+                .environmentObject(OpenAIConnector())
         }
     }
 }
