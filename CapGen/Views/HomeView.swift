@@ -17,6 +17,8 @@ struct HomeView: View {
     
     @State var platformSelected: String
     @State var promptText: String = ""
+    @State var showRefillModal: Bool = false
+    @State var showCongratsModal: Bool = false
     
     @FocusState private var isFocused: Bool
     
@@ -46,8 +48,8 @@ struct HomeView: View {
                 
                 GeometryReader { geo in
                     VStack(alignment: .trailing) {
-                        CreditCounterView(credits: $credits)
-                            .frame(width: geo.size.width / getWidthDivisorForCreditCounter(), height: 40)
+                        CreditCounterView(credits: $credits, showModal: $showRefillModal)
+                            .frame(width: geo.size.width / getWidthDivisorForCreditCounter(), height: 35)
                             .padding(.trailing, 15)
                         
                         Text("Which social media platform is this for?")
@@ -79,16 +81,13 @@ struct HomeView: View {
                             .position(x: geo.size.width / 2, y: geo.size.height / 3.5)
                             .focused($isFocused)
                         
-                        BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText)
+                        BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText, credits: $credits)
                             .frame(maxHeight: geo.size.height)
                     }
                     
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
-            }
-            .onTapGesture {
-                expandBottomArea = false
             }
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
@@ -100,7 +99,21 @@ struct HomeView: View {
             }
             .onReceive(AuthManager.shared.userManager.$user) { user in
                 if user != nil {
-                    self.credits = user!.credits 
+                    self.credits = user!.credits
+                }
+            }
+            .modalView(horizontalPadding: 40, show: $showRefillModal) {
+                RefillModalView(isViewPresented: $showRefillModal, showCongratsModal: $showCongratsModal)
+            } onClickExit: {
+                withAnimation {
+                    self.showRefillModal = false
+                }
+            }
+            .modalView(horizontalPadding: 40, show: $showCongratsModal) {
+                CongratsModalView(showView: $showCongratsModal)
+            } onClickExit: {
+                withAnimation {
+                    self.showCongratsModal = false
                 }
             }
         }

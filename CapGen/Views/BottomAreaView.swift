@@ -26,9 +26,12 @@ extension Text {
 }
 
 struct BottomAreaView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
+    @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @Binding var expandArea: Bool
     @Binding var platformSelected: String
     @Binding var promptText: String
+    @Binding var credits: Int
     
     @State var lengthValue: String = ""
     @State var toneSelected: String = tones[0].title
@@ -41,6 +44,9 @@ struct BottomAreaView: View {
     
     @State var showCaptionView: Bool = false
     @State var showProfileView: Bool = false
+    @State var showCreditsDepletedBottomSheet: Bool = false
+    
+    @State var isAdDone: Bool = false
     
     func mapAllRequests() {
         promptRequestStr = AIRequest(platform: self.platformSelected, prompt: self.promptText, tone: self.toneSelected, includeEmojis: self.includeEmojis, includeHashtags: self.includeHashtags, captionLength: self.lengthValue)
@@ -64,8 +70,24 @@ struct BottomAreaView: View {
                                     .dropInAndOutAnimation(value: expandArea)
                                 
                                 Button {
+                                    guard let userManager = AuthManager.shared.userManager.user else { return }
                                     mapAllRequests()
-                                    displayLoadView.toggle()
+                                    
+                                    if (credits < 1) {
+                                        // Only show the bottom sheet modal if user has not selected 'Just play ad next time'
+                                        if (userManager.userPrefs.showCreditDepletedModal) {
+                                            self.showCreditsDepletedBottomSheet = true
+                                        } else {
+                                            // play ad and display load view
+                                            self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
+                                                firestoreMan.incrementCredit(for: userManager.id)
+                                            })
+                                        }
+                                    }
+                                    else {
+                                        displayLoadView.toggle()
+                                    }
+                                    
                                 } label: {
                                     Image("submit-btn-1")
                                         .resizable()
@@ -89,7 +111,6 @@ struct BottomAreaView: View {
                                 .padding(.bottom, SCREEN_HEIGHT < 700 ? 50 : 80)
                         }
                     }
-                    
                 )
                 .frame(height: expandArea ? MAX_HEIGHT : MIN_HEIGHT)
                 .offset(x: 0, y: expandArea ? 50 : MIN_HEIGHT / 1.2)
@@ -106,8 +127,17 @@ struct BottomAreaView: View {
             ProfileView(isPresented: $showProfileView)
                 .navigationBarBackButtonHidden(true)
         }
+        .sheet(isPresented: $showCreditsDepletedBottomSheet) {
+            CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet, displayLoadView: $displayLoadView)
+                .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
+        }
         .onAppear() {
             self.expandArea = false
+            
+            // Once ad is done playing, display load view
+            if (self.isAdDone) {
+                self.displayLoadView = true
+            }
         }
         .ignoresSafeArea(.all)
     }
@@ -149,7 +179,7 @@ struct ExpandButton: View {
     
     var body: some View {
         Button {
-            withAnimation() {
+            withAnimation(.interpolatingSpring(stiffness: 200, damping: 300)) {
                 expandArea.toggle()
             }
         } label: {
@@ -180,7 +210,7 @@ struct ExpandButton: View {
                 .frame(width: 80, height: 80)
             
         }
-        .animation(.spring(), value: expandArea)
+        .animation(.interpolatingSpring(stiffness: 200, damping: 300), value: expandArea)
         .onAppear() {
             Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { _ in
                 withAnimation {

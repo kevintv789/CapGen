@@ -22,7 +22,9 @@ struct CaptionView: View {
     
     var body: some View {
         ZStack(alignment: .leading) {
-            Color.ui.lighterLavBlue.ignoresSafeArea()
+            Color.ui.cultured.ignoresSafeArea()
+            Color.ui.lighterLavBlue.ignoresSafeArea().opacity(0.5)
+                
             
             VStack(alignment: .leading) {
                 BackArrowView {
