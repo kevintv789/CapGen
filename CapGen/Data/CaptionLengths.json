@@ -1,5 +1,5 @@
 [
-    {"id": 0, "value": "1 and 5 words", "title": "Very short (1-5 words)"},
+    {"id": 0, "value": "1 and 5 words", "title": "Extremely short (1-5 words)"},
     {"id": 1, "value": "5 and 15 words", "title": "Very short (5-15 words)"},
     {"id": 2, "value": "15 and 25 words", "title": "Short (15-25 words)"},
     {"id": 3, "value": "25 and 40 words", "title": "Moderate (25-40 words)"},
