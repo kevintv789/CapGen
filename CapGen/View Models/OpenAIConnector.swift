@@ -62,6 +62,9 @@ public class OpenAIConnector: ObservableObject {
         do {
             let (data, response) = try await session.data(for: request as URLRequest)
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                
+                // Create fallback screens for responses - 4xx, 5xx
+                // 503 - Overloaded with server requests
                 print("ERROR OpenAIConnect HttpResponse:", response)
                 return nil
             }

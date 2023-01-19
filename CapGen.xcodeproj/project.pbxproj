@@ -124,6 +124,7 @@
 		D4056ED12978750D00D3894D /* DisplayAdBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056ED02978750D00D3894D /* DisplayAdBtnView.swift */; };
 		D4056ED329788FAF00D3894D /* OverlayedLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056ED229788FAF00D3894D /* OverlayedLoaderView.swift */; };
 		D4056ED529788FCA00D3894D /* lightbulb_loader_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */; };
+		D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EDB2978A06900D3894D /* space_man_empty.json */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -262,6 +263,7 @@
 		D4056ED02978750D00D3894D /* DisplayAdBtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAdBtnView.swift; sourceTree = "<group>"; };
 		D4056ED229788FAF00D3894D /* OverlayedLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayedLoaderView.swift; sourceTree = "<group>"; };
 		D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lightbulb_loader_lottie.json; sourceTree = "<group>"; };
+		D4056EDB2978A06900D3894D /* space_man_empty.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = space_man_empty.json; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -421,13 +423,10 @@
 			isa = PBXGroup;
 			children = (
 				D4005DB6295BE0E0004D695D /* ContentView.swift */,
-				D4056E82296F867D00D3894D /* LaunchView.swift */,
-				D4056E84296F868800D3894D /* HomeView.swift */,
-				D4056E25295F639100D3894D /* BottomAreaView.swift */,
-				D4056E3F2963AB3B00D3894D /* LoadingView.swift */,
-				D4056E372963178D00D3894D /* CaptionView.swift */,
-				D4056EA729721BC300D3894D /* ProfileView.swift */,
-				D4056EA929721DA800D3894D /* SavedCaptionsView.swift */,
+				D4056ED929789CDB00D3894D /* Welcome */,
+				D4056ED629789CB000D3894D /* Home */,
+				D4056ED829789CC900D3894D /* Profile */,
+				D4056ED729789CBC00D3894D /* Caption */,
 				D4056ECB2977968D00D3894D /* Modals */,
 				D4056E1E295CC92100D3894D /* Common */,
 			);
@@ -591,6 +590,7 @@
 		D4056E7D296F0C7E00D3894D /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
+				D4056EDB2978A06900D3894D /* space_man_empty.json */,
 				D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */,
 				D4056ECE2978735A00D3894D /* btn_loader.json */,
 				D4056EC729775B7C00D3894D /* piggy_bank_lottie.json */,
@@ -613,6 +613,41 @@
 				D4056ECC297796B900D3894D /* CreditsDepletedModalView.swift */,
 			);
 			path = Modals;
+			sourceTree = "<group>";
+		};
+		D4056ED629789CB000D3894D /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E84296F868800D3894D /* HomeView.swift */,
+				D4056E25295F639100D3894D /* BottomAreaView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		D4056ED729789CBC00D3894D /* Caption */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E3F2963AB3B00D3894D /* LoadingView.swift */,
+				D4056E372963178D00D3894D /* CaptionView.swift */,
+				D4056EA929721DA800D3894D /* SavedCaptionsView.swift */,
+			);
+			path = Caption;
+			sourceTree = "<group>";
+		};
+		D4056ED829789CC900D3894D /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				D4056EA729721BC300D3894D /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		D4056ED929789CDB00D3894D /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E82296F867D00D3894D /* LaunchView.swift */,
+			);
+			path = Welcome;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -757,6 +792,7 @@
 				D4056DEE295C0DFB00D3894D /* Blacker-Text-Bold-trial.ttf in Resources */,
 				D4005DBC295BE0E1004D695D /* Preview Assets.xcassets in Resources */,
 				D4056DE3295C0DFB00D3894D /* Blacker-Text-Book-trial.ttf in Resources */,
+				D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */,
 				D4056DE9295C0DFB00D3894D /* Blacker-Display-Heavy-Italic-trial.ttf in Resources */,
 				D4056E0D295C0E2A00D3894D /* GraphikRegularItalic.otf in Resources */,
 				D4056E13295C0E2A00D3894D /* GraphikBlack.otf in Resources */,
