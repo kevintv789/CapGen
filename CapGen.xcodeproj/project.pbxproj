@@ -125,6 +125,7 @@
 		D4056ED329788FAF00D3894D /* OverlayedLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056ED229788FAF00D3894D /* OverlayedLoaderView.swift */; };
 		D4056ED529788FCA00D3894D /* lightbulb_loader_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */; };
 		D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EDB2978A06900D3894D /* space_man_empty.json */; };
+		D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -265,6 +266,7 @@
 		D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lightbulb_loader_lottie.json; sourceTree = "<group>"; };
 		D4056EDB2978A06900D3894D /* space_man_empty.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = space_man_empty.json; sourceTree = "<group>"; };
 		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
+		D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulatedCaptionsView.swift; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -632,6 +634,7 @@
 				D4056E3F2963AB3B00D3894D /* LoadingView.swift */,
 				D4056E372963178D00D3894D /* CaptionView.swift */,
 				D4056EA929721DA800D3894D /* SavedCaptionsView.swift */,
+				D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */,
 			);
 			path = Caption;
 			sourceTree = "<group>";
@@ -1011,6 +1014,7 @@
 				D4056EAA29721DA800D3894D /* SavedCaptionsView.swift in Sources */,
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4056EB829736F6E00D3894D /* GoogleRewardedAds.swift in Sources */,
+				D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
 				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
