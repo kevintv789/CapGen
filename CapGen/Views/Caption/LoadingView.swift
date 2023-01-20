@@ -9,6 +9,8 @@ import SwiftUI
 
 struct LoadingView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
+    @EnvironmentObject var openAiRequest: OpenAIConnector
+    
     let rotationTime: Double = 0.75 // seconds to complete a full rotation
     let animationTime: Double = 1.9
     
@@ -22,10 +24,6 @@ struct LoadingView: View {
     @State var rotationDegreeS3: Angle
     @State var showCaptionView: Bool = false
     @State var openAiResponse: String?
-    
-    @Binding var promptRequestStr: AIRequest?
-    
-    var openAiRequest = OpenAIConnector()
     
     func animateSpinner(with timeInterval: Double, completion: @escaping (() -> Void)) {
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
@@ -89,8 +87,8 @@ struct LoadingView: View {
                 }
  
                 Task {
-                    if (promptRequestStr != nil) {
-                        openAiResponse = await openAiRequest.processPrompt(prompt: promptRequestStr!.generatedPromptString, apiKey: firestoreMan.openAiKey)
+                    if (!openAiRequest.prompt.isEmpty) {
+                        openAiResponse = await openAiRequest.processPrompt(apiKey: firestoreMan.openAiKey)
                         
                         if (openAiResponse != nil && !openAiResponse!.isEmpty) {
                             // decrement credit on success
@@ -102,7 +100,7 @@ struct LoadingView: View {
                 }
             }
             .navigationDestination(isPresented: $showCaptionView) {
-                CaptionView(captionStr: $openAiResponse, promptText: promptRequestStr?.prompt ?? "")
+                CaptionView(captionStr: $openAiResponse)
                     .navigationBarBackButtonHidden(true)
             }
         }

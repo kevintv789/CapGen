@@ -24,7 +24,7 @@ extension TextEditor {
                         x: 1,
                         y: 2
                     )
-
+                
             )
             .background(
                 RoundedRectangle(cornerRadius: 20)
@@ -53,18 +53,26 @@ struct TextAreaView: View {
                     .customStyle()
                     .opacity(text.isEmpty ? 0.75 : 1)
                     .onChange(of: text) { text in
+                        // Limit number of characters typed
                         if (text.count <= charLimit) {
                             lastText = text
                         } else {
                             self.text = lastText
                         }
+                        
+                        // Detect when 'done' or a newline is generated
+                        if !text.filter({ $0.isNewline }).isEmpty {
+                            self.text = String(text.dropLast())
+                            hideKeyboard()
+                        }
                     }
-                 
+                    .submitLabel(.done)
+                
                 Text("\(text.count)/\(charLimit)")
                     .font(.ui.graphikRegular)
                     .foregroundColor(.ui.cadetBlueCrayola)
                     .position(x: geo.size.width / 1.12, y: geo.size.height / 1.05)
-                    
+                
             }
         }
     }

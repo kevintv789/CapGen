@@ -28,7 +28,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             if (authManager.isSignedIn ?? false) {
-                HomeView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+                HomeView(promptText: "", platformSelected: SocialMediaPlatforms.init().platforms[0])
             } else {
                 LaunchView()
             }

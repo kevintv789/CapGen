@@ -23,6 +23,11 @@ struct HomeView: View {
     
     @FocusState private var isFocused: Bool
     
+    init(promptText: String, platformSelected: String) {
+        self.promptText = promptText
+        self.platformSelected = platformSelected
+    }
+    
     func platformSelect(platform: String) {
         platformSelected = platform
     }
@@ -90,14 +95,6 @@ struct HomeView: View {
                 .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("Done") {
-                        hideKeyboard()
-                    }
-                }
-            }
             .onReceive(AuthManager.shared.userManager.$user) { user in
                 if user != nil {
                     self.credits = user!.credits
@@ -126,9 +123,9 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+        HomeView(promptText: "", platformSelected: SocialMediaPlatforms.init().platforms[0])
         
-        HomeView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+        HomeView(promptText: "", platformSelected: SocialMediaPlatforms.init().platforms[0])
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

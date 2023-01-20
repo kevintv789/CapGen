@@ -264,6 +264,7 @@
 		D4056ED229788FAF00D3894D /* OverlayedLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayedLoaderView.swift; sourceTree = "<group>"; };
 		D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lightbulb_loader_lottie.json; sourceTree = "<group>"; };
 		D4056EDB2978A06900D3894D /* space_man_empty.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = space_man_empty.json; sourceTree = "<group>"; };
+		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -541,6 +542,7 @@
 			children = (
 				D4056E2D295F8F3A00D3894D /* Tones.json */,
 				D4056E33296202E900D3894D /* CaptionLengths.json */,
+				D4056EDF297A346100D3894D /* CaptionsMock.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";

@@ -338,6 +338,7 @@ struct AccountManagementSectionView: View {
             
             OptionButtonView(title: "🔐 Logout") {
                 AuthManager.shared.logout()
+                self.isPresented = false
             }
             
             ZStack {
@@ -349,13 +350,6 @@ struct AccountManagementSectionView: View {
             
             OptionButtonView(title: "🔨 Delete profile", subTitle: "Deleting your profile will permanently remove all credits and captions. This action is irreversible, please proceed with caution.", dangerField: true) {
                 print("Saved captions")
-            }
-        }
-        .onReceive(AuthManager.shared.$isSignedIn) { isSignedIn in
-            guard let isSignedIn = isSignedIn else { return }
-            
-            if (!isSignedIn) {
-                isPresented = false
             }
         }
     }

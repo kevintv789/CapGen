@@ -28,6 +28,8 @@ extension Text {
 struct BottomAreaView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
+    @EnvironmentObject var openAiConnector: OpenAIConnector
+    
     @Binding var expandArea: Bool
     @Binding var platformSelected: String
     @Binding var promptText: String
@@ -35,13 +37,12 @@ struct BottomAreaView: View {
     @Binding var isAdLoading: Bool
     
     @State var lengthValue: String = ""
+    @State var captionLengthType: String = ""
     @State var toneSelected: String = tones[0].title
     @State var includeEmojis: Bool = false
     @State var includeHashtags: Bool = false
     
     @State var displayLoadView: Bool = false
-    
-    @State var promptRequestStr: AIRequest?
     
     @State var showCaptionView: Bool = false
     @State var showProfileView: Bool = false
@@ -50,7 +51,7 @@ struct BottomAreaView: View {
     @State var isAdDone: Bool = false
     
     func mapAllRequests() {
-        promptRequestStr = AIRequest(platform: self.platformSelected, prompt: self.promptText, tone: self.toneSelected, includeEmojis: self.includeEmojis, includeHashtags: self.includeHashtags, captionLength: self.lengthValue)
+        openAiConnector.generatePrompt(platform: self.platformSelected, prompt: self.promptText, tone: self.toneSelected, includeEmojis: self.includeEmojis, includeHashtags: self.includeHashtags, captionLength: self.lengthValue, captionLengthType: self.captionLengthType)
     }
     
     var body: some View {
@@ -67,7 +68,7 @@ struct BottomAreaView: View {
                                 EmojisAndHashtagSection(includeEmoji: $includeEmojis, includeHashtag: $includeHashtags)
                                     .dropInAndOutAnimation(value: expandArea)
                                 
-                                LengthSelectionSection(lengthValue: $lengthValue)
+                                LengthSelectionSection(lengthValue: $lengthValue, captionLengthType: $captionLengthType)
                                     .dropInAndOutAnimation(value: expandArea)
                                 
                                 Button {
@@ -126,7 +127,7 @@ struct BottomAreaView: View {
                 .offset(x: 0, y: expandArea ? 50 : MIN_HEIGHT / 1.2)
         }
         .navigationDestination(isPresented: $displayLoadView) {
-            LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270), promptRequestStr: $promptRequestStr)
+            LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270))
                 .navigationBarBackButtonHidden(true)
         }
         .navigationDestination(isPresented: $showCaptionView) {
@@ -333,6 +334,7 @@ struct LengthSelectionSection: View {
     @State var sliderValues: [Int] = [0, 1, 2, 3, 4, 5]
     @State var selectedValue: Int = 0
     @Binding var lengthValue: String
+    @Binding var captionLengthType: String
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -348,6 +350,7 @@ struct LengthSelectionSection: View {
             SnappableSliderView(values: $sliderValues) { value in
                 self.selectedValue = Int(value)
                 self.lengthValue = captionLengths[Int(value)].value
+                self.captionLengthType = captionLengths[Int(value)].type
             }
             .overlay(
                 GeometryReader { geo in
@@ -371,6 +374,7 @@ struct LengthSelectionSection: View {
         .onAppear() {
             self.selectedValue = sliderValues[0]
             self.lengthValue = captionLengths[0].value
+            self.captionLengthType = captionLengths[0].type
         }
     }
 }
