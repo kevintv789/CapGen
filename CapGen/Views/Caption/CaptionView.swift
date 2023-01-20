@@ -38,10 +38,8 @@ struct CaptionView: View {
         // Save to database
         let userId = AuthManager.shared.userManager.user?.id as? String ?? nil
         
-        firestore.saveCaptions(for: userId, with: openAiConnector.requestModel) { isDone in
-            if (isDone) {
-                self.backBtnClicked = true
-            }
+        firestore.saveCaptions(for: userId, with: openAiConnector.requestModel) {
+            self.backBtnClicked = true
         }
     }
     
@@ -101,7 +99,7 @@ struct CaptionView: View {
                         }, onResetClick: {
                             self.backBtnClicked = true
                         })
-                            .padding(.top, 15)
+                        .padding(.top, 15)
                         
                     }
                     .padding()
@@ -115,10 +113,7 @@ struct CaptionView: View {
                 .navigationBarBackButtonHidden(true)
         }
         .onAppear() {
-            if var originalString = captionStr {
-                if originalString[0] == " " {
-                    originalString = String(captionStr!.dropFirst())
-                }
+            if let originalString = captionStr {
                 
                 let uniqueStr = UUID().uuidString
                 
@@ -129,8 +124,13 @@ struct CaptionView: View {
                     return ele != "" && ele != "\n" && ele != "\n\n"
                 })
                 
-                self.captionsTitle = parsedArray.removeLast()
-                self.captionsParsed = parsedArray
+                // Removing the first character because it is an empty space
+                self.captionsTitle = String(parsedArray.removeLast().trimmingCharacters(in: .whitespaces))
+                
+                self.captionsParsed = parsedArray.map { element in
+                    // removing leading and trailing white spaces
+                    return element.trimmingCharacters(in: .whitespaces)
+                }
             }
         }
     }
@@ -139,10 +139,12 @@ struct CaptionView: View {
 struct CaptionView_Previews: PreviewProvider {
     static var previews: some View {
         CaptionView(captionStr: .constant("\n\n1. Look at those two crazy pups playing on a rainbow road! 🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbow 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. 🌈"))
+            .environmentObject(OpenAIConnector())
         
         CaptionView(captionStr: .constant("\n\n1. Look at those two crazy pups playing on a rainbow road! 🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbow 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. Two Pups, One Rainbow Roadddddd! 🌈"))
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
+            .environmentObject(OpenAIConnector())
     }
 }
 
@@ -217,7 +219,7 @@ struct CaptionCard: View {
                 .shadow(radius: isCaptionSelected ? 1 : 3)
             
             VStack(alignment: .trailing, spacing: 0) {
-                Text(caption.dropFirst())
+                Text(caption.trimmingCharacters(in: .whitespaces))
                     .padding(EdgeInsets.init(top: 15, leading: 10, bottom: 15, trailing: 10))
                     .font(.ui.graphikRegular)
                     .lineSpacing(4)

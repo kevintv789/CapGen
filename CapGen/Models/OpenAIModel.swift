@@ -30,7 +30,7 @@ struct GeneratedCaptions: Codable, Identifiable {
     var description: String
 }
 
-struct AIRequest: Codable, Identifiable {
+struct AIRequest: Codable, Identifiable, Comparable {
     var id: String = UUID().uuidString
     var platform: String = ""
     var prompt: String = ""
@@ -39,8 +39,22 @@ struct AIRequest: Codable, Identifiable {
     var includeHashtags: Bool = false
     var captionLength: String = ""
     var title: String = ""
-    var dateCreated: String?
+    var dateCreated: String = getCurrentDate()
     var captions: [GeneratedCaptions] = []
+    
+    static func < (lhs: AIRequest, rhs: AIRequest) -> Bool {
+        let leftDate = convertStringToDate(date: lhs.dateCreated) ?? Date()
+        let rightDate = convertStringToDate(date: rhs.dateCreated) ?? Date()
+        
+        return leftDate < rightDate
+    }
+    
+    static func == (lhs: AIRequest, rhs: AIRequest) -> Bool {
+        let leftDate = convertStringToDate(date: lhs.dateCreated) ?? Date()
+        let rightDate = convertStringToDate(date: rhs.dateCreated) ?? Date()
+        
+        return leftDate == rightDate
+    }
     
     var dictionary: [String: Any] {
         let data = (try? JSONEncoder().encode(self)) ?? Data()
@@ -49,6 +63,19 @@ struct AIRequest: Codable, Identifiable {
     
     init() { }
     
+    init(id: String, platform: String, prompt: String, tone: String, includeEmojis: Bool, includeHashtags: Bool, captionLength: String, title: String, dateCreated: String, captions: [GeneratedCaptions]) {
+        self.id = id
+        self.platform = platform
+        self.prompt = prompt
+        self.tone = tone
+        self.includeEmojis = includeEmojis
+        self.includeHashtags = includeHashtags
+        self.captionLength = captionLength
+        self.dateCreated = dateCreated
+        self.title = title
+        self.captions = captions
+    }
+    
     init(platform: String, prompt: String, tone: String, includeEmojis: Bool, includeHashtags: Bool, captionLength: String) {
         self.platform = platform
         self.prompt = prompt
@@ -56,16 +83,20 @@ struct AIRequest: Codable, Identifiable {
         self.includeEmojis = includeEmojis
         self.includeHashtags = includeHashtags
         self.captionLength = captionLength
-        self.dateCreated = getCurrentDate()
     }
     
-    func getCurrentDate() -> String? {
+    static func getCurrentDate() -> String {
         let date = Date()
         let df = DateFormatter()
-        
-        // LONG STYLE
-        df.dateStyle = DateFormatter.Style.long
-        df.timeStyle = DateFormatter.Style.long
-        return df.string(from: date) // December 10, 2021 at 5:00:41 PM PST
+        df.dateFormat = "MMM d, h:mm a"
+        df.timeZone = TimeZone.current
+        return df.string(from: date)
+    }
+    
+    static func convertStringToDate(date: String?) -> Date? {
+        guard let date = date else { return nil }
+        let df = DateFormatter()
+        df.dateFormat = "MMM d, h:mm a"
+        return df.date(from: date)
     }
 }

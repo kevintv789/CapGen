@@ -8,22 +8,27 @@
 import SwiftUI
 
 struct SavedCaptionsView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var firestore: FirestoreManager
+    @State var hasCaptions: Bool = false
     
     var body: some View {
         ZStack {
             Color.ui.cultured.ignoresSafeArea(.all)
             
             VStack {
-                BackArrowView {
-                    self.presentationMode.wrappedValue.dismiss()
+                if (!hasCaptions) {
+                    EmptyCaptionsView()
+                } else {
+                    PopulatedCaptionsView()
                 }
-                .frame(maxWidth: SCREEN_WIDTH, alignment: .leading)
-                .padding(.leading, 15)
-                
-                EmptyCaptionsView()
                 
                 Spacer()
+            }
+        }
+        .onAppear() {
+            guard let userId = AuthManager.shared.userManager.user?.id as? String else { return }
+            self.firestore.hasCaptions(for: userId) { captionsGroup in
+                self.hasCaptions = captionsGroup != nil
             }
         }
     }
@@ -36,8 +41,16 @@ struct SavedCaptionsView_Previews: PreviewProvider {
 }
 
 struct EmptyCaptionsView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     var body: some View {
         VStack {
+            BackArrowView {
+                self.presentationMode.wrappedValue.dismiss()
+            }
+            .frame(maxWidth: SCREEN_WIDTH, alignment: .leading)
+            .padding(.leading, 15)
+            
             LottieView(name: "space_man_empty", loopMode: .loop, isAnimating: true)
                 .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT / 2)
             
