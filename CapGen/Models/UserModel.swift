@@ -16,6 +16,7 @@ struct UserModel: Codable {
     var email: String
     var userPrefs: UserPreferences
     var dateCreated: Date
+    var captionsGroup: [AIRequest] = []
 }
 
 struct UserPreferences: Codable {

@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct CaptionView: View {
+    @EnvironmentObject var openAiConnector: OpenAIConnector
+    @EnvironmentObject var firestore: FirestoreManager
+    
     @State var backBtnClicked: Bool = false
     @Binding var captionStr: String?
     @State var captionsParsed: [String] = []
     @State var captionsTitle: String = ""
     @State var captionSelected: String = ""
     @State var cardColorFill: [Color] = [.ui.middleYellowRed, .ui.darkSalmon, .ui.frenchBlueSky, .ui.lightCyan, .ui.middleBluePurple]
-    
-    let promptText: String
     
     @State var initialText: String = ""
     let finalText: String = "Tap a card to copy 😏"
@@ -25,6 +26,23 @@ struct CaptionView: View {
     func saveCaptions() {
         // Don't do anything if there's an error
         guard !self.saveError else { return }
+        
+        // Store caption group title and caption cards
+        var mappedCaptions: [GeneratedCaptions] = []
+        self.captionsParsed.forEach { caption in
+            mappedCaptions.append(GeneratedCaptions(description: caption))
+        }
+        
+        openAiConnector.createCaptionGroup(title: self.captionsTitle, captions: mappedCaptions)
+        
+        // Save to database
+        let userId = AuthManager.shared.userManager.user?.id as? String ?? nil
+        
+        firestore.saveCaptions(for: userId, with: openAiConnector.requestModel) { isDone in
+            if (isDone) {
+                self.backBtnClicked = true
+            }
+        }
     }
     
     var body: some View {
@@ -74,8 +92,6 @@ struct CaptionView: View {
                                     
                                 }
                             }
-                            
-                            
                         }
                         
                         Spacer()
@@ -83,7 +99,7 @@ struct CaptionView: View {
                         SubmitButtonGroupView(onSaveClick: {
                             saveCaptions()
                         }, onResetClick: {
-                            
+                            self.backBtnClicked = true
                         })
                             .padding(.top, 15)
                         
@@ -95,7 +111,7 @@ struct CaptionView: View {
             
         }
         .navigationDestination(isPresented: $backBtnClicked) {
-            HomeView(platformSelected: SocialMediaPlatforms.init().platforms[0], promptText: promptText)
+            HomeView(promptText: openAiConnector.requestModel.prompt, platformSelected: SocialMediaPlatforms.init().platforms[0])
                 .navigationBarBackButtonHidden(true)
         }
         .onAppear() {
@@ -122,9 +138,9 @@ struct CaptionView: View {
 
 struct CaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        CaptionView(captionStr: .constant("\n\n1. Look at those two crazy pups playing on a rainbow road! 🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbow 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. 🌈"), promptText: "")
+        CaptionView(captionStr: .constant("\n\n1. Look at those two crazy pups playing on a rainbow road! 🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbow 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. 🌈"))
         
-        CaptionView(captionStr: .constant("\n\n1. Look at those two crazy pups playing on a rainbow road! 🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbow 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. Two Pups, One Rainbow Roadddddd! 🌈"), promptText: "")
+        CaptionView(captionStr: .constant("\n\n1. Look at those two crazy pups playing on a rainbow road! 🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbow 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. Two Pups, One Rainbow Roadddddd! 🌈"))
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
@@ -193,12 +209,12 @@ struct CaptionCard: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14)
-                .stroke(.black, lineWidth: isCaptionSelected ? 2 : 0)
+                .stroke(.black, lineWidth: isCaptionSelected ? 2 : 1)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
                         .fill(colorFilled)
                 )
-                .shadow(radius: isCaptionSelected ? 0 : 3)
+                .shadow(radius: isCaptionSelected ? 1 : 3)
             
             VStack(alignment: .trailing, spacing: 0) {
                 Text(caption.dropFirst())
@@ -257,15 +273,13 @@ struct SubmitButtonGroupView: View {
                 self.onResetClick()
             } label: {
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.ui.frenchBlueSky)
-                    .opacity(0.5)
+                    .stroke(Color.ui.frenchBlueSky, lineWidth: 1)
                     .frame(width: SCREEN_WIDTH * 0.85, height: 55)
                     .overlay(
                         Text("Reset")
                             .foregroundColor(Color.blue)
                             .font(.ui.title2)
                     )
-                
             }
         }
     }

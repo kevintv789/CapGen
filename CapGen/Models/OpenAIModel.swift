@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import FirebaseFirestore
+import FirebaseFirestoreSwift
+import Firebase
 
 struct OpenAIResponseModel: Codable {
     var id: String
@@ -22,14 +25,29 @@ struct Choice: Codable {
     var finish_reason: String
 }
 
-struct AIRequest: Hashable {
-    let platform: String
-    let prompt: String
-    let tone: String
-    let includeEmojis: Bool
-    let includeHashtags: Bool
-    let captionLength: String
-    var generatedPromptString: String
+struct GeneratedCaptions: Codable, Identifiable {
+    var id: String = UUID().uuidString
+    var description: String
+}
+
+struct AIRequest: Codable, Identifiable {
+    var id: String = UUID().uuidString
+    var platform: String = ""
+    var prompt: String = ""
+    var tone: String = ""
+    var includeEmojis: Bool = false
+    var includeHashtags: Bool = false
+    var captionLength: String = ""
+    var title: String = ""
+    var dateCreated: String?
+    var captions: [GeneratedCaptions] = []
+    
+    var dictionary: [String: Any] {
+        let data = (try? JSONEncoder().encode(self)) ?? Data()
+        return (try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any]) ?? [:]
+    }
+    
+    init() { }
     
     init(platform: String, prompt: String, tone: String, includeEmojis: Bool, includeHashtags: Bool, captionLength: String) {
         self.platform = platform
@@ -38,7 +56,16 @@ struct AIRequest: Hashable {
         self.includeEmojis = includeEmojis
         self.includeHashtags = includeHashtags
         self.captionLength = captionLength
+        self.dateCreated = getCurrentDate()
+    }
+    
+    func getCurrentDate() -> String? {
+        let date = Date()
+        let df = DateFormatter()
         
-        self.generatedPromptString = "Generate 5 captions and a title for an \(platform) post. The title should be a catchy title that is less than 5 words. The tone should be \(tone) and the length of each caption should have a minimum of \(captionLength). Emojis, Hashtags and Numbers should be excluded from the word count. The user's prompt is: \(prompt == "" ? "Make me feel good" : prompt). \(includeEmojis ? "Use emojis" : "Do not use emojis"). \(includeHashtags ? "Use hashtags" : "Do not use hashtags"). Each caption should be displayed as a numbered list. The caption title should be the sixth item on the list, listed as 6. and without the Title word."
+        // LONG STYLE
+        df.dateStyle = DateFormatter.Style.long
+        df.timeStyle = DateFormatter.Style.long
+        return df.string(from: date) // December 10, 2021 at 5:00:41 PM PST
     }
 }

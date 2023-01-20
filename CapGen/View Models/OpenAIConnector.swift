@@ -8,11 +8,29 @@
 import Foundation
 
 public class OpenAIConnector: ObservableObject {
+    @Published var requestModel: AIRequest = AIRequest()
+    @Published var prompt: String = ""
+    @Published var captionLengthType: String = ""
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
 
+    func generatePrompt(platform: String, prompt: String, tone: String, includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String) {
+        self.requestModel = AIRequest(platform: platform, prompt: prompt, tone: tone, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength)
+        
+        self.captionLengthType = captionLengthType
+        
+        self.prompt = "Generate 5 captions and a title. Conform each caption to the standards of an \(platform) post. The title should be a catchy title that is no more than 5 words. The tone should be \(tone) and the length of each caption should be between \(captionLength). Emojis, Hashtags and Numbers should be excluded from the word count. The user's prompt is: \(prompt == "" ? "Make me feel good" : prompt). \(includeEmojis ? "Include emojis in each caption" : "Do not use emojis"). \(includeHashtags ? "Include hashtags in each caption" : "Do not use hashtags"). Each caption should be displayed as a numbered list. The caption title should be the sixth item on the list, listed as 6. and without the Title word."
+    }
+    
+    func createCaptionGroup(title: String, captions: [GeneratedCaptions]) {
+        // At this point, the requestModel should be initialized, now we just add new data
+        self.requestModel.captionLength = self.captionLengthType
+        self.requestModel.title = title
+        self.requestModel.captions = captions
+    }
+    
     @MainActor
-    public func processPrompt(prompt: String, apiKey: String?) async -> String? {
-        print("PROMPT", prompt)
+    public func processPrompt(apiKey: String?) async -> String? {
+        print("PROMPT", self.prompt)
         
         guard let openAIKey = apiKey else {
             print("Error retrieving Open AI Key")
