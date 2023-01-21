@@ -38,7 +38,9 @@ struct CaptionView: View {
         // Save to database
         let userId = AuthManager.shared.userManager.user?.id as? String ?? nil
         
-        firestore.saveCaptions(for: userId, with: openAiConnector.requestModel) {
+        let captionsGroup = AuthManager.shared.userManager.user?.captionsGroup as? [AIRequest] ?? []
+        
+        firestore.saveCaptions(for: userId, with: openAiConnector.requestModel, captionsGroup: captionsGroup) {
             self.backBtnClicked = true
         }
     }
