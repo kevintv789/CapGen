@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SavedCaptionsView: View {
-    @EnvironmentObject var firestore: FirestoreManager
     @State var hasCaptions: Bool = false
     
     var body: some View {
@@ -26,10 +25,8 @@ struct SavedCaptionsView: View {
             }
         }
         .onAppear() {
-            guard let userId = AuthManager.shared.userManager.user?.id as? String else { return }
-            self.firestore.hasCaptions(for: userId) { captionsGroup in
-                self.hasCaptions = captionsGroup != nil
-            }
+            let captionsGroup = AuthManager.shared.userManager.user?.captionsGroup as? [AIRequest] ?? []
+            self.hasCaptions = !captionsGroup.isEmpty
         }
     }
 }

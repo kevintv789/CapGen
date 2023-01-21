@@ -101,7 +101,7 @@ struct PopulatedCaptionsView: View {
                                                     
                                                     Spacer()
                                                     
-                                                    Text(element.dateCreated ?? "")
+                                                    Text(element.dateCreated)
                                                         .foregroundColor(.ui.cultured)
                                                         .font(.ui.headlineMd)
                                                     
@@ -112,7 +112,7 @@ struct PopulatedCaptionsView: View {
                                         
                                     }
                                     .padding(40)
-                                }
+                                }.id(element.title + element.id + element.dateCreated)
                             }
                         }
                        
@@ -120,27 +120,25 @@ struct PopulatedCaptionsView: View {
                 }
             }
         }
-        .onAppear() {
-            guard let userId = AuthManager.shared.userManager.user?.id as? String else { return }
-            print("GETTING CAPTION GROUPS")
-            self.firestore.getAllCaptions(for: userId) { isDone in
-                self.isLoading = !isDone
-            }
-        }
-        .onReceive(firestore.$captionsGroup) { value in
-            print("RECEIVING NEW CAPTION GROUPS")
+        .onReceive(AuthManager.shared.userManager.$user) { user in
             // This creates a set from an array of platforms by mapping the platform property of each object
             // Use this to retrieve all social media network platforms in an array
-            let platformSet = Set(value.map { $0.platform })
-            self.platforms = Array(platformSet)
             
-            if (!self.platforms.isEmpty) {
-                self.platformSelected = self.platforms[0] // initiate the first item to be selected by default
+            if (user != nil) {
+                let value = user!.captionsGroup
+                let platformSet = Set(value.map { $0.platform })
+                self.platforms = Array(platformSet)
+
+                if (!self.platforms.isEmpty) {
+                    self.platformSelected = self.platforms[0] // initiate the first item to be selected by default
+                }
             }
+            
         }
         .onChange(of: self.platformSelected) { value in
             // Filter to the selected social media network platform
-            self.filteredCaptionsGroup = firestore.captionsGroup.filter { $0.platform == value }
+            let captionsGroup = AuthManager.shared.userManager.user?.captionsGroup as? [AIRequest] ?? []
+            self.filteredCaptionsGroup = captionsGroup.filter { $0.platform == value }
         }
     }
 }
