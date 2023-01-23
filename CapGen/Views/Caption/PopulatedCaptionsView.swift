@@ -112,7 +112,7 @@ struct PopulatedCaptionsView: View {
                                         
                                     }
                                     .padding(40)
-                                }.id(element.title + element.id + element.dateCreated)
+                                }
                             }
                         }
                        
@@ -127,7 +127,7 @@ struct PopulatedCaptionsView: View {
             if (user != nil) {
                 let value = user!.captionsGroup
                 let platformSet = Set(value.map { $0.platform })
-                self.platforms = Array(platformSet)
+                self.platforms = Array(platformSet).sorted()
 
                 if (!self.platforms.isEmpty) {
                     self.platformSelected = self.platforms[0] // initiate the first item to be selected by default

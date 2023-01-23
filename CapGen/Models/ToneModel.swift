@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct ToneModel: Identifiable, Decodable {
+struct ToneModel: Identifiable, Codable {
     let id: Int
     let title: String
     let description: String
+    let icon: String
 }
 
 var tones: [ToneModel] = load("Tones.json")

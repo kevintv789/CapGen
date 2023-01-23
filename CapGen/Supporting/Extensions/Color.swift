@@ -26,5 +26,6 @@ extension Color {
         let shadowGray = Color("Shadow Gray")
         let dangerRed = Color("Danger Red")
         let orangeWeb = Color("Orange Web")
+        let darkerPurple = Color("Darker Purple")
     }
 }

@@ -34,7 +34,7 @@ struct AIRequest: Codable, Identifiable, Comparable {
     var id: String = UUID().uuidString
     var platform: String = ""
     var prompt: String = ""
-    var tone: String = ""
+    var tone: ToneModel = ToneModel(id: 0, title: "", description: "", icon: "")
     var includeEmojis: Bool = false
     var includeHashtags: Bool = false
     var captionLength: String = ""
@@ -63,7 +63,7 @@ struct AIRequest: Codable, Identifiable, Comparable {
     
     init() { }
     
-    init(id: String, platform: String, prompt: String, tone: String, includeEmojis: Bool, includeHashtags: Bool, captionLength: String, title: String, dateCreated: String, captions: [GeneratedCaptions]) {
+    init(id: String, platform: String, prompt: String, tone: ToneModel, includeEmojis: Bool, includeHashtags: Bool, captionLength: String, title: String, dateCreated: String, captions: [GeneratedCaptions]) {
         self.id = id
         self.platform = platform
         self.prompt = prompt
@@ -76,7 +76,7 @@ struct AIRequest: Codable, Identifiable, Comparable {
         self.captions = captions
     }
     
-    init(platform: String, prompt: String, tone: String, includeEmojis: Bool, includeHashtags: Bool, captionLength: String) {
+    init(platform: String, prompt: String, tone: ToneModel, includeEmojis: Bool, includeHashtags: Bool, captionLength: String) {
         self.platform = platform
         self.prompt = prompt
         self.tone = tone

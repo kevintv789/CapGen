@@ -17,22 +17,23 @@ struct CreditCounterView: View {
                 self.showModal = true
             }
         } label : {
+            HStack(alignment: .center, spacing: 0) {
+                Text("\(credits > 100 ? "100+" : "\(credits)")")
+                    .font(.ui.headline)
+                    .foregroundColor(.ui.orangeWeb)
+                    .padding(.leading, 15)
+                    
+                
+                Image("coin-icon")
+                    .resizable()
+                    .frame(width: 40, height: 35)
+                    .padding(.bottom, 3)
+                
+            }
+        }
+        .overlay (
             RoundedRectangle(cornerRadius: 100)
                 .stroke(Color.ui.orangeWeb, lineWidth: 2)
-                .overlay(
-                    HStack(alignment: .center, spacing: 0) {
-                        Text("\(credits > 1 ? "Credits" : "Credit"): \(credits > 100 ? "100+" : "\(credits)")")
-                            .font(.ui.headline)
-                            .foregroundColor(.ui.orangeWeb)
-                            .padding(.leading, 10)
-                        
-                        Image("coin-icon")
-                            .resizable()
-                            .frame(width: 50, height: 40)
-                            .padding(.bottom, 3)
-                        
-                    }
-                )
-        }
+        )
     }
 }
