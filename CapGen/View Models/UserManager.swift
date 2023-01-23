@@ -96,7 +96,7 @@ class UserManager: ObservableObject {
             let platform = element["platform"] as! String
             let prompt = element["prompt"] as! String
             let title = element["title"] as! String
-            let tone = element["tone"] as! String
+            let toneDict = element["tone"] as! [ String: AnyObject ]
             
             var captions: [GeneratedCaptions] = []
             captionsDict?.forEach { ele in
@@ -106,6 +106,8 @@ class UserManager: ObservableObject {
                 let parsedCaptions = GeneratedCaptions(id: captionsId, description: description)
                 captions.append(parsedCaptions)
             }
+            
+            let tone = ToneModel(id: toneDict["id"] as! Int, title: toneDict["title"] as! String, description: toneDict["description"] as! String, icon: toneDict["icon"] as! String)
             
             let parsedCaptionsGroup = AIRequest(id: id, platform: platform, prompt: prompt, tone: tone, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength, title: title, dateCreated: dateCreated, captions: captions)
             

@@ -16,7 +16,10 @@ struct SocialMediaPlatforms {
         "Twitter",
         "TikTok",
         "Facebook",
-        "YouTube"
+        "YouTube",
+        "Reddit",
+        "Pinterest",
+        "LinkedIn"
     ]
 }
 

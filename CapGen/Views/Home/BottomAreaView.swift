@@ -38,7 +38,7 @@ struct BottomAreaView: View {
     
     @State var lengthValue: String = ""
     @State var captionLengthType: String = ""
-    @State var toneSelected: String = tones[0].title
+    @State var toneSelected: ToneModel = tones[0]
     @State var includeEmojis: Bool = false
     @State var includeHashtags: Bool = false
     
@@ -158,7 +158,7 @@ struct TabButtonsView: View {
             Button {
                 showCaptionView = true
             } label: {
-                Image("hashtag-tab-icon")
+                Image("saved-captions-tab-icon")
                     .resizable()
                     .frame(width: 40, height: 40)
             }
@@ -170,7 +170,7 @@ struct TabButtonsView: View {
             Button {
                 showProfileView = true
             } label: {
-                Image(systemName: "person.fill")
+                Image("profile-tab-icon")
                     .resizable()
                     .frame(width: 40, height: 40)
                     .foregroundColor(.ui.cultured)
@@ -228,10 +228,10 @@ struct ExpandButton: View {
 }
 
 struct ToneSelectionSection: View {
-    @Binding var toneSelected: String
+    @Binding var toneSelected: ToneModel
     
     func toneSelect(tone: ToneModel) {
-        toneSelected = tone.title
+        toneSelected = tone
     }
     
     var body: some View {
@@ -245,7 +245,7 @@ struct ToneSelectionSection: View {
                         Button {
                             toneSelect(tone: tone)
                         } label: {
-                            RectangleCard(title: tone.title, description: tone.description, isSelected: toneSelected == tone.title)
+                            RectangleCard(title: tone.title, description: tone.description, isSelected: toneSelected.id == tone.id)
                                 .frame(width: 110, height: 110)
                         }
                         .padding(.leading, 15)

@@ -12,23 +12,22 @@ struct Pill: View {
     let isToggled: Bool
     
     var body: some View {
-        Text(title)
-            .font(.ui.graphikMedium)
-            .foregroundColor(isToggled ? Color.ui.richBlack : Color.ui.cadetBlueCrayola)
-            .padding(10)
+        RoundedRectangle(cornerRadius: isToggled ? 100 : 200)
+            .fill(isToggled ? Color.ui.middleBluePurple : Color.ui.cultured)
+            .frame(width: isToggled ? 170 : 45, height: 45)
+            .shadow(color: isToggled ? Color.ui.lavenderBlue : Color.ui.shadowGray, radius: isToggled ? 0 : 3, x: isToggled ? 0 : 1, y: isToggled ? 0 : 3)
             .overlay(
-                RoundedRectangle(cornerRadius: 100)
-                    .stroke(isToggled ? .black : Color.ui.cadetBlueCrayola, lineWidth: 2)
-                    .shadow(
-                        color: Color.ui.shadowGray.opacity(isToggled ? 0.8 : 0),
-                        radius: 2,
-                        x: 1,
-                        y: 2
-                    )
-            )
-            .background(
-                RoundedRectangle(cornerRadius: 100)
-                    .fill(isToggled ? Color.ui.lightOldPaper : .white.opacity(0))
+                HStack(spacing: 10) {
+                    Image(title)
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                    
+                    if (isToggled) {
+                        Text(title)
+                            .font(.ui.title4)
+                            .foregroundColor( Color.ui.cultured)
+                    }
+                }
             )
     }
 }

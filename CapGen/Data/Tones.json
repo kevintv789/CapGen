@@ -1,8 +1,12 @@
 [
-    {"id": 1, "title": "Formal", "description": "Professional, respectful, and polite."},
-    {"id": 2, "title": "Friendly", "description": "Warm, open, and casual."},
-    {"id": 3, "title": "Witty", "description": "Sarcastic, and humorous."},
-    {"id": 4, "title": "Inspiring", "description": "Motivating, encouraging, uplifting."},
-    {"id": 5, "title": "Passionate", "description": "Heartfelt, enthusiastic, dedicated."},
+    {"id": 1, "title": "Formal", "description": "Professional, respectful, and polite.", "icon": "🤵"},
+    {"id": 2, "title": "Friendly", "description": "Warm, open, and casual.", "icon": "🙆‍♀️"},
+    {"id": 3, "title": "Dark", "description": "Gloomy, ominous, somber.", "icon": "🧛"},
+    {"id": 4, "title": "Humorous", "description": "Funny, witty, comical.", "icon": "🤹‍♂️"},
+    {"id": 5, "title": "Sarcastic", "description": "Ironic, tongue-in-cheek, sardonic", "icon": "🧌"},
+    {"id": 6, "title": "Inspiring", "description": "Motivating, encouraging, uplifting.", "icon": "✨"},
+    {"id": 7, "title": "Passionate", "description": "Heartfelt, enthusiastic, dedicated.", "icon": "🔥"},
+    {"id": 8, "title": "Romantic", "description": "Loving, affectionate, heartfelt.", "icon": "❤️"},
+    {"id": 9, "title": "Informative", "description": "Detailed, factual, educational.", "icon": "📜"},
 ]
 

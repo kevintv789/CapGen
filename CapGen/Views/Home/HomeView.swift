@@ -32,16 +32,6 @@ struct HomeView: View {
         platformSelected = platform
     }
     
-    func getWidthDivisorForCreditCounter() -> CGFloat {
-        if (credits < 10) {
-            return 2.5
-        } else if (credits > 10) {
-            return 2.3
-        }
-        
-        return 2.1
-    }
-    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -52,46 +42,56 @@ struct HomeView: View {
                         hideKeyboard()
                     }
                 
-                GeometryReader { geo in
-                    VStack(alignment: .trailing) {
-                        CreditCounterView(credits: $credits, showModal: $showRefillModal)
-                            .frame(width: geo.size.width / getWidthDivisorForCreditCounter(), height: 35)
-                            .padding(.trailing, 15)
-                        
-                        Text("Which social media platform is this for?")
-                            .padding(.leading, 16)
-                            .padding(.top, 6)
-                            .font(.ui.graphikSemibold)
-                            .foregroundColor(Color.ui.richBlack)
-                            .frame(width: geo.size.width, alignment: .center)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(alignment: .top, spacing: 16) {
-                                ForEach(socialMediaPlatforms.platforms, id: \.self) { platform in
-                                    Button {
-                                        platformSelect(platform: platform)
-                                    } label: {
-                                        Pill(title: platform, isToggled: platform == platformSelected)
+                    VStack {
+                        HStack(alignment: .center) {
+                            Text("Which platform is this for?")
+                                .padding(.leading, 16)
+                                .font(.ui.headline)
+                                .foregroundColor(Color.ui.richBlack)
+                            
+                            Spacer()
+                            
+                            CreditCounterView(credits: $credits, showModal: $showRefillModal)
+                                .padding(.trailing, 16)
+                        }
+                      
+                        ScrollViewReader { scrollProxy in
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(alignment: .top, spacing: 15) {
+                                    ForEach(socialMediaPlatforms.platforms, id: \.self) { platform in
+                                        Button {
+                                            withAnimation(.spring()) {
+                                                platformSelect(platform: platform)
+                                            }
+                                            
+                                        } label: {
+                                            Pill(title: platform, isToggled: platform == platformSelected)
+                                        }
+                                        //                                    .frame(width: platform == platformSelected ? 100 : 50)
                                     }
                                 }
+                                .onTapGesture {
+                                    hideKeyboard()
+                                }
+                                .padding()
                             }
-                            .onTapGesture {
-                                hideKeyboard()
+                            .frame(height: 75)
+                            .onChange(of: self.platformSelected) { value in
+                                withAnimation {
+                                    scrollProxy.scrollTo(self.platformSelected, anchor: .center)
+                                }
                             }
-                            .padding()
                         }
-                        .frame(height: 75)
+                        
                         // Create a Text Area view that is the main component for typing input
                         TextAreaView(text: $promptText)
-                            .frame(width: geo.size.width / 1.1, height: geo.size.height / 1.7)
-                            .position(x: geo.size.width / 2, y: geo.size.height / 3.5)
+                            .frame(width: SCREEN_WIDTH / 1.1, height: SCREEN_HEIGHT / 2)
+                            .position(x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 4)
                             .focused($isFocused)
                         
                         BottomAreaView(expandArea: $expandBottomArea, platformSelected: $platformSelected, promptText: $promptText, credits: $credits, isAdLoading: $isAdLoading)
-                            .frame(maxHeight: geo.size.height)
+                            .frame(maxHeight: SCREEN_HEIGHT)
                     }
-                    
-                }
                 .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }

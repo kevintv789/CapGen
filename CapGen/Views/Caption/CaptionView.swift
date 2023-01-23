@@ -16,7 +16,7 @@ struct CaptionView: View {
     @State var captionsParsed: [String] = []
     @State var captionsTitle: String = ""
     @State var captionSelected: String = ""
-    @State var cardColorFill: [Color] = [.ui.middleYellowRed, .ui.darkSalmon, .ui.frenchBlueSky, .ui.lightCyan, .ui.middleBluePurple]
+    @State var cardColorFill: [Color] = [.ui.middleYellowRed, .ui.darkSalmon, .ui.middleBluePurple, .ui.frenchBlueSky, .ui.lightCyan]
     
     @State var initialText: String = ""
     let finalText: String = "Tap a card to copy 😏"
@@ -263,8 +263,9 @@ struct SubmitButtonGroupView: View {
                 self.onSaveClick()
             } label: {
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.ui.frenchBlueSky)
+                    .fill(Color.ui.darkerPurple)
                     .frame(width: SCREEN_WIDTH * 0.85, height: 55)
+                    .shadow(color: Color.ui.shadowGray, radius: 2, x: 3, y: 4)
                     .overlay(
                         Text("Save")
                             .foregroundColor(.ui.cultured)
@@ -277,11 +278,11 @@ struct SubmitButtonGroupView: View {
                 self.onResetClick()
             } label: {
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.ui.frenchBlueSky, lineWidth: 1)
+                    .stroke(Color.ui.darkerPurple, lineWidth: 1)
                     .frame(width: SCREEN_WIDTH * 0.85, height: 55)
                     .overlay(
                         Text("Reset")
-                            .foregroundColor(Color.blue)
+                            .foregroundColor(Color.ui.darkerPurple)
                             .font(.ui.title2)
                     )
             }
