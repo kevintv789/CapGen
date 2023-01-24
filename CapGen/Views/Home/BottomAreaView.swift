@@ -197,10 +197,15 @@ struct ExpandButton: View {
             }
         } label: {
             Circle()
-                .strokeBorder(Color.ui.lighterLavBlue, lineWidth: 4)
+                .strokeBorder(Color.ui.lighterLavBlue.opacity(0.5), lineWidth: 4)
                 .background(
                     Circle()
-                        .foregroundColor(Color.ui.richBlack)
+                        .strokeBorder(Color.ui.cultured, lineWidth: 4)
+                        .background(
+                            Circle()
+                                .fill(Color.ui.richBlack)
+                        )
+                        
                 )
                 .overlay(
                     VStack(spacing: 3) {

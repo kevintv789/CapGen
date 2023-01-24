@@ -263,8 +263,6 @@ struct CaptionCard: View {
                     RoundedRectangle(cornerRadius: 14)
                         .fill(colorFilled)
                 )
-                .shadow(radius: isCaptionSelected ? 1 : 3)
-            
             VStack(alignment: .trailing, spacing: 0) {
                 Text(caption.trimmingCharacters(in: .whitespaces))
                     .padding(EdgeInsets.init(top: 15, leading: 10, bottom: 15, trailing: 10))
@@ -325,6 +323,7 @@ struct SubmitButtonGroupView: View {
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(Color.ui.darkerPurple, lineWidth: 1)
                     .frame(width: SCREEN_WIDTH * 0.85, height: 55)
+                    .shadow(color: Color.ui.shadowGray, radius: 1, x: 2, y: 1)
                     .overlay(
                         Text("Reset")
                             .foregroundColor(Color.ui.darkerPurple)
@@ -346,7 +345,9 @@ struct CaptionSettingsView: View {
         // Display saved configurations
         HStack {
             // Tones
-            CircularTonesView(tones: self.tones ?? [])
+            if (tones != nil && !self.tones!.isEmpty) {
+                CircularTonesView(tones: self.tones ?? [])
+            }
             
             // Emojis
             CircularView(image: self.includeEmojis ?? false ? "yes-emoji" : "no-emoji")
@@ -355,7 +356,7 @@ struct CaptionSettingsView: View {
             CircularView(image: self.includeHashtags ?? false ? "yes-hashtag" : "no-hashtag")
             
             // Caption length
-            CircularView(image: self.captionLength ?? "veryShort", imageWidth: 15)
+            CircularView(image: self.captionLength ?? "veryShort", imageWidth: 20)
         }
     }
 }

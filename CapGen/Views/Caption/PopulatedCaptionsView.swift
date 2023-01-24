@@ -49,6 +49,8 @@ struct PopulatedCaptionsView: View {
     @State var unparsedCaptionStr: String? = ""
     @State var filteredCaptionsGroup: [AIRequest] = []
     @State var platforms: [String] = []
+    @State var showDeleteModal: Bool = false
+    @State var currentCaptionSelected: AIRequest = AIRequest()
     
     // Mapper for caption view
     @State var tones: [ToneModel] = []
@@ -98,14 +100,23 @@ struct PopulatedCaptionsView: View {
                             Spacer()
                         }
                     )
-                
+
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack {
                         ForEach(filteredCaptionsGroup) { element in
                             ZStack(alignment: .topLeading) {
                                 StackedCardsView(viewHeight: self.textSize.height)
                                 VStack(alignment: .leading, spacing: 20) {
-                                    CardTitleHeaderView(title: element.title)
+                                    CardTitleHeaderView(title: element.title) {
+                                        // Edit caption group
+                                        self.mapCaptionConfigurations(element: element)
+                                        self.showCaptionsView = true
+                                    } share: {
+                                        
+                                    } delete: {
+                                        self.showDeleteModal = true
+                                        self.currentCaptionSelected = element
+                                    }
                                     
                                     Button {
                                         self.mapCaptionConfigurations(element: element)
@@ -174,6 +185,13 @@ struct PopulatedCaptionsView: View {
             // Filter to the selected social media network platform
             let captionsGroup = AuthManager.shared.userManager.user?.captionsGroup as? [AIRequest] ?? []
             self.filteredCaptionsGroup = captionsGroup.filter { $0.platform == value }
+        }
+        .modalView(horizontalPadding: 40, show: $showDeleteModal) {
+            DeleteModalView(title: "Deleting Captions", subTitle: "You’re about to delete these captions. This action cannot be undone. Are you sure? 🫢", lottieFile: "crane_hand_lottie", showView: $showDeleteModal, onDelete: {
+                firestore.onCaptionsGroupDelete(for: AuthManager.shared.userManager.user?.id ?? nil, element: self.currentCaptionSelected, captionsGroup: filteredCaptionsGroup)
+            })
+        } onClickExit: {
+            self.showDeleteModal = false
         }
     }
 }
@@ -273,6 +291,9 @@ struct StackedCardsView: View {
 
 struct CardTitleHeaderView: View {
     let title: String
+    var edit: () -> Void
+    var share: () -> Void
+    var delete: () -> Void
     
     var body: some View {
         HStack {
@@ -286,14 +307,13 @@ struct CardTitleHeaderView: View {
             Spacer()
             
             // Edit button
-            Button {
-                print("Edit...")
-            } label: {
-                Image(systemName: "ellipsis")
-                    .rotationEffect(.degrees(90))
-                    .font(.ui.title)
-                    .foregroundColor(.ui.cultured)
-            }
+            CustomMenuPopup(edit: {
+                edit()
+            }, share: {
+                share()
+            }, delete: {
+                delete()
+            })
         }
     }
 }
@@ -304,7 +324,9 @@ struct ConfigurationIndicatorsView: View {
     var body: some View {
         HStack {
             // Tones
-            CircularTonesView(tones: element.tones)
+            if (!element.tones.isEmpty) {
+                CircularTonesView(tones: element.tones)
+            }
             
             // Emojis
             CircularView(image: element.includeEmojis ? "yes-emoji" : "no-emoji")
