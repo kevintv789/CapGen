@@ -75,6 +75,12 @@ class FirestoreManager: ObservableObject {
         
         if (!captionsGroup.isEmpty) {
             // Update array with new item
+            let indexOfGroup = captionsGroup.firstIndex{ $0.id == captions.id }
+            if (indexOfGroup != nil) {
+                // Update a specific item in the array by removing it first
+                docRef.updateData(["captionsGroup": FieldValue.arrayRemove([captionsGroup[indexOfGroup!].dictionary])])
+            }
+            
             docRef.updateData(["captionsGroup": FieldValue.arrayUnion([captions.dictionary])])
         } else {
             // Create new data field

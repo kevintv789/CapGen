@@ -15,8 +15,8 @@ struct SnappableSliderView: UIViewRepresentable {
     var callback: (Float) -> Void
    
     var thumbColor: UIColor = UIColor(Color.ui.middleYellowRed)
-    var minTrackColor: UIColor = UIColor(Color.ui.cadetBlueCrayola)
-    var maxTrackColor: UIColor = UIColor(Color.ui.cadetBlueCrayola)
+    var minTrackColor: UIColor = UIColor(Color.ui.middleYellowRed)
+    var maxTrackColor: UIColor = UIColor(Color.ui.cultured)
     
     // Create a class Coordinator to bind SwiftUI and UIKit together
     // so that a SwiftUI View can access data from this UIKit component

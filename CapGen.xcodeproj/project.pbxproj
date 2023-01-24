@@ -126,6 +126,7 @@
 		D4056ED529788FCA00D3894D /* lightbulb_loader_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */; };
 		D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EDB2978A06900D3894D /* space_man_empty.json */; };
 		D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */; };
+		D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -268,6 +269,7 @@
 		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
 		D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulatedCaptionsView.swift; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
+		D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaglistViewModel.swift; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
@@ -447,6 +449,7 @@
 				D4056E9A2971EF6F00D3894D /* FBAuthManager.swift */,
 				D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */,
 				D4056EB729736F6E00D3894D /* GoogleRewardedAds.swift */,
+				D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -1003,6 +1006,7 @@
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
 				D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */,
 				D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */,
+				D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */,
 				D4056E9B2971EF6F00D3894D /* FBAuthManager.swift in Sources */,
 				D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */,
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,

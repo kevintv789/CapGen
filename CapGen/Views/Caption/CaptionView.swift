@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CaptionView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var firestore: FirestoreManager
     
@@ -23,6 +24,25 @@ struct CaptionView: View {
     @State private var isTextCopied: Bool = false
     @State var saveError: Bool = false
     
+    // Variables below are specifically for going through saved captions screen
+    var tones: [ToneModel]?
+    var captionLength: String?
+    var prompt: String?
+    var includeEmojis: Bool?
+    var includeHashtags: Bool?
+    var savedCaptions: [GeneratedCaptions]?
+    var isEditing: Bool?
+    var onBackBtnClicked: (() -> Void)?
+    
+    private func dynamicViewPop() {
+        if (onBackBtnClicked != nil) {
+            onBackBtnClicked!()
+            self.presentationMode.wrappedValue.dismiss()
+        } else {
+            backBtnClicked = true
+        }
+    }
+    
     func saveCaptions() {
         // Don't do anything if there's an error
         guard !self.saveError else { return }
@@ -33,7 +53,7 @@ struct CaptionView: View {
             mappedCaptions.append(GeneratedCaptions(description: caption))
         }
         
-        openAiConnector.createCaptionGroup(title: self.captionsTitle, captions: mappedCaptions)
+        openAiConnector.generateNewRequestModel(title: self.captionsTitle, captions: mappedCaptions)
         
         // Save to database
         let userId = AuthManager.shared.userManager.user?.id as? String ?? nil
@@ -41,7 +61,7 @@ struct CaptionView: View {
         let captionsGroup = AuthManager.shared.userManager.user?.captionsGroup as? [AIRequest] ?? []
         
         firestore.saveCaptions(for: userId, with: openAiConnector.requestModel, captionsGroup: captionsGroup) {
-            self.backBtnClicked = true
+            dynamicViewPop()
         }
     }
     
@@ -50,11 +70,8 @@ struct CaptionView: View {
             Color.ui.cultured.ignoresSafeArea()
             Color.ui.lighterLavBlue.ignoresSafeArea().opacity(0.5)
             
-            
             VStack(alignment: .leading) {
-                BackArrowView {
-                    backBtnClicked = true
-                }
+                BackArrowView { dynamicViewPop() }
                 .padding(.leading, 8)
                 
                 ScrollView(.vertical, showsIndicators: false) {
@@ -64,7 +81,33 @@ struct CaptionView: View {
                             .padding(.bottom, 15)
                         
                         VStack(alignment: .leading, spacing: 5) {
-                            if (!isTextCopied) {
+                            if (isEditing != nil && isEditing!) {
+                                
+                                // Display saved prompt
+                                if (prompt != nil) {
+                                    Text(prompt!)
+                                        .padding(.bottom, 15)
+                                        .font(.ui.headlineLight)
+                                        .foregroundColor(.ui.richBlack)
+                                }
+                                
+                                // Display saved configurations
+                                HStack {
+                                    // Tones
+                                    CircularTonesView(tones: self.tones ?? [])
+                                    
+                                    // Emojis
+                                    CircularView(image: self.includeEmojis ?? false ? "yes-emoji" : "no-emoji")
+                                    
+                                    // Hashtags
+                                    CircularView(image: self.includeHashtags ?? false ? "yes-hashtag" : "no-hashtag")
+                                    
+                                    // Caption length
+                                    CircularView(image: self.captionLength ?? "veryShort", imageWidth: 15)
+                                }
+                            }
+                            
+                            if (!isTextCopied && (isEditing == nil || !isEditing!)) {
                                 RoundedRectangle(cornerRadius: 100)
                                     .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [4], dashPhase: 0))
                                     .foregroundColor(Color.ui.richBlack)
@@ -87,8 +130,11 @@ struct CaptionView: View {
                                         UIPasteboard.general.string = String(caption)
                                     }
                                 } label: {
-                                    CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index])
-                                        .padding(10)
+                                    if index < 5 {
+                                        CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index])
+                                            .padding(10)
+                                    }
+                                   
                                     
                                 }
                             }
@@ -99,7 +145,7 @@ struct CaptionView: View {
                         SubmitButtonGroupView(onSaveClick: {
                             saveCaptions()
                         }, onResetClick: {
-                            self.backBtnClicked = true
+                            dynamicViewPop()
                         })
                         .padding(.top, 15)
                         
