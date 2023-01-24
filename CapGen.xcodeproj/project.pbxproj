@@ -128,6 +128,9 @@
 		D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */; };
 		D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */; };
 		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
+		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
+		D4C3E485298087CE00C2847A /* crane_hand_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E484298087CE00C2847A /* crane_hand_lottie.json */; };
+		D4C3E4872980883D00C2847A /* DeleteModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4862980883D00C2847A /* DeleteModalView.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -272,6 +275,9 @@
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaglistViewModel.swift; sourceTree = "<group>"; };
 		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
+		D4C3E482298059C800C2847A /* CustomMenuPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuPopup.swift; sourceTree = "<group>"; };
+		D4C3E484298087CE00C2847A /* crane_hand_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = crane_hand_lottie.json; sourceTree = "<group>"; };
+		D4C3E4862980883D00C2847A /* DeleteModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteModalView.swift; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
@@ -599,6 +605,7 @@
 		D4056E7D296F0C7E00D3894D /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
+				D4C3E484298087CE00C2847A /* crane_hand_lottie.json */,
 				D4056EDB2978A06900D3894D /* space_man_empty.json */,
 				D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */,
 				D4056ECE2978735A00D3894D /* btn_loader.json */,
@@ -620,6 +627,8 @@
 				D4056EC929778FB700D3894D /* RefillModalView.swift */,
 				D4056EB9297373E400D3894D /* RewardedAdView.swift */,
 				D4056ECC297796B900D3894D /* CreditsDepletedModalView.swift */,
+				D4C3E482298059C800C2847A /* CustomMenuPopup.swift */,
+				D4C3E4862980883D00C2847A /* DeleteModalView.swift */,
 			);
 			path = Modals;
 			sourceTree = "<group>";
@@ -842,6 +851,7 @@
 				D4056EB02972872600D3894D /* speech_bubble.json in Resources */,
 				D4056DE6295C0DFB00D3894D /* Blacker-Text-Book-Italic-trial.ttf in Resources */,
 				D4056E0F295C0E2A00D3894D /* GraphikRegular.otf in Resources */,
+				D4C3E485298087CE00C2847A /* crane_hand_lottie.json in Resources */,
 				D4056DDF295C0DFB00D3894D /* Blacker-Text-Bold-Italic-trial.ttf in Resources */,
 				D4056DE7295C0DFB00D3894D /* Blacker-Text-Light-trial.ttf in Resources */,
 				D4056E0C295C0E2A00D3894D /* GraphikMedium.otf in Resources */,
@@ -999,6 +1009,7 @@
 				D4056EA22971FD6200D3894D /* GoogleAuthManager.swift in Sources */,
 				D4056EA829721BC300D3894D /* ProfileView.swift in Sources */,
 				D4056E362962030800D3894D /* CaptionLengthsModel.swift in Sources */,
+				D4C3E4872980883D00C2847A /* DeleteModalView.swift in Sources */,
 				D4056E992971EB9600D3894D /* AuthManager.swift in Sources */,
 				D4056EBA297373E400D3894D /* RewardedAdView.swift in Sources */,
 				D4056ECD297796B900D3894D /* CreditsDepletedModalView.swift in Sources */,
@@ -1020,6 +1031,7 @@
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
 				D4056EAA29721DA800D3894D /* SavedCaptionsView.swift in Sources */,
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
+				D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */,
 				D4056EB829736F6E00D3894D /* GoogleRewardedAds.swift in Sources */,
 				D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,

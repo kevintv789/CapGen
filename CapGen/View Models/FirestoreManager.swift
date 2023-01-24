@@ -89,4 +89,21 @@ class FirestoreManager: ObservableObject {
         
         completion()
     }
+    
+    /**
+        This function deletes the specific caption group
+     */
+    func onCaptionsGroupDelete(for uid: String?, element: AIRequest, captionsGroup: [AIRequest]) {
+        guard let userId = uid else { return }
+        
+        let docRef = db.collection("Users").document("\(userId)")
+        
+        if (!captionsGroup.isEmpty) {
+            let indexOfGroup = captionsGroup.firstIndex{ $0.id == element.id }
+            if (indexOfGroup != nil) {
+                docRef.updateData(["captionsGroup": FieldValue.arrayRemove([captionsGroup[indexOfGroup!].dictionary])])
+            }
+            
+        }
+    }
 }
