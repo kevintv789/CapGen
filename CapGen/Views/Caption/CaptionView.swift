@@ -23,6 +23,7 @@ struct CaptionView: View {
     let finalText: String = "Tap a card to copy 😏"
     @State private var isTextCopied: Bool = false
     @State var saveError: Bool = false
+    @State var showCaptionsGuideModal: Bool = false
     
     // Variables below are specifically for going through saved captions screen
     var tones: [ToneModel]?
@@ -72,7 +73,7 @@ struct CaptionView: View {
             
             VStack(alignment: .leading) {
                 BackArrowView { dynamicViewPop() }
-                .padding(.leading, 8)
+                    .padding(.leading, 8)
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 5) {
@@ -82,7 +83,6 @@ struct CaptionView: View {
                         
                         VStack(alignment: .leading, spacing: 5) {
                             if (isEditing != nil && isEditing!) {
-                                
                                 // Display saved prompt
                                 if (prompt != nil) {
                                     Text(prompt!)
@@ -91,20 +91,13 @@ struct CaptionView: View {
                                         .foregroundColor(.ui.richBlack)
                                 }
                                 
-                                // Display saved configurations
-                                HStack {
-                                    // Tones
-                                    CircularTonesView(tones: self.tones ?? [])
-                                    
-                                    // Emojis
-                                    CircularView(image: self.includeEmojis ?? false ? "yes-emoji" : "no-emoji")
-                                    
-                                    // Hashtags
-                                    CircularView(image: self.includeHashtags ?? false ? "yes-hashtag" : "no-hashtag")
-                                    
-                                    // Caption length
-                                    CircularView(image: self.captionLength ?? "veryShort", imageWidth: 15)
+                                Button {
+                                    self.showCaptionsGuideModal = true
+                                } label: {
+                                    // Display different settings for the captions
+                                    CaptionSettingsView(prompt: prompt, tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength)
                                 }
+                                
                             }
                             
                             if (!isTextCopied && (isEditing == nil || !isEditing!)) {
@@ -134,7 +127,7 @@ struct CaptionView: View {
                                         CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index])
                                             .padding(10)
                                     }
-                                   
+                                    
                                     
                                 }
                             }
@@ -155,6 +148,12 @@ struct CaptionView: View {
             }
             
             
+        }
+        .sheet(isPresented: $showCaptionsGuideModal) {
+            CaptionGuidesView(tones: self.tones ?? [], includeEmojis: self.includeEmojis ?? false, includeHashtags: self.includeHashtags ?? false, captionLength: self.captionLength ?? "")
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+                
         }
         .navigationDestination(isPresented: $backBtnClicked) {
             HomeView(promptText: openAiConnector.requestModel.prompt, platformSelected: SocialMediaPlatforms.init().platforms[0])
@@ -332,6 +331,31 @@ struct SubmitButtonGroupView: View {
                             .font(.ui.title2)
                     )
             }
+        }
+    }
+}
+
+struct CaptionSettingsView: View {
+    let prompt: String?
+    let tones: [ToneModel]?
+    let includeEmojis: Bool?
+    let includeHashtags: Bool?
+    let captionLength: String?
+    
+    var body: some View {
+        // Display saved configurations
+        HStack {
+            // Tones
+            CircularTonesView(tones: self.tones ?? [])
+            
+            // Emojis
+            CircularView(image: self.includeEmojis ?? false ? "yes-emoji" : "no-emoji")
+            
+            // Hashtags
+            CircularView(image: self.includeHashtags ?? false ? "yes-hashtag" : "no-hashtag")
+            
+            // Caption length
+            CircularView(image: self.captionLength ?? "veryShort", imageWidth: 15)
         }
     }
 }
