@@ -81,6 +81,9 @@ class UserManager: ObservableObject {
         }
     }
     
+    /**
+     This function converts the group of captions within Firebase to a readable/Swift format so data can be read and retrieved
+     */
     private func convertCaptionGroup(for captionsGroup: [[ String: AnyObject ]]?) -> [AIRequest] {
         guard let captionsGroup = captionsGroup else { return [] }
         
@@ -96,7 +99,7 @@ class UserManager: ObservableObject {
             let platform = element["platform"] as! String
             let prompt = element["prompt"] as! String
             let title = element["title"] as! String
-            let toneDict = element["tone"] as! [ String: AnyObject ]
+            let tonesDict = element["tones"] as? [[ String: AnyObject ]] ?? []
             
             var captions: [GeneratedCaptions] = []
             captionsDict?.forEach { ele in
@@ -107,9 +110,13 @@ class UserManager: ObservableObject {
                 captions.append(parsedCaptions)
             }
             
-            let tone = ToneModel(id: toneDict["id"] as! Int, title: toneDict["title"] as! String, description: toneDict["description"] as! String, icon: toneDict["icon"] as! String)
+            var tones: [ToneModel] = []
+            tonesDict.forEach { ele in
+                let tone = ToneModel(id: ele["id"] as! Int, title: ele["title"] as! String, description: ele["description"] as! String, icon: ele["icon"] as! String)
+                tones.append(tone)
+            }
             
-            let parsedCaptionsGroup = AIRequest(id: id, platform: platform, prompt: prompt, tone: tone, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength, title: title, dateCreated: dateCreated, captions: captions)
+            let parsedCaptionsGroup = AIRequest(id: id, platform: platform, prompt: prompt, tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength, title: title, dateCreated: dateCreated, captions: captions)
             
             result.append(parsedCaptionsGroup)
         })

@@ -47,6 +47,7 @@ struct EmptyCaptionsView: View {
             }
             .frame(maxWidth: SCREEN_WIDTH, alignment: .leading)
             .padding(.leading, 15)
+            .padding(.top, 15)
             
             LottieView(name: "space_man_empty", loopMode: .loop, isAnimating: true)
                 .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT / 2)

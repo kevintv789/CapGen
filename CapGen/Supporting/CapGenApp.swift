@@ -41,6 +41,7 @@ struct CapGenApp: App {
                 .environmentObject(FirestoreManager())
                 .environmentObject(UserManager())
                 .environmentObject(OpenAIConnector())
+                .environmentObject(TaglistViewModel())
         }
     }
 }

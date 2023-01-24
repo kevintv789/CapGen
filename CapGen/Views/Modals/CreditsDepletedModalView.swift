@@ -37,7 +37,7 @@ struct CreditsDepletedModalView: View {
                 
                 LottieView(name: "coin_pile_lottie", loopMode: .loop, isAnimating: true)
                     .position(x: SCREEN_WIDTH / 2, y: 30)
-                    .frame(width: SCREEN_WIDTH, height: 250)
+                    .frame(width: SCREEN_WIDTH, height: 230)
                     .padding(.bottom, -70)
                 
                 DisplayAdBtnView(title: "Collect Credits", isAdDone: $isAdDone)
@@ -61,6 +61,7 @@ struct CreditsDepletedModalView: View {
                     Text("Just play ad next time")
                         .foregroundColor(.ui.cadetBlueCrayola)
                         .font(.ui.headline)
+                        .padding(.bottom, 30)
                 }
                 .disabled(self.isAdLoading)
             }

@@ -8,9 +8,9 @@
 import SwiftUI
 
 extension View {
-    func customCardStyle() -> some View {
+    func customCardStyle(viewHeight: CGFloat) -> some View {
         return self
-            .frame(width: SCREEN_WIDTH * 0.9, height: SCREEN_HEIGHT / 4)
+            .frame(width: SCREEN_WIDTH * 0.9, height: viewHeight + 150)
             .padding()
             .shadow(
                 color: Color.ui.richBlack.opacity(0.5),
@@ -21,116 +21,151 @@ extension View {
     }
 }
 
+// The ViewSizeKey and ViewGeometry are used to calculate size of Views
+struct ViewSizeKey: PreferenceKey {
+    static var defaultValue: CGSize = .zero
+    
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+        value = nextValue()
+    }
+}
+
+struct ViewGeometry: View {
+    var body: some View {
+        GeometryReader { geometry in
+            Color.clear
+                .preference(key: ViewSizeKey.self, value: geometry.size)
+        }
+    }
+}
+
 struct PopulatedCaptionsView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var firestore: FirestoreManager
     
-    @State var isLoading: Bool = false
+    @State var textSize: CGSize = .zero
     @State var platformSelected: String = ""
+    @State var showCaptionsView: Bool = false
+    @State var unparsedCaptionStr: String? = ""
     @State var filteredCaptionsGroup: [AIRequest] = []
     @State var platforms: [String] = []
-    /**
-     MOCKED VALUES BELOW
-     */
-    //    @State var platforms: [String] = ["Twitter", "Instagram", "Youtube"]
-    //    @State var filteredCaptionsGroup: [AIRequest] = [AIRequest(id: "123", platform: "Instagram", prompt: "Generate me a caption about my two dogs playing in the sunny park in an open field of rainbows and sunshine and unicorn and sunshine and unicorn and sunshine and unicorn and sunshine andne and unicorn and sunshine and unicorn and sunshine andne and unicorn and sunshine and unicorn and sunshine and unicorn", tone: "Formal", includeEmojis: true, includeHashtags: false, captionLength: "veryShort", title: "Embrace Joy", dateCreated: "Jan 20, 3:11 PM", captions: [
-    //
-    //        GeneratedCaptions(description: "test1"),
-    //        GeneratedCaptions(description: "test2"),
-    //        GeneratedCaptions(description: "test3"),
-    //        GeneratedCaptions(description: "test4"),
-    //        GeneratedCaptions(description: "test5"),
-    //    ])]
+    
+    // Mapper for caption view
+    @State var tones: [ToneModel] = []
+    @State var captionLength: String = ""
+    @State var prompt: String = ""
+    @State var includeEmojis: Bool = false
+    @State var includeHashtags: Bool = false
+    @State var savedCaptions: [GeneratedCaptions] = []
+    
+    private func mapCaptionConfigurations(element: AIRequest) {
+        // Generate a string to parse captions
+        for (index, caption) in element.captions.enumerated() {
+            self.unparsedCaptionStr! += "\n\(index). \(caption.description)"
+        }
+        // Generate the last string to parse title
+        self.unparsedCaptionStr! += "\n6. \(element.title)"
+        
+        // Map necessary configurations to view
+        self.tones = element.tones
+        self.captionLength = element.captionLength
+        self.prompt = element.prompt
+        self.includeEmojis = element.includeEmojis
+        self.includeHashtags = element.includeHashtags
+        self.savedCaptions = element.captions
+    }
     
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color.ui.cultured.ignoresSafeArea(.all)
             
-            if (isLoading) {
-                ProgressView()
-                    .foregroundColor(.ui.cadetBlueCrayola)
-            } else {
-                VStack {
-                    Color.ui.lavenderBlue.ignoresSafeArea(.all)
-                        .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.13)
-                        .overlay(
-                            VStack(spacing: 0) {
-                                BackArrowView {
-                                    self.presentationMode.wrappedValue.dismiss()
-                                }
-                                .frame(maxWidth: SCREEN_WIDTH, alignment: .leading)
-                                .frame(height: 10)
-                                .padding(.leading, 15)
-                                .padding(.bottom, 20)
-                                
-                                PlatformHeaderView(platforms: platforms, platformSelected: $platformSelected)
-                                
-                                Spacer()
+            VStack {
+                Color.ui.lavenderBlue.ignoresSafeArea(.all)
+                    .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT * (SCREEN_HEIGHT < 700 ? 0.2 : 0.15))
+                    .overlay(
+                        VStack(spacing: 0) {
+                            BackArrowView {
+                                self.presentationMode.wrappedValue.dismiss()
                             }
-                        )
-                    
-                    ScrollView(.vertical, showsIndicators: false) {
-                        LazyVStack {
-                            ForEach(filteredCaptionsGroup) { element in
-                                ZStack(alignment: .topLeading) {
-                                    StackedCardsView()
-                                    VStack(alignment: .leading, spacing: 20) {
-                                        CardTitleHeaderView(title: element.title)
+                            .frame(maxWidth: SCREEN_WIDTH, alignment: .leading)
+                            .frame(height: 10)
+                            .padding(.leading, 15)
+                            .padding(.bottom, 20)
+                            .padding(.top, 15)
+                            
+                            PlatformHeaderView(platforms: platforms, platformSelected: $platformSelected)
+                            
+                            Spacer()
+                        }
+                    )
+                
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVStack {
+                        ForEach(filteredCaptionsGroup) { element in
+                            ZStack(alignment: .topLeading) {
+                                StackedCardsView(viewHeight: self.textSize.height)
+                                VStack(alignment: .leading, spacing: 20) {
+                                    CardTitleHeaderView(title: element.title)
+                                    
+                                    Button {
+                                        self.mapCaptionConfigurations(element: element)
+                                        self.showCaptionsView = true
                                         
-                                        Button {
+                                    } label: {
+                                        VStack(alignment: .leading) {
+                                            Text(element.prompt)
+                                                .font(.ui.bodyLarge)
+                                                .foregroundColor(.ui.cultured)
+                                                .lineLimit(Int(SCREEN_HEIGHT / 180))
+                                                .multilineTextAlignment(.leading)
+                                                .lineSpacing(3)
+                                                .background(ViewGeometry())
+                                                .onPreferenceChange(ViewSizeKey.self) {
+                                                    self.textSize = $0 // get size of text view
+                                                }
                                             
-                                        } label: {
-                                            VStack(alignment: .leading) {
-                                                Text(element.prompt)
-                                                    .font(.ui.bodyLarge)
-                                                    .foregroundColor(.ui.cultured)
-                                                    .lineLimit(Int(SCREEN_HEIGHT / 180))
-                                                    .multilineTextAlignment(.leading)
-                                                    .lineSpacing(3)
+                                            Spacer()
+                                            
+                                            HStack(spacing: 5) {
+                                                // Tones indicator
+                                                ConfigurationIndicatorsView(element: element)
                                                 
                                                 Spacer()
                                                 
-                                                HStack {
-                                                    Image("Instagram")
-                                                        .resizable()
-                                                        .frame(width: 35, height: 35)
-                                                    
-                                                    Image("Instagram")
-                                                        .resizable()
-                                                        .frame(width: 35, height: 35)
-                                                    
-                                                    Spacer()
-                                                    
-                                                    Text(element.dateCreated)
-                                                        .foregroundColor(.ui.cultured)
-                                                        .font(.ui.headlineMd)
-                                                    
-                                                }
+                                                Text(element.dateCreated)
+                                                    .foregroundColor(.ui.cultured)
+                                                    .font(.ui.headlineMd)
+                                                
                                             }
                                         }
-                                        
-                                        
                                     }
-                                    .padding(40)
                                 }
+                                .padding(40)
                             }
                         }
-                       
                     }
+                    
                 }
             }
+        }
+        .navigationDestination(isPresented: $showCaptionsView) {
+            CaptionView(captionStr: $unparsedCaptionStr, tones: self.tones, captionLength: captionLength, prompt: prompt, includeEmojis: includeEmojis, includeHashtags: includeHashtags, savedCaptions: savedCaptions, isEditing: true) {
+                // On exit
+                self.unparsedCaptionStr?.removeAll()
+            }
+            .navigationBarBackButtonHidden(true)
         }
         .onReceive(AuthManager.shared.userManager.$user) { user in
             // This creates a set from an array of platforms by mapping the platform property of each object
             // Use this to retrieve all social media network platforms in an array
-            
             if (user != nil) {
                 let value = user!.captionsGroup
                 let platformSet = Set(value.map { $0.platform })
                 self.platforms = Array(platformSet).sorted()
-
+                
                 if (!self.platforms.isEmpty) {
                     self.platformSelected = self.platforms[0] // initiate the first item to be selected by default
+                    self.filteredCaptionsGroup = value.filter { $0.platform == self.platformSelected }
                 }
             }
             
@@ -215,21 +250,23 @@ struct PlatformHeaderView: View {
 }
 
 struct StackedCardsView: View {
+    let viewHeight: CGFloat
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.ui.darkSalmon)
                 .offset(x: 10, y: 10)
-                .customCardStyle()
+                .customCardStyle(viewHeight: viewHeight)
             
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.ui.middleYellowRed)
                 .offset(x: 5, y: 5)
-                .customCardStyle()
+                .customCardStyle(viewHeight: viewHeight)
             
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.ui.middleBluePurple)
-                .customCardStyle()
+                .customCardStyle(viewHeight: viewHeight)
         }
     }
 }
@@ -257,6 +294,73 @@ struct CardTitleHeaderView: View {
                     .font(.ui.title)
                     .foregroundColor(.ui.cultured)
             }
+        }
+    }
+}
+
+struct ConfigurationIndicatorsView: View {
+    let element: AIRequest
+    
+    var body: some View {
+        HStack {
+            // Tones
+            CircularTonesView(tones: element.tones)
+            
+            // Emojis
+            CircularView(image: element.includeEmojis ? "yes-emoji" : "no-emoji")
+            
+            // Hashtags
+            CircularView(image: element.includeHashtags ? "yes-hashtag" : "no-hashtag")
+            
+            // Caption length
+            CircularView(image: element.captionLength, imageWidth: 15)
+        }
+        
+    }
+}
+
+struct CircularTonesView: View {
+    let tones: [ToneModel]
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(Color.ui.cultured)
+                .frame(width: 35, height: 35)
+            
+            // If there are 2 tones for a caption group, then group them together in one circle
+            if (!tones.isEmpty) {
+                if (tones.count > 1) {
+                    Text(tones[0].icon)
+                        .font(.ui.headlineSm)
+                        .offset(x: -5, y: -5)
+                    
+                    Text(tones[1].icon)
+                        .font(.ui.headlineSm)
+                        .offset(x: 5, y: 3)
+                } else {
+                    Text(tones[0].icon)
+                        .font(.ui.title2)
+                }
+            }
+        }
+    }
+}
+
+struct CircularView: View {
+    let image: String
+    @State var imageWidth: CGFloat = 20
+    
+    var body: some View {
+        // Emojis
+        ZStack {
+            Circle()
+                .fill(Color.ui.cultured)
+                .frame(width: 35, height: 35)
+            
+            Image(image)
+                .resizable()
+                .frame(width: imageWidth, height: 20)
         }
     }
 }

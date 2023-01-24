@@ -67,7 +67,6 @@ struct HomeView: View {
                                         } label: {
                                             Pill(title: platform, isToggled: platform == platformSelected)
                                         }
-                                        //                                    .frame(width: platform == platformSelected ? 100 : 50)
                                     }
                                 }
                                 .onTapGesture {
@@ -124,8 +123,10 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(promptText: "", platformSelected: SocialMediaPlatforms.init().platforms[0])
+            .environmentObject(TaglistViewModel())
         
         HomeView(promptText: "", platformSelected: SocialMediaPlatforms.init().platforms[0])
+            .environmentObject(TaglistViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

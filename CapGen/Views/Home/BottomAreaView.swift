@@ -20,8 +20,7 @@ extension Text {
     func headerStyle() -> some View {
         self
             .foregroundColor(.ui.cultured)
-            .font(.ui.graphikBold)
-            .padding()
+            .font(.ui.title4)
     }
 }
 
@@ -38,7 +37,7 @@ struct BottomAreaView: View {
     
     @State var lengthValue: String = ""
     @State var captionLengthType: String = ""
-    @State var toneSelected: ToneModel = tones[0]
+    @State var tonesSelected: [ToneModel] = []
     @State var includeEmojis: Bool = false
     @State var includeHashtags: Bool = false
     
@@ -51,7 +50,14 @@ struct BottomAreaView: View {
     @State var isAdDone: Bool = false
     
     func mapAllRequests() {
-        openAiConnector.generatePrompt(platform: self.platformSelected, prompt: self.promptText, tone: self.toneSelected, includeEmojis: self.includeEmojis, includeHashtags: self.includeHashtags, captionLength: self.lengthValue, captionLengthType: self.captionLengthType)
+        // Zero out all sizes for tones since it's not needed at this point and will cause database conflicts during edit
+        var modifiedSelectedTones: [ToneModel] = []
+        self.tonesSelected.forEach { tone in
+            let newTone = ToneModel(id: tone.id, title: tone.title, description: tone.description, icon: tone.icon, size: 0)
+            modifiedSelectedTones.append(newTone)
+        }
+        
+        openAiConnector.generatePrompt(platform: self.platformSelected, prompt: self.promptText, tones: modifiedSelectedTones, includeEmojis: self.includeEmojis, includeHashtags: self.includeHashtags, captionLength: self.lengthValue, captionLengthType: self.captionLengthType)
     }
     
     var body: some View {
@@ -62,7 +68,7 @@ struct BottomAreaView: View {
                     ZStack {
                         ScrollView(.vertical, showsIndicators: false) {
                             VStack(spacing: 20) {
-                                ToneSelectionSection(toneSelected: $toneSelected)
+                                ToneSelectionSection(tonesSelected: $tonesSelected)
                                     .dropInAndOutAnimation(value: expandArea)
                                 
                                 EmojisAndHashtagSection(includeEmoji: $includeEmojis, includeHashtag: $includeHashtags)
@@ -71,6 +77,7 @@ struct BottomAreaView: View {
                                 LengthSelectionSection(lengthValue: $lengthValue, captionLengthType: $captionLengthType)
                                     .dropInAndOutAnimation(value: expandArea)
                                 
+                                // Play/Submit button
                                 Button {
                                     guard let userManager = AuthManager.shared.userManager.user else { return }
                                     mapAllRequests()
@@ -142,9 +149,9 @@ struct BottomAreaView: View {
             CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet, displayLoadView: $displayLoadView)
                 .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
         }
-        .onAppear() {
-            self.expandArea = false
-        }
+        //        .onAppear() {
+        //            self.expandArea = false
+        //        }
         .ignoresSafeArea(.all)
     }
 }
@@ -228,32 +235,59 @@ struct ExpandButton: View {
 }
 
 struct ToneSelectionSection: View {
-    @Binding var toneSelected: ToneModel
-    
-    func toneSelect(tone: ToneModel) {
-        toneSelected = tone
-    }
+    @EnvironmentObject var taglistVM: TaglistViewModel
+    @Binding var tonesSelected: [ToneModel]
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Choose the tone")
+            Text("Choose up to 2 tones")
                 .headerStyle()
+                .padding()
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack {
-                    ForEach(tones) { tone in
-                        Button {
-                            toneSelect(tone: tone)
-                        } label: {
-                            RectangleCard(title: tone.title, description: tone.description, isSelected: toneSelected.id == tone.id)
-                                .frame(width: 110, height: 110)
+            VStack(alignment: .leading, spacing: 15) {
+                ForEach(taglistVM.rows, id: \.self) { rows in
+                    HStack(spacing: 15) {
+                        ForEach(rows) { tone in
+                            Button {
+                                // Don't select the same tone again
+                                if (!tonesSelected.contains(tone)) {
+                                    tonesSelected.append(tone)
+                                } else {
+                                    // If an already existing item is selected, then remove
+                                    self.tonesSelected = tonesSelected.filter({ $0 != tone })
+                                }
+                                
+                                // Remove first selected item to keep it at a maximum of 2 selections
+                                if (tonesSelected.count > 2) {
+                                    tonesSelected.remove(at: 0)
+                                }
+                            } label: {
+                                Text("\(tone.icon) \(tone.title)")
+                                    .foregroundColor(tonesSelected.contains(tone) ? .ui.cultured : .ui.richBlack)
+                                    .font(.ui.headline)
+                                    .padding(.leading, 14)
+                                    .padding(.trailing, 15)
+                                    .padding(.vertical, 10)
+                                    .background(
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .fill(tonesSelected.contains(tone) ? Color.ui.middleBluePurple : Color.ui.cultured)
+                                            
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.ui.cultured, lineWidth: tonesSelected.contains(tone) ? 3 : 0)
+                                        }
+                                        
+                                    )
+                            }
                         }
-                        .padding(.leading, 15)
                     }
                 }
             }
-            
-            .frame(height: 120)
+            .padding(.horizontal, 15)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .onAppear() {
+            self.taglistVM.getTags()
         }
     }
 }
@@ -263,11 +297,12 @@ struct EmojisAndHashtagSection: View {
     @Binding var includeHashtag: Bool
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Include emojis and hashtags?")
-                .headerStyle()
-            
-            HStack {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Emojis?")
+                    .headerStyle()
+                    .padding()
+                
                 HStack(spacing: 15) {
                     Button {
                         includeEmoji = false
@@ -294,8 +329,14 @@ struct EmojisAndHashtagSection: View {
                     }
                 }
                 .padding(.leading, 15)
-                
-                Spacer()
+            }
+            
+            Spacer()
+            
+            VStack(alignment: .leading) {
+                Text("Hashtags?")
+                    .headerStyle()
+                    .padding(.vertical)
                 
                 HStack(spacing: 15) {
                     Button {
@@ -316,10 +357,9 @@ struct EmojisAndHashtagSection: View {
                         RectangleCard(title: "", description: nil, isSelected: includeHashtag)
                             .frame(width: 70, height: 70)
                             .overlay(
-                                Image(systemName: "number.circle.fill")
+                                Image("yes-hashtag")
                                     .resizable()
                                     .frame(width: 45, height: 45)
-                                    .foregroundColor(.ui.richBlack)
                             )
                     }
                 }
@@ -340,10 +380,11 @@ struct LengthSelectionSection: View {
         VStack(alignment: .leading) {
             Text("How lengthy should your caption be?")
                 .headerStyle()
+                .padding()
             
             Text("\(captionLengths[selectedValue].title)")
                 .foregroundColor(Color.ui.cultured)
-                .font(Font.ui.graphikLightItalic)
+                .font(Font.ui.bodyLarge)
                 .padding(.leading, 15)
                 .offset(y: -10)
             
