@@ -71,7 +71,6 @@ struct EditCaptionView: View {
             
         }
         .onAppear() {
-            print("CAPTION", self.caption)
             self.editableCaption = self.caption
         }
     }

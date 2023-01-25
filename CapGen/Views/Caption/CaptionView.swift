@@ -113,7 +113,7 @@ struct CaptionView: View {
                                     .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [4], dashPhase: 0))
                                     .foregroundColor(Color.ui.richBlack)
                                     .overlay(
-                                        AnimatedTextView(initialText: $initialText, finalText: self.finalText, isRepeat: true, timeInterval: 5, typingSpeed: 0.05)
+                                        AnimatedTextView(initialText: $initialText, finalText: self.finalText, isRepeat: self.showEditCaptionView ? false : true, timeInterval: 5, typingSpeed: 0.05)
                                             .font(.ui.graphikMedium)
                                             .foregroundColor(.ui.richBlack)
                                             .frame(width: SCREEN_WIDTH, alignment: .center)
