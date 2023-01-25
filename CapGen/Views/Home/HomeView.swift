@@ -9,7 +9,6 @@ import SwiftUI
 import FirebaseAuth
 
 struct HomeView: View {
-    let socialMediaPlatforms = SocialMediaPlatforms()
     @State var credits: Int = AuthManager.shared.userManager.user?.credits ?? 0
     
     @FocusState private var isKeyboardFocused: Bool
@@ -26,10 +25,6 @@ struct HomeView: View {
     init(promptText: String, platformSelected: String) {
         self.promptText = promptText
         self.platformSelected = platformSelected
-    }
-    
-    func platformSelect(platform: String) {
-        platformSelected = platform
     }
     
     var body: some View {
@@ -58,14 +53,14 @@ struct HomeView: View {
                         ScrollViewReader { scrollProxy in
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(alignment: .top, spacing: 15) {
-                                    ForEach(socialMediaPlatforms.platforms, id: \.self) { platform in
+                                    ForEach(socialMediaPlatforms) { platform in
                                         Button {
                                             withAnimation(.spring()) {
-                                                platformSelect(platform: platform)
+                                                self.platformSelected = platform.title
                                             }
                                             
                                         } label: {
-                                            Pill(title: platform, isToggled: platform == platformSelected)
+                                            Pill(title: platform.title, isToggled: platform.title == self.platformSelected)
                                         }
                                     }
                                 }
@@ -122,10 +117,10 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(promptText: "", platformSelected: SocialMediaPlatforms.init().platforms[0])
+        HomeView(promptText: "", platformSelected: socialMediaPlatforms[0].title)
             .environmentObject(TaglistViewModel())
         
-        HomeView(promptText: "", platformSelected: SocialMediaPlatforms.init().platforms[0])
+        HomeView(promptText: "", platformSelected: socialMediaPlatforms[0].title)
             .environmentObject(TaglistViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")

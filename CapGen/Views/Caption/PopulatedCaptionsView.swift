@@ -137,6 +137,7 @@ struct PopulatedCaptionsView: View {
                                             
                                             Spacer()
                                             
+                                            // Bottom area of group
                                             HStack(spacing: 5) {
                                                 // Tones indicator
                                                 ConfigurationIndicatorsView(element: element)
@@ -155,12 +156,11 @@ struct PopulatedCaptionsView: View {
                             }
                         }
                     }
-                    
                 }
             }
         }
         .navigationDestination(isPresented: $showCaptionsView) {
-            CaptionView(captionStr: $unparsedCaptionStr, tones: self.tones, captionLength: captionLength, prompt: prompt, includeEmojis: includeEmojis, includeHashtags: includeHashtags, savedCaptions: savedCaptions, isEditing: true) {
+            CaptionView(captionStr: $unparsedCaptionStr, tones: self.tones, captionLength: captionLength, prompt: prompt, includeEmojis: includeEmojis, includeHashtags: includeHashtags, savedCaptions: savedCaptions, isEditing: true, platform: platformSelected) {
                 // On exit
                 self.unparsedCaptionStr?.removeAll()
             }
@@ -199,6 +199,9 @@ struct PopulatedCaptionsView: View {
 struct PopulatedCaptionsView_Previews: PreviewProvider {
     static var previews: some View {
         PopulatedCaptionsView()
+        
+        PopulatedCaptionsView()
+            .previewDevice("iPhone 13 Pro Max")
         
         PopulatedCaptionsView()
             .previewDevice("iPhone SE (3rd generation)")

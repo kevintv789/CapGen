@@ -9,20 +9,6 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 
-struct SocialMediaPlatforms {
-    let platforms: [String] =
-    [
-        "Instagram",
-        "Twitter",
-        "TikTok",
-        "Facebook",
-        "YouTube",
-        "Reddit",
-        "Pinterest",
-        "LinkedIn"
-    ]
-}
-
 struct ContentView: View {
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @ObservedObject var authManager: AuthManager
@@ -31,7 +17,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             if (authManager.isSignedIn ?? false) {
-                HomeView(promptText: "", platformSelected: SocialMediaPlatforms.init().platforms[0])
+                HomeView(promptText: "", platformSelected: socialMediaPlatforms[0].title)
             } else {
                 LaunchView()
             }

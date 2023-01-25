@@ -7,31 +7,47 @@
 
 import SwiftUI
 
+enum MenuTheme {
+    case light, dark
+}
+
+enum Orientation {
+    case vertical, horizontal
+}
+
 struct CustomMenuPopup: View {
-    var edit: () -> Void
-    var share: () -> Void
-    var delete: () -> Void
+    @State var menuTheme: MenuTheme = .light
+    @State var orientation: Orientation = .vertical
+    var edit: (() -> Void)?
+    var share: (() -> Void)?
+    var delete: (() -> Void)?
     
     var body: some View {
         Menu {
-            Button(action: { edit() }) {
-                Label("Edit", systemImage: "pencil")
+            if (edit != nil) {
+                Button(action: { edit!() }) {
+                    Label("Edit", systemImage: "pencil")
+                }
+            }
+           
+            if (share != nil) {
+                Button(action: { share!() }) {
+                    Label("Share", systemImage: "arrowshape.turn.up.right")
+                }
             }
             
-            Button(action: { share() }) {
-                Label("Share", systemImage: "arrowshape.turn.up.right")
+            if (delete != nil) {
+                Button(role: .destructive, action: { delete!() }) {
+                    Label("Delete", systemImage: "trash")
+                }
             }
             
-            Button(role: .destructive, action: { delete() }) {
-                Label("Delete", systemImage: "trash")
-            }
         } label: {
             Image(systemName: "ellipsis")
-                .rotationEffect(.degrees(90))
+                .rotationEffect(orientation == .vertical ? .degrees(90) : .degrees(0))
                 .font(.ui.title)
-                .foregroundColor(.ui.cultured)
-                .contentShape(Rectangle().inset(by: -100))
+                .foregroundColor(menuTheme == .light ? .ui.cultured : .ui.richBlack)
         }
-        .contentShape(Rectangle().inset(by: -100))
+        .contentShape(Rectangle().inset(by: -25))
     }
 }

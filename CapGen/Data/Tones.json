@@ -3,7 +3,7 @@
     {"id": 2, "title": "Friendly", "description": "Warm, open, and casual.", "icon": "🙆‍♀️", "size": 0},
     {"id": 3, "title": "Dark", "description": "Gloomy, ominous, somber.", "icon": "🧛", "size": 0},
     {"id": 4, "title": "Humorous", "description": "Funny, witty, comical.", "icon": "🤹‍♂️", "size": 0},
-    {"id": 5, "title": "Sarcastic", "description": "Ironic, tongue-in-cheek, sardonic", "icon": "🧌", "size": 0},
+    {"id": 5, "title": "Sarcastic", "description": "Sardonic, tongue-in-cheek, ironic.", "icon": "🧌", "size": 0},
     {"id": 6, "title": "Inspiring", "description": "Motivating, encouraging, uplifting.", "icon": "✨", "size": 0},
     {"id": 7, "title": "Passionate", "description": "Heartfelt, enthusiastic, dedicated.", "icon": "🔥", "size": 0},
     {"id": 8, "title": "Romantic", "description": "Loving, affectionate, heartfelt.", "icon": "❤️", "size": 0},
