@@ -14,14 +14,10 @@ struct SavedCaptionsView: View {
         ZStack {
             Color.ui.cultured.ignoresSafeArea(.all)
             
-            VStack {
-                if (!hasCaptions) {
-                    EmptyCaptionsView()
-                } else {
-                    PopulatedCaptionsView()
-                }
-                
-                Spacer()
+            if (!hasCaptions) {
+                EmptyCaptionsView()
+            } else {
+                PopulatedCaptionsView()
             }
         }
         .onAppear() {
@@ -58,6 +54,8 @@ struct EmptyCaptionsView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .multilineTextAlignment(.center)
                 .lineSpacing(7)
+            
+            Spacer()
         }
     }
 }

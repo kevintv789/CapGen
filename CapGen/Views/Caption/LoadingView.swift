@@ -100,7 +100,7 @@ struct LoadingView: View {
                 }
             }
             .navigationDestination(isPresented: $showCaptionView) {
-                CaptionView(captionStr: $openAiResponse)
+                CaptionView(captionStr: $openAiResponse, platform: openAiRequest.requestModel.platform)
                     .navigationBarBackButtonHidden(true)
             }
         }

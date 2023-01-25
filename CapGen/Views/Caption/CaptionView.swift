@@ -25,6 +25,11 @@ struct CaptionView: View {
     @State var saveError: Bool = false
     @State var showCaptionsGuideModal: Bool = false
     
+    // Variables below are for the caption edit view
+    @State var showEditCaptionView: Bool = false
+    @State var captionToEdit: String = ""
+    @State var selectedColorForEdit: Color = .clear
+    
     // Variables below are specifically for going through saved captions screen
     var tones: [ToneModel]?
     var captionLength: String?
@@ -33,6 +38,9 @@ struct CaptionView: View {
     var includeHashtags: Bool?
     var savedCaptions: [GeneratedCaptions]?
     var isEditing: Bool?
+    
+    var platform: String
+    
     var onBackBtnClicked: (() -> Void)?
     
     private func dynamicViewPop() {
@@ -125,10 +133,18 @@ struct CaptionView: View {
                                 } label: {
                                     if index < 5 {
                                         CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index])
-                                            .padding(10)
+                                        {
+                                            // edit
+                                            self.captionToEdit = caption
+                                            self.selectedColorForEdit = cardColorFill[index]
+                                            self.showEditCaptionView = true
+                                           
+                                        } share: {
+                                            // share
+                                        }
+                                        .padding(10)
+                                        
                                     }
-                                    
-                                    
                                 }
                             }
                         }
@@ -149,17 +165,28 @@ struct CaptionView: View {
             
             
         }
+        .navigationDestination(isPresented: $showEditCaptionView) {
+            if (!captionToEdit.isEmpty) {
+                EditCaptionView(bgColor: self.selectedColorForEdit, captionTitle: self.captionsTitle, platform: self.platform, caption: self.captionToEdit)
+                    .navigationBarBackButtonHidden(true)
+            } else {
+                EmptyView()
+            }
+            
+        }
         .sheet(isPresented: $showCaptionsGuideModal) {
             CaptionGuidesView(tones: self.tones ?? [], includeEmojis: self.includeEmojis ?? false, includeHashtags: self.includeHashtags ?? false, captionLength: self.captionLength ?? "")
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
-                
+            
         }
         .navigationDestination(isPresented: $backBtnClicked) {
-            HomeView(promptText: openAiConnector.requestModel.prompt, platformSelected: SocialMediaPlatforms.init().platforms[0])
+            HomeView(promptText: openAiConnector.requestModel.prompt, platformSelected: socialMediaPlatforms[0].title)
                 .navigationBarBackButtonHidden(true)
         }
         .onAppear() {
+            self.captionToEdit = ""
+            
             if let originalString = captionStr {
                 
                 let uniqueStr = UUID().uuidString
@@ -185,10 +212,10 @@ struct CaptionView: View {
 
 struct CaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        CaptionView(captionStr: .constant("\n\n1. Look at those two crazy pups playing on a rainbow road! 🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbow 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. 🌈"))
+        CaptionView(captionStr: .constant("\n\n1. Lo 🐶\n3. Nothing cuter than Nothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playinseeing two doggies playing in a rainbow 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. 🌈"), platform: "Instagram")
             .environmentObject(OpenAIConnector())
         
-        CaptionView(captionStr: .constant("\n\n1. Look at those two crazy pups playing on a rainbow road! 🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbow 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. Two Pups, One Rainbow Roadddddd! 🌈"))
+        CaptionView(captionStr: .constant("\n\n1. Loo🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbowNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playin 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. Two Pups, One Rainbow Roadddddd! 🌈"), platform: "Instagram")
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
             .environmentObject(OpenAIConnector())
@@ -255,6 +282,9 @@ struct CaptionCard: View {
     @State private var phase = 0.0
     @Binding var colorFilled: Color
     
+    var edit: () -> Void
+    var share: () -> Void
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14)
@@ -264,13 +294,26 @@ struct CaptionCard: View {
                         .fill(colorFilled)
                 )
             VStack(alignment: .trailing, spacing: 0) {
-                Text(caption.trimmingCharacters(in: .whitespaces))
-                    .padding(EdgeInsets.init(top: 15, leading: 10, bottom: 15, trailing: 10))
-                    .font(.ui.graphikRegular)
-                    .lineSpacing(4)
-                    .foregroundColor(.ui.richBlack)
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack {
+                    Text(caption.trimmingCharacters(in: .whitespaces))
+                        .padding(EdgeInsets.init(top: 15, leading: 10, bottom: 15, trailing: 15))
+                        .font(.ui.graphikRegular)
+                        .lineSpacing(4)
+                        .foregroundColor(.ui.richBlack)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    CustomMenuPopup(menuTheme: .dark,
+                    edit: {
+                        edit()
+                    }, share: {
+                        share()
+                    })
+                    .onTapGesture { }
+                    .frame(maxHeight: .infinity, alignment: .topTrailing)
+                    .padding(.top, 18)
+                }
+                
                 
                 if (isCaptionSelected) {
                     Text("Copied!")

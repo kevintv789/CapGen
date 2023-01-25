@@ -1,0 +1,51 @@
+[
+    {
+        "id": 1,
+        "title": "Instagram",
+        "characterLimit": 2200,
+        "hashtagLimit": 30
+    },
+    {
+        "id": 2,
+        "title": "Twitter",
+        "characterLimit": 280,
+        "hashtagLimit": 30
+    },
+    {
+        "id": 3,
+        "title": "TikTok",
+        "characterLimit": 2200,
+        "hashtagLimit": 0
+    },
+    {
+        "id": 4,
+        "title": "Facebook",
+        "characterLimit": 63206,
+        "hashtagLimit": 0
+    },
+    {
+        "id": 5,
+        "title": "YouTube",
+        "characterLimit": 5000,
+        "hashtagLimit": 0
+    },
+    {
+        "id": 6,
+        "title": "Reddit",
+        "characterLimit": 0,
+        "hashtagLimit": 0
+    },
+    {
+        "id": 7,
+        "title": "Pinterest",
+        "characterLimit": 500,
+        "hashtagLimit": 20
+    },
+    {
+        "id": 8,
+        "title": "LinkedIn",
+        "characterLimit": 3000,
+        "hashtagLimit": 0
+    }
+]
+

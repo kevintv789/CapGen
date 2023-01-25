@@ -131,6 +131,10 @@
 		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
 		D4C3E485298087CE00C2847A /* crane_hand_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E484298087CE00C2847A /* crane_hand_lottie.json */; };
 		D4C3E4872980883D00C2847A /* DeleteModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4862980883D00C2847A /* DeleteModalView.swift */; };
+		D4C3E48A29819C6500C2847A /* CaptionsGroupMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48929819C6500C2847A /* CaptionsGroupMock.swift */; };
+		D4C3E48C2981C10B00C2847A /* SocialMediaPlatforms.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E48B2981C10B00C2847A /* SocialMediaPlatforms.json */; };
+		D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48D2981C24500C2847A /* SocialMediaPlatformsModel.swift */; };
+		D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -278,6 +282,10 @@
 		D4C3E482298059C800C2847A /* CustomMenuPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuPopup.swift; sourceTree = "<group>"; };
 		D4C3E484298087CE00C2847A /* crane_hand_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = crane_hand_lottie.json; sourceTree = "<group>"; };
 		D4C3E4862980883D00C2847A /* DeleteModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteModalView.swift; sourceTree = "<group>"; };
+		D4C3E48929819C6500C2847A /* CaptionsGroupMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionsGroupMock.swift; sourceTree = "<group>"; };
+		D4C3E48B2981C10B00C2847A /* SocialMediaPlatforms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SocialMediaPlatforms.json; sourceTree = "<group>"; };
+		D4C3E48D2981C24500C2847A /* SocialMediaPlatformsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialMediaPlatformsModel.swift; sourceTree = "<group>"; };
+		D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCaptionView.swift; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
@@ -428,6 +436,7 @@
 				D4056E352962030800D3894D /* CaptionLengthsModel.swift */,
 				D4056E3D2963487500D3894D /* OpenAIModel.swift */,
 				D4056EC129751ACA00D3894D /* UserModel.swift */,
+				D4C3E48D2981C24500C2847A /* SocialMediaPlatformsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -553,9 +562,11 @@
 		D4056E19295CC59800D3894D /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				D4C3E48829819C4300C2847A /* Mocks */,
 				D4056E2D295F8F3A00D3894D /* Tones.json */,
 				D4056E33296202E900D3894D /* CaptionLengths.json */,
 				D4056EDF297A346100D3894D /* CaptionsMock.json */,
+				D4C3E48B2981C10B00C2847A /* SocialMediaPlatforms.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -650,6 +661,7 @@
 				D4056EA929721DA800D3894D /* SavedCaptionsView.swift */,
 				D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */,
 				D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */,
+				D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */,
 			);
 			path = Caption;
 			sourceTree = "<group>";
@@ -668,6 +680,14 @@
 				D4056E82296F867D00D3894D /* LaunchView.swift */,
 			);
 			path = Welcome;
+			sourceTree = "<group>";
+		};
+		D4C3E48829819C4300C2847A /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				D4C3E48929819C6500C2847A /* CaptionsGroupMock.swift */,
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -855,6 +875,7 @@
 				D4056DDF295C0DFB00D3894D /* Blacker-Text-Bold-Italic-trial.ttf in Resources */,
 				D4056DE7295C0DFB00D3894D /* Blacker-Text-Light-trial.ttf in Resources */,
 				D4056E0C295C0E2A00D3894D /* GraphikMedium.otf in Resources */,
+				D4C3E48C2981C10B00C2847A /* SocialMediaPlatforms.json in Resources */,
 				D4056DE2295C0DFB00D3894D /* Blacker-Text-Light-Italic-trial.ttf in Resources */,
 				D4056DE4295C0DFB00D3894D /* Blacker-Display-Medium-trial.ttf in Resources */,
 				D4056DDE295C0DFB00D3894D /* Blacker-Display-Regular-Italic-trial.ttf in Resources */,
@@ -1016,6 +1037,7 @@
 				D4056EC62977460200D3894D /* CreditCounterView.swift in Sources */,
 				D4056E972970F33E00D3894D /* SignInWithAppleDelegate.swift in Sources */,
 				D4056E83296F867D00D3894D /* LaunchView.swift in Sources */,
+				D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */,
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
 				D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */,
@@ -1032,8 +1054,10 @@
 				D4056EAA29721DA800D3894D /* SavedCaptionsView.swift in Sources */,
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */,
+				D4C3E48A29819C6500C2847A /* CaptionsGroupMock.swift in Sources */,
 				D4056EB829736F6E00D3894D /* GoogleRewardedAds.swift in Sources */,
 				D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */,
+				D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
 				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
