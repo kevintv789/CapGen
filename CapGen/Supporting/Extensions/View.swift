@@ -21,6 +21,11 @@ struct RoundedCorner: Shape {
 
 extension View {
     
+    func removePredictiveSuggestions() -> some View {
+        self.keyboardType(.alphabet)
+            .disableAutocorrection(true)
+    }
+    
     // To use: .cornerRadius(14, corners: [.topLeft, .topRight])
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape( RoundedCorner(radius: radius, corners: corners) )
