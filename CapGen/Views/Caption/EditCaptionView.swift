@@ -86,7 +86,6 @@ struct EditCaptionView: View {
                         
                         Spacer()
                         
-                        // TODO -- need to add in shareable data
                         CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, copy: {
                             // Copy selected
                             self.isTextCopied = true
@@ -136,9 +135,9 @@ struct EditCaptionView: View {
                 } label: {
                     Image("\(colorScheme == .dark ? "hashtag-white" : "hashtag-black")")
                         .resizable()
-                        .frame(width: 20, height: 20)
+                        .frame(width: 20, height: 20, alignment: .leading)
                 }
-                .contentShape(Rectangle())
+                .frame(width: 100, alignment: .leading)
                 
                 Spacer()
                 
@@ -152,7 +151,7 @@ struct EditCaptionView: View {
                 }
 
                 VerticalDivider(color: Color.primary)
-                    .padding(.horizontal, 8)
+                    .padding(.horizontal, 10)
                 
                 Button {
                     hideKeyboard()
@@ -161,8 +160,9 @@ struct EditCaptionView: View {
                         .foregroundColor(Color.primary)
                         .frame(width: 20, height: 20, alignment: .trailing)
                 }
+                .frame(width: 50, alignment: .trailing)
                 .padding(.trailing, -12)
-                .contentShape(Rectangle())
+                .padding(.leading, -5)
             }
         }
         .onAppear() {
