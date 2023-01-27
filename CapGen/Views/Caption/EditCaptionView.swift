@@ -255,7 +255,6 @@ struct CaptionTextEditorView: View {
     
     var body: some View {
         TextEditor(text: $editableCaption)
-            .removePredictiveSuggestions()
             .font(.ui.graphikRegular)
             .foregroundColor(Color.ui.richBlack)
             .lineSpacing(6)
