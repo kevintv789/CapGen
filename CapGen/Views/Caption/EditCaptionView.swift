@@ -11,6 +11,7 @@ import UIKit
 
 struct EditCaptionView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var openAiConnector: OpenAIConnector
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
     
@@ -30,6 +31,7 @@ struct EditCaptionView: View {
     
     // Extra settings
     @State var keyboardHeight: CGFloat = 0
+    @State var shareableData: ShareableData?
     
     private func countHashtags(text: String) -> Int {
         let hashtagRegex = "#[a-zA-Z0-9_]+"
@@ -84,16 +86,17 @@ struct EditCaptionView: View {
                         
                         Spacer()
                         
-                        CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, copy: {
+                        // TODO -- need to add in shareable data
+                        CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, copy: {
                             // Copy selected
                             self.isTextCopied = true
                             UIPasteboard.general.string = String(self.editableCaption)
                             
-                        }, share: {
-                            // Share
                         }, reset: {
                             // Reset to original text
                             self.editableCaption = self.caption
+                        }, onMenuOpen: {
+                            self.shareableData = mapShareableData(caption: self.editableCaption, captionGroup: self.openAiConnector.mutableCaptionGroup)
                         })
                         .padding(.horizontal)
                     }
@@ -165,6 +168,7 @@ struct EditCaptionView: View {
         .onAppear() {
             self.editableCaption = self.caption
             self.textCount = self.caption.count
+            self.hashtagCount = self.countHashtags(text: self.caption)
             
             let socialMediaFiltered = socialMediaPlatforms.first(where: { $0.title == self.platform })
             self.textLimit = socialMediaFiltered?.characterLimit ?? 0

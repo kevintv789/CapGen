@@ -42,6 +42,7 @@ struct ViewGeometry: View {
 struct PopulatedCaptionsView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var firestore: FirestoreManager
+    @EnvironmentObject var openAiConnector: OpenAIConnector
     
     @State var textSize: CGSize = .zero
     @State var platformSelected: String = ""
@@ -51,13 +52,9 @@ struct PopulatedCaptionsView: View {
     @State var platforms: [String] = []
     @State var showDeleteModal: Bool = false
     @State var currentCaptionSelected: AIRequest = AIRequest()
+    @State var shareableData: ShareableData?
     
     // Mapper for caption view
-    @State var tones: [ToneModel] = []
-    @State var captionLength: String = ""
-    @State var prompt: String = ""
-    @State var includeEmojis: Bool = false
-    @State var includeHashtags: Bool = false
     @State var savedCaptions: [GeneratedCaptions] = []
     
     private func mapCaptionConfigurations(element: AIRequest) {
@@ -69,12 +66,42 @@ struct PopulatedCaptionsView: View {
         self.unparsedCaptionStr! += "\n6. \(element.title)"
         
         // Map necessary configurations to view
-        self.tones = element.tones
-        self.captionLength = element.captionLength
-        self.prompt = element.prompt
-        self.includeEmojis = element.includeEmojis
-        self.includeHashtags = element.includeHashtags
-        self.savedCaptions = element.captions
+        openAiConnector.updateMutableCaptionGroup(group: element)
+    }
+    
+    private func mapShareableData(element: AIRequest) {
+        var tonesStr: String {
+            if (element.tones.isEmpty) {
+                return "Tone: 🙆‍♀️ Casual"
+            }
+            
+            return """
+                   Tone(s):
+                   \(element.tones.enumerated().map({ index, tone in
+                            return "\(index + 1). \(tone.icon) \(tone.title)"
+                        }).joined(separator: "\n"))
+                   """
+        }
+        
+        
+        var item: String {
+            """
+            Behold the precious captions I generated from ⚡CapGen⚡ for my \(element.platform)!
+            
+            \(tonesStr)
+            
+            Captions:
+            \(element.captions.enumerated().map({ index, caption in
+                return "\(index + 1). \(caption.description)"
+            }).joined(separator: "\n\n"))
+            
+            And check out the catchy title I came up with to accompany my captions:
+            "\(element.title)"
+            """
+        }
+        
+        let newShareableData = ShareableData(item: item, subject: "Check out my captions from CapGen!")
+        self.shareableData = newShareableData
     }
     
     var body: some View {
@@ -107,16 +134,16 @@ struct PopulatedCaptionsView: View {
                             ZStack(alignment: .topLeading) {
                                 StackedCardsView(viewHeight: self.textSize.height)
                                 VStack(alignment: .leading, spacing: 20) {
-                                    CardTitleHeaderView(title: element.title) {
+                                    CardTitleHeaderView(title: element.title, shareableData: self.$shareableData, edit: {
                                         // Edit caption group
                                         self.mapCaptionConfigurations(element: element)
                                         self.showCaptionsView = true
-                                    } share: {
-                                        
-                                    } delete: {
+                                    }, delete: {
                                         self.showDeleteModal = true
                                         self.currentCaptionSelected = element
-                                    }
+                                    }, onMenuOpen: {
+                                        self.mapShareableData(element: element)
+                                    })
                                     
                                     Button {
                                         self.mapCaptionConfigurations(element: element)
@@ -160,7 +187,7 @@ struct PopulatedCaptionsView: View {
             }
         }
         .navigationDestination(isPresented: $showCaptionsView) {
-            CaptionView(captionStr: $unparsedCaptionStr, tones: self.tones, captionLength: captionLength, prompt: prompt, includeEmojis: includeEmojis, includeHashtags: includeHashtags, savedCaptions: savedCaptions, isEditing: true, platform: platformSelected) {
+            CaptionView(captionStr: self.$unparsedCaptionStr, savedCaptions: savedCaptions, isEditing: true, platform: self.openAiConnector.mutableCaptionGroup?.platform ?? "") {
                 // On exit
                 self.unparsedCaptionStr?.removeAll()
             }
@@ -294,9 +321,10 @@ struct StackedCardsView: View {
 
 struct CardTitleHeaderView: View {
     let title: String
+    @Binding var shareableData: ShareableData?
     var edit: () -> Void
-    var share: () -> Void
     var delete: () -> Void
+    var onMenuOpen: () -> Void
     
     var body: some View {
         HStack {
@@ -310,17 +338,18 @@ struct CardTitleHeaderView: View {
             Spacer()
             
             // Edit button
-            CustomMenuPopup(edit: {
+            CustomMenuPopup(shareableData: $shareableData, edit: {
                 edit()
-            }, share: {
-                share()
             }, delete: {
                 delete()
+            }, onMenuOpen: {
+                onMenuOpen()
             })
             .padding(-20)
             .padding(.top, -5)
         }
     }
+    
 }
 
 struct ConfigurationIndicatorsView: View {

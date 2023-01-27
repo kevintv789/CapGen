@@ -121,8 +121,9 @@ class UserManager: ObservableObject {
             result.append(parsedCaptionsGroup)
         })
         
-        // Sort date by most recent
-        result.sort(by: { $0.dateCreated > $1.dateCreated })
+        let df = DateFormatter()
+        df.dateFormat = "MMM d, h:mm a"
+        result.sort(by: { df.date(from: $0.dateCreated)!.compare(df.date(from: $1.dateCreated)!) == .orderedDescending})
         
         return result
     }

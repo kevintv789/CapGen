@@ -42,7 +42,6 @@ struct CaptionGuidesView: View {
                         ToneDescriptionView(tones: self.tones)
                     }
                     
-                    
                     SettingsDescriptionView(image: self.includeEmojis ? "yes-emoji" : "no-emoji", text: self.includeEmojis ? "Emojis are included" : "No emojis included", description: self.includeEmojis ? "Some emojis are included in your captions." : "No emojis are included in your captions.")
                     
                     SettingsDescriptionView(image: self.includeHashtags ? "yes-hashtag" : "no-hashtag", text: self.includeHashtags ? "Hashtags are included" : "No hashtags included", description: self.includeHashtags ? "Some hashtags are included in your captions." : "No hashtags are included in your captions.")

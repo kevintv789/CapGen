@@ -18,11 +18,12 @@ enum Orientation {
 struct CustomMenuPopup: View {
     @State var menuTheme: MenuTheme = .light
     @State var orientation: Orientation = .vertical
+    @Binding var shareableData: ShareableData?
     var edit: (() -> Void)?
     var copy: (() -> Void)?
-    var share: (() -> Void)?
     var delete: (() -> Void)?
     var reset: (() -> Void)?
+    var onMenuOpen: (() -> Void)?
     
     var body: some View {
         Menu {
@@ -38,8 +39,8 @@ struct CustomMenuPopup: View {
                 }
             }
            
-            if (share != nil) {
-                Button(action: { share!() }) {
+            if (shareableData != nil) {
+                ShareLink(item: shareableData!.item, subject: Text(shareableData!.subject)) {
                     Label("Share", systemImage: "arrowshape.turn.up.right")
                 }
             }
@@ -62,6 +63,11 @@ struct CustomMenuPopup: View {
                 .font(.ui.title)
                 .foregroundColor(menuTheme == .light ? .ui.cultured : .ui.richBlack)
                 .frame(width: 50, height: 50)
+        }
+        .onTapGesture {
+            if (onMenuOpen != nil) {
+                onMenuOpen!()
+            }
         }
     }
 }

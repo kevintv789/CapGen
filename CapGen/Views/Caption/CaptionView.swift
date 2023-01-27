@@ -7,11 +7,30 @@
 
 import SwiftUI
 
+func mapShareableData(caption: String, captionGroup: AIRequest?) -> ShareableData? {
+    if (captionGroup != nil) {
+        var item: String {
+            """
+            Behold the precious caption I generated from ⚡CapGen⚡ for my \(captionGroup!.platform)!
+            
+            "\(caption)"
+            """
+        }
+        
+        let newShareableData = ShareableData(item: item, subject: "Check out my caption from CapGen!")
+        return newShareableData
+    }
+    
+    return nil
+}
+
+
 struct CaptionView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var firestore: FirestoreManager
     
+    @State var shareableData: ShareableData?
     @State var backBtnClicked: Bool = false
     @Binding var captionStr: String?
     @State var captionsParsed: [String] = []
@@ -19,6 +38,7 @@ struct CaptionView: View {
     @State var captionSelected: String = ""
     @State var cardColorFill: [Color] = [.ui.middleYellowRed, .ui.darkSalmon, .ui.middleBluePurple, .ui.frenchBlueSky, .ui.lightCyan]
     @State var selectedCaptionIndex: Int = 0
+    @State var isLoading: Bool = false
     
     @State var initialText: String = ""
     let finalText: String = "Tap a card to copy 😏"
@@ -32,30 +52,31 @@ struct CaptionView: View {
     @State var selectedColorForEdit: Color = .clear
     
     // Variables below are specifically for going through saved captions screen
-    var tones: [ToneModel]?
-    var captionLength: String?
-    var prompt: String?
-    var includeEmojis: Bool?
-    var includeHashtags: Bool?
+    @State var mutableCaptionGroup: AIRequest?
     var savedCaptions: [GeneratedCaptions]?
     var isEditing: Bool?
-    
     var platform: String
-    
     var onBackBtnClicked: (() -> Void)?
     
     private func dynamicViewPop() {
-        if (onBackBtnClicked != nil) {
-            onBackBtnClicked!()
-            self.presentationMode.wrappedValue.dismiss()
-        } else {
-            backBtnClicked = true
+        if (!self.isLoading) {
+            if (onBackBtnClicked != nil) {
+                onBackBtnClicked!()
+                self.presentationMode.wrappedValue.dismiss()
+            } else {
+                backBtnClicked = true
+            }
         }
     }
-    
+
     func saveCaptions() {
         // Don't do anything if there's an error
-        guard !self.saveError else { return }
+        self.isLoading = true
+        
+        guard !self.saveError else {
+            self.isLoading = false
+            return
+        }
         
         // Store caption group title and caption cards
         var mappedCaptions: [GeneratedCaptions] = []
@@ -63,16 +84,32 @@ struct CaptionView: View {
             mappedCaptions.append(GeneratedCaptions(description: caption))
         }
         
-        openAiConnector.generateNewRequestModel(title: self.captionsTitle, captions: mappedCaptions)
-        
-        // Save to database
+        // Retrieves necessary data to find and save document
         let userId = AuthManager.shared.userManager.user?.id as? String ?? nil
-        
         let captionsGroup = AuthManager.shared.userManager.user?.captionsGroup as? [AIRequest] ?? []
         
-        firestore.saveCaptions(for: userId, with: openAiConnector.requestModel, captionsGroup: captionsGroup) {
-            dynamicViewPop()
+        // Generate request model for saving new generated captions
+        if (self.isEditing == nil || (self.isEditing != nil && !self.isEditing!)) {
+            openAiConnector.generateNewRequestModel(title: self.captionsTitle, captions: mappedCaptions)
+            
+            // Save new entry to database
+            firestore.saveCaptions(for: userId, with: openAiConnector.requestModel, captionsGroup: captionsGroup) {
+                self.isLoading = false
+                dynamicViewPop()
+            }
+        } else {
+            // Update caption group
+            if (self.mutableCaptionGroup != nil && self.openAiConnector.mutableCaptionGroup != nil) {
+                self.openAiConnector.updateMutableCaptionGroupWithNewCaptions(with: mappedCaptions, title: self.captionsTitle)
+                
+                firestore.saveCaptions(for: userId, with: self.openAiConnector.mutableCaptionGroup!, captionsGroup: captionsGroup) {
+                    self.isLoading = false
+                    dynamicViewPop()
+                }
+            }
         }
+        
+       
     }
     
     var body: some View {
@@ -93,8 +130,8 @@ struct CaptionView: View {
                         VStack(alignment: .leading, spacing: 5) {
                             if (isEditing != nil && isEditing!) {
                                 // Display saved prompt
-                                if (prompt != nil) {
-                                    Text(prompt!)
+                                if (self.mutableCaptionGroup?.prompt != nil) {
+                                    Text(self.mutableCaptionGroup!.prompt)
                                         .padding(.bottom, 15)
                                         .font(.ui.headlineLight)
                                         .foregroundColor(.ui.richBlack)
@@ -104,7 +141,7 @@ struct CaptionView: View {
                                     self.showCaptionsGuideModal = true
                                 } label: {
                                     // Display different settings for the captions
-                                    CaptionSettingsView(prompt: prompt, tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength)
+                                    CaptionSettingsView(prompt: mutableCaptionGroup?.prompt, tones: mutableCaptionGroup?.tones, includeEmojis: mutableCaptionGroup?.includeEmojis, includeHashtags: mutableCaptionGroup?.includeHashtags, captionLength: mutableCaptionGroup?.captionLength)
                                 }
                                 
                             }
@@ -114,7 +151,7 @@ struct CaptionView: View {
                                     .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [4], dashPhase: 0))
                                     .foregroundColor(Color.ui.richBlack)
                                     .overlay(
-                                        AnimatedTextView(initialText: $initialText, finalText: self.finalText, isRepeat: self.showEditCaptionView ? false : true, timeInterval: 5, typingSpeed: 0.05)
+                                        AnimatedTextView(initialText: $initialText, finalText: self.finalText, isRepeat: false, timeInterval: 5, typingSpeed: 0.03)
                                             .font(.ui.graphikMedium)
                                             .foregroundColor(.ui.richBlack)
                                             .frame(width: SCREEN_WIDTH, alignment: .center)
@@ -133,17 +170,16 @@ struct CaptionView: View {
                                     }
                                 } label: {
                                     if index < 5 {
-                                        CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index])
-                                        {
+                                        CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index], shareableData: self.$shareableData,
+                                        edit: {
                                             // edit
                                             self.captionToEdit = caption
                                             self.selectedCaptionIndex = index
                                             self.selectedColorForEdit = cardColorFill[index]
                                             self.showEditCaptionView = true
-                                           
-                                        } share: {
-                                            // share
-                                        }
+                                        }, onMenuOpen: {
+                                            self.shareableData = mapShareableData(caption: caption, captionGroup: self.mutableCaptionGroup)
+                                        })
                                         .padding(10)
                                         
                                     }
@@ -176,7 +212,7 @@ struct CaptionView: View {
             }
         }
         .sheet(isPresented: $showCaptionsGuideModal) {
-            CaptionGuidesView(tones: self.tones ?? [], includeEmojis: self.includeEmojis ?? false, includeHashtags: self.includeHashtags ?? false, captionLength: self.captionLength ?? "")
+            CaptionGuidesView(tones: self.mutableCaptionGroup?.tones ?? [], includeEmojis: self.mutableCaptionGroup?.includeEmojis ?? false, includeHashtags: self.mutableCaptionGroup?.includeHashtags ?? false, captionLength: self.mutableCaptionGroup?.captionLength ?? "")
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
             
@@ -186,6 +222,10 @@ struct CaptionView: View {
                 .navigationBarBackButtonHidden(true)
         }
         .onAppear() {
+            if (self.openAiConnector.mutableCaptionGroup != nil) {
+                self.mutableCaptionGroup = self.openAiConnector.mutableCaptionGroup!
+            }
+            
             // Initial parse of raw text to captions
             if let originalString = captionStr, self.captionsParsed.isEmpty {
                 
@@ -211,7 +251,6 @@ struct CaptionView: View {
             // Secondary pull after caption has been edited
             if (!self.captionsParsed.isEmpty) {
                 // Only runs if the value has been updated
-                // BUG - DOES NOT WORK
                 if (!self.captionToEdit.isEmpty && captionsParsed[self.selectedCaptionIndex] != self.captionToEdit) {
                     captionsParsed[self.selectedCaptionIndex] = self.captionToEdit
                     self.captionToEdit.removeAll()
@@ -292,9 +331,10 @@ struct CaptionCard: View {
     var isCaptionSelected: Bool
     @State private var phase = 0.0
     @Binding var colorFilled: Color
+    @Binding var shareableData: ShareableData?
     
     var edit: () -> Void
-    var share: () -> Void
+    var onMenuOpen: () -> Void
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -314,11 +354,11 @@ struct CaptionCard: View {
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    CustomMenuPopup(menuTheme: .dark,
+                    CustomMenuPopup(menuTheme: .dark, shareableData: $shareableData,
                     edit: {
                         edit()
-                    }, share: {
-                        share()
+                    }, onMenuOpen: {
+                        onMenuOpen()
                     })
                     .onTapGesture { }
                     .frame(maxHeight: .infinity, alignment: .topTrailing)
@@ -405,12 +445,15 @@ struct CaptionSettingsView: View {
             
             // Emojis
             CircularView(image: self.includeEmojis ?? false ? "yes-emoji" : "no-emoji")
-            
+
             // Hashtags
             CircularView(image: self.includeHashtags ?? false ? "yes-hashtag" : "no-hashtag")
             
             // Caption length
-            CircularView(image: self.captionLength ?? "veryShort", imageWidth: 20)
+            if (self.captionLength != nil && !self.captionLength!.isEmpty) {
+                CircularView(image: self.captionLength!, imageWidth: 20)
+            }
+           
         }
     }
 }
