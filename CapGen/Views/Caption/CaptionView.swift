@@ -187,7 +187,7 @@ struct CaptionView: View {
         }
         .onAppear() {
             // Initial parse of raw text to captions
-            if let originalString = captionStr {
+            if let originalString = captionStr, self.captionsParsed.isEmpty {
                 
                 let uniqueStr = UUID().uuidString
                 
@@ -212,8 +212,9 @@ struct CaptionView: View {
             if (!self.captionsParsed.isEmpty) {
                 // Only runs if the value has been updated
                 // BUG - DOES NOT WORK
-                if (captionsParsed[self.selectedCaptionIndex] != self.captionToEdit) {
+                if (!self.captionToEdit.isEmpty && captionsParsed[self.selectedCaptionIndex] != self.captionToEdit) {
                     captionsParsed[self.selectedCaptionIndex] = self.captionToEdit
+                    self.captionToEdit.removeAll()
                 }
             }
         }
