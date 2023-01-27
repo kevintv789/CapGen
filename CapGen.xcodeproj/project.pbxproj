@@ -138,6 +138,7 @@
 		D4C3E4922982105300C2847A /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4912982105300C2847A /* Notifications.swift */; };
 		D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E493298343B500C2847A /* FloatingNotificationView.swift */; };
 		D4C3E496298437B600C2847A /* ShareableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E495298437B600C2847A /* ShareableData.swift */; };
+		D4C3E49829844F7400C2847A /* SupportEmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E49729844F7400C2847A /* SupportEmailModel.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -292,6 +293,7 @@
 		D4C3E4912982105300C2847A /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		D4C3E493298343B500C2847A /* FloatingNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingNotificationView.swift; sourceTree = "<group>"; };
 		D4C3E495298437B600C2847A /* ShareableData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareableData.swift; sourceTree = "<group>"; };
+		D4C3E49729844F7400C2847A /* SupportEmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportEmailModel.swift; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
@@ -444,6 +446,7 @@
 				D4056EC129751ACA00D3894D /* UserModel.swift */,
 				D4C3E48D2981C24500C2847A /* SocialMediaPlatformsModel.swift */,
 				D4C3E495298437B600C2847A /* ShareableData.swift */,
+				D4C3E49729844F7400C2847A /* SupportEmailModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1045,6 +1048,7 @@
 				D4056ECD297796B900D3894D /* CreditsDepletedModalView.swift in Sources */,
 				D4056EC62977460200D3894D /* CreditCounterView.swift in Sources */,
 				D4056E972970F33E00D3894D /* SignInWithAppleDelegate.swift in Sources */,
+				D4C3E49829844F7400C2847A /* SupportEmailModel.swift in Sources */,
 				D4056E83296F867D00D3894D /* LaunchView.swift in Sources */,
 				D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */,
 				D4056E28295F659B00D3894D /* View.swift in Sources */,

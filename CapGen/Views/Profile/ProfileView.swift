@@ -166,6 +166,8 @@ struct GreetingsTextView: View {
 }
 
 struct CreditAndCaptionsAnimatedView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
+    @EnvironmentObject var authManager: AuthManager
     @State var animateCoin: Bool = false
     @State var animateSpeechBubble: Bool = false
     @State var creditAmount: Int = 0
@@ -196,7 +198,7 @@ struct CreditAndCaptionsAnimatedView: View {
                     LottieView(name: "speech_bubble", loopMode: .playOnce, isAnimating: animateSpeechBubble)
                         .frame(width: 90, height: 100)
                     
-                    Text("10\ncaptions created")
+                    Text("\(firestoreMan.getCaptionsCount(using: authManager.userManager.user?.captionsGroup ?? []))\ncaptions created")
                         .customProfileHeadline()
                 }
             }
@@ -266,6 +268,7 @@ struct OptionButtonView: View {
 struct ContentSectionView: View {
     @State var showBottomSheet: Bool = false
     @Binding var showCongratsModal: Bool
+    @State var showSavedCaptionsView: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -276,7 +279,7 @@ struct ContentSectionView: View {
                 .offset(y: 10)
             
             OptionButtonView(title: "📝 Saved captions", subTitle: "Easily view, export, copy and edit your generated captions.") {
-                print("Saved captions")
+                self.showSavedCaptionsView = true
             }
             
             ZStack {
@@ -294,10 +297,17 @@ struct ContentSectionView: View {
                     .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
             }
         }
+        .navigationDestination(isPresented: $showSavedCaptionsView) {
+            SavedCaptionsView()
+                .navigationBarBackButtonHidden(true)
+        }
     }
 }
 
 struct ConnectSectionView: View {
+    @Environment(\.openURL) var openURL
+    let supportEmailModel: SupportEmailModel = SupportEmailModel()
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Connect")
@@ -318,7 +328,7 @@ struct ConnectSectionView: View {
             }
             
             OptionButtonView(title: "💌 Send us a message", subTitle: "We’re here to help! Need assistance or have feedback? Let us know, we'd love to hear from you.") {
-                print("Saved captions")
+                supportEmailModel.send(openURL: openURL)
             }
             
         }

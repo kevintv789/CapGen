@@ -106,4 +106,13 @@ class FirestoreManager: ObservableObject {
             
         }
     }
+    
+    func getCaptionsCount(using captionsGroup: [AIRequest]) -> Int {
+        var count = 0
+        captionsGroup.forEach { group in
+            count += group.captions.count
+        }
+        
+        return count
+    }
 }
