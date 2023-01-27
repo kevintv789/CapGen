@@ -136,6 +136,7 @@
 		D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48D2981C24500C2847A /* SocialMediaPlatformsModel.swift */; };
 		D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */; };
 		D4C3E4922982105300C2847A /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4912982105300C2847A /* Notifications.swift */; };
+		D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E493298343B500C2847A /* FloatingNotificationView.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -288,6 +289,7 @@
 		D4C3E48D2981C24500C2847A /* SocialMediaPlatformsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialMediaPlatformsModel.swift; sourceTree = "<group>"; };
 		D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCaptionView.swift; sourceTree = "<group>"; };
 		D4C3E4912982105300C2847A /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		D4C3E493298343B500C2847A /* FloatingNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingNotificationView.swift; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
@@ -587,6 +589,7 @@
 				D4056EC52977460200D3894D /* CreditCounterView.swift */,
 				D4056ED02978750D00D3894D /* DisplayAdBtnView.swift */,
 				D4056ED229788FAF00D3894D /* OverlayedLoaderView.swift */,
+				D4C3E493298343B500C2847A /* FloatingNotificationView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1051,6 +1054,7 @@
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
+				D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */,
 				D4056EC429751BD200D3894D /* UserManager.swift in Sources */,
 				D4056E81296F0CB900D3894D /* LottieView.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,

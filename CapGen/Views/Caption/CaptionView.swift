@@ -18,6 +18,7 @@ struct CaptionView: View {
     @State var captionsTitle: String = ""
     @State var captionSelected: String = ""
     @State var cardColorFill: [Color] = [.ui.middleYellowRed, .ui.darkSalmon, .ui.middleBluePurple, .ui.frenchBlueSky, .ui.lightCyan]
+    @State var selectedCaptionIndex: Int = 0
     
     @State var initialText: String = ""
     let finalText: String = "Tap a card to copy 😏"
@@ -136,6 +137,7 @@ struct CaptionView: View {
                                         {
                                             // edit
                                             self.captionToEdit = caption
+                                            self.selectedCaptionIndex = index
                                             self.selectedColorForEdit = cardColorFill[index]
                                             self.showEditCaptionView = true
                                            
@@ -166,13 +168,12 @@ struct CaptionView: View {
             
         }
         .navigationDestination(isPresented: $showEditCaptionView) {
-            if (!captionToEdit.isEmpty) {
-                EditCaptionView(bgColor: self.selectedColorForEdit, captionTitle: self.captionsTitle, platform: self.platform, caption: self.captionToEdit)
+            if (!self.captionToEdit.isEmpty) {
+                EditCaptionView(bgColor: self.selectedColorForEdit, captionTitle: self.captionsTitle, platform: self.platform, caption: captionsParsed[self.selectedCaptionIndex], editableCaption: self.$captionToEdit)
                     .navigationBarBackButtonHidden(true)
             } else {
                 EmptyView()
             }
-            
         }
         .sheet(isPresented: $showCaptionsGuideModal) {
             CaptionGuidesView(tones: self.tones ?? [], includeEmojis: self.includeEmojis ?? false, includeHashtags: self.includeHashtags ?? false, captionLength: self.captionLength ?? "")
@@ -185,8 +186,7 @@ struct CaptionView: View {
                 .navigationBarBackButtonHidden(true)
         }
         .onAppear() {
-            self.captionToEdit = ""
-            
+            // Initial parse of raw text to captions
             if let originalString = captionStr {
                 
                 let uniqueStr = UUID().uuidString
@@ -204,6 +204,16 @@ struct CaptionView: View {
                 self.captionsParsed = parsedArray.map { element in
                     // removing leading and trailing white spaces
                     return element.trimmingCharacters(in: .whitespaces)
+                }
+            }
+        }
+        .onAppear() {
+            // Secondary pull after caption has been edited
+            if (!self.captionsParsed.isEmpty) {
+                // Only runs if the value has been updated
+                // BUG - DOES NOT WORK
+                if (captionsParsed[self.selectedCaptionIndex] != self.captionToEdit) {
+                    captionsParsed[self.selectedCaptionIndex] = self.captionToEdit
                 }
             }
         }
@@ -311,7 +321,7 @@ struct CaptionCard: View {
                     })
                     .onTapGesture { }
                     .frame(maxHeight: .infinity, alignment: .topTrailing)
-                    .padding(.top, 18)
+                    .padding(.trailing, -10)
                 }
                 
                 
