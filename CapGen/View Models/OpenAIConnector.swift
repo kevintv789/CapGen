@@ -9,6 +9,7 @@ import Foundation
 
 public class OpenAIConnector: ObservableObject {
     @Published var requestModel: AIRequest = AIRequest()
+    @Published var mutableCaptionGroup: AIRequest?
     @Published var prompt: String = ""
     @Published var captionLengthType: String = ""
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
@@ -33,6 +34,15 @@ public class OpenAIConnector: ObservableObject {
         self.requestModel.captionLength = self.captionLengthType
         self.requestModel.title = title
         self.requestModel.captions = captions
+    }
+    
+    func updateMutableCaptionGroup(group: AIRequest) {
+        self.mutableCaptionGroup = group
+    }
+    
+    func updateMutableCaptionGroupWithNewCaptions(with captions: [GeneratedCaptions], title: String) {
+        self.mutableCaptionGroup?.captions = captions
+        self.mutableCaptionGroup?.title = title
     }
     
     @MainActor
