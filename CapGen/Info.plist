@@ -37,6 +37,14 @@
 	<array>
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>
+        <string>instagram</string>
+        <string>fb</string>
+        <string>twitter</string>
+        <string>tiktok</string>
+        <string>youtube</string>
+        <string>reddit</string>
+        <string>pinterest</string>
+        <string>linkedin</string>
 	</array>
 	<key>UIAppFonts</key>
 	<array>

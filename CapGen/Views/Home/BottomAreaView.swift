@@ -149,9 +149,6 @@ struct BottomAreaView: View {
             CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet, displayLoadView: $displayLoadView)
                 .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
         }
-        //        .onAppear() {
-        //            self.expandArea = false
-        //        }
         .ignoresSafeArea(.all)
     }
 }

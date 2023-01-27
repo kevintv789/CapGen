@@ -12,6 +12,8 @@ struct SocialMediaPlatformsModel: Codable, Identifiable {
     let title: String
     let characterLimit: Int
     let hashtagLimit: Int
+    let link: String
+    let websiteLink: String
 }
 
 var socialMediaPlatforms: [SocialMediaPlatformsModel] = load("SocialMediaPlatforms.json")

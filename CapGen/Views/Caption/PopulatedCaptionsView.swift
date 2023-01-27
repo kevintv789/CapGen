@@ -317,6 +317,8 @@ struct CardTitleHeaderView: View {
             }, delete: {
                 delete()
             })
+            .padding(-20)
+            .padding(.top, -5)
         }
     }
 }
