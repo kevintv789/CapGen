@@ -11,23 +11,29 @@ import FirebaseFirestoreSwift
 
 class FirestoreManager: ObservableObject {
     @Published var openAiKey: String?
+    @Published var admobUnitId: String?
+    @Published var appStoreModel: AppStoreModel?
+    
     let db = Firestore.firestore()
     
     func fetchKey() {
-        let docRef = db.collection("Secrets").document("OpenAI")
-        
-        docRef.getDocument { (document, error) in
-            if error != nil {
-                print("Can't retrieve key", error!.localizedDescription)
-                return
+        self.fetch(from: "Secrets", documentId: "OpenAI") { data in
+            if let data = data {
+                self.openAiKey = data["Key"] as? String ?? nil
             }
-            
-            if let document = document, document.exists {
-                let data = document.data()
-                if let data = data {
-                    self.openAiKey = data["Key"] as? String ?? nil
-                    print("Key retrieval success!")
-                }
+        }
+        
+        self.fetch(from: "Secrets", documentId: "Admob") { data in
+            if let data = data {
+                self.admobUnitId = data["ADMOB_REWARDED_AD_UNIT_ID"] as? String ?? nil
+            }
+        }
+        
+        self.fetch(from: "Secrets", documentId: "AppStore") { data in
+            if let data = data {
+                let appStoreId = data["storeId"] as? String ?? nil
+                let website = data["website"] as? String ?? nil
+                self.appStoreModel = AppStoreModel(storeId: appStoreId ?? "", website: website ?? "")
             }
         }
     }
@@ -114,5 +120,24 @@ class FirestoreManager: ObservableObject {
         }
         
         return count
+    }
+    
+    private func fetch(from collection: String, documentId: String, completion: @escaping (_ data: [String: Any]?) -> Void) {
+        let docRef = db.collection(collection).document(documentId)
+        
+        docRef.getDocument { (document, error) in
+            if error != nil {
+                print("Can't retrieve \(collection) \(documentId)", error!.localizedDescription)
+                completion(nil)
+                return
+            }
+            
+            if let document = document, document.exists {
+                let data = document.data()
+                if let data = data {
+                    completion(data)
+                }
+            }
+        }
     }
 }

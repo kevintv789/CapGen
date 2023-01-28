@@ -242,37 +242,67 @@ struct OptionButtonView: View {
     var title: String
     var subTitle: String?
     var dangerField: Bool?
-    var action: () -> Void
+    var isButton: Bool = true
+    var action: (() -> Void)?
     
     var body: some View {
-        Button {
-            action()
-        } label: {
-            Rectangle()
-                .fill(Color.ui.cultured)
-                .overlay(
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text(title)
-                            .foregroundColor(dangerField ?? false ? .ui.dangerRed : .ui.richBlack)
-                            .font(.ui.headlineMd)
-                            .frame(width: SCREEN_WIDTH, alignment: .leading)
-                            .padding(.leading, 25)
-                        
-                        if (subTitle != nil) {
-                            Text(subTitle!)
+        if (isButton) {
+            Button {
+                if (action != nil) {
+                    action!()
+                }
+            } label: {
+                Rectangle()
+                    .fill(Color.ui.cultured)
+                    .overlay(
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(title)
                                 .foregroundColor(dangerField ?? false ? .ui.dangerRed : .ui.richBlack)
-                                .font(.ui.bodyLight)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .frame(width: SCREEN_WIDTH/1.4, alignment: .leading)
-                                .multilineTextAlignment(.leading)
-                                .lineSpacing(5)
+                                .font(.ui.headlineMd)
+                                .frame(width: SCREEN_WIDTH, alignment: .leading)
                                 .padding(.leading, 25)
-                        }
-                        
-                    }      .offset(x: 3, y: subTitle != nil ? 0 : 5)
-                )
-        }
-        .frame(height: subTitle != nil ? 100 : 50)
+                            
+                            if (subTitle != nil) {
+                                Text(subTitle!)
+                                    .foregroundColor(dangerField ?? false ? .ui.dangerRed : .ui.richBlack)
+                                    .font(.ui.bodyLight)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(width: SCREEN_WIDTH/1.4, alignment: .leading)
+                                    .multilineTextAlignment(.leading)
+                                    .lineSpacing(5)
+                                    .padding(.leading, 25)
+                            }
+                            
+                        }      .offset(x: 3, y: subTitle != nil ? 0 : 5)
+                    )
+            }
+            .frame(height: subTitle != nil ? 100 : 50)
+            } else {
+                Rectangle()
+                    .fill(Color.ui.cultured)
+                    .overlay(
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(title)
+                                .foregroundColor(dangerField ?? false ? .ui.dangerRed : .ui.richBlack)
+                                .font(.ui.headlineMd)
+                                .frame(width: SCREEN_WIDTH, alignment: .leading)
+                                .padding(.leading, 25)
+                            
+                            if (subTitle != nil) {
+                                Text(subTitle!)
+                                    .foregroundColor(dangerField ?? false ? .ui.dangerRed : .ui.richBlack)
+                                    .font(.ui.bodyLight)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(width: SCREEN_WIDTH/1.4, alignment: .leading)
+                                    .multilineTextAlignment(.leading)
+                                    .lineSpacing(5)
+                                    .padding(.leading, 25)
+                            }
+                            
+                        }      .offset(x: 3, y: subTitle != nil ? 0 : 5)
+                    )
+                    .frame(height: subTitle != nil ? 100 : 50)
+            }
     }
 }
 
@@ -317,7 +347,35 @@ struct ContentSectionView: View {
 
 struct ConnectSectionView: View {
     @Environment(\.openURL) var openURL
+    @EnvironmentObject var firestoreMan: FirestoreManager
     let supportEmailModel: SupportEmailModel = SupportEmailModel()
+    
+    private func generateMessage(appStore: AppStoreModel) -> String? {
+        var link: String = {
+            if !appStore.storeId.isEmpty {
+                return appStore.storeId
+            } else if (!appStore.website.isEmpty) {
+                return appStore.website
+            }
+            
+            return ""
+        }()
+        
+        if (!link.isEmpty) {
+            var message: String {
+                """
+                Check out this cool new app I found called ⚡CapGen⚡. It's an AI-powered caption generating app that takes the hassle out of coming up with the perfect caption for your social media posts. Give it a try and let me know what you think!
+                
+                \(link)
+                """
+            }
+            
+            return message
+        }
+        
+        return nil
+       
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -327,16 +385,19 @@ struct ConnectSectionView: View {
                 .padding()
                 .offset(y: 10)
             
-            OptionButtonView(title: "🚀 Share CapGen", subTitle: "Spice up your socials with CapGen. Share with friends via 📱, 🐦 and more!") {
-                print("Saved captions")
-            }
-            
-            ZStack {
-                Color.ui.cultured
+            if let appStore = firestoreMan.appStoreModel, let message = generateMessage(appStore: appStore) {
+                ShareLink(item: message, subject: Text("Check out CapGen!")) {
+                    OptionButtonView(title: "🚀 Share CapGen", subTitle: "Spice up your socials with CapGen. Share with friends via 📱, 🐦 and more!", isButton: false)
+                }
                 
-                Divider()
-                    .frame(width: SCREEN_WIDTH / 1.1)
+                ZStack {
+                    Color.ui.cultured
+                    
+                    Divider()
+                        .frame(width: SCREEN_WIDTH / 1.1)
+                }
             }
+
             
             OptionButtonView(title: "💌 Send us a message", subTitle: "We’re here to help! Need assistance or have feedback? Let us know, we'd love to hear from you.") {
                 supportEmailModel.send(openURL: openURL)
