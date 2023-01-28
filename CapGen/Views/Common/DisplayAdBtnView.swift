@@ -40,7 +40,7 @@ struct DisplayAdBtnView: View {
         Button {
             // load new ads
             self.isLoading = true
-            self.rewardedAd.loadAd() { isLoadDone in
+            self.rewardedAd.loadAd(adUnitId: firestoreMan.admobUnitId) { isLoadDone in
                 if (isLoadDone) {
                     self.isLoading = false
                     self.isAdDone = self.rewardedAd.showAd(rewardFunction: {

@@ -48,7 +48,7 @@ struct CreditsDepletedModalView: View {
                     
                     // Play ad
                     self.isAdLoading = true
-                    self.rewardedAd.loadAd() { isLoadDone in
+                    self.rewardedAd.loadAd(adUnitId: firestoreMan.admobUnitId) { isLoadDone in
                         if (isLoadDone) {
                             self.isAdLoading = false
                             self.isAdDone = self.rewardedAd.showAd(rewardFunction: {

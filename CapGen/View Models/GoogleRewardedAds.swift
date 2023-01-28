@@ -11,14 +11,15 @@ import UIKit
 import SwiftUI
 
 final class GoogleRewardedAds: ObservableObject {
-    private let adUnitId: String = Bundle.main.infoDictionary?["ADMOB_REWARDED_AD_UNIT_ID"] as! String
     @Published var rewardedAd: GADRewardedAd?
     
     init() {
-        loadAd() { _ in }
+        loadAd(adUnitId: nil) { _ in }
     }
     
-    func loadAd(completion: @escaping (Bool) -> Void) {
+    func loadAd(adUnitId: String?, completion: @escaping (Bool) -> Void) {
+        guard let adUnitId = adUnitId else { return }
+        
         let request = GADRequest()
         // add extras here to the request, for example, for not presonalized Ads
         GADRewardedAd.load(withAdUnitID: adUnitId, request: request, completionHandler: {rewardedAd, error in
