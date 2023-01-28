@@ -23,6 +23,7 @@ struct ProfileView: View {
     @EnvironmentObject var authManager: AuthManager
     let envName: String = Bundle.main.infoDictionary?["ENV"] as! String
     @State var showCongratsModal: Bool = false
+    @State var showDeleteProfileModal: Bool = false
     @Binding var isPresented: Bool
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
@@ -69,7 +70,7 @@ struct ProfileView: View {
                         VStack {
                             ContentSectionView(showCongratsModal: $showCongratsModal)
                             ConnectSectionView()
-                            AccountManagementSectionView(isPresented: $isPresented)
+                            AccountManagementSectionView(isPresented: $isPresented, showDeleteProfileModal: $showDeleteProfileModal)
                             
                             VStack(spacing: 7) {
                                 Text("Thank you for using")
@@ -89,7 +90,6 @@ struct ProfileView: View {
                                 
                             }
                             .frame(height: 150)
-                            
                         }
                         
                     }
@@ -102,6 +102,17 @@ struct ProfileView: View {
         } onClickExit: {
             withAnimation {
                 self.showCongratsModal = false
+            }
+        }
+        .modalView(horizontalPadding: 40, show: $showDeleteProfileModal) {
+            DeleteProfileModalView(showView: $showDeleteProfileModal) {
+                // on delete profile
+                authManager.userManager.deleteUser()
+                self.isPresented = false
+            }
+        } onClickExit: {
+            withAnimation {
+                self.showDeleteProfileModal = false
             }
         }
     }
@@ -337,6 +348,7 @@ struct ConnectSectionView: View {
 
 struct AccountManagementSectionView: View {
     @Binding var isPresented: Bool
+    @Binding var showDeleteProfileModal: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -359,7 +371,7 @@ struct AccountManagementSectionView: View {
             }
             
             OptionButtonView(title: "🔨 Delete profile", subTitle: "Deleting your profile will permanently remove all credits and captions. This action is irreversible, please proceed with caution.", dangerField: true) {
-                print("Saved captions")
+                showDeleteProfileModal = true
             }
         }
     }

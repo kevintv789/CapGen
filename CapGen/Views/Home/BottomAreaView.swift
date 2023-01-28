@@ -176,7 +176,7 @@ struct TabButtonsView: View {
             } label: {
                 Image("profile-tab-icon")
                     .resizable()
-                    .frame(width: 40, height: 40)
+                    .frame(width: 43, height: 43)
                     .foregroundColor(.ui.cultured)
             }
         }

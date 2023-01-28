@@ -13,11 +13,11 @@ import FirebaseAuth
 import FBSDKCoreKit
 
 enum FBSignedInStatus {
-    case sigednOut, signedIn
+    case signedOut, signedIn
 }
 
 class FBAuthManager: ObservableObject {
-    @Published var fbSignedInStatus: FBSignedInStatus = .sigednOut
+    @Published var fbSignedInStatus: FBSignedInStatus = .signedOut
     let loginManager = LoginManager()
     
     func login() {
@@ -67,5 +67,9 @@ class FBAuthManager: ObservableObject {
             
             completion(userDict)
         }
+    }
+    
+    func signOut() {
+        self.fbSignedInStatus = .signedOut
     }
 }
