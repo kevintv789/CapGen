@@ -21,7 +21,7 @@ class UserManager: ObservableObject {
             if (!doesExist) {
                 let usersPref = UserPreferences(showCongratsModal: true, showCreditDepletedModal: true)
                 let dateCreated = Date.now
-                let credit = 1
+                let credit = 0
                 
                 // Create from Apple SSO
                 self.createAppleUser(uid: uid, credit: credit, usersPref: usersPref, dateCreated: dateCreated)
@@ -76,6 +76,39 @@ class UserManager: ObservableObject {
                 
                 if userPref != nil {
                     self.user = UserModel(id: uid, fullName: fullName, credits: credits, email: email, userPrefs: userPref!, dateCreated: dateCreated, captionsGroup: captionsGroup)
+                }
+            }
+        }
+    }
+    
+    func deleteUser() {
+        let user = Auth.auth().currentUser
+        
+        guard let user = user else { return }
+        
+        // Delete firestore data
+        let docRef = self.collection.document("\(user.uid)")
+        docRef.delete() { error in
+            if let error = error {
+                print("Error in deleting user from firestore", error.localizedDescription)
+            } else {
+                if (AuthManager.shared.googleAuthMan.googleSignInState == .signedIn) {
+                    AuthManager.shared.googleAuthMan.signOut()
+                }
+                
+                if (AuthManager.shared.fbAuthManager.fbSignedInStatus == .signedIn) {
+                    AuthManager.shared.fbAuthManager.signOut()
+                }
+                
+                if (AuthManager.shared.appleAuthManager.appleSignedInStatus == .signedIn) {
+                    AuthManager.shared.appleAuthManager.signOut()
+                }
+                
+                user.delete() { error in
+                    if let error = error {
+                        print("Error in deleting user", error.localizedDescription)
+                    }
+                    // Account has been deleted
                 }
             }
         }
@@ -164,7 +197,11 @@ class UserManager: ObservableObject {
         
         if (appleAuthManager.appleSignedInStatus == .signedIn) {
             guard let fullName = appleAuthManager.fullName else { return }
-            guard let email = appleAuthManager.email else { return }
+            guard var email = appleAuthManager.email else { return }
+            
+            if email == "N/A" {
+                email = Auth.auth().currentUser?.email ?? "N/A"
+            }
             
             let userModel = UserModel(id: uid, fullName: fullName, credits: credit, email: email, userPrefs: usersPref, dateCreated: dateCreated)
             
@@ -176,7 +213,7 @@ class UserManager: ObservableObject {
         do {
             try self.collection.document(uid).setData(from: userModel)
         } catch {
-            print("ERROR when creating Google SSO user", error.localizedDescription)
+            print("ERROR when creating SSO user", error.localizedDescription)
         }
     }
 }

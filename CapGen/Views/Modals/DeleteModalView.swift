@@ -41,7 +41,7 @@ struct DeleteModalView: View {
                 } label: {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Color.ui.darkerPurple)
-                        .frame(width: SCREEN_WIDTH/1.2, height: 55)
+                        .frame(width: SCREEN_WIDTH/1.4, height: 55)
                         .overlay(
                             Text("Cancel")
                                 .foregroundColor(.ui.cultured)
@@ -55,7 +55,7 @@ struct DeleteModalView: View {
                 } label: {
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(Color.ui.dangerRed, lineWidth: 2)
-                        .frame(width: SCREEN_WIDTH/1.2, height: 55)
+                        .frame(width: SCREEN_WIDTH/1.4, height: 55)
                         .overlay(
                             Text("Yes! Delete")
                                 .foregroundColor(.ui.dangerRed)

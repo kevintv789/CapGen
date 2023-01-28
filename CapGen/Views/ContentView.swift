@@ -18,12 +18,12 @@ struct ContentView: View {
         NavigationStack {
             if (authManager.isSignedIn ?? false) {
                 HomeView(promptText: "", platformSelected: socialMediaPlatforms[0].title)
+                    .onAppear {
+                        firestoreManager.fetchKey()
+                    }
             } else {
                 LaunchView()
             }
-        }
-        .onAppear {
-            firestoreManager.fetchKey()
         }
     }
 }

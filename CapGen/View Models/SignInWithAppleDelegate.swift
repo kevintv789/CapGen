@@ -129,6 +129,10 @@ class SignInWithApple: ObservableObject {
         self.appleSignedInStatus = .signedIn
     }
     
+    func signOut() {
+        self.appleSignedInStatus = .signedOut
+    }
+    
     static func authenticate(credential: ASAuthorizationAppleIDCredential, currentNonce: String) {
         // Retrieving token
         guard let token = credential.identityToken else {

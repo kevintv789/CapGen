@@ -139,6 +139,8 @@
 		D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E493298343B500C2847A /* FloatingNotificationView.swift */; };
 		D4C3E496298437B600C2847A /* ShareableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E495298437B600C2847A /* ShareableData.swift */; };
 		D4C3E49829844F7400C2847A /* SupportEmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E49729844F7400C2847A /* SupportEmailModel.swift */; };
+		D4C3E49A298470FB00C2847A /* sad_emoji_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E499298470FB00C2847A /* sad_emoji_lottie.json */; };
+		D4C3E49C2984710E00C2847A /* DeleteProfileModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -294,6 +296,8 @@
 		D4C3E493298343B500C2847A /* FloatingNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingNotificationView.swift; sourceTree = "<group>"; };
 		D4C3E495298437B600C2847A /* ShareableData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareableData.swift; sourceTree = "<group>"; };
 		D4C3E49729844F7400C2847A /* SupportEmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportEmailModel.swift; sourceTree = "<group>"; };
+		D4C3E499298470FB00C2847A /* sad_emoji_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sad_emoji_lottie.json; sourceTree = "<group>"; };
+		D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProfileModalView.swift; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
@@ -639,6 +643,7 @@
 				D4056EAB2972297000D3894D /* robot_plain_lottie.json */,
 				D4056EB529728E8C00D3894D /* gold_coin_lottie.json */,
 				D4056EAF2972872500D3894D /* speech_bubble.json */,
+				D4C3E499298470FB00C2847A /* sad_emoji_lottie.json */,
 			);
 			path = Lottie;
 			sourceTree = "<group>";
@@ -652,6 +657,7 @@
 				D4056ECC297796B900D3894D /* CreditsDepletedModalView.swift */,
 				D4C3E482298059C800C2847A /* CustomMenuPopup.swift */,
 				D4C3E4862980883D00C2847A /* DeleteModalView.swift */,
+				D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */,
 			);
 			path = Modals;
 			sourceTree = "<group>";
@@ -862,6 +868,7 @@
 				D4056DE0295C0DFB00D3894D /* Blacker-Display-ExtraBold-trial.ttf in Resources */,
 				D4056DEA295C0DFB00D3894D /* Blacker-Text-Medium-Italic-trial.ttf in Resources */,
 				D4056E0B295C0E2A00D3894D /* GraphikThinItalic.otf in Resources */,
+				D4C3E49A298470FB00C2847A /* sad_emoji_lottie.json in Resources */,
 				D4056DF1295C0DFB00D3894D /* Blacker-Display-Heavy-trial.ttf in Resources */,
 				D4056DE5295C0DFB00D3894D /* Blacker-Display-Bold-italic-trial.ttf in Resources */,
 				D4056EBD2974931D00D3894D /* coin_pile_lottie.json in Resources */,
@@ -1078,6 +1085,7 @@
 				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
 				D4056E79296E2C1700D3894D /* String.swift in Sources */,
+				D4C3E49C2984710E00C2847A /* DeleteProfileModalView.swift in Sources */,
 				D4056E85296F868800D3894D /* HomeView.swift in Sources */,
 				D4056ED329788FAF00D3894D /* OverlayedLoaderView.swift in Sources */,
 				D4056ED12978750D00D3894D /* DisplayAdBtnView.swift in Sources */,

@@ -51,9 +51,11 @@ class AuthManager: NSObject, ObservableObject {
                 googleAuthMan.signOut()
             }
             
-            if (googleAuthMan.googleSignInState == .signedOut) {
-                try Auth.auth().signOut()
+            if (appleAuthManager.appleSignedInStatus == .signedIn) {
+                appleAuthManager.signOut()
             }
+            
+            try Auth.auth().signOut()
             
         } catch let error as NSError {
             print("Failed to sign out", error)
