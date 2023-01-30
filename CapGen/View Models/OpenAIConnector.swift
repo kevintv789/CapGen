@@ -12,6 +12,8 @@ public class OpenAIConnector: ObservableObject {
     @Published var mutableCaptionGroup: AIRequest?
     @Published var prompt: String = ""
     @Published var captionLengthType: String = ""
+    @Published var appError: ErrorType? = nil
+    
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
 
     func generatePrompt(platform: String, prompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String) {
@@ -96,21 +98,36 @@ public class OpenAIConnector: ObservableObject {
         
         do {
             let (data, response) = try await session.data(for: request as URLRequest)
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                
-                // Create fallback screens for responses - 4xx, 5xx
-                // 503 - Overloaded with server requests
-                print("ERROR OpenAIConnect HttpResponse:", response)
-                return nil
-            }
             
-            if let requestData = self.parseJSON(data) {
-                return requestData
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode >= 500 {
+                    DispatchQueue.main.async {
+                        self.appError = ErrorType(error: .capacityError)
+                    }
+                    
+                    return nil
+                } else if (httpResponse.statusCode != 200) {
+                    DispatchQueue.main.async {
+                        self.appError = ErrorType(error: .genericError)
+                    }
+                    
+                    return nil
+                } else {
+                    if let requestData = self.parseJSON(data) {
+                        return requestData
+                    }
+                }
             }
             
         } catch {
+            DispatchQueue.main.async {
+                self.appError = ErrorType(error: .genericError)
+            }
+            
+            // Report to analytics??
             print("Error: \(error.localizedDescription)")
         }
+            
         
         return nil
     }

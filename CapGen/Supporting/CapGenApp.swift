@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseCore
 import Firebase
 import GoogleMobileAds
+import NavigationStack
 
 let SCREEN_WIDTH = UIScreen.main.bounds.width
 let SCREEN_HEIGHT = UIScreen.main.bounds.height
@@ -32,7 +33,7 @@ struct CapGenApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(authManager: AuthManager.shared)
+            ContentView(navigationStack: NavigationStackCompat())
                 .environmentObject(AuthManager.shared)
                 .environmentObject(GoogleAuthManager())
                 .environmentObject(GoogleRewardedAds())
@@ -42,6 +43,8 @@ struct CapGenApp: App {
                 .environmentObject(UserManager())
                 .environmentObject(OpenAIConnector())
                 .environmentObject(TaglistViewModel())
+                .environmentObject(NavigationStackCompat())
+                .environmentObject(CaptionEditViewModel())
         }
     }
 }

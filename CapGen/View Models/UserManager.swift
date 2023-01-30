@@ -81,15 +81,20 @@ class UserManager: ObservableObject {
         }
     }
     
-    func deleteUser() {
+    func deleteUser(completion: @escaping (_ error: ErrorType?) -> Void) {
         let user = Auth.auth().currentUser
         
-        guard let user = user else { return }
+        guard let user = user else {
+            completion(ErrorType(error: .genericError))
+            return
+            
+        }
         
         // Delete firestore data
         let docRef = self.collection.document("\(user.uid)")
         docRef.delete() { error in
             if let error = error {
+                completion(ErrorType(error: .genericError))
                 print("Error in deleting user from firestore", error.localizedDescription)
             } else {
                 if (AuthManager.shared.googleAuthMan.googleSignInState == .signedIn) {
@@ -106,9 +111,12 @@ class UserManager: ObservableObject {
                 
                 user.delete() { error in
                     if let error = error {
+                        completion(ErrorType(error: .genericError))
                         print("Error in deleting user", error.localizedDescription)
                     }
                     // Account has been deleted
+                    AuthManager.shared.setSignOut()
+                    completion(nil)
                 }
             }
         }

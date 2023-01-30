@@ -43,6 +43,10 @@ class AuthManager: NSObject, ObservableObject {
         })
     }
     
+    func setSignOut() {
+        self.isSignedIn = false
+    }
+    
     func logout() {
         do {
             if (googleAuthMan.googleSignInState == .signedIn) {
