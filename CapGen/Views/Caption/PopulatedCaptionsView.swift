@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 extension View {
     func customCardStyle(viewHeight: CGFloat) -> some View {
@@ -40,19 +41,22 @@ struct ViewGeometry: View {
 }
 
 struct PopulatedCaptionsView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var firestore: FirestoreManager
     @EnvironmentObject var openAiConnector: OpenAIConnector
+    @EnvironmentObject var navStack: NavigationStackCompat
+    @EnvironmentObject var captionEditVm: CaptionEditViewModel
     
-    @State var textSize: CGSize = .zero
+    @State var textSizes: [CGSize] = []
+    @State var hasLoaded: Bool = false
+    @State var hasCaptions: Bool = true
     @State var platformSelected: String = ""
     @State var showCaptionsView: Bool = false
     @State var unparsedCaptionStr: String? = ""
-    @State var filteredCaptionsGroup: [AIRequest] = []
     @State var platforms: [String] = []
     @State var showDeleteModal: Bool = false
     @State var currentCaptionSelected: AIRequest = AIRequest()
     @State var shareableData: ShareableData?
+    @State var mutableCaptionsGroup: [AIRequest] = []
     
     // Mapper for caption view
     @State var savedCaptions: [GeneratedCaptions] = []
@@ -104,121 +108,144 @@ struct PopulatedCaptionsView: View {
         self.shareableData = newShareableData
     }
     
+    private func pushToCaptionView() {
+        self.navStack.push(CaptionView(captionStr: self.$unparsedCaptionStr, savedCaptions: savedCaptions, isEditing: true, platform: self.openAiConnector.mutableCaptionGroup?.platform ?? "", 
+            onBackBtnClicked: {
+                // On exit
+                self.unparsedCaptionStr?.removeAll()
+        }))
+    }
+    
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            Color.ui.cultured.ignoresSafeArea(.all)
-            
-            VStack {
-                Color.ui.lavenderBlue.ignoresSafeArea(.all)
-                    .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT * (SCREEN_HEIGHT < 700 ? 0.2 : 0.15))
-                    .overlay(
-                        VStack(spacing: 0) {
-                            BackArrowView {
-                                self.presentationMode.wrappedValue.dismiss()
+        if (hasCaptions) {
+            ZStack(alignment: .topLeading) {
+                Color.ui.cultured.ignoresSafeArea(.all)
+                
+                VStack {
+                    Color.ui.lavenderBlue.ignoresSafeArea(.all)
+                        .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT * (SCREEN_HEIGHT < 700 ? 0.2 : 0.15))
+                        .overlay(
+                            VStack(spacing: 0) {
+                                BackArrowView()
+                                .frame(maxWidth: SCREEN_WIDTH, alignment: .leading)
+                                .frame(height: 10)
+                                .padding(.leading, 15)
+                                .padding(.bottom, 20)
+                                .padding(.top, 15)
+                                
+                                PlatformHeaderView(platforms: platforms, platformSelected: $platformSelected)
+                                
+                                Spacer()
                             }
-                            .frame(maxWidth: SCREEN_WIDTH, alignment: .leading)
-                            .frame(height: 10)
-                            .padding(.leading, 15)
-                            .padding(.bottom, 20)
-                            .padding(.top, 15)
-                            
-                            PlatformHeaderView(platforms: platforms, platformSelected: $platformSelected)
-                            
-                            Spacer()
-                        }
-                    )
+                        )
 
-                ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack {
-                        ForEach(filteredCaptionsGroup) { element in
-                            ZStack(alignment: .topLeading) {
-                                StackedCardsView(viewHeight: self.textSize.height)
-                                VStack(alignment: .leading, spacing: 20) {
-                                    CardTitleHeaderView(title: element.title, shareableData: self.$shareableData, edit: {
-                                        // Edit caption group
-                                        self.mapCaptionConfigurations(element: element)
-                                        self.showCaptionsView = true
-                                    }, delete: {
-                                        self.showDeleteModal = true
-                                        self.currentCaptionSelected = element
-                                    }, onMenuOpen: {
-                                        self.mapShareableData(element: element)
-                                    })
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVStack {
+                            ForEach(Array(mutableCaptionsGroup.enumerated()), id:\.element) { index, element in
+                                ZStack(alignment: .topLeading) {
                                     
-                                    Button {
-                                        self.mapCaptionConfigurations(element: element)
-                                        self.showCaptionsView = true
+                                    if (element.platform == self.platformSelected && !self.captionEditVm.textSizes.isEmpty && self.captionEditVm.textSizes.count == mutableCaptionsGroup.count) {
+                                        StackedCardsView(viewHeight: self.captionEditVm.textSizes[index].height)
                                         
-                                    } label: {
-                                        VStack(alignment: .leading) {
-                                            Text(element.prompt)
-                                                .font(.ui.bodyLarge)
-                                                .foregroundColor(.ui.cultured)
-                                                .lineLimit(Int(SCREEN_HEIGHT / 180))
-                                                .multilineTextAlignment(.leading)
-                                                .lineSpacing(3)
-                                                .background(ViewGeometry())
-                                                .onPreferenceChange(ViewSizeKey.self) {
-                                                    self.textSize = $0 // get size of text view
+                                        VStack(alignment: .leading, spacing: 20) {
+                                            CardTitleHeaderView(title: element.title, shareableData: self.$shareableData, edit: {
+                                                // Edit caption group
+                                                self.mapCaptionConfigurations(element: element)
+                                                self.pushToCaptionView()
+                                            }, delete: {
+                                                self.showDeleteModal = true
+                                                self.currentCaptionSelected = element
+                                            }, onMenuOpen: {
+                                                self.mapShareableData(element: element)
+                                            })
+                                            
+                                            Button {
+                                                self.mapCaptionConfigurations(element: element)
+                                                self.pushToCaptionView()
+                                                
+                                            } label: {
+                                                VStack(alignment: .leading) {
+                                                    Text(element.prompt)
+                                                        .font(.ui.bodyLarge)
+                                                        .foregroundColor(.ui.cultured)
+                                                        .lineLimit(Int(SCREEN_HEIGHT / 180))
+                                                        .multilineTextAlignment(.leading)
+                                                        .lineSpacing(3)
+                                                        .background(ViewGeometry())
+                                                        .onPreferenceChange(ViewSizeKey.self) {
+                                                            self.captionEditVm.textSizes[index] = $0
+                                                        }
+                                                    
+                                                    Spacer()
+                                                    
+                                                    // Bottom area of group
+                                                    HStack(spacing: 5) {
+                                                        // Tones indicator
+                                                        ConfigurationIndicatorsView(element: element)
+                                                        
+                                                        Spacer()
+                                                        
+                                                        Text(element.dateCreated)
+                                                            .foregroundColor(.ui.cultured)
+                                                            .font(.ui.headlineMd)
+                                                        
+                                                    }
                                                 }
-                                            
-                                            Spacer()
-                                            
-                                            // Bottom area of group
-                                            HStack(spacing: 5) {
-                                                // Tones indicator
-                                                ConfigurationIndicatorsView(element: element)
-                                                
-                                                Spacer()
-                                                
-                                                Text(element.dateCreated)
-                                                    .foregroundColor(.ui.cultured)
-                                                    .font(.ui.headlineMd)
-                                                
                                             }
                                         }
+                                        .padding(40)
                                     }
                                 }
-                                .padding(40)
                             }
                         }
                     }
                 }
             }
-        }
-        .navigationDestination(isPresented: $showCaptionsView) {
-            CaptionView(captionStr: self.$unparsedCaptionStr, savedCaptions: savedCaptions, isEditing: true, platform: self.openAiConnector.mutableCaptionGroup?.platform ?? "") {
-                // On exit
-                self.unparsedCaptionStr?.removeAll()
-            }
-            .navigationBarBackButtonHidden(true)
-        }
-        .onReceive(AuthManager.shared.userManager.$user) { user in
-            // This creates a set from an array of platforms by mapping the platform property of each object
-            // Use this to retrieve all social media network platforms in an array
-            if (user != nil) {
-                let value = user!.captionsGroup
-                let platformSet = Set(value.map { $0.platform })
-                self.platforms = Array(platformSet).sorted()
-                
-                if (!self.platforms.isEmpty) {
-                    self.platformSelected = self.platforms[0] // initiate the first item to be selected by default
-                    self.filteredCaptionsGroup = value.filter { $0.platform == self.platformSelected }
+            .onAppear() {
+                let group: [AIRequest] = AuthManager.shared.userManager.user?.captionsGroup ?? []
+                if !group.isEmpty {
+                    let platformSet = Set(group.map { $0.platform })
+                    self.platforms = Array(platformSet).sorted()
+                    
+                    if (!self.platforms.isEmpty) {
+                        self.platformSelected = self.platforms[0] // initiate the first item to be selected by default
+                    }
                 }
             }
-            
-        }
-        .onChange(of: self.platformSelected) { value in
-            // Filter to the selected social media network platform
-            let captionsGroup = AuthManager.shared.userManager.user?.captionsGroup as? [AIRequest] ?? []
-            self.filteredCaptionsGroup = captionsGroup.filter { $0.platform == value }
-        }
-        .modalView(horizontalPadding: 40, show: $showDeleteModal) {
-            DeleteModalView(title: "Deleting Captions", subTitle: "You’re about to delete these captions. This action cannot be undone. Are you sure? 🫢", lottieFile: "crane_hand_lottie", showView: $showDeleteModal, onDelete: {
-                firestore.onCaptionsGroupDelete(for: AuthManager.shared.userManager.user?.id ?? nil, element: self.currentCaptionSelected, captionsGroup: filteredCaptionsGroup)
-            })
-        } onClickExit: {
-            self.showDeleteModal = false
+            .onReceive(AuthManager.shared.userManager.$user) { user in
+                // This creates a set from an array of platforms by mapping the platform property of each object
+                // Use this to retrieve all social media network platforms in an array
+                if (user != nil) {
+                    let value = user!.captionsGroup
+                    if (!value.isEmpty) {
+                        
+                        // This piece of code only updates if there's an update within the original captions group array
+                        // We put this on the main thread to asynchronously update when the user has saved/deleted
+                        // a captions group. Without this, textSizes would return the incorrect values
+                        DispatchQueue.main.async {
+                            if (self.captionEditVm.textSizes.count != value.count) {
+                                self.captionEditVm.textSizes = [CGSize](repeating: .zero, count: value.count)
+                            }
+                        }
+                        
+                        self.mutableCaptionsGroup = value
+                        self.hasCaptions = true
+                        let platformSet = Set(value.map { $0.platform })
+                        self.platforms = Array(platformSet).sorted()
+                    } else if (value.isEmpty) {
+                        self.hasCaptions = false
+                    }
+                }
+            }
+            .modalView(horizontalPadding: 40, show: $showDeleteModal) {
+                DeleteModalView(title: "Deleting Captions", subTitle: "You’re about to delete these captions. This action cannot be undone. Are you sure? 🫢", lottieFile: "crane_hand_lottie", showView: $showDeleteModal, onDelete: {
+                    firestore.onCaptionsGroupDelete(for: AuthManager.shared.userManager.user?.id ?? nil, element: self.currentCaptionSelected, captionsGroup: AuthManager.shared.userManager.user?.captionsGroup ?? [])
+                })
+            } onClickExit: {
+                self.showDeleteModal = false
+            }
+        } else {
+            EmptyCaptionsView()
         }
     }
 }

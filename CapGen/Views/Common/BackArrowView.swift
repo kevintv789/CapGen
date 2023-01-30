@@ -6,17 +6,26 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct BackArrowView: View {
-    var action: () -> Void
+    var action: (() -> Void)?
     
     var body: some View {
-        Button {
-            action()
-        } label: {
-            Image("back_arrow")
-                .resizable()
-                .frame(width: 50, height: 40)
+        if (action != nil) {
+            Button {
+                action!()
+            } label: {
+                Image("back_arrow")
+                    .resizable()
+                    .frame(width: 50, height: 40)
+            }
+        } else {
+            PopView(destination: .previous) {
+                Image("back_arrow")
+                    .resizable()
+                    .frame(width: 50, height: 40)
+            }
         }
     }
 }

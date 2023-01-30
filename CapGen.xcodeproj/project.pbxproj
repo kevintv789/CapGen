@@ -104,7 +104,7 @@
 		D4056EA02971FCC400D3894D /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E9F2971FCC400D3894D /* GoogleSignInSwift */; };
 		D4056EA22971FD6200D3894D /* GoogleAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */; };
 		D4056EA829721BC300D3894D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA729721BC300D3894D /* ProfileView.swift */; };
-		D4056EAA29721DA800D3894D /* SavedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA929721DA800D3894D /* SavedCaptionsView.swift */; };
+		D4056EAA29721DA800D3894D /* EmptyCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA929721DA800D3894D /* EmptyCaptionsView.swift */; };
 		D4056EAC2972297000D3894D /* robot_plain_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EAB2972297000D3894D /* robot_plain_lottie.json */; };
 		D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EAD2972716D00D3894D /* BackArrowView.swift */; };
 		D4056EB02972872600D3894D /* speech_bubble.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EAF2972872500D3894D /* speech_bubble.json */; };
@@ -142,6 +142,13 @@
 		D4C3E49A298470FB00C2847A /* sad_emoji_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E499298470FB00C2847A /* sad_emoji_lottie.json */; };
 		D4C3E49C2984710E00C2847A /* DeleteProfileModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */; };
 		D4C3E49E2984C02D00C2847A /* AppStoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E49D2984C02D00C2847A /* AppStoreModel.swift */; };
+		D4C3E4A12984D6ED00C2847A /* capacity_error_robot.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E49F2984D6ED00C2847A /* capacity_error_robot.json */; };
+		D4C3E4A22984D6ED00C2847A /* general_error_robot.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E4A02984D6ED00C2847A /* general_error_robot.json */; };
+		D4C3E4A42984F7C500C2847A /* FallbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4A32984F7C500C2847A /* FallbackView.swift */; };
+		D4C3E4A6298577B400C2847A /* ErrorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4A5298577B400C2847A /* ErrorModel.swift */; };
+		D4C3E4A92986368400C2847A /* NavigationStack in Frameworks */ = {isa = PBXBuildFile; productRef = D4C3E4A82986368400C2847A /* NavigationStack */; };
+		D4C3E4AC298639AE00C2847A /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AB298639AE00C2847A /* Router.swift */; };
+		D4C3E4AE2987368300C2847A /* CaptionEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -260,7 +267,7 @@
 		D4056E9A2971EF6F00D3894D /* FBAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAuthManager.swift; sourceTree = "<group>"; };
 		D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthManager.swift; sourceTree = "<group>"; };
 		D4056EA729721BC300D3894D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		D4056EA929721DA800D3894D /* SavedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionsView.swift; sourceTree = "<group>"; };
+		D4056EA929721DA800D3894D /* EmptyCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCaptionsView.swift; sourceTree = "<group>"; };
 		D4056EAB2972297000D3894D /* robot_plain_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = robot_plain_lottie.json; sourceTree = "<group>"; };
 		D4056EAD2972716D00D3894D /* BackArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackArrowView.swift; sourceTree = "<group>"; };
 		D4056EAF2972872500D3894D /* speech_bubble.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = speech_bubble.json; sourceTree = "<group>"; };
@@ -300,6 +307,12 @@
 		D4C3E499298470FB00C2847A /* sad_emoji_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sad_emoji_lottie.json; sourceTree = "<group>"; };
 		D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProfileModalView.swift; sourceTree = "<group>"; };
 		D4C3E49D2984C02D00C2847A /* AppStoreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreModel.swift; sourceTree = "<group>"; };
+		D4C3E49F2984D6ED00C2847A /* capacity_error_robot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacity_error_robot.json; sourceTree = "<group>"; };
+		D4C3E4A02984D6ED00C2847A /* general_error_robot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = general_error_robot.json; sourceTree = "<group>"; };
+		D4C3E4A32984F7C500C2847A /* FallbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallbackView.swift; sourceTree = "<group>"; };
+		D4C3E4A5298577B400C2847A /* ErrorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorModel.swift; sourceTree = "<group>"; };
+		D4C3E4AB298639AE00C2847A /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionEditViewModel.swift; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
@@ -311,6 +324,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4056E612968E17700D3894D /* FirebaseDatabaseSwift in Frameworks */,
+				D4C3E4A92986368400C2847A /* NavigationStack in Frameworks */,
 				D4056E9E2971FCC400D3894D /* GoogleSignIn in Frameworks */,
 				D4056E5F2968E17700D3894D /* FirebaseDatabase in Frameworks */,
 				D4056E572968E17700D3894D /* FirebaseAnalyticsSwift in Frameworks */,
@@ -407,6 +421,7 @@
 				D4056E7D296F0C7E00D3894D /* Lottie */,
 				D4056E6E2968E6CE00D3894D /* Firebase */,
 				D4005DEA295C086A004D695D /* Info.plist */,
+				D4C3E4AA2986399700C2847A /* Navigation */,
 				D4056E19295CC59800D3894D /* Data */,
 				D4005DDE295C024A004D695D /* Models */,
 				D4005DE0295C0258004D695D /* View Models */,
@@ -454,6 +469,7 @@
 				D4C3E495298437B600C2847A /* ShareableData.swift */,
 				D4C3E49729844F7400C2847A /* SupportEmailModel.swift */,
 				D4C3E49D2984C02D00C2847A /* AppStoreModel.swift */,
+				D4C3E4A5298577B400C2847A /* ErrorModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -484,6 +500,7 @@
 				D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */,
 				D4056EB729736F6E00D3894D /* GoogleRewardedAds.swift */,
 				D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */,
+				D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -603,6 +620,7 @@
 				D4056ED02978750D00D3894D /* DisplayAdBtnView.swift */,
 				D4056ED229788FAF00D3894D /* OverlayedLoaderView.swift */,
 				D4C3E493298343B500C2847A /* FloatingNotificationView.swift */,
+				D4C3E4A32984F7C500C2847A /* FallbackView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -636,6 +654,8 @@
 			isa = PBXGroup;
 			children = (
 				D4C3E484298087CE00C2847A /* crane_hand_lottie.json */,
+				D4C3E49F2984D6ED00C2847A /* capacity_error_robot.json */,
+				D4C3E4A02984D6ED00C2847A /* general_error_robot.json */,
 				D4056EDB2978A06900D3894D /* space_man_empty.json */,
 				D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */,
 				D4056ECE2978735A00D3894D /* btn_loader.json */,
@@ -679,7 +699,7 @@
 			children = (
 				D4056E3F2963AB3B00D3894D /* LoadingView.swift */,
 				D4056E372963178D00D3894D /* CaptionView.swift */,
-				D4056EA929721DA800D3894D /* SavedCaptionsView.swift */,
+				D4056EA929721DA800D3894D /* EmptyCaptionsView.swift */,
 				D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */,
 				D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */,
 				D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */,
@@ -709,6 +729,14 @@
 				D4C3E48929819C6500C2847A /* CaptionsGroupMock.swift */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		D4C3E4AA2986399700C2847A /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				D4C3E4AB298639AE00C2847A /* Router.swift */,
+			);
+			path = Navigation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -747,6 +775,7 @@
 				D4056E7B296F0C7000D3894D /* Lottie */,
 				D4056E9D2971FCC400D3894D /* GoogleSignIn */,
 				D4056E9F2971FCC400D3894D /* GoogleSignInSwift */,
+				D4C3E4A82986368400C2847A /* NavigationStack */,
 			);
 			productName = CapGen;
 			productReference = D4005DB1295BE0E0004D695D /* CapGen Beta.app */;
@@ -827,6 +856,7 @@
 				D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				D4056E7A296F0C7000D3894D /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				D4056E9C2971FCC400D3894D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
 			);
 			productRefGroup = D4005DB2295BE0E0004D695D /* Products */;
 			projectDirPath = "";
@@ -873,8 +903,10 @@
 				D4056E0B295C0E2A00D3894D /* GraphikThinItalic.otf in Resources */,
 				D4C3E49A298470FB00C2847A /* sad_emoji_lottie.json in Resources */,
 				D4056DF1295C0DFB00D3894D /* Blacker-Display-Heavy-trial.ttf in Resources */,
+				D4C3E4A12984D6ED00C2847A /* capacity_error_robot.json in Resources */,
 				D4056DE5295C0DFB00D3894D /* Blacker-Display-Bold-italic-trial.ttf in Resources */,
 				D4056EBD2974931D00D3894D /* coin_pile_lottie.json in Resources */,
+				D4C3E4A22984D6ED00C2847A /* general_error_robot.json in Resources */,
 				D4056DE8295C0DFB00D3894D /* Blacker-Display-ExtraBold-Italic-trial.ttf in Resources */,
 				D4056E14295C0E2A00D3894D /* GraphikBlackItalic.otf in Resources */,
 				D4056DDD295C0DFB00D3894D /* Blacker-Display-Light-Italic-trial.ttf in Resources */,
@@ -1064,6 +1096,7 @@
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
 				D4C3E496298437B600C2847A /* ShareableData.swift in Sources */,
+				D4C3E4A6298577B400C2847A /* ErrorModel.swift in Sources */,
 				D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */,
 				D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */,
 				D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */,
@@ -1072,17 +1105,19 @@
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
+				D4C3E4AC298639AE00C2847A /* Router.swift in Sources */,
 				D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */,
 				D4056EC429751BD200D3894D /* UserManager.swift in Sources */,
 				D4056E81296F0CB900D3894D /* LottieView.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
 				D4C3E4922982105300C2847A /* Notifications.swift in Sources */,
-				D4056EAA29721DA800D3894D /* SavedCaptionsView.swift in Sources */,
+				D4056EAA29721DA800D3894D /* EmptyCaptionsView.swift in Sources */,
 				D4C3E49E2984C02D00C2847A /* AppStoreModel.swift in Sources */,
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */,
 				D4C3E48A29819C6500C2847A /* CaptionsGroupMock.swift in Sources */,
 				D4056EB829736F6E00D3894D /* GoogleRewardedAds.swift in Sources */,
+				D4C3E4A42984F7C500C2847A /* FallbackView.swift in Sources */,
 				D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */,
 				D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
@@ -1100,6 +1135,7 @@
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
 				D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */,
 				D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */,
+				D4C3E4AE2987368300C2847A /* CaptionEditViewModel.swift in Sources */,
 				D4056E382963178D00D3894D /* CaptionView.swift in Sources */,
 				D4056EC229751ACA00D3894D /* UserModel.swift in Sources */,
 			);
@@ -1775,6 +1811,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/matteopuc/swiftui-navigation-stack.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1857,6 +1901,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D4056E9C2971FCC400D3894D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		D4C3E4A82986368400C2847A /* NavigationStack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
+			productName = NavigationStack;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

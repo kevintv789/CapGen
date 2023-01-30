@@ -52,6 +52,7 @@ extension Font {
         let title6 = Font.custom("Graphik-Light", size: 18, relativeTo: .title2)
         let headline = Font.custom("Graphik-Medium", size: 18, relativeTo: .headline)
         let headlineLight = Font.custom("Graphik-Light", size: 18, relativeTo: .headline)
+        let headlineRegular = Font.custom("Graphik-Regular", size: 18, relativeTo: .headline)
         let headlineMediumSm = Font.custom("Graphik-Medium", size: 16, relativeTo: .headline)
         let headlineLightSm = Font.custom("Graphik-Light", size: 16, relativeTo: .headline)
         let headlineMd = Font.custom("Graphik-Medium", size: 15, relativeTo: .headline)

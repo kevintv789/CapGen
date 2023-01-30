@@ -10,8 +10,9 @@ import Combine
 import UIKit
 
 struct EditCaptionView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var openAiConnector: OpenAIConnector
+    @EnvironmentObject var captionEditVm: CaptionEditViewModel
+    
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
     
@@ -20,7 +21,6 @@ struct EditCaptionView: View {
     let captionTitle: String
     let platform: String
     let caption: String
-    @Binding var editableCaption: String
     
     // Platform limits and standards
     @State var textCount: Int = 0
@@ -68,7 +68,7 @@ struct EditCaptionView: View {
                 VStack(alignment: .leading) {
                     // Header
                     HStack {
-                        BackArrowView { self.presentationMode.wrappedValue.dismiss() }
+                        BackArrowView()
                             .padding(.leading, 8)
                         
                         Spacer()
@@ -89,13 +89,13 @@ struct EditCaptionView: View {
                         CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, copy: {
                             // Copy selected
                             self.isTextCopied = true
-                            UIPasteboard.general.string = String(self.editableCaption)
+                            UIPasteboard.general.string = String(self.captionEditVm.editableText)
                             
                         }, reset: {
                             // Reset to original text
-                            self.editableCaption = self.caption
+                            self.captionEditVm.editableText = self.caption
                         }, onMenuOpen: {
-                            self.shareableData = mapShareableData(caption: self.editableCaption, captionGroup: self.openAiConnector.mutableCaptionGroup)
+                            self.shareableData = mapShareableData(caption: self.captionEditVm.editableText, captionGroup: self.openAiConnector.mutableCaptionGroup)
                         })
                         .padding(.horizontal)
                     }
@@ -113,7 +113,7 @@ struct EditCaptionView: View {
                         
                         PlatformLimitsView(textCount: $textCount, hashtagCount: $hashtagCount, textLimit: textLimit, hashtagLimit: hashtagLimit)
                         
-                        CaptionTextEditorView(editableCaption: $editableCaption, keyboardHeight: $keyboardHeight)
+                        CaptionTextEditorView(keyboardHeight: $keyboardHeight)
                             .padding(.horizontal, -2)
                     }
                     .padding(.horizontal, 15)
@@ -131,7 +131,7 @@ struct EditCaptionView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Button {
-                    self.editableCaption.append("#")
+                    self.captionEditVm.editableText.append("#")
                 } label: {
                     Image("\(colorScheme == .dark ? "hashtag-white" : "hashtag-black")")
                         .resizable()
@@ -144,7 +144,7 @@ struct EditCaptionView: View {
                 CaptionCopyBtnView(platform: platform) {
                     // On copy
                     self.isTextCopied = true
-                    UIPasteboard.general.string = String(self.editableCaption)
+                    UIPasteboard.general.string = String(self.captionEditVm.editableText)
                 } onPlatformClick: {
                     // On platform
                     self.openLink()
@@ -166,7 +166,7 @@ struct EditCaptionView: View {
             }
         }
         .onAppear() {
-            self.editableCaption = self.caption
+            self.captionEditVm.editableText = self.caption
             self.textCount = self.caption.count
             self.hashtagCount = self.countHashtags(text: self.caption)
             
@@ -181,7 +181,7 @@ struct EditCaptionView: View {
                 }
             }
         }
-        .onChange(of: editableCaption) { value in
+        .onChange(of: captionEditVm.editableText) { value in
             // Count number of chars in the text
             self.textCount = value.count
             
@@ -199,9 +199,9 @@ struct EditCaptionView: View {
 
 struct EditCaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "Instagram", caption: "Life is so much better with a furry friend to share it with! My rescue pup brings me #so much joy and love every day. 🤗", editableCaption: .constant(""))
+        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "Instagram", caption: "Life is so much better with a furry friend to share it with! My rescue pup brings me #so much joy and love every day. 🤗")
         
-        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "LinkedIn", caption: "🐶💕 Life is so much better with a furry friend to share it with! My rescue pup brings me so much joy and love every day. 🤗", editableCaption: .constant(""))
+        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "LinkedIn", caption: "🐶💕 Life is so much better with a furry friend to share it with! My rescue pup brings me so much joy and love every day. 🤗")
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
@@ -254,11 +254,11 @@ struct PlatformLimitsView: View {
 }
 
 struct CaptionTextEditorView: View {
-    @Binding var editableCaption: String
+    @EnvironmentObject var captionEditVm: CaptionEditViewModel
     @Binding var keyboardHeight: CGFloat
     
     var body: some View {
-        TextEditor(text: $editableCaption)
+        TextEditor(text: $captionEditVm.editableText)
             .font(.ui.graphikRegular)
             .foregroundColor(Color.ui.richBlack)
             .lineSpacing(6)

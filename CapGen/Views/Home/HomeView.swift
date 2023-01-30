@@ -10,6 +10,8 @@ import FirebaseAuth
 
 struct HomeView: View {
     @State var credits: Int = AuthManager.shared.userManager.user?.credits ?? 0
+    @EnvironmentObject var firestoreManager: FirestoreManager
+    @EnvironmentObject var openAiConnector: OpenAIConnector
     
     @FocusState private var isKeyboardFocused: Bool
     @State var expandBottomArea: Bool = false
@@ -88,6 +90,13 @@ struct HomeView: View {
                     }
                 .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
+            }
+            .onAppear() {
+                firestoreManager.fetchKey()
+                
+                if (!openAiConnector.prompt.isEmpty) {
+                    self.promptText = openAiConnector.prompt
+                }
             }
             .onReceive(AuthManager.shared.userManager.$user) { user in
                 if user != nil {

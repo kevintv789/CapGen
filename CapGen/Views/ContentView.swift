@@ -8,33 +8,31 @@
 import SwiftUI
 import Firebase
 import FirebaseAuth
+import NavigationStack
 
 struct ContentView: View {
-    @EnvironmentObject var rewardedAd: GoogleRewardedAds
-    @ObservedObject var authManager: AuthManager
-    @EnvironmentObject var firestoreManager: FirestoreManager
+    @EnvironmentObject var authManager: AuthManager
+    let navigationStack: NavigationStackCompat
+    @State var router: Router?
     
     var body: some View {
-        NavigationStack {
-            if (authManager.isSignedIn ?? false) {
-                HomeView(promptText: "", platformSelected: socialMediaPlatforms[0].title)
-                    .onAppear {
-                        firestoreManager.fetchKey()
-                    }
-            } else {
-                LaunchView()
-            }
+        NavigationStackView(navigationStack: navigationStack) {
+            EmptyView() // Maybe a loading screen here instead?
+        }
+        .onReceive(authManager.$isSignedIn) { isLoggedIn in
+            // Push to initial screen
+            self.router = Router(navStack: navigationStack, isLoggedIn: isLoggedIn ?? false)
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(authManager: AuthManager.shared)
+        ContentView(navigationStack: NavigationStackCompat())
             .previewDevice("iPhone 14 Pro Max")
             .previewDisplayName("iPhone 14 Pro Max")
         
-        ContentView(authManager: AuthManager.shared)
+        ContentView(navigationStack: NavigationStackCompat())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

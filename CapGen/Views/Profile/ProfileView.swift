@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import NavigationStack
 
 extension Text {
     func customProfileHeadline() -> some View {
@@ -19,12 +20,12 @@ extension Text {
 }
 
 struct ProfileView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject private var navStack: NavigationStackCompat
+    
     let envName: String = Bundle.main.infoDictionary?["ENV"] as! String
     @State var showCongratsModal: Bool = false
     @State var showDeleteProfileModal: Bool = false
-    @Binding var isPresented: Bool
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
     var dividerText: String = {
@@ -42,9 +43,8 @@ struct ProfileView: View {
                 .ignoresSafeArea(.all)
             
             VStack(alignment: .leading) {
-                BackArrowView {
-                    self.presentationMode.wrappedValue.dismiss()
-                }
+                BackArrowView()
+                
                 .padding(.leading, 8)
                 
                 ScrollView(.vertical, showsIndicators: false) {
@@ -70,7 +70,7 @@ struct ProfileView: View {
                         VStack {
                             ContentSectionView(showCongratsModal: $showCongratsModal)
                             ConnectSectionView()
-                            AccountManagementSectionView(isPresented: $isPresented, showDeleteProfileModal: $showDeleteProfileModal)
+                            AccountManagementSectionView(showDeleteProfileModal: $showDeleteProfileModal)
                             
                             VStack(spacing: 7) {
                                 Text("Thank you for using")
@@ -107,8 +107,14 @@ struct ProfileView: View {
         .modalView(horizontalPadding: 40, show: $showDeleteProfileModal) {
             DeleteProfileModalView(showView: $showDeleteProfileModal) {
                 // on delete profile
-                authManager.userManager.deleteUser()
-                self.isPresented = false
+                authManager.userManager.deleteUser() { error in
+                    if let error = error {
+                        print("ERROR in deleting account", error.error.errorDescription ?? "")
+                        return
+                    }
+                    
+                    self.navStack.pop()
+                }
             }
         } onClickExit: {
             withAnimation {
@@ -120,11 +126,11 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView(isPresented: .constant(true))
+        ProfileView()
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
         
-        ProfileView(isPresented: .constant(true))
+        ProfileView()
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
             .previewDevice("iPhone SE (3rd generation)")
@@ -307,9 +313,9 @@ struct OptionButtonView: View {
 }
 
 struct ContentSectionView: View {
+    @EnvironmentObject private var navStack: NavigationStackCompat
     @State var showBottomSheet: Bool = false
     @Binding var showCongratsModal: Bool
-    @State var showSavedCaptionsView: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -320,7 +326,7 @@ struct ContentSectionView: View {
                 .offset(y: 10)
             
             OptionButtonView(title: "📝 Saved captions", subTitle: "Easily view, export, copy and edit your generated captions.") {
-                self.showSavedCaptionsView = true
+                self.navStack.push(PopulatedCaptionsView())
             }
             
             ZStack {
@@ -338,10 +344,6 @@ struct ContentSectionView: View {
                     .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
             }
         }
-        .navigationDestination(isPresented: $showSavedCaptionsView) {
-            SavedCaptionsView()
-                .navigationBarBackButtonHidden(true)
-        }
     }
 }
 
@@ -351,7 +353,7 @@ struct ConnectSectionView: View {
     let supportEmailModel: SupportEmailModel = SupportEmailModel()
     
     private func generateMessage(appStore: AppStoreModel) -> String? {
-        var link: String = {
+        let link: String = {
             if !appStore.storeId.isEmpty {
                 return appStore.storeId
             } else if (!appStore.website.isEmpty) {
@@ -364,7 +366,7 @@ struct ConnectSectionView: View {
         if (!link.isEmpty) {
             var message: String {
                 """
-                Check out this cool new app I found called ⚡CapGen⚡. It's an AI-powered caption generating app that takes the hassle out of coming up with the perfect caption for your social media posts. Give it a try and let me know what you think!
+                Check out this new app I found called ⚡CapGen⚡! It's like an AI brain for your captions, no more struggling for the perfect words for your gram. Trust me, give it a try!"
                 
                 \(link)
                 """
@@ -408,7 +410,6 @@ struct ConnectSectionView: View {
 }
 
 struct AccountManagementSectionView: View {
-    @Binding var isPresented: Bool
     @Binding var showDeleteProfileModal: Bool
     
     var body: some View {
@@ -419,10 +420,12 @@ struct AccountManagementSectionView: View {
                 .padding()
                 .offset(y: 10)
             
-            OptionButtonView(title: "🔐 Logout") {
-                AuthManager.shared.logout()
-                self.isPresented = false
+            PopView {
+                OptionButtonView(title: "🔐 Logout") {
+                    AuthManager.shared.logout()
+                }
             }
+           
             
             ZStack {
                 Color.ui.cultured

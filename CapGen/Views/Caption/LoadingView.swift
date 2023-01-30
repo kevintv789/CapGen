@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct LoadingView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var openAiRequest: OpenAIConnector
+    @EnvironmentObject var navStack: NavigationStackCompat
+    
+    @State var router: Router? = nil
     
     let rotationTime: Double = 0.75 // seconds to complete a full rotation
     let animationTime: Double = 1.9
@@ -79,8 +83,8 @@ struct LoadingView: View {
                     )
             }
             .onAppear() {
+                self.router = Router(navStack: navStack)
                 self.animateSpinner()
-                showCaptionView = false
                 
                 Timer.scheduledTimer(withTimeInterval: animationTime, repeats: true) { _ in
                     self.animateSpinner()
@@ -90,18 +94,23 @@ struct LoadingView: View {
                     if (!openAiRequest.prompt.isEmpty) {
                         openAiResponse = await openAiRequest.processPrompt(apiKey: firestoreMan.openAiKey)
                         
+                        if let error = openAiRequest.appError?.error {
+                            switch error {
+                            case .capacityError:
+                                self.router?.toCapacityFallbackView()
+                            default:
+                                self.router?.toGenericFallbackView()
+                            }
+                        }
+                        
                         if (openAiResponse != nil && !openAiResponse!.isEmpty) {
                             // decrement credit on success
                             firestoreMan.decrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
-                            showCaptionView = true
+                            self.navStack.push(CaptionView(captionStr: $openAiResponse, platform: openAiRequest.requestModel.platform))
                         }
                     }
                    
                 }
-            }
-            .navigationDestination(isPresented: $showCaptionView) {
-                CaptionView(captionStr: $openAiResponse, platform: openAiRequest.requestModel.platform)
-                    .navigationBarBackButtonHidden(true)
             }
         }
     }

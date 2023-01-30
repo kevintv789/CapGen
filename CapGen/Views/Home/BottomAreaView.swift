@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 let MIN_HEIGHT: CGFloat = SCREEN_HEIGHT * 0.2
 let MAX_HEIGHT: CGFloat = SCREEN_HEIGHT * 0.7
@@ -28,6 +29,9 @@ struct BottomAreaView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @EnvironmentObject var openAiConnector: OpenAIConnector
+    @EnvironmentObject var navStack: NavigationStackCompat
+    
+    @State var router: Router? = nil
     
     @Binding var expandArea: Bool
     @Binding var platformSelected: String
@@ -43,8 +47,6 @@ struct BottomAreaView: View {
     
     @State var displayLoadView: Bool = false
     
-    @State var showCaptionView: Bool = false
-    @State var showProfileView: Bool = false
     @State var showCreditsDepletedBottomSheet: Bool = false
     
     @State var isAdDone: Bool = false
@@ -102,7 +104,8 @@ struct BottomAreaView: View {
                                         }
                                     }
                                     else {
-                                        displayLoadView.toggle()
+//                                        displayLoadView.toggle()
+                                        self.router?.toLoadingView()
                                     }
                                     
                                 } label: {
@@ -125,7 +128,7 @@ struct BottomAreaView: View {
                             .dropInAndOutAnimation(value: expandArea)
                         
                         if (!expandArea) {
-                            TabButtonsView(showCaptionView: $showCaptionView, showProfileView: $showProfileView)
+                            TabButtonsView()
                                 .padding(.bottom, SCREEN_HEIGHT < 700 ? 50 : 80)
                         }
                     }
@@ -133,18 +136,13 @@ struct BottomAreaView: View {
                 .frame(height: expandArea ? MAX_HEIGHT : MIN_HEIGHT)
                 .offset(x: 0, y: expandArea ? 50 : MIN_HEIGHT / 1.2)
         }
-        .navigationDestination(isPresented: $displayLoadView) {
-            LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270))
-                .navigationBarBackButtonHidden(true)
+        .onAppear() {
+            self.router = Router(navStack: self.navStack)
         }
-        .navigationDestination(isPresented: $showCaptionView) {
-            SavedCaptionsView()
-                .navigationBarBackButtonHidden(true)
-        }
-        .navigationDestination(isPresented: $showProfileView) {
-            ProfileView(isPresented: $showProfileView)
-                .navigationBarBackButtonHidden(true)
-        }
+//        .navigationDestination(isPresented: $displayLoadView) {
+//            LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270))
+//                .navigationBarBackButtonHidden(true)
+//        }
         .sheet(isPresented: $showCreditsDepletedBottomSheet) {
             CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet, displayLoadView: $displayLoadView)
                 .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
@@ -154,32 +152,40 @@ struct BottomAreaView: View {
 }
 
 struct TabButtonsView: View {
-    @Binding var showCaptionView: Bool
-    @Binding var showProfileView: Bool
+    @State var hasCaptions: Bool = false
     
     var body: some View {
         HStack(alignment: .center) {
-            Button {
-                showCaptionView = true
-            } label: {
-                Image("saved-captions-tab-icon")
-                    .resizable()
-                    .frame(width: 40, height: 40)
+            if (hasCaptions) {
+                PushView(destination: PopulatedCaptionsView()) {
+                    Image("saved-captions-tab-icon")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                }
+            } else {
+                PushView(destination: EmptyCaptionsView()) {
+                    Image("saved-captions-tab-icon")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                }
             }
+            
             
             Spacer()
                 .frame(width: SCREEN_WIDTH / 2)
             
-            
-            Button {
-                showProfileView = true
-            } label: {
+            PushView(destination: ProfileView()) {
                 Image("profile-tab-icon")
                     .resizable()
                     .frame(width: 43, height: 43)
                     .foregroundColor(.ui.cultured)
             }
         }
+        .onReceive(AuthManager.shared.userManager.$user, perform: { user in
+            if let cg = user?.captionsGroup, !cg.isEmpty {
+                self.hasCaptions = true
+            }
+        })
     }
 }
 

@@ -74,7 +74,8 @@ class FirestoreManager: ObservableObject {
         ])
     }
     
-    func saveCaptions(for uid: String?, with captions: AIRequest, captionsGroup: [AIRequest], completion: @escaping () -> Void) {
+    @MainActor
+    func saveCaptions(for uid: String?, with captions: AIRequest, captionsGroup: [AIRequest], completion: @escaping () -> Void) async {
         guard let userId = uid else { return }
         
         let docRef = db.collection("Users").document("\(userId)")
@@ -84,13 +85,31 @@ class FirestoreManager: ObservableObject {
             let indexOfGroup = captionsGroup.firstIndex{ $0.id == captions.id }
             if (indexOfGroup != nil) {
                 // Update a specific item in the array by removing it first
-                docRef.updateData(["captionsGroup": FieldValue.arrayRemove([captionsGroup[indexOfGroup!].dictionary])])
+                do {
+                    try await docRef.updateData(["captionsGroup": FieldValue.arrayRemove([captionsGroup[indexOfGroup!].dictionary])])
+                } catch {
+                    print("ERROR")
+                }
+                
             }
             
-            docRef.updateData(["captionsGroup": FieldValue.arrayUnion([captions.dictionary])])
+            // Change UUID
+            let newCaption = AIRequest(id: UUID().uuidString, platform: captions.platform, prompt: captions.prompt, tones: captions.tones, includeEmojis: captions.includeEmojis, includeHashtags: captions.includeHashtags, captionLength: captions.captionLength, title: captions.title, dateCreated: captions.dateCreated, captions: captions.captions)
+            
+            // Add new entry
+            do {
+                try await docRef.updateData(["captionsGroup": FieldValue.arrayUnion([newCaption.dictionary])])
+            } catch {
+                print("ERROR")
+            }
+            
         } else {
-            // Create new data field
-            docRef.setData(["captionsGroup": [captions.dictionary]], merge: true)
+            do {
+                // Create new data field
+                try await docRef.setData(["captionsGroup": [captions.dictionary]], merge: true)
+            } catch {
+                print("ERROR")
+            }
         }
         
         completion()
@@ -125,14 +144,14 @@ class FirestoreManager: ObservableObject {
     private func fetch(from collection: String, documentId: String, completion: @escaping (_ data: [String: Any]?) -> Void) {
         let docRef = db.collection(collection).document(documentId)
         
-        docRef.getDocument { (document, error) in
+        docRef.addSnapshotListener { (documentSnapshot, error) in
             if error != nil {
                 print("Can't retrieve \(collection) \(documentId)", error!.localizedDescription)
                 completion(nil)
                 return
             }
             
-            if let document = document, document.exists {
+            if let document = documentSnapshot, document.exists {
                 let data = document.data()
                 if let data = data {
                     completion(data)

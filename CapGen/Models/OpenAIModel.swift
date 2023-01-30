@@ -25,12 +25,12 @@ struct Choice: Codable {
     var finish_reason: String
 }
 
-struct GeneratedCaptions: Codable, Identifiable {
+struct GeneratedCaptions: Codable, Identifiable, Hashable {
     var id: String = UUID().uuidString
     var description: String
 }
 
-struct AIRequest: Codable, Identifiable, Comparable {
+struct AIRequest: Codable, Identifiable, Comparable, Hashable {
     var id: String = UUID().uuidString
     var platform: String = ""
     var prompt: String = ""
@@ -50,10 +50,7 @@ struct AIRequest: Codable, Identifiable, Comparable {
     }
     
     static func == (lhs: AIRequest, rhs: AIRequest) -> Bool {
-        let leftDate = convertStringToDate(date: lhs.dateCreated) ?? Date()
-        let rightDate = convertStringToDate(date: rhs.dateCreated) ?? Date()
-        
-        return leftDate == rightDate
+        return lhs.id == rhs.id
     }
     
     var dictionary: [String: Any] {
