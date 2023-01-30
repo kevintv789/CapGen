@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 enum ButtonLength {
     case short, full
@@ -14,6 +15,10 @@ enum ButtonLength {
 struct DisplayAdBtnView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
+    @EnvironmentObject var navStack: NavigationStackCompat
+    
+    @State var router: Router? = nil
+    
     @State var btnLength: ButtonLength = .full
     @State var isLoading: Bool = false
     let authManager = AuthManager.shared.userManager
@@ -58,6 +63,16 @@ struct DisplayAdBtnView: View {
         }
        
         .disabled(self.isLoading)
+        .onAppear() {
+            self.router = Router(navStack: navStack)
+        }
+        .onReceive(self.rewardedAd.$appError) { value in
+            if let error = value?.error {
+                if error == .genericError {
+                    self.router?.toGenericFallbackView()
+                }
+            }
+        }
     }
 }
 

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct EmptyCaptionsView: View {
+    @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
+    
     var body: some View {
         ZStack {
             Color.ui.cultured.ignoresSafeArea(.all)
@@ -31,6 +33,9 @@ struct EmptyCaptionsView: View {
                 
                 Spacer()
             }
+        }
+        .onAppear() {
+            self.captionConfigs.resetConfigs()
         }
        
     }

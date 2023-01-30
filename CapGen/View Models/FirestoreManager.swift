@@ -13,6 +13,9 @@ class FirestoreManager: ObservableObject {
     @Published var openAiKey: String?
     @Published var admobUnitId: String?
     @Published var appStoreModel: AppStoreModel?
+    @Published var appError: ErrorType? = nil
+    
+    var snapshotListener: ListenerRegistration? = nil
     
     let db = Firestore.firestore()
     
@@ -39,7 +42,10 @@ class FirestoreManager: ObservableObject {
     }
     
     func incrementCredit(for uid: String?) {
-        guard let userId = uid else { return }
+        guard let userId = uid else {
+            self.appError = ErrorType(error: .genericError)
+            return
+        }
         
         let docRef = db.collection("Users").document("\(userId)")
         docRef.updateData([
@@ -48,7 +54,10 @@ class FirestoreManager: ObservableObject {
     }
     
     func decrementCredit(for uid: String?) {
-        guard let userId = uid else { return }
+        guard let userId = uid else {
+            self.appError = ErrorType(error: .genericError)
+            return
+        }
         
         let docRef = db.collection("Users").document("\(userId)")
         docRef.updateData([
@@ -57,7 +66,10 @@ class FirestoreManager: ObservableObject {
     }
     
     func setShowCongratsModal(for uid: String?, to boolValue: Bool) {
-        guard let userId = uid else { return }
+        guard let userId = uid else {
+            self.appError = ErrorType(error: .genericError)
+            return
+        }
         
         let docRef = db.collection("Users").document("\(userId)")
         docRef.updateData([
@@ -66,7 +78,10 @@ class FirestoreManager: ObservableObject {
     }
     
     func setShowCreditDepletedModal(for uid: String?, to boolValue: Bool) {
-        guard let userId = uid else { return }
+        guard let userId = uid else {
+            self.appError = ErrorType(error: .genericError)
+            return
+        }
         
         let docRef = db.collection("Users").document("\(userId)")
         docRef.updateData([
@@ -76,7 +91,10 @@ class FirestoreManager: ObservableObject {
     
     @MainActor
     func saveCaptions(for uid: String?, with captions: AIRequest, captionsGroup: [AIRequest], completion: @escaping () -> Void) async {
-        guard let userId = uid else { return }
+        guard let userId = uid else {
+            self.appError = ErrorType(error: .genericError)
+            return
+        }
         
         let docRef = db.collection("Users").document("\(userId)")
         
@@ -119,7 +137,10 @@ class FirestoreManager: ObservableObject {
         This function deletes the specific caption group
      */
     func onCaptionsGroupDelete(for uid: String?, element: AIRequest, captionsGroup: [AIRequest]) {
-        guard let userId = uid else { return }
+        guard let userId = uid else {
+            self.appError = ErrorType(error: .genericError)
+            return
+        }
         
         let docRef = db.collection("Users").document("\(userId)")
         
@@ -144,8 +165,9 @@ class FirestoreManager: ObservableObject {
     private func fetch(from collection: String, documentId: String, completion: @escaping (_ data: [String: Any]?) -> Void) {
         let docRef = db.collection(collection).document(documentId)
         
-        docRef.addSnapshotListener { (documentSnapshot, error) in
+        self.snapshotListener = docRef.addSnapshotListener { (documentSnapshot, error) in
             if error != nil {
+                self.appError = ErrorType(error: .genericError)
                 print("Can't retrieve \(collection) \(documentId)", error!.localizedDescription)
                 completion(nil)
                 return
@@ -158,5 +180,9 @@ class FirestoreManager: ObservableObject {
                 }
             }
         }
+    }
+    
+    func unbindListener() async {
+        self.snapshotListener?.remove()
     }
 }

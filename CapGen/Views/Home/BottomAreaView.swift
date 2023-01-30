@@ -45,8 +45,6 @@ struct BottomAreaView: View {
     @State var includeEmojis: Bool = false
     @State var includeHashtags: Bool = false
     
-    @State var displayLoadView: Bool = false
-    
     @State var showCreditsDepletedBottomSheet: Bool = false
     
     @State var isAdDone: Bool = false
@@ -95,7 +93,7 @@ struct BottomAreaView: View {
                                                 if (isLoadDone) {
                                                     self.isAdLoading = false
                                                     self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                                                        self.displayLoadView = true
+                                                        self.router?.toLoadingView()
                                                         firestoreMan.incrementCredit(for: userManager.id)
                                                     })
                                                 }
@@ -104,7 +102,6 @@ struct BottomAreaView: View {
                                         }
                                     }
                                     else {
-//                                        displayLoadView.toggle()
                                         self.router?.toLoadingView()
                                     }
                                     
@@ -139,12 +136,8 @@ struct BottomAreaView: View {
         .onAppear() {
             self.router = Router(navStack: self.navStack)
         }
-//        .navigationDestination(isPresented: $displayLoadView) {
-//            LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270))
-//                .navigationBarBackButtonHidden(true)
-//        }
         .sheet(isPresented: $showCreditsDepletedBottomSheet) {
-            CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet, displayLoadView: $displayLoadView)
+            CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet)
                 .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
         }
         .ignoresSafeArea(.all)

@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct CreditsDepletedModalView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var rewardedAd: GoogleRewardedAds
+    @EnvironmentObject var navStack: NavigationStackCompat
+    
+    @State var router: Router? = nil
     @Binding var isViewPresented: Bool
-    @Binding var displayLoadView: Bool
     
     @State var isAdDone: Bool? = false
     @State var isAdLoading: Bool = false
@@ -68,11 +71,12 @@ struct CreditsDepletedModalView: View {
             .padding(.top, 35)
         }
         .onAppear {
+            self.router = Router(navStack: navStack)
             // Dismiss bottom sheet modal when ad is exited
             guard let isAdDone = self.isAdDone else { return }
             if (isAdDone) {
                 self.isViewPresented = false
-                self.displayLoadView = true
+                self.router?.toLoadingView()
             }
         }
     }
