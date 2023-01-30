@@ -16,6 +16,7 @@ class AuthManager: NSObject, ObservableObject {
     @Published var fbAuthManager: FBAuthManager = FBAuthManager()
     @Published var appleAuthManager: SignInWithApple = SignInWithApple()
     @Published var userManager: UserManager = UserManager()
+    @Published var appError: ErrorType?
     
     private let auth = Auth.auth()
     static let shared = AuthManager()
@@ -30,6 +31,7 @@ class AuthManager: NSObject, ObservableObject {
     func login(credential: AuthCredential, completionBlock: @escaping (_ success: Bool) -> Void) {
         Auth.auth().signIn(with: credential, completion: { (result, error) in
             if error != nil {
+                self.appError = ErrorType(error: .genericError)
                 print("ERROR logging into Firebase", error!.localizedDescription)
                 return
             }
@@ -45,6 +47,8 @@ class AuthManager: NSObject, ObservableObject {
     
     func setSignOut() {
         self.isSignedIn = false
+        self.unbindAuth()
+        self.userManager.unbindSnapshot()
     }
     
     func logout() {
@@ -59,9 +63,16 @@ class AuthManager: NSObject, ObservableObject {
                 appleAuthManager.signOut()
             }
             
+            if (fbAuthManager.fbSignedInStatus == .signedIn) {
+                fbAuthManager.signOut()
+            }
+            
             try Auth.auth().signOut()
             
+            self.setSignOut()
+            
         } catch let error as NSError {
+            self.appError = ErrorType(error: .genericError)
             print("Failed to sign out", error)
         }
     }
@@ -74,7 +85,7 @@ class AuthManager: NSObject, ObservableObject {
             
             self.isSignedIn = true
         } else {
-            self.isSignedIn = false
+            self.setSignOut()
         }
     }
     

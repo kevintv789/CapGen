@@ -22,6 +22,9 @@ extension Text {
 struct ProfileView: View {
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject private var navStack: NavigationStackCompat
+    @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
+    
+    @State var router: Router? = nil
     
     let envName: String = Bundle.main.infoDictionary?["ENV"] as! String
     @State var showCongratsModal: Bool = false
@@ -97,6 +100,10 @@ struct ProfileView: View {
                 .ignoresSafeArea(.all)
             }
         }
+        .onAppear() {
+            self.router = Router(navStack: navStack)
+            self.captionConfigs.resetConfigs()
+        }
         .modalView(horizontalPadding: 40, show: $showCongratsModal) {
             CongratsModalView(showView: $showCongratsModal)
         } onClickExit: {
@@ -109,11 +116,12 @@ struct ProfileView: View {
                 // on delete profile
                 authManager.userManager.deleteUser() { error in
                     if let error = error {
+                        self.router?.toGenericFallbackView()
                         print("ERROR in deleting account", error.error.errorDescription ?? "")
                         return
                     }
                     
-                    self.navStack.pop()
+                    self.router?.toLaunchView()
                 }
             }
         } onClickExit: {
@@ -410,6 +418,7 @@ struct ConnectSectionView: View {
 }
 
 struct AccountManagementSectionView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
     @Binding var showDeleteProfileModal: Bool
     
     var body: some View {
@@ -422,7 +431,11 @@ struct AccountManagementSectionView: View {
             
             PopView {
                 OptionButtonView(title: "🔐 Logout") {
-                    AuthManager.shared.logout()
+                    Task {
+                        await self.firestoreMan.unbindListener()
+                        AuthManager.shared.logout()
+                    }
+                   
                 }
             }
            

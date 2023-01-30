@@ -10,7 +10,6 @@ import NavigationStack
 import SwiftUI
 
 let HOME_SCREEN = "homeScreen"
-let LAUNCH_SCREEN = "launchScreen"
 
 class Router {
     private let navStack: NavigationStackCompat
@@ -19,7 +18,12 @@ class Router {
         self.navStack = navStack
         
         if (isLoggedIn) {
-            self.toHomeView(promptText: "", platformSelected: socialMediaPlatforms[0].title)
+            // Do this check so that HomeView doesn't get instantiated twice with the same ID
+            if !self.doesHaveId(with: HOME_SCREEN) {
+                self.toHomeView()
+            } else {
+                self.navStack.pop(to: .view(withId: HOME_SCREEN))
+            }
         } else {
             self.toLaunchView()
         }
@@ -29,12 +33,16 @@ class Router {
         self.navStack = navStack
     }
     
-    func toHomeView(promptText: String, platformSelected: String) {
-        self.navStack.push(HomeView(promptText: promptText, platformSelected: platformSelected), withId: HOME_SCREEN)
+    func doesHaveId(with id: String) -> Bool {
+        return self.navStack.containsView(withId: id)
+    }
+    
+    func toHomeView() {
+        self.navStack.push(HomeView(), withId: HOME_SCREEN)
     }
     
     func toLaunchView() {
-        self.navStack.push(LaunchView(), withId: LAUNCH_SCREEN)
+        self.navStack.push(LaunchView())
     }
     
     func toLoadingView() {

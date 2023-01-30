@@ -12,6 +12,7 @@ import SwiftUI
 
 final class GoogleRewardedAds: ObservableObject {
     @Published var rewardedAd: GADRewardedAd?
+    @Published var appError: ErrorType?
     
     init() {
         loadAd(adUnitId: nil) { _ in }
@@ -25,6 +26,7 @@ final class GoogleRewardedAds: ObservableObject {
         GADRewardedAd.load(withAdUnitID: adUnitId, request: request, completionHandler: {rewardedAd, error in
             if error != nil {
                 // loading the rewarded Ad failed :(
+                self.appError = ErrorType(error: .genericError)
                 print("Failed to load rewarded ad", error!.localizedDescription)
                 completion(false)
                 return
@@ -36,11 +38,13 @@ final class GoogleRewardedAds: ObservableObject {
     
     func showAd(rewardFunction: @escaping () -> Void) -> Bool {
         guard let rewardedAd = self.rewardedAd else {
+            self.appError = ErrorType(error: .genericError)
             print("Reward ad is nil")
             return false
         }
         
         guard let root = UIApplication.shared.keyWindowPresentedController else {
+            self.appError = ErrorType(error: .genericError)
             return false
         }
 

@@ -149,6 +149,7 @@
 		D4C3E4A92986368400C2847A /* NavigationStack in Frameworks */ = {isa = PBXBuildFile; productRef = D4C3E4A82986368400C2847A /* NavigationStack */; };
 		D4C3E4AC298639AE00C2847A /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AB298639AE00C2847A /* Router.swift */; };
 		D4C3E4AE2987368300C2847A /* CaptionEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */; };
+		D4C3E4B029885FFD00C2847A /* CaptionConfigsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -313,6 +314,7 @@
 		D4C3E4A5298577B400C2847A /* ErrorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorModel.swift; sourceTree = "<group>"; };
 		D4C3E4AB298639AE00C2847A /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionEditViewModel.swift; sourceTree = "<group>"; };
+		D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionConfigsViewModel.swift; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
@@ -501,6 +503,7 @@
 				D4056EB729736F6E00D3894D /* GoogleRewardedAds.swift */,
 				D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */,
 				D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */,
+				D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -1134,6 +1137,7 @@
 				D4056EC02974AF6D00D3894D /* CongratsModalView.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
 				D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */,
+				D4C3E4B029885FFD00C2847A /* CaptionConfigsViewModel.swift in Sources */,
 				D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */,
 				D4C3E4AE2987368300C2847A /* CaptionEditViewModel.swift in Sources */,
 				D4056E382963178D00D3894D /* CaptionView.swift in Sources */,

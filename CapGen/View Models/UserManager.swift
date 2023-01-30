@@ -13,6 +13,7 @@ import GoogleSignIn
 class UserManager: ObservableObject {
     @Published var user: UserModel?
     var collection = Firestore.firestore().collection("Users")
+    var snapshotListener: ListenerRegistration? = nil
     
     func createUserDoc(auth: Auth) {
         guard let uid = auth.currentUser?.uid else { return }
@@ -54,7 +55,7 @@ class UserManager: ObservableObject {
     func getUser(with uid: String) {
         let docRef = self.collection.document("\(uid)")
         
-        docRef.addSnapshotListener { snapshot, error in
+        self.snapshotListener = docRef.addSnapshotListener { snapshot, error in
             if (error != nil) {
                 print("ERROR in fetching user \(uid)", error!.localizedDescription)
                 return
@@ -223,5 +224,9 @@ class UserManager: ObservableObject {
         } catch {
             print("ERROR when creating SSO user", error.localizedDescription)
         }
+    }
+    
+    func unbindSnapshot() {
+        self.snapshotListener?.remove()
     }
 }

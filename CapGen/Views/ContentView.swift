@@ -23,6 +23,13 @@ struct ContentView: View {
             // Push to initial screen
             self.router = Router(navStack: navigationStack, isLoggedIn: isLoggedIn ?? false)
         }
+        .onReceive(authManager.$appError) { value in
+            if let error = value?.error {
+                if error == .genericError {
+                    self.router?.toGenericFallbackView()
+                }
+            }
+        }
     }
 }
 

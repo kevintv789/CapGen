@@ -45,6 +45,7 @@ struct PopulatedCaptionsView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionEditVm: CaptionEditViewModel
+    @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
     
     @State var textSizes: [CGSize] = []
     @State var hasLoaded: Bool = false
@@ -202,6 +203,8 @@ struct PopulatedCaptionsView: View {
                 }
             }
             .onAppear() {
+                self.captionConfigs.resetConfigs()
+                
                 let group: [AIRequest] = AuthManager.shared.userManager.user?.captionsGroup ?? []
                 if !group.isEmpty {
                     let platformSet = Set(group.map { $0.platform })

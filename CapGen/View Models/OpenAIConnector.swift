@@ -52,6 +52,7 @@ public class OpenAIConnector: ObservableObject {
         print("PROMPT", self.prompt)
         
         guard let openAIKey = apiKey else {
+            self.appError = ErrorType(error: .genericError)
             print("Error retrieving Open AI Key")
             return nil
         }
@@ -72,7 +73,7 @@ public class OpenAIConnector: ObservableObject {
         do {
             httpBodyJson = try JSONSerialization.data(withJSONObject: httpBody, options: .prettyPrinted)
         } catch {
-            print("Unable to convert to JSON \(error)")
+            self.appError = ErrorType(error: .genericError)
             return nil
         }
         
@@ -139,6 +140,8 @@ public class OpenAIConnector: ObservableObject {
             let decodedData = try decoder.decode(OpenAIResponseModel.self, from: data)
             return decodedData
         } catch {
+            self.appError = ErrorType(error: .genericError)
+            print("Can't decode open AI JSON", error.localizedDescription)
             return nil
         }
     }
