@@ -6,10 +6,10 @@ target 'CapGen' do
   use_frameworks!
 
   # Pods for CapGen
-  pod 'FacebookCore'
-  pod 'FacebookLogin'
-  pod 'FacebookShare'
-  pod 'Google-Mobile-Ads-SDK'
+  # pod 'FacebookCore'
+  # pod 'FacebookLogin'
+  # pod 'FacebookShare'
+  # pod 'Google-Mobile-Ads-SDK'
 
   target 'CapGenTests' do
     inherit! :search_paths

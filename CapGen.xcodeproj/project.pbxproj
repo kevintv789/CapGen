@@ -150,6 +150,10 @@
 		D4C3E4AC298639AE00C2847A /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AB298639AE00C2847A /* Router.swift */; };
 		D4C3E4AE2987368300C2847A /* CaptionEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */; };
 		D4C3E4B029885FFD00C2847A /* CaptionConfigsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */; };
+		D4F1D3012988C53A00599F05 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = D4F1D3002988C53A00599F05 /* FacebookCore */; };
+		D4F1D3032988C53A00599F05 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = D4F1D3022988C53A00599F05 /* FacebookLogin */; };
+		D4F1D3052988C53A00599F05 /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = D4F1D3042988C53A00599F05 /* FacebookShare */; };
+		D4F1D30829896BA500599F05 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = D4F1D30729896BA500599F05 /* GoogleMobileAds */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -325,6 +329,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4F1D3032988C53A00599F05 /* FacebookLogin in Frameworks */,
 				D4056E612968E17700D3894D /* FirebaseDatabaseSwift in Frameworks */,
 				D4C3E4A92986368400C2847A /* NavigationStack in Frameworks */,
 				D4056E9E2971FCC400D3894D /* GoogleSignIn in Frameworks */,
@@ -332,6 +337,7 @@
 				D4056E572968E17700D3894D /* FirebaseAnalyticsSwift in Frameworks */,
 				D4056E6D2968E17700D3894D /* FirebaseStorageCombine-Community in Frameworks */,
 				D4056E652968E17700D3894D /* FirebaseFirestoreCombine-Community in Frameworks */,
+				D4F1D3012988C53A00599F05 /* FacebookCore in Frameworks */,
 				D4056E7C296F0C7000D3894D /* Lottie in Frameworks */,
 				D4056E592968E17700D3894D /* FirebaseAuth in Frameworks */,
 				D4056E6B2968E17700D3894D /* FirebaseStorage in Frameworks */,
@@ -339,10 +345,12 @@
 				D4056E672968E17700D3894D /* FirebaseFirestoreSwift in Frameworks */,
 				D4056E5D2968E17700D3894D /* FirebaseCrashlytics in Frameworks */,
 				D4056E632968E17700D3894D /* FirebaseFirestore in Frameworks */,
+				D4F1D30829896BA500599F05 /* GoogleMobileAds in Frameworks */,
 				D4056E552968E17700D3894D /* FirebaseAnalytics in Frameworks */,
 				D4056E692968E17700D3894D /* FirebaseFunctions in Frameworks */,
 				D4056E5B2968E17700D3894D /* FirebaseAuthCombine-Community in Frameworks */,
 				8A81E2B66D4A4B40A38F8EBC /* Pods_CapGen.framework in Frameworks */,
+				D4F1D3052988C53A00599F05 /* FacebookShare in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,7 +762,6 @@
 				D4005DAE295BE0E0004D695D /* Frameworks */,
 				D4056E722968E78400D3894D /* Setup Firebase Environment GoogleService-Info.plist */,
 				D4005DAF295BE0E0004D695D /* Resources */,
-				43D31075103845359E2D4E40 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -779,6 +786,10 @@
 				D4056E9D2971FCC400D3894D /* GoogleSignIn */,
 				D4056E9F2971FCC400D3894D /* GoogleSignInSwift */,
 				D4C3E4A82986368400C2847A /* NavigationStack */,
+				D4F1D3002988C53A00599F05 /* FacebookCore */,
+				D4F1D3022988C53A00599F05 /* FacebookLogin */,
+				D4F1D3042988C53A00599F05 /* FacebookShare */,
+				D4F1D30729896BA500599F05 /* GoogleMobileAds */,
 			);
 			productName = CapGen;
 			productReference = D4005DB1295BE0E0004D695D /* CapGen Beta.app */;
@@ -811,7 +822,6 @@
 				D4005DC7295BE0E1004D695D /* Sources */,
 				D4005DC8295BE0E1004D695D /* Frameworks */,
 				D4005DC9295BE0E1004D695D /* Resources */,
-				F55235A6A5BA6E8B18142B6E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -860,6 +870,8 @@
 				D4056E7A296F0C7000D3894D /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				D4056E9C2971FCC400D3894D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
+				D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+				D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = D4005DB2295BE0E0004D695D /* Products */;
 			projectDirPath = "";
@@ -980,23 +992,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		43D31075103845359E2D4E40 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		A5E736975D43B0C377446941 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1059,23 +1054,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist\n\n# Get references to dev and prod versions of the GoogleService-Info.plist\n# NOTE: These should only live on the file system and should NOT be part of the target (since we'll be adding them to the target manually)\nGOOGLESERVICE_INFO_DEV=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Dev/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_PROD=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Prod/${GOOGLESERVICE_INFO_PLIST}\n\n# Make sure the dev version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_DEV}\"\nif [ ! -f $GOOGLESERVICE_INFO_DEV ]\nthen\n    echo \"No Development GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Make sure the prod version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_PROD}\"\nif [ ! -f $GOOGLESERVICE_INFO_PROD ]\nthen\n    echo \"No Production GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Get a reference to the destination location for the GoogleService-Info.plist\nPLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\necho \"Will copy ${GOOGLESERVICE_INFO_PLIST} to final destination: ${PLIST_DESTINATION}\"\n\n# Copy over the prod GoogleService-Info.plist for Release builds\nif [ \"${CONFIGURATION}\" == \"Release-PROD\" ] ||  [ \"${CONFIGURATION}\" == \"Debug-PROD\" ] \nthen\n    echo \"Using ${GOOGLESERVICE_INFO_PROD}\"\n    cp \"${GOOGLESERVICE_INFO_PROD}\" \"${PLIST_DESTINATION}\"\nelse\n    echo \"Using ${GOOGLESERVICE_INFO_DEV}\"\n    cp \"${GOOGLESERVICE_INFO_DEV}\" \"${PLIST_DESTINATION}\"\nfi\n";
-		};
-		F55235A6A5BA6E8B18142B6E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1312,7 +1290,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1355,7 +1333,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1538,7 +1516,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1675,7 +1653,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1823,6 +1801,22 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+		D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1910,6 +1904,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
 			productName = NavigationStack;
+		};
+		D4F1D3002988C53A00599F05 /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		D4F1D3022988C53A00599F05 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
+		D4F1D3042988C53A00599F05 /* FacebookShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookShare;
+		};
+		D4F1D30729896BA500599F05 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
