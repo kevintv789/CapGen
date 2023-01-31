@@ -10,6 +10,7 @@ import FirebaseCore
 import Firebase
 import GoogleMobileAds
 import NavigationStack
+import FBSDKCoreKit
 
 let SCREEN_WIDTH = UIScreen.main.bounds.width
 let SCREEN_HEIGHT = UIScreen.main.bounds.height
@@ -21,6 +22,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         // Initialize the Google Mobile Ads SDK.
         GADMobileAds.sharedInstance().start(completionHandler: nil)
+        
+        // Initialize Facebook SDK
+        FBSDKCoreKit.ApplicationDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
         
         return true
     }

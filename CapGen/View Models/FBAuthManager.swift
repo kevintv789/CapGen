@@ -48,7 +48,7 @@ class FBAuthManager: ObservableObject {
     func authenticateWithFirebase(accessToken: AccessToken) {
         if let accessToken = AccessToken.current {
             AuthManager.shared.login(credential: FacebookAuthProvider.credential(withAccessToken: accessToken.tokenString)) { success in
-                if (success) {
+                if (success && AccessToken.isCurrentAccessTokenActive) {
                     self.fbSignedInStatus = .signedIn
                     print("Facebook login successful!")
                 }
@@ -70,6 +70,9 @@ class FBAuthManager: ObservableObject {
     }
     
     func signOut() {
-        self.fbSignedInStatus = .signedOut
+        if AccessToken.isCurrentAccessTokenActive {
+            self.loginManager.logOut()
+            self.fbSignedInStatus = .signedOut
+        }
     }
 }

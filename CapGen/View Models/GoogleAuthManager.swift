@@ -19,8 +19,10 @@ class GoogleAuthManager: ObservableObject {
     @Published var googleSignInState: GoogleSignInState = .signedOut
     
     func signOut() {
-        GIDSignIn.sharedInstance.signOut()
-        self.googleSignInState = .signedOut
+        if GIDSignIn.sharedInstance.currentUser != nil {
+            GIDSignIn.sharedInstance.signOut()
+            self.googleSignInState = .signedOut
+        }
     }
     
     func signIn() {
@@ -59,7 +61,7 @@ class GoogleAuthManager: ObservableObject {
         let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
         
         AuthManager.shared.login(credential: credential) { (success) in
-            if (success) {
+            if (success && GIDSignIn.sharedInstance.currentUser != nil) {
                 self.googleSignInState = .signedIn
                 print("Google login was a success!")
             }

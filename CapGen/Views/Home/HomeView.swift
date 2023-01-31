@@ -70,7 +70,7 @@ struct HomeView: View {
                     .frame(height: 75)
                     .onChange(of: self.captionConfigs.platformSelected) { value in
                         withAnimation {
-                            scrollProxy.scrollTo(self.captionConfigs.platformSelected, anchor: .center)
+                            scrollProxy.scrollTo(value, anchor: .center)
                         }
                     }
                 }
@@ -136,9 +136,17 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
             .environmentObject(TaglistViewModel())
+            .environmentObject(CaptionConfigsViewModel())
+            .environmentObject(FirestoreManager())
+            .environmentObject(CaptionConfigsViewModel())
+            .environmentObject(NavigationStackCompat())
         
         HomeView()
             .environmentObject(TaglistViewModel())
+            .environmentObject(CaptionConfigsViewModel())
+            .environmentObject(FirestoreManager())
+            .environmentObject(CaptionConfigsViewModel())
+            .environmentObject(NavigationStackCompat())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
