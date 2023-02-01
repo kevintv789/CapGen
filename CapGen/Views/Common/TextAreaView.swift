@@ -16,7 +16,7 @@ extension TextEditor {
             .lineSpacing(6)
             .scrollContentBackground(.hidden)
             .overlay(
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 12)
                     .stroke(.black, lineWidth: 2)
                     .shadow(
                         color: Color.ui.shadowGray.opacity(0.8),
@@ -27,7 +27,7 @@ extension TextEditor {
                 
             )
             .background(
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 12)
                     .fill(Color.ui.lightOldPaper)
             )
     }
