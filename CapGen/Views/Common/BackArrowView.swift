@@ -15,7 +15,7 @@ struct BackArrowView: View {
         if (action != nil) {
             Button {
                 action!()
-                Haptics.shared.play(.medium)
+                Haptics.shared.play(.soft)
             } label: {
                 Image("back_arrow")
                     .resizable()
@@ -28,7 +28,7 @@ struct BackArrowView: View {
                     .frame(width: 50, height: 40)
             }
             .simultaneousGesture(TapGesture().onEnded({ _ in
-                Haptics.shared.play(.medium)
+                Haptics.shared.play(.soft)
             }))
         }
     }

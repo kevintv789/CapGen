@@ -79,7 +79,7 @@ struct BottomAreaView: View {
                                 
                                 // Play/Submit button
                                 Button {
-                                    Haptics.shared.play(.medium)
+                                    Haptics.shared.play(.soft)
                                     
                                     guard let userManager = AuthManager.shared.userManager.user else { return }
                                     mapAllRequests()
@@ -166,7 +166,7 @@ struct TabButtonsView: View {
                         .frame(width: 40 * scaledSize, height: 40 * scaledSize)
                 }
                 .simultaneousGesture(TapGesture().onEnded({ _ in
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                 }))
             } else {
                 PushView(destination: EmptyCaptionsView()) {
@@ -175,7 +175,7 @@ struct TabButtonsView: View {
                         .frame(width: 40 * scaledSize, height: 40 * scaledSize)
                 }
                 .simultaneousGesture(TapGesture().onEnded({ _ in
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                 }))
             }
             
@@ -190,7 +190,7 @@ struct TabButtonsView: View {
                     .foregroundColor(.ui.cultured)
             }
             .simultaneousGesture(TapGesture().onEnded({ _ in
-                Haptics.shared.play(.medium)
+                Haptics.shared.play(.soft)
             }))
             
         }
@@ -216,7 +216,7 @@ struct ExpandButton: View {
                 expandArea.toggle()
             }
             
-            Haptics.shared.play(.medium)
+            Haptics.shared.play(.soft)
         } label: {
             Circle()
                 .strokeBorder(Color.ui.lighterLavBlue.opacity(0.5), lineWidth: 4)

@@ -163,7 +163,7 @@ struct PopulatedCaptionsView: View {
                                             Button {
                                                 self.mapCaptionConfigurations(element: element)
                                                 self.pushToCaptionView()
-                                                Haptics.shared.play(.medium)
+                                                Haptics.shared.play(.soft)
                                             } label: {
                                                 VStack(alignment: .leading) {
                                                     Text(element.prompt)

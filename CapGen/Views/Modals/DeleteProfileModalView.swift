@@ -49,7 +49,7 @@ struct DeleteProfileModalView: View {
                     .frame(width: 120, height: 120)
                 
                 Button {
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                     showView = false
                 } label: {
                     RoundedRectangle(cornerRadius: 16)
@@ -63,7 +63,7 @@ struct DeleteProfileModalView: View {
                 }
                 
                 Button {
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                     onDelete()
                     showView = false
                 } label: {

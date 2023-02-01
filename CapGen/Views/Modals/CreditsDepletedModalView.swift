@@ -46,7 +46,7 @@ struct CreditsDepletedModalView: View {
                 DisplayAdBtnView(title: "Collect Credits", isAdDone: $isAdDone)
                 
                 Button {
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                     
                     // Update data field in firestore
                     firestoreMan.setShowCreditDepletedModal(for: userId, to: false)
