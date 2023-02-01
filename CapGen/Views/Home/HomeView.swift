@@ -25,6 +25,7 @@ struct HomeView: View {
     @State var isAdLoading: Bool = false
     
     @FocusState private var isFocused: Bool
+    @ScaledMetric var platformScrollViewHeight: CGFloat = 75
     
     var body: some View {
         ZStack {
@@ -70,8 +71,10 @@ struct HomeView: View {
                         withAnimation {
                             scrollProxy.scrollTo(value, anchor: .center)
                         }
+                        
+                        Haptics.shared.play(.soft)
                     }
-                    .frame(height: 75)
+                    .frame(height: platformScrollViewHeight)
                     
                 }
                 

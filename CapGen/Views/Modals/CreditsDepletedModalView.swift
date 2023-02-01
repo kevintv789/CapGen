@@ -46,6 +46,8 @@ struct CreditsDepletedModalView: View {
                 DisplayAdBtnView(title: "Collect Credits", isAdDone: $isAdDone)
                 
                 Button {
+                    Haptics.shared.play(.medium)
+                    
                     // Update data field in firestore
                     firestoreMan.setShowCreditDepletedModal(for: userId, to: false)
                     
@@ -77,6 +79,13 @@ struct CreditsDepletedModalView: View {
             if (isAdDone) {
                 self.isViewPresented = false
                 self.router?.toLoadingView()
+            }
+        }
+        .onReceive(self.rewardedAd.$appError) { value in
+            if let error = value?.error {
+                if error == .genericError {
+                    self.router?.toGenericFallbackView()
+                }
             }
         }
     }

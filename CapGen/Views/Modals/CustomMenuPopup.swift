@@ -28,17 +28,20 @@ struct CustomMenuPopup: View {
     var body: some View {
         Menu {
             if (edit != nil) {
-                Button(action: { edit!() }) {
-                    Label("Edit", systemImage: "pencil")
-                }
+                Button(action: {
+                    Haptics.shared.play(.medium)
+                    edit!(
+                    ) }) {
+                        Label("Edit", systemImage: "pencil")
+                    }
             }
             
             if (copy != nil) {
-                Button(action: { copy!() }) {
+                Button(action: { copy!(); Haptics.shared.play(.medium) }) {
                     Label("Copy", systemImage: "doc.on.doc")
                 }
             }
-           
+            
             if (shareableData != nil) {
                 ShareLink(item: shareableData!.item, subject: Text(shareableData!.subject)) {
                     Label("Share", systemImage: "arrowshape.turn.up.right")
@@ -46,13 +49,13 @@ struct CustomMenuPopup: View {
             }
             
             if (delete != nil) {
-                Button(role: .destructive, action: { delete!() }) {
+                Button(role: .destructive, action: { delete!(); Haptics.shared.play(.medium) }) {
                     Label("Delete", systemImage: "trash")
                 }
             }
             
             if (reset != nil) {
-                Button(role: .destructive, action: { reset!() }) {
+                Button(role: .destructive, action: { reset!(); Haptics.shared.play(.medium) }) {
                     Label("Reset", systemImage: "arrow.clockwise")
                 }
             }
@@ -68,6 +71,8 @@ struct CustomMenuPopup: View {
             if (onMenuOpen != nil) {
                 onMenuOpen!()
             }
+            
+            Haptics.shared.play(.medium)
         }
     }
 }

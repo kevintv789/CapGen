@@ -55,6 +55,9 @@ struct CaptionView: View {
     var platform: String
     var onBackBtnClicked: (() -> Void)?
     
+    @ScaledMetric var animatedTextBorderWidth: CGFloat = 220
+    @ScaledMetric var animatedTextBorderHeight: CGFloat = 40
+    
     private func dynamicViewPop() {
         if (!self.isLoading) {
             if (onBackBtnClicked != nil) {
@@ -145,6 +148,7 @@ struct CaptionView: View {
                                 
                                 Button {
                                     self.showCaptionsGuideModal = true
+                                    Haptics.shared.play(.medium)
                                 } label: {
                                     // Display different settings for the captions
                                     CaptionSettingsView(prompt: mutableCaptionGroup?.prompt, tones: mutableCaptionGroup?.tones, includeEmojis: mutableCaptionGroup?.includeEmojis, includeHashtags: mutableCaptionGroup?.includeHashtags, captionLength: mutableCaptionGroup?.captionLength)
@@ -162,7 +166,7 @@ struct CaptionView: View {
                                             .foregroundColor(.ui.richBlack)
                                             .frame(width: SCREEN_WIDTH, alignment: .center)
                                     )
-                                    .frame(width: 220, height: 40)
+                                    .frame(width: animatedTextBorderWidth, height: animatedTextBorderHeight)
                             }
                             Spacer()
                             
@@ -173,6 +177,7 @@ struct CaptionView: View {
                                         self.captionSelected = caption
                                         self.isTextCopied = true
                                         UIPasteboard.general.string = String(caption)
+                                        Haptics.shared.play(.soft)
                                     }
                                 } label: {
                                     if index < 5 {
@@ -196,9 +201,11 @@ struct CaptionView: View {
                         
                         SubmitButtonGroupView(onSaveClick: {
                             saveCaptions()
+                            Haptics.shared.play(.medium)
                         }, onResetClick: {
                             dynamicViewPop()
-                        })
+                            Haptics.shared.play(.medium)
+                        }, isLoading: self.$isLoading)
                         .padding(.top, 15)
                         
                     }
@@ -317,6 +324,7 @@ struct EditableTitleView: View {
             
             Button {
                 isEditing.toggle()
+                Haptics.shared.play(.medium)
             } label: {
                 Image(systemName: "pencil")
                     .resizable()
@@ -397,6 +405,23 @@ struct SubmitButtonGroupView: View {
     var onSaveClick: () -> Void
     var onResetClick: () -> Void
     
+    @Binding var isLoading: Bool
+    
+    func displayBtnOverlay() -> some View {
+        if (self.isLoading) {
+            return AnyView(
+                LottieView(name: "btn_loader", loopMode: .loop, isAnimating: true)
+                    .frame(width: 100, height: 100)
+            )
+        } else {
+            return AnyView(
+                Text("Save")
+                .foregroundColor(.ui.cultured)
+                .font(.ui.title2)
+            )
+        }
+    }
+    
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
             Button {
@@ -406,13 +431,10 @@ struct SubmitButtonGroupView: View {
                     .fill(Color.ui.darkerPurple)
                     .frame(width: SCREEN_WIDTH * 0.85, height: 55)
                     .shadow(color: Color.ui.shadowGray, radius: 2, x: 3, y: 4)
-                    .overlay(
-                        Text("Save")
-                            .foregroundColor(.ui.cultured)
-                            .font(.ui.title2)
-                    )
+                    .overlay(displayBtnOverlay())
                 
             }
+            .disabled(self.isLoading)
             
             Button {
                 self.onResetClick()

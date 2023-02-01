@@ -77,7 +77,7 @@ struct ToneDescriptionView: View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
                 ForEach(Array(tones.enumerated()), id: \.element) { index, tone in
-                    HStack {
+                    HStack(spacing: 0) {
                         Text(tone.icon)
                             .font(.system(size: 30))
                             .padding(.leading, -2)
@@ -87,7 +87,7 @@ struct ToneDescriptionView: View {
                             .foregroundColor(.ui.richBlack)
                         
                         if (index < tones.count - 1) {
-                            Text("&")
+                            Text(" &")
                                 .font(.ui.title5)
                                 .foregroundColor(.ui.richBlack)
                         }
@@ -121,7 +121,7 @@ struct SettingsDescriptionView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            HStack(alignment: .center) {
+            HStack(alignment: .center, spacing: 3) {
                 Image(image)
                     .resizable()
                     .frame(width: 30 - widthOffset, height: 30)

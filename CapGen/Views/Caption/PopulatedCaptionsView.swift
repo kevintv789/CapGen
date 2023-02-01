@@ -163,7 +163,7 @@ struct PopulatedCaptionsView: View {
                                             Button {
                                                 self.mapCaptionConfigurations(element: element)
                                                 self.pushToCaptionView()
-                                                
+                                                Haptics.shared.play(.medium)
                                             } label: {
                                                 VStack(alignment: .leading) {
                                                     Text(element.prompt)
@@ -256,11 +256,17 @@ struct PopulatedCaptionsView: View {
 struct PopulatedCaptionsView_Previews: PreviewProvider {
     static var previews: some View {
         PopulatedCaptionsView()
+            .environmentObject(CaptionConfigsViewModel())
+            .environmentObject(CaptionEditViewModel())
         
         PopulatedCaptionsView()
+            .environmentObject(CaptionConfigsViewModel())
+            .environmentObject(CaptionEditViewModel())
             .previewDevice("iPhone 13 Pro Max")
         
         PopulatedCaptionsView()
+            .environmentObject(CaptionConfigsViewModel())
+            .environmentObject(CaptionEditViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
@@ -270,6 +276,10 @@ struct PlatformPillsBtnView: View {
     var title: String
     var isToggled: Bool
     var action: () -> Void
+    
+    @ScaledMetric var iconSize: CGFloat = 20
+    @ScaledMetric var pillHeight: CGFloat = 40
+    @ScaledMetric var pillWidth: CGFloat = SCREEN_WIDTH / 2.4
     
     var body: some View {
         Button {
@@ -283,12 +293,12 @@ struct PlatformPillsBtnView: View {
                     x: 1,
                     y: 2
                 )
-                .frame(width: SCREEN_WIDTH / 2.4, height: 40)
+                .frame(width: pillWidth, height: pillHeight)
                 .overlay(
                     HStack {
                         Image(title)
                             .resizable()
-                            .frame(width: 20, height: 20)
+                            .frame(width: iconSize, height: iconSize)
                         
                         
                         Text(title)
@@ -322,6 +332,8 @@ struct PlatformHeaderView: View {
                 withAnimation {
                     scrollProxy.scrollTo(value, anchor: .center)
                 }
+                
+                Haptics.shared.play(.soft)
             }
         }
     }

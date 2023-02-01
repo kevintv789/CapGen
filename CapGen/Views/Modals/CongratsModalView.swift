@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct CongratsModalView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
@@ -13,6 +14,8 @@ struct CongratsModalView: View {
     @Binding var showView: Bool
     
     let userManager = AuthManager.shared.userManager
+    
+    @ScaledMetric var scaledSize: CGFloat = 1
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -38,7 +41,7 @@ struct CongratsModalView: View {
                     .font(.ui.title3)
                 
                 LottieView(name: "coin_wallet_purple_lottie", loopMode: .loop, isAnimating: true)
-                    .frame(width: SCREEN_WIDTH / 2, height: 200)
+                    .frame(width: SCREEN_WIDTH / 2 * scaledSize, height: 200 * scaledSize)
                     .padding(-60)
                 
                 DisplayAdBtnView(btnLength: .short, title: "Collect More", isAdDone: .constant(nil))
@@ -48,6 +51,8 @@ struct CongratsModalView: View {
                         showView = false
                         firestoreMan.setShowCongratsModal(for: userManager.user?.id as? String ?? nil, to: false)
                     }
+                    
+                    Haptics.shared.play(.medium)
                 } label: {
                     Text("Don’t show again")
                         .foregroundColor(.ui.cadetBlueCrayola)
@@ -63,5 +68,8 @@ struct CongratsModalView: View {
 struct CongratsModalView_Previews: PreviewProvider {
     static var previews: some View {
         CongratsModalView(showView: .constant(true))
+            .environmentObject(GoogleRewardedAds())
+            .environmentObject(FirestoreManager())
+            .environmentObject(NavigationStackCompat())
     }
 }
