@@ -16,6 +16,8 @@ struct CreditCounterView: View {
             withAnimation {
                 self.showModal = true
             }
+            
+            Haptics.shared.play(.medium)
         } label : {
             HStack(alignment: .center, spacing: 0) {
                 Text("\(credits > 100 ? "100+" : "\(credits)")")

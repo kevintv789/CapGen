@@ -43,6 +43,8 @@ struct DisplayAdBtnView: View {
     
     var body: some View {
         Button {
+            Haptics.shared.play(.medium)
+            
             // load new ads
             self.isLoading = true
             self.rewardedAd.loadAd(adUnitId: firestoreMan.admobUnitId) { isLoadDone in

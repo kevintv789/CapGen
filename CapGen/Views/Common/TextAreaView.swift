@@ -10,7 +10,7 @@ import SwiftUI
 extension TextEditor {
     func customStyle() -> some View {
         self
-            .font(.ui.graphikRegular)
+            .font(.ui.headlineRegular)
             .foregroundColor(Color.ui.richBlack)
             .padding(14)
             .lineSpacing(6)
@@ -69,10 +69,12 @@ struct TextAreaView: View {
                     .submitLabel(.done)
                 
                 Text("\(text.count)/\(charLimit)")
-                    .font(.ui.graphikRegular)
+                    .font(.ui.headlineRegular)
                     .foregroundColor(.ui.cadetBlueCrayola)
-                    .position(x: geo.size.width / 1.12, y: geo.size.height / 1.05)
-                
+                    .frame(width: geo.size.width * 0.95, height: geo.size.height * 0.95, alignment: .bottomTrailing)
+            }
+            .onTapGesture {
+                Haptics.shared.play(.soft)
             }
         }
     }

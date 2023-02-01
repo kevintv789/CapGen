@@ -79,6 +79,8 @@ struct BottomAreaView: View {
                                 
                                 // Play/Submit button
                                 Button {
+                                    Haptics.shared.play(.medium)
+                                    
                                     guard let userManager = AuthManager.shared.userManager.user else { return }
                                     mapAllRequests()
                                     
@@ -136,6 +138,13 @@ struct BottomAreaView: View {
         .onAppear() {
             self.router = Router(navStack: self.navStack)
         }
+        .onReceive(self.rewardedAd.$appError) { value in
+            if let error = value?.error {
+                if error == .genericError {
+                    self.router?.toGenericFallbackView()
+                }
+            }
+        }
         .sheet(isPresented: $showCreditsDepletedBottomSheet) {
             CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet)
                 .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
@@ -146,6 +155,7 @@ struct BottomAreaView: View {
 
 struct TabButtonsView: View {
     @State var hasCaptions: Bool = false
+    @ScaledMetric var scaledSize: CGFloat = 1
     
     var body: some View {
         HStack(alignment: .center) {
@@ -153,14 +163,20 @@ struct TabButtonsView: View {
                 PushView(destination: PopulatedCaptionsView()) {
                     Image("saved-captions-tab-icon")
                         .resizable()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 40 * scaledSize, height: 40 * scaledSize)
                 }
+                .simultaneousGesture(TapGesture().onEnded({ _ in
+                    Haptics.shared.play(.medium)
+                }))
             } else {
                 PushView(destination: EmptyCaptionsView()) {
                     Image("saved-captions-tab-icon")
                         .resizable()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 40 * scaledSize, height: 40 * scaledSize)
                 }
+                .simultaneousGesture(TapGesture().onEnded({ _ in
+                    Haptics.shared.play(.medium)
+                }))
             }
             
             
@@ -170,9 +186,13 @@ struct TabButtonsView: View {
             PushView(destination: ProfileView()) {
                 Image("profile-tab-icon")
                     .resizable()
-                    .frame(width: 43, height: 43)
+                    .frame(width: 43 * scaledSize, height: 43 * scaledSize)
                     .foregroundColor(.ui.cultured)
             }
+            .simultaneousGesture(TapGesture().onEnded({ _ in
+                Haptics.shared.play(.medium)
+            }))
+            
         }
         .onReceive(AuthManager.shared.userManager.$user, perform: { user in
             if let cg = user?.captionsGroup, !cg.isEmpty {
@@ -186,11 +206,17 @@ struct ExpandButton: View {
     @Binding var expandArea: Bool
     @State var showText: Bool = false
     
+    @ScaledMetric var buttonSize: CGFloat = 80
+    @ScaledMetric var chevronSizeExpanded: CGFloat = 40
+    @ScaledMetric var chevronSize: CGFloat = 30
+    
     var body: some View {
         Button {
             withAnimation(.interpolatingSpring(stiffness: 200, damping: 300)) {
                 expandArea.toggle()
             }
+            
+            Haptics.shared.play(.medium)
         } label: {
             Circle()
                 .strokeBorder(Color.ui.lighterLavBlue.opacity(0.5), lineWidth: 4)
@@ -207,21 +233,21 @@ struct ExpandButton: View {
                     VStack(spacing: 3) {
                         Image("chevron-up-white")
                             .resizable()
-                            .frame(width: expandArea ? 40 : 30, height: expandArea ? 40 : 30)
+                            .frame(width: expandArea ? chevronSizeExpanded : chevronSize, height: expandArea ? chevronSizeExpanded : chevronSize)
                             .rotationEffect(.degrees(expandArea ? -180 : 0))
                         
                         
                         if (showText) {
                             Text("Next")
                                 .foregroundColor(.ui.cultured)
-                                .font(.ui.graphikBoldMed)
+                                .font(.ui.headlineBold)
                         }
                         
                     }
                         .offset(y: expandArea ? 0 : -5)
                     
                 )
-                .frame(width: 80, height: 80)
+                .frame(width: buttonSize, height: buttonSize)
             
         }
         .animation(.interpolatingSpring(stiffness: 200, damping: 300), value: expandArea)
@@ -250,6 +276,8 @@ struct ToneSelectionSection: View {
                     HStack(spacing: 15) {
                         ForEach(rows) { tone in
                             Button {
+                                Haptics.shared.play(.soft)
+                                
                                 // Don't select the same tone again
                                 if (!tonesSelected.contains(tone)) {
                                     tonesSelected.append(tone)
@@ -306,6 +334,7 @@ struct EmojisAndHashtagSection: View {
                 
                 HStack(spacing: 15) {
                     Button {
+                        Haptics.shared.play(.soft)
                         includeEmoji = false
                     } label: {
                         RectangleCard(title: "", description: nil, isSelected: !includeEmoji)
@@ -318,6 +347,7 @@ struct EmojisAndHashtagSection: View {
                     }
                     
                     Button {
+                        Haptics.shared.play(.soft)
                         includeEmoji = true
                     } label: {
                         RectangleCard(title: "", description: nil, isSelected: includeEmoji)
@@ -341,6 +371,7 @@ struct EmojisAndHashtagSection: View {
                 
                 HStack(spacing: 15) {
                     Button {
+                        Haptics.shared.play(.soft)
                         includeHashtag = false
                     } label: {
                         RectangleCard(title: "", description: nil, isSelected: !includeHashtag)
@@ -353,6 +384,7 @@ struct EmojisAndHashtagSection: View {
                     }
                     
                     Button {
+                        Haptics.shared.play(.soft)
                         includeHashtag = true
                     } label: {
                         RectangleCard(title: "", description: nil, isSelected: includeHashtag)
@@ -393,6 +425,7 @@ struct LengthSelectionSection: View {
                 self.selectedValue = Int(value)
                 self.lengthValue = captionLengths[Int(value)].value
                 self.captionLengthType = captionLengths[Int(value)].type
+                Haptics.shared.play(.soft)
             }
             .overlay(
                 GeometryReader { geo in

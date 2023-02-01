@@ -24,6 +24,8 @@ struct ProfileView: View {
     @EnvironmentObject private var navStack: NavigationStackCompat
     @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
     
+    @ScaledMetric var scaledSize: CGFloat = 1
+    
     @State var router: Router? = nil
     
     let envName: String = Bundle.main.infoDictionary?["ENV"] as! String
@@ -92,7 +94,7 @@ struct ProfileView: View {
                                 }
                                 
                             }
-                            .frame(height: 150)
+                            .frame(height: 150 * scaledSize)
                         }
                         
                     }
@@ -137,10 +139,16 @@ struct ProfileView_Previews: PreviewProvider {
         ProfileView()
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
+            .environmentObject(CaptionConfigsViewModel())
+            .environmentObject(NavigationStackCompat())
+            .environmentObject(FirestoreManager())
         
         ProfileView()
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
+            .environmentObject(CaptionConfigsViewModel())
+            .environmentObject(NavigationStackCompat())
+            .environmentObject(FirestoreManager())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
         
@@ -149,6 +157,8 @@ struct ProfileView_Previews: PreviewProvider {
 
 struct GreetingsTextView: View {
     @State var initialText: String = ""
+    
+    @ScaledMetric var scaledSize: CGFloat = 1
     
     func createGreeting() -> String {
         let hour: Int = Calendar.current.component(.hour, from: Date())
@@ -183,7 +193,7 @@ struct GreetingsTextView: View {
             AnimatedTextView(initialText: $initialText, finalText: self.createGreeting(), isRepeat: false, timeInterval: 10, typingSpeed: 0.02)
                 .font(.ui.headline)
                 .foregroundColor(.ui.richBlack)
-                .frame(width: SCREEN_WIDTH, height: 50, alignment: .center)
+                .frame(width: SCREEN_WIDTH, height: 80 * scaledSize, alignment: .center)
                 .multilineTextAlignment(.center)
                 .lineSpacing(10)
         }
@@ -197,16 +207,19 @@ struct CreditAndCaptionsAnimatedView: View {
     @State var animateSpeechBubble: Bool = false
     @State var creditAmount: Int = 0
     
+    @ScaledMetric var scaledSize: CGFloat = 1
+    
     var body: some View {
         HStack(spacing: 50) {
             Button {
                 if (!animateCoin) {
                     animateCoin = true
                 }
+                Haptics.shared.play(.soft)
             } label: {
                 VStack {
                     LottieView(name: "gold_coin_lottie", loopMode: .playOnce, isAnimating: animateCoin)
-                        .frame(width: 100, height: 100)
+                        .frame(width: 100 * scaledSize, height: 100 * scaledSize)
                     
                     Text("\(creditAmount <= 1000000 ? "\(creditAmount)" : "1000000+")\n\(creditAmount > 1 ? "credits" : "credit") left")
                         .customProfileHeadline()
@@ -218,10 +231,11 @@ struct CreditAndCaptionsAnimatedView: View {
                 if (!animateSpeechBubble) {
                     animateSpeechBubble = true
                 }
+                Haptics.shared.play(.soft)
             } label: {
                 VStack {
                     LottieView(name: "speech_bubble", loopMode: .playOnce, isAnimating: animateSpeechBubble)
-                        .frame(width: 90, height: 100)
+                        .frame(width: 90 * scaledSize, height: 100 * scaledSize)
                     
                     Text("\(firestoreMan.getCaptionsCount(using: authManager.userManager.user?.captionsGroup ?? []))\ncaptions saved")
                         .customProfileHeadline()
@@ -259,6 +273,8 @@ struct OptionButtonView: View {
     var isButton: Bool = true
     var action: (() -> Void)?
     
+    @ScaledMetric var scaledSize: CGFloat = 1
+    
     var body: some View {
         if (isButton) {
             Button {
@@ -290,7 +306,7 @@ struct OptionButtonView: View {
                         }      .offset(x: 3, y: subTitle != nil ? 0 : 5)
                     )
             }
-            .frame(height: subTitle != nil ? 100 : 50)
+            .frame(height: subTitle != nil ? 100 * scaledSize : 50 * scaledSize)
             } else {
                 Rectangle()
                     .fill(Color.ui.cultured)
@@ -315,7 +331,7 @@ struct OptionButtonView: View {
                             
                         }      .offset(x: 3, y: subTitle != nil ? 0 : 5)
                     )
-                    .frame(height: subTitle != nil ? 100 : 50)
+                    .frame(height: subTitle != nil ? 100 * scaledSize : 50 * scaledSize)
             }
     }
 }
@@ -335,6 +351,7 @@ struct ContentSectionView: View {
             
             OptionButtonView(title: "📝 Saved captions", subTitle: "Easily view, export, copy and edit your generated captions.") {
                 self.navStack.push(PopulatedCaptionsView())
+                Haptics.shared.play(.medium)
             }
             
             ZStack {
@@ -346,6 +363,7 @@ struct ContentSectionView: View {
             
             OptionButtonView(title: "🎁 Get more credits", subTitle: "Unlock endless 🔥 captions with CapGen - Watch ads, earn credits ⭐, create more 🎨") {
                 showBottomSheet = true
+                Haptics.shared.play(.medium)
             }
             .sheet(isPresented: $showBottomSheet) {
                 RewardedAdView(isViewPresented: $showBottomSheet, showCongratsModal: $showCongratsModal)
@@ -411,6 +429,7 @@ struct ConnectSectionView: View {
             
             OptionButtonView(title: "💌 Send us a message", subTitle: "We’re here to help! Need assistance or have feedback? Let us know, we'd love to hear from you.") {
                 supportEmailModel.send(openURL: openURL)
+                Haptics.shared.play(.medium)
             }
             
         }
@@ -435,7 +454,6 @@ struct AccountManagementSectionView: View {
                         await self.firestoreMan.unbindListener()
                         AuthManager.shared.logout()
                     }
-                   
                 }
             }
            
@@ -449,6 +467,7 @@ struct AccountManagementSectionView: View {
             
             OptionButtonView(title: "🔨 Delete profile", subTitle: "Deleting your profile will permanently remove all credits and captions. This action is irreversible, please proceed with caution.", dangerField: true) {
                 showDeleteProfileModal = true
+                Haptics.shared.play(.medium)
             }
         }
     }

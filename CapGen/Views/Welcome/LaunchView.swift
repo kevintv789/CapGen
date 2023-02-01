@@ -82,6 +82,7 @@ struct SignInWithAppleView: View {
         Button {
             AuthManager.shared.appleAuthManager.setDelegate()
             AuthManager.shared.appleAuthManager.signIn()
+            Haptics.shared.play(.medium)
         } label: {
             Circle()
                 .fill(Color.ui.richBlack)
@@ -101,6 +102,7 @@ struct FacebookSignInView: View {
     var body: some View {
         Button {
             AuthManager.shared.fbAuthManager.login()
+            Haptics.shared.play(.medium)
         } label: {
             Image("facebook-circle-icon")
                 .resizable()
@@ -117,6 +119,7 @@ struct GoogleSignInView: View {
         Button {
             // Need to reference google auth inside authManager to get the logged in status of googleAuthMan
             authManager.googleAuthMan.signIn()
+            Haptics.shared.play(.medium)
         } label: {
             Circle()
                 .strokeBorder(Color.ui.cadetBlueCrayola, lineWidth: 1)
