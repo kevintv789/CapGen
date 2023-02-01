@@ -223,7 +223,7 @@ struct CreditAndCaptionsAnimatedView: View {
                     LottieView(name: "speech_bubble", loopMode: .playOnce, isAnimating: animateSpeechBubble)
                         .frame(width: 90, height: 100)
                     
-                    Text("\(firestoreMan.getCaptionsCount(using: authManager.userManager.user?.captionsGroup ?? []))\ncaptions created")
+                    Text("\(firestoreMan.getCaptionsCount(using: authManager.userManager.user?.captionsGroup ?? []))\ncaptions saved")
                         .customProfileHeadline()
                 }
             }
