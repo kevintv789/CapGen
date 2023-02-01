@@ -59,20 +59,20 @@ struct HomeView: View {
                                     
                                 } label: {
                                     Pill(title: platform.title, isToggled: platform.title == self.captionConfigs.platformSelected)
+                                    
                                 }
+                                .id(platform.title)
                             }
-                        }
-                        .onTapGesture {
-                            hideKeyboard()
                         }
                         .padding()
                     }
-                    .frame(height: 75)
                     .onChange(of: self.captionConfigs.platformSelected) { value in
                         withAnimation {
                             scrollProxy.scrollTo(value, anchor: .center)
                         }
                     }
+                    .frame(height: 75)
+                    
                 }
                 
                 // Create a Text Area view that is the main component for typing input

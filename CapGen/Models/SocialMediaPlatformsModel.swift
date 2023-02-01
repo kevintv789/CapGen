@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SocialMediaPlatformsModel: Codable, Identifiable {
+struct SocialMediaPlatformsModel: Codable, Identifiable, Hashable {
     let id: Int
     let title: String
     let characterLimit: Int
