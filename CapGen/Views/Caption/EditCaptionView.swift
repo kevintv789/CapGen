@@ -132,7 +132,7 @@ struct EditCaptionView: View {
             ToolbarItemGroup(placement: .keyboard) {
                 Button {
                     self.captionEditVm.editableText.append("#")
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                 } label: {
                     Image("\(colorScheme == .dark ? "hashtag-white" : "hashtag-black")")
                         .resizable()
@@ -146,11 +146,11 @@ struct EditCaptionView: View {
                     // On copy
                     self.isTextCopied = true
                     UIPasteboard.general.string = String(self.captionEditVm.editableText)
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                 } onPlatformClick: {
                     // On platform
                     self.openLink()
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                 }
 
                 VerticalDivider(color: Color.primary)
@@ -158,7 +158,7 @@ struct EditCaptionView: View {
                 
                 Button {
                     hideKeyboard()
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                 } label: {
                     Image(systemName: "chevron.down")
                         .foregroundColor(Color.primary)

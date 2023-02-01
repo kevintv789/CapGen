@@ -47,6 +47,7 @@ struct CaptionView: View {
     @State private var isTextCopied: Bool = false
     @State var saveError: Bool = false
     @State var showCaptionsGuideModal: Bool = false
+    @State var isEditingTitle: Bool = false
     
     // Variables below are specifically for going through saved captions screen
     @State var mutableCaptionGroup: AIRequest?
@@ -123,6 +124,7 @@ struct CaptionView: View {
         ZStack(alignment: .leading) {
             Color.ui.cultured.ignoresSafeArea()
             Color.ui.lighterLavBlue.ignoresSafeArea().opacity(0.5)
+               
             
             VStack(alignment: .leading) {
                 BackArrowView() {
@@ -133,7 +135,7 @@ struct CaptionView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 5) {
                         
-                        EditableTitleView(isError: $saveError)
+                        EditableTitleView(isError: $saveError, isEditing: self.$isEditingTitle)
                             .padding(.bottom, 15)
                         
                         VStack(alignment: .leading, spacing: 5) {
@@ -148,7 +150,7 @@ struct CaptionView: View {
                                 
                                 Button {
                                     self.showCaptionsGuideModal = true
-                                    Haptics.shared.play(.medium)
+                                    Haptics.shared.play(.soft)
                                 } label: {
                                     // Display different settings for the captions
                                     CaptionSettingsView(prompt: mutableCaptionGroup?.prompt, tones: mutableCaptionGroup?.tones, includeEmojis: mutableCaptionGroup?.includeEmojis, includeHashtags: mutableCaptionGroup?.includeHashtags, captionLength: mutableCaptionGroup?.captionLength)
@@ -196,15 +198,18 @@ struct CaptionView: View {
                                 }
                             }
                         }
+                        .simultaneousGesture(TapGesture().onEnded({ _ in
+                            self.isEditingTitle = false
+                        }))
                         
                         Spacer()
                         
                         SubmitButtonGroupView(onSaveClick: {
                             saveCaptions()
-                            Haptics.shared.play(.medium)
+                            Haptics.shared.play(.soft)
                         }, onResetClick: {
                             dynamicViewPop()
-                            Haptics.shared.play(.medium)
+                            Haptics.shared.play(.soft)
                         }, isLoading: self.$isLoading)
                         .padding(.top, 15)
                         
@@ -284,9 +289,10 @@ struct CaptionView_Previews: PreviewProvider {
 
 struct EditableTitleView: View {
     @EnvironmentObject var captionEditVm: CaptionEditViewModel
+    @FocusState var isFocusOn: Bool
     @Binding var isError: Bool
     
-    @State var isEditing: Bool = false
+    @Binding var isEditing: Bool
     
     var body: some View {
         HStack {
@@ -304,11 +310,17 @@ struct EditableTitleView: View {
                     .foregroundColor(isError ? Color.red : Color.ui.shadowGray)
                     .overlay(
                         TextField("", text: self.$captionEditVm.captionGroupTitle)
+                            .focused($isFocusOn)
                             .font(.ui.title)
                             .foregroundColor(.ui.shadowGray)
                             .minimumScaleFactor(0.5)
                             .frame(width: SCREEN_WIDTH * 0.8, alignment: .leading)
                             .lineLimit(1)
+                            .submitLabel(.done)
+                            .onSubmit {
+                                isEditing.toggle()
+                                isFocusOn.toggle()
+                            }
                             .onChange(of: self.captionEditVm.captionGroupTitle, perform: { title in
                                 if (title.isEmpty || title == " ") {
                                     isError = true
@@ -324,14 +336,14 @@ struct EditableTitleView: View {
             
             Button {
                 isEditing.toggle()
-                Haptics.shared.play(.medium)
+                isFocusOn.toggle()
+                Haptics.shared.play(.soft)
             } label: {
                 Image(systemName: "pencil")
                     .resizable()
                     .frame(width: 20, height: 20)
                     .foregroundColor(.ui.richBlack)
             }
-            
         }
         
     }

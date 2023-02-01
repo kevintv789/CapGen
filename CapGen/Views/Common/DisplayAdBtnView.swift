@@ -43,7 +43,7 @@ struct DisplayAdBtnView: View {
     
     var body: some View {
         Button {
-            Haptics.shared.play(.medium)
+            Haptics.shared.play(.soft)
             
             // load new ads
             self.isLoading = true

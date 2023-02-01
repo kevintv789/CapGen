@@ -351,7 +351,7 @@ struct ContentSectionView: View {
             
             OptionButtonView(title: "📝 Saved captions", subTitle: "Easily view, export, copy and edit your generated captions.") {
                 self.navStack.push(PopulatedCaptionsView())
-                Haptics.shared.play(.medium)
+                Haptics.shared.play(.soft)
             }
             
             ZStack {
@@ -363,7 +363,7 @@ struct ContentSectionView: View {
             
             OptionButtonView(title: "🎁 Get more credits", subTitle: "Unlock endless 🔥 captions with CapGen - Watch ads, earn credits ⭐, create more 🎨") {
                 showBottomSheet = true
-                Haptics.shared.play(.medium)
+                Haptics.shared.play(.soft)
             }
             .sheet(isPresented: $showBottomSheet) {
                 RewardedAdView(isViewPresented: $showBottomSheet, showCongratsModal: $showCongratsModal)
@@ -429,7 +429,7 @@ struct ConnectSectionView: View {
             
             OptionButtonView(title: "💌 Send us a message", subTitle: "We’re here to help! Need assistance or have feedback? Let us know, we'd love to hear from you.") {
                 supportEmailModel.send(openURL: openURL)
-                Haptics.shared.play(.medium)
+                Haptics.shared.play(.soft)
             }
             
         }
@@ -467,7 +467,7 @@ struct AccountManagementSectionView: View {
             
             OptionButtonView(title: "🔨 Delete profile", subTitle: "Deleting your profile will permanently remove all credits and captions. This action is irreversible, please proceed with caution.", dangerField: true) {
                 showDeleteProfileModal = true
-                Haptics.shared.play(.medium)
+                Haptics.shared.play(.soft)
             }
         }
     }

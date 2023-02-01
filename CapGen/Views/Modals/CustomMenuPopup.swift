@@ -29,7 +29,7 @@ struct CustomMenuPopup: View {
         Menu {
             if (edit != nil) {
                 Button(action: {
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                     edit!(
                     ) }) {
                         Label("Edit", systemImage: "pencil")
@@ -37,7 +37,7 @@ struct CustomMenuPopup: View {
             }
             
             if (copy != nil) {
-                Button(action: { copy!(); Haptics.shared.play(.medium) }) {
+                Button(action: { copy!(); Haptics.shared.play(.soft) }) {
                     Label("Copy", systemImage: "doc.on.doc")
                 }
             }
@@ -49,13 +49,13 @@ struct CustomMenuPopup: View {
             }
             
             if (delete != nil) {
-                Button(role: .destructive, action: { delete!(); Haptics.shared.play(.medium) }) {
+                Button(role: .destructive, action: { delete!(); Haptics.shared.play(.soft) }) {
                     Label("Delete", systemImage: "trash")
                 }
             }
             
             if (reset != nil) {
-                Button(role: .destructive, action: { reset!(); Haptics.shared.play(.medium) }) {
+                Button(role: .destructive, action: { reset!(); Haptics.shared.play(.soft) }) {
                     Label("Reset", systemImage: "arrow.clockwise")
                 }
             }
@@ -72,7 +72,7 @@ struct CustomMenuPopup: View {
                 onMenuOpen!()
             }
             
-            Haptics.shared.play(.medium)
+            Haptics.shared.play(.soft)
         }
     }
 }

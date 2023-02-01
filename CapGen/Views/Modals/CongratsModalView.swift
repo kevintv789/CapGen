@@ -52,7 +52,7 @@ struct CongratsModalView: View {
                         firestoreMan.setShowCongratsModal(for: userManager.user?.id as? String ?? nil, to: false)
                     }
                     
-                    Haptics.shared.play(.medium)
+                    Haptics.shared.play(.soft)
                 } label: {
                     Text("Don’t show again")
                         .foregroundColor(.ui.cadetBlueCrayola)
