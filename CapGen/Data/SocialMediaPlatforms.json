@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "title": "Instagram",
+        "characterLimit": 2200,
+        "hashtagLimit": 30,
+        "link": "instagram://",
+        "websiteLink": "https://instagram.com"
+    },
+    {
+        "id": 2,
+        "title": "Twitter",
+        "characterLimit": 280,
+        "hashtagLimit": 30,
+        "link": "twitter://",
+        "websiteLink": "https://twitter.com"
+    },
+    {
+        "id": 3,
+        "title": "TikTok",
+        "characterLimit": 2200,
+        "hashtagLimit": 0,
+        "link": "tiktok://",
+        "websiteLink": "https://www.tiktok.com"
+    },
+    {
+        "id": 4,
+        "title": "Facebook",
+        "characterLimit": 63206,
+        "hashtagLimit": 0,
+        "link": "fb://",
+        "websiteLink": "https://facebook.com"
+    },
+    {
+        "id": 5,
+        "title": "Pinterest",
+        "characterLimit": 500,
+        "hashtagLimit": 20,
+        "link": "pinterest://",
+        "websiteLink": "https://pinterest.com"
+    },
+    {
+        "id": 6,
+        "title": "YouTube",
+        "characterLimit": 5000,
+        "hashtagLimit": 0,
+        "link": "youtube://",
+        "websiteLink": "https://youtube.com"
+    },
+    {
+        "id": 7,
+        "title": "Reddit",
+        "characterLimit": 0,
+        "hashtagLimit": 0,
+        "link": "reddit://",
+        "websiteLink": "https://reddit.com"
+    },
+    {
+        "id": 8,
+        "title": "LinkedIn",
+        "characterLimit": 3000,
+        "hashtagLimit": 0,
+        "link": "linkedin://",
+        "websiteLink": "https://linkedin.com"
+    }
+]

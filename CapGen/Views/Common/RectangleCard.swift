@@ -18,7 +18,7 @@ struct RectangleCard: View {
                 .stroke(Color.ui.cultured, lineWidth: 3)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(isSelected ? Color.ui.middleYellowRed : Color.ui.cultured)
+                        .fill(isSelected ? Color.ui.middleBluePurple : Color.ui.cultured)
                 )
                 .overlay(
                     VStack(alignment: .leading) {

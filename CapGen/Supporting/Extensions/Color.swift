@@ -24,5 +24,8 @@ extension Color {
         let lightOldPaper = Color("Light Old Paper")
         let lighterLavBlue = Color("Lighter Lavender Blue")
         let shadowGray = Color("Shadow Gray")
+        let dangerRed = Color("Danger Red")
+        let orangeWeb = Color("Orange Web")
+        let darkerPurple = Color("Darker Purple")
     }
 }

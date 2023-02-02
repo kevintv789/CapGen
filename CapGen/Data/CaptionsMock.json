@@ -1,0 +1,34 @@
+[
+    {
+        "prompt": "",
+        "platform": "",
+        "tone": "",
+        "includeEmojis": false,
+        "includeHashtags": false,
+        "captionLength": "",
+        "dateCreated": "",
+        "title": "",
+        captions: [
+            {
+                "id": "",
+                "description": ""
+            },
+            {
+                "id": "",
+                "description": ""
+            },
+            {
+                "id": "",
+                "description": ""
+            },
+            {
+                "id": "",
+                "description": ""
+            },
+            {
+                "id": "",
+                "description": ""
+            }
+        ]
+    }
+]
