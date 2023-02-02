@@ -83,13 +83,10 @@ struct SnappableSliderView: UIViewRepresentable {
             for: .valueChanged
         )
         
-<<<<<<< HEAD
         let longPress = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleTap(_:)))
         longPress.minimumPressDuration = 0
         slider.addGestureRecognizer(longPress)
         
-=======
->>>>>>> main
         return slider
     }
     
