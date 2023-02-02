@@ -41,6 +41,7 @@ struct SnappableSliderView: UIViewRepresentable {
                 self.callback(Float(actualValue))
             }
         }
+<<<<<<< HEAD
         
         @objc func handleTap(_ sender: UIGestureRecognizer) {
             let location = sender.location(in: nil)
@@ -59,6 +60,8 @@ struct SnappableSliderView: UIViewRepresentable {
                 }
             }
         }
+=======
+>>>>>>> main
     }
     
     // Initialize coordinator
@@ -83,10 +86,13 @@ struct SnappableSliderView: UIViewRepresentable {
             for: .valueChanged
         )
         
+<<<<<<< HEAD
         let longPress = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleTap(_:)))
         longPress.minimumPressDuration = 0
         slider.addGestureRecognizer(longPress)
         
+=======
+>>>>>>> main
         return slider
     }
     
