@@ -41,7 +41,6 @@ struct SnappableSliderView: UIViewRepresentable {
                 self.callback(Float(actualValue))
             }
         }
-<<<<<<< HEAD
         
         @objc func handleTap(_ sender: UIGestureRecognizer) {
             let location = sender.location(in: nil)
@@ -60,8 +59,6 @@ struct SnappableSliderView: UIViewRepresentable {
                 }
             }
         }
-=======
->>>>>>> main
     }
     
     // Initialize coordinator
