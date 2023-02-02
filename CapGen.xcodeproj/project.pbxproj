@@ -90,6 +90,71 @@
 		D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
 		D4056E762968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
 		D4056E772968E94300D3894D /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E742968E94300D3894D /* FirestoreManager.swift */; };
+		D4056E79296E2C1700D3894D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E78296E2C1700D3894D /* String.swift */; };
+		D4056E7C296F0C7000D3894D /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E7B296F0C7000D3894D /* Lottie */; };
+		D4056E81296F0CB900D3894D /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E80296F0CB900D3894D /* LottieView.swift */; };
+		D4056E83296F867D00D3894D /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E82296F867D00D3894D /* LaunchView.swift */; };
+		D4056E85296F868800D3894D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E84296F868800D3894D /* HomeView.swift */; };
+		D4056E87296F87F700D3894D /* robot_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056E86296F87F700D3894D /* robot_lottie.json */; };
+		D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E8B29708D4200D3894D /* AnimatedTextView.swift */; };
+		D4056E972970F33E00D3894D /* SignInWithAppleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E962970F33E00D3894D /* SignInWithAppleDelegate.swift */; };
+		D4056E992971EB9600D3894D /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E982971EB9600D3894D /* AuthManager.swift */; };
+		D4056E9B2971EF6F00D3894D /* FBAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E9A2971EF6F00D3894D /* FBAuthManager.swift */; };
+		D4056E9E2971FCC400D3894D /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E9D2971FCC400D3894D /* GoogleSignIn */; };
+		D4056EA02971FCC400D3894D /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D4056E9F2971FCC400D3894D /* GoogleSignInSwift */; };
+		D4056EA22971FD6200D3894D /* GoogleAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */; };
+		D4056EA829721BC300D3894D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA729721BC300D3894D /* ProfileView.swift */; };
+		D4056EAA29721DA800D3894D /* EmptyCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EA929721DA800D3894D /* EmptyCaptionsView.swift */; };
+		D4056EAC2972297000D3894D /* robot_plain_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EAB2972297000D3894D /* robot_plain_lottie.json */; };
+		D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EAD2972716D00D3894D /* BackArrowView.swift */; };
+		D4056EB02972872600D3894D /* speech_bubble.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EAF2972872500D3894D /* speech_bubble.json */; };
+		D4056EB629728E8D00D3894D /* gold_coin_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EB529728E8C00D3894D /* gold_coin_lottie.json */; };
+		D4056EB829736F6E00D3894D /* GoogleRewardedAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EB729736F6E00D3894D /* GoogleRewardedAds.swift */; };
+		D4056EBA297373E400D3894D /* RewardedAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EB9297373E400D3894D /* RewardedAdView.swift */; };
+		D4056EBD2974931D00D3894D /* coin_pile_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EBB2974931D00D3894D /* coin_pile_lottie.json */; };
+		D4056EBE2974931D00D3894D /* coin_wallet_purple_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EBC2974931D00D3894D /* coin_wallet_purple_lottie.json */; };
+		D4056EC02974AF6D00D3894D /* CongratsModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EBF2974AF6D00D3894D /* CongratsModalView.swift */; };
+		D4056EC229751ACA00D3894D /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC129751ACA00D3894D /* UserModel.swift */; };
+		D4056EC429751BD200D3894D /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC329751BD200D3894D /* UserManager.swift */; };
+		D4056EC62977460200D3894D /* CreditCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC52977460200D3894D /* CreditCounterView.swift */; };
+		D4056EC829775B7D00D3894D /* piggy_bank_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EC729775B7C00D3894D /* piggy_bank_lottie.json */; };
+		D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EC929778FB700D3894D /* RefillModalView.swift */; };
+		D4056ECD297796B900D3894D /* CreditsDepletedModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056ECC297796B900D3894D /* CreditsDepletedModalView.swift */; };
+		D4056ECF2978735A00D3894D /* btn_loader.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056ECE2978735A00D3894D /* btn_loader.json */; };
+		D4056ED12978750D00D3894D /* DisplayAdBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056ED02978750D00D3894D /* DisplayAdBtnView.swift */; };
+		D4056ED329788FAF00D3894D /* OverlayedLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056ED229788FAF00D3894D /* OverlayedLoaderView.swift */; };
+		D4056ED529788FCA00D3894D /* lightbulb_loader_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */; };
+		D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EDB2978A06900D3894D /* space_man_empty.json */; };
+		D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */; };
+		D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */; };
+		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
+		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
+		D4C3E485298087CE00C2847A /* crane_hand_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E484298087CE00C2847A /* crane_hand_lottie.json */; };
+		D4C3E4872980883D00C2847A /* DeleteModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4862980883D00C2847A /* DeleteModalView.swift */; };
+		D4C3E48A29819C6500C2847A /* CaptionsGroupMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48929819C6500C2847A /* CaptionsGroupMock.swift */; };
+		D4C3E48C2981C10B00C2847A /* SocialMediaPlatforms.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E48B2981C10B00C2847A /* SocialMediaPlatforms.json */; };
+		D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48D2981C24500C2847A /* SocialMediaPlatformsModel.swift */; };
+		D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */; };
+		D4C3E4922982105300C2847A /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4912982105300C2847A /* Notifications.swift */; };
+		D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E493298343B500C2847A /* FloatingNotificationView.swift */; };
+		D4C3E496298437B600C2847A /* ShareableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E495298437B600C2847A /* ShareableData.swift */; };
+		D4C3E49829844F7400C2847A /* SupportEmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E49729844F7400C2847A /* SupportEmailModel.swift */; };
+		D4C3E49A298470FB00C2847A /* sad_emoji_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E499298470FB00C2847A /* sad_emoji_lottie.json */; };
+		D4C3E49C2984710E00C2847A /* DeleteProfileModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */; };
+		D4C3E49E2984C02D00C2847A /* AppStoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E49D2984C02D00C2847A /* AppStoreModel.swift */; };
+		D4C3E4A12984D6ED00C2847A /* capacity_error_robot.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E49F2984D6ED00C2847A /* capacity_error_robot.json */; };
+		D4C3E4A22984D6ED00C2847A /* general_error_robot.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E4A02984D6ED00C2847A /* general_error_robot.json */; };
+		D4C3E4A42984F7C500C2847A /* FallbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4A32984F7C500C2847A /* FallbackView.swift */; };
+		D4C3E4A6298577B400C2847A /* ErrorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4A5298577B400C2847A /* ErrorModel.swift */; };
+		D4C3E4A92986368400C2847A /* NavigationStack in Frameworks */ = {isa = PBXBuildFile; productRef = D4C3E4A82986368400C2847A /* NavigationStack */; };
+		D4C3E4AC298639AE00C2847A /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AB298639AE00C2847A /* Router.swift */; };
+		D4C3E4AE2987368300C2847A /* CaptionEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */; };
+		D4C3E4B029885FFD00C2847A /* CaptionConfigsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */; };
+		D4F1D3012988C53A00599F05 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = D4F1D3002988C53A00599F05 /* FacebookCore */; };
+		D4F1D3032988C53A00599F05 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = D4F1D3022988C53A00599F05 /* FacebookLogin */; };
+		D4F1D3052988C53A00599F05 /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = D4F1D3042988C53A00599F05 /* FacebookShare */; };
+		D4F1D30829896BA500599F05 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = D4F1D30729896BA500599F05 /* GoogleMobileAds */; };
+		D4F1D30A298AD45500599F05 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F1D309298AD45500599F05 /* Haptics.swift */; };
 		F7C4075B0B72228BFA953B1F /* Pods_CapGen_CapGenUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -196,7 +261,66 @@
 		D4056E4F2968E0C100D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D4056E712968E71300D3894D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D4056E742968E94300D3894D /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
+		D4056E78296E2C1700D3894D /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		D4056E80296F0CB900D3894D /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
+		D4056E82296F867D00D3894D /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
+		D4056E84296F868800D3894D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D4056E86296F87F700D3894D /* robot_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = robot_lottie.json; sourceTree = "<group>"; };
+		D4056E8B29708D4200D3894D /* AnimatedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedTextView.swift; sourceTree = "<group>"; };
+		D4056E912970AC6E00D3894D /* CapGen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CapGen.entitlements; sourceTree = "<group>"; };
+		D4056E962970F33E00D3894D /* SignInWithAppleDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleDelegate.swift; sourceTree = "<group>"; };
+		D4056E982971EB9600D3894D /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		D4056E9A2971EF6F00D3894D /* FBAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAuthManager.swift; sourceTree = "<group>"; };
+		D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthManager.swift; sourceTree = "<group>"; };
+		D4056EA729721BC300D3894D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		D4056EA929721DA800D3894D /* EmptyCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCaptionsView.swift; sourceTree = "<group>"; };
+		D4056EAB2972297000D3894D /* robot_plain_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = robot_plain_lottie.json; sourceTree = "<group>"; };
+		D4056EAD2972716D00D3894D /* BackArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackArrowView.swift; sourceTree = "<group>"; };
+		D4056EAF2972872500D3894D /* speech_bubble.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = speech_bubble.json; sourceTree = "<group>"; };
+		D4056EB529728E8C00D3894D /* gold_coin_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gold_coin_lottie.json; sourceTree = "<group>"; };
+		D4056EB729736F6E00D3894D /* GoogleRewardedAds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleRewardedAds.swift; sourceTree = "<group>"; };
+		D4056EB9297373E400D3894D /* RewardedAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardedAdView.swift; sourceTree = "<group>"; };
+		D4056EBB2974931D00D3894D /* coin_pile_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = coin_pile_lottie.json; sourceTree = "<group>"; };
+		D4056EBC2974931D00D3894D /* coin_wallet_purple_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = coin_wallet_purple_lottie.json; sourceTree = "<group>"; };
+		D4056EBF2974AF6D00D3894D /* CongratsModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CongratsModalView.swift; sourceTree = "<group>"; };
+		D4056EC129751ACA00D3894D /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		D4056EC329751BD200D3894D /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		D4056EC52977460200D3894D /* CreditCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCounterView.swift; sourceTree = "<group>"; };
+		D4056EC729775B7C00D3894D /* piggy_bank_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = piggy_bank_lottie.json; sourceTree = "<group>"; };
+		D4056EC929778FB700D3894D /* RefillModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefillModalView.swift; sourceTree = "<group>"; };
+		D4056ECC297796B900D3894D /* CreditsDepletedModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsDepletedModalView.swift; sourceTree = "<group>"; };
+		D4056ECE2978735A00D3894D /* btn_loader.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = btn_loader.json; sourceTree = "<group>"; };
+		D4056ED02978750D00D3894D /* DisplayAdBtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAdBtnView.swift; sourceTree = "<group>"; };
+		D4056ED229788FAF00D3894D /* OverlayedLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayedLoaderView.swift; sourceTree = "<group>"; };
+		D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lightbulb_loader_lottie.json; sourceTree = "<group>"; };
+		D4056EDB2978A06900D3894D /* space_man_empty.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = space_man_empty.json; sourceTree = "<group>"; };
+		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
+		D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulatedCaptionsView.swift; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
+		D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaglistViewModel.swift; sourceTree = "<group>"; };
+		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
+		D4C3E482298059C800C2847A /* CustomMenuPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuPopup.swift; sourceTree = "<group>"; };
+		D4C3E484298087CE00C2847A /* crane_hand_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = crane_hand_lottie.json; sourceTree = "<group>"; };
+		D4C3E4862980883D00C2847A /* DeleteModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteModalView.swift; sourceTree = "<group>"; };
+		D4C3E48929819C6500C2847A /* CaptionsGroupMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionsGroupMock.swift; sourceTree = "<group>"; };
+		D4C3E48B2981C10B00C2847A /* SocialMediaPlatforms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SocialMediaPlatforms.json; sourceTree = "<group>"; };
+		D4C3E48D2981C24500C2847A /* SocialMediaPlatformsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialMediaPlatformsModel.swift; sourceTree = "<group>"; };
+		D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCaptionView.swift; sourceTree = "<group>"; };
+		D4C3E4912982105300C2847A /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		D4C3E493298343B500C2847A /* FloatingNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingNotificationView.swift; sourceTree = "<group>"; };
+		D4C3E495298437B600C2847A /* ShareableData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareableData.swift; sourceTree = "<group>"; };
+		D4C3E49729844F7400C2847A /* SupportEmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportEmailModel.swift; sourceTree = "<group>"; };
+		D4C3E499298470FB00C2847A /* sad_emoji_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sad_emoji_lottie.json; sourceTree = "<group>"; };
+		D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProfileModalView.swift; sourceTree = "<group>"; };
+		D4C3E49D2984C02D00C2847A /* AppStoreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreModel.swift; sourceTree = "<group>"; };
+		D4C3E49F2984D6ED00C2847A /* capacity_error_robot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacity_error_robot.json; sourceTree = "<group>"; };
+		D4C3E4A02984D6ED00C2847A /* general_error_robot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = general_error_robot.json; sourceTree = "<group>"; };
+		D4C3E4A32984F7C500C2847A /* FallbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallbackView.swift; sourceTree = "<group>"; };
+		D4C3E4A5298577B400C2847A /* ErrorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorModel.swift; sourceTree = "<group>"; };
+		D4C3E4AB298639AE00C2847A /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionEditViewModel.swift; sourceTree = "<group>"; };
+		D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionConfigsViewModel.swift; sourceTree = "<group>"; };
+		D4F1D309298AD45500599F05 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		D550A160BA820A85F0CDC34B /* Pods_CapGen_CapGenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGen_CapGenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF7993C63683A288F23EAE3 /* Pods_CapGenTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CapGenTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB95C364BA3BADD88FA1A463 /* Pods-CapGenTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGenTests.release-dev.xcconfig"; path = "Target Support Files/Pods-CapGenTests/Pods-CapGenTests.release-dev.xcconfig"; sourceTree = "<group>"; };
@@ -207,20 +331,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4F1D3032988C53A00599F05 /* FacebookLogin in Frameworks */,
 				D4056E612968E17700D3894D /* FirebaseDatabaseSwift in Frameworks */,
+				D4C3E4A92986368400C2847A /* NavigationStack in Frameworks */,
+				D4056E9E2971FCC400D3894D /* GoogleSignIn in Frameworks */,
 				D4056E5F2968E17700D3894D /* FirebaseDatabase in Frameworks */,
 				D4056E572968E17700D3894D /* FirebaseAnalyticsSwift in Frameworks */,
 				D4056E6D2968E17700D3894D /* FirebaseStorageCombine-Community in Frameworks */,
 				D4056E652968E17700D3894D /* FirebaseFirestoreCombine-Community in Frameworks */,
+				D4F1D3012988C53A00599F05 /* FacebookCore in Frameworks */,
+				D4056E7C296F0C7000D3894D /* Lottie in Frameworks */,
 				D4056E592968E17700D3894D /* FirebaseAuth in Frameworks */,
 				D4056E6B2968E17700D3894D /* FirebaseStorage in Frameworks */,
+				D4056EA02971FCC400D3894D /* GoogleSignInSwift in Frameworks */,
 				D4056E672968E17700D3894D /* FirebaseFirestoreSwift in Frameworks */,
 				D4056E5D2968E17700D3894D /* FirebaseCrashlytics in Frameworks */,
 				D4056E632968E17700D3894D /* FirebaseFirestore in Frameworks */,
+				D4F1D30829896BA500599F05 /* GoogleMobileAds in Frameworks */,
 				D4056E552968E17700D3894D /* FirebaseAnalytics in Frameworks */,
 				D4056E692968E17700D3894D /* FirebaseFunctions in Frameworks */,
 				D4056E5B2968E17700D3894D /* FirebaseAuthCombine-Community in Frameworks */,
 				8A81E2B66D4A4B40A38F8EBC /* Pods_CapGen.framework in Frameworks */,
+				D4F1D3052988C53A00599F05 /* FacebookShare in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,12 +429,15 @@
 		D4005DB3295BE0E0004D695D /* CapGen */ = {
 			isa = PBXGroup;
 			children = (
+				D4056E912970AC6E00D3894D /* CapGen.entitlements */,
+				D4056E7D296F0C7E00D3894D /* Lottie */,
 				D4056E6E2968E6CE00D3894D /* Firebase */,
 				D4005DEA295C086A004D695D /* Info.plist */,
+				D4C3E4AA2986399700C2847A /* Navigation */,
 				D4056E19295CC59800D3894D /* Data */,
 				D4005DDE295C024A004D695D /* Models */,
+				D4005DE0295C0258004D695D /* View Models */,
 				D4005DDF295C0252004D695D /* Views */,
-				D4005DE0295C0258004D695D /* Controllers */,
 				D4005DE1295C0268004D695D /* Supporting */,
 				D4005DB8295BE0E1004D695D /* Assets.xcassets */,
 				D4005DBA295BE0E1004D695D /* Preview Content */,
@@ -341,6 +476,12 @@
 				D4056E2B295F8F0100D3894D /* ToneModel.swift */,
 				D4056E352962030800D3894D /* CaptionLengthsModel.swift */,
 				D4056E3D2963487500D3894D /* OpenAIModel.swift */,
+				D4056EC129751ACA00D3894D /* UserModel.swift */,
+				D4C3E48D2981C24500C2847A /* SocialMediaPlatformsModel.swift */,
+				D4C3E495298437B600C2847A /* ShareableData.swift */,
+				D4C3E49729844F7400C2847A /* SupportEmailModel.swift */,
+				D4C3E49D2984C02D00C2847A /* AppStoreModel.swift */,
+				D4C3E4A5298577B400C2847A /* ErrorModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -349,21 +490,32 @@
 			isa = PBXGroup;
 			children = (
 				D4005DB6295BE0E0004D695D /* ContentView.swift */,
-				D4056E25295F639100D3894D /* BottomAreaView.swift */,
-				D4056E3F2963AB3B00D3894D /* LoadingView.swift */,
-				D4056E372963178D00D3894D /* CaptionView.swift */,
+				D4056ED929789CDB00D3894D /* Welcome */,
+				D4056ED629789CB000D3894D /* Home */,
+				D4056ED829789CC900D3894D /* Profile */,
+				D4056ED729789CBC00D3894D /* Caption */,
+				D4056ECB2977968D00D3894D /* Modals */,
 				D4056E1E295CC92100D3894D /* Common */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		D4005DE0295C0258004D695D /* Controllers */ = {
+		D4005DE0295C0258004D695D /* View Models */ = {
 			isa = PBXGroup;
 			children = (
 				D4056E3B2963450D00D3894D /* OpenAIConnector.swift */,
 				D4056E742968E94300D3894D /* FirestoreManager.swift */,
+				D4056E982971EB9600D3894D /* AuthManager.swift */,
+				D4056EC329751BD200D3894D /* UserManager.swift */,
+				D4056E962970F33E00D3894D /* SignInWithAppleDelegate.swift */,
+				D4056E9A2971EF6F00D3894D /* FBAuthManager.swift */,
+				D4056EA12971FD6200D3894D /* GoogleAuthManager.swift */,
+				D4056EB729736F6E00D3894D /* GoogleRewardedAds.swift */,
+				D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */,
+				D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */,
+				D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */,
 			);
-			path = Controllers;
+			path = "View Models";
 			sourceTree = "<group>";
 		};
 		D4005DE1295C0268004D695D /* Supporting */ = {
@@ -384,6 +536,8 @@
 				D4005DE3295C042F004D695D /* Color.swift */,
 				D4005DEB295C09EE004D695D /* Font.swift */,
 				D4056E27295F659B00D3894D /* View.swift */,
+				D4056E78296E2C1700D3894D /* String.swift */,
+				D4C3E4912982105300C2847A /* Notifications.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -456,8 +610,11 @@
 		D4056E19295CC59800D3894D /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				D4C3E48829819C4300C2847A /* Mocks */,
 				D4056E2D295F8F3A00D3894D /* Tones.json */,
 				D4056E33296202E900D3894D /* CaptionLengths.json */,
+				D4056EDF297A346100D3894D /* CaptionsMock.json */,
+				D4C3E48B2981C10B00C2847A /* SocialMediaPlatforms.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -465,10 +622,19 @@
 		D4056E1E295CC92100D3894D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				D4056EAD2972716D00D3894D /* BackArrowView.swift */,
 				D4056E1F295CCA1C00D3894D /* Pill.swift */,
 				D4056E23295E296600D3894D /* TextAreaView.swift */,
 				D4056E29295F8EA700D3894D /* RectangleCard.swift */,
 				D4056E2F2960F54900D3894D /* SnappableSliderView.swift */,
+				D4056E80296F0CB900D3894D /* LottieView.swift */,
+				D4056E8B29708D4200D3894D /* AnimatedTextView.swift */,
+				D4056EC52977460200D3894D /* CreditCounterView.swift */,
+				D4056ED02978750D00D3894D /* DisplayAdBtnView.swift */,
+				D4056ED229788FAF00D3894D /* OverlayedLoaderView.swift */,
+				D4C3E493298343B500C2847A /* FloatingNotificationView.swift */,
+				D4C3E4A32984F7C500C2847A /* FallbackView.swift */,
+				D4F1D309298AD45500599F05 /* Haptics.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -496,6 +662,95 @@
 				D4056E712968E71300D3894D /* GoogleService-Info.plist */,
 			);
 			path = Prod;
+			sourceTree = "<group>";
+		};
+		D4056E7D296F0C7E00D3894D /* Lottie */ = {
+			isa = PBXGroup;
+			children = (
+				D4C3E484298087CE00C2847A /* crane_hand_lottie.json */,
+				D4C3E49F2984D6ED00C2847A /* capacity_error_robot.json */,
+				D4C3E4A02984D6ED00C2847A /* general_error_robot.json */,
+				D4056EDB2978A06900D3894D /* space_man_empty.json */,
+				D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */,
+				D4056ECE2978735A00D3894D /* btn_loader.json */,
+				D4056EC729775B7C00D3894D /* piggy_bank_lottie.json */,
+				D4056EBB2974931D00D3894D /* coin_pile_lottie.json */,
+				D4056EBC2974931D00D3894D /* coin_wallet_purple_lottie.json */,
+				D4056E86296F87F700D3894D /* robot_lottie.json */,
+				D4056EAB2972297000D3894D /* robot_plain_lottie.json */,
+				D4056EB529728E8C00D3894D /* gold_coin_lottie.json */,
+				D4056EAF2972872500D3894D /* speech_bubble.json */,
+				D4C3E499298470FB00C2847A /* sad_emoji_lottie.json */,
+			);
+			path = Lottie;
+			sourceTree = "<group>";
+		};
+		D4056ECB2977968D00D3894D /* Modals */ = {
+			isa = PBXGroup;
+			children = (
+				D4056EBF2974AF6D00D3894D /* CongratsModalView.swift */,
+				D4056EC929778FB700D3894D /* RefillModalView.swift */,
+				D4056EB9297373E400D3894D /* RewardedAdView.swift */,
+				D4056ECC297796B900D3894D /* CreditsDepletedModalView.swift */,
+				D4C3E482298059C800C2847A /* CustomMenuPopup.swift */,
+				D4C3E4862980883D00C2847A /* DeleteModalView.swift */,
+				D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */,
+			);
+			path = Modals;
+			sourceTree = "<group>";
+		};
+		D4056ED629789CB000D3894D /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E84296F868800D3894D /* HomeView.swift */,
+				D4056E25295F639100D3894D /* BottomAreaView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		D4056ED729789CBC00D3894D /* Caption */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E3F2963AB3B00D3894D /* LoadingView.swift */,
+				D4056E372963178D00D3894D /* CaptionView.swift */,
+				D4056EA929721DA800D3894D /* EmptyCaptionsView.swift */,
+				D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */,
+				D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */,
+				D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */,
+			);
+			path = Caption;
+			sourceTree = "<group>";
+		};
+		D4056ED829789CC900D3894D /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				D4056EA729721BC300D3894D /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		D4056ED929789CDB00D3894D /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				D4056E82296F867D00D3894D /* LaunchView.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		D4C3E48829819C4300C2847A /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				D4C3E48929819C6500C2847A /* CaptionsGroupMock.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		D4C3E4AA2986399700C2847A /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				D4C3E4AB298639AE00C2847A /* Router.swift */,
+			);
+			path = Navigation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -530,6 +785,14 @@
 				D4056E682968E17700D3894D /* FirebaseFunctions */,
 				D4056E6A2968E17700D3894D /* FirebaseStorage */,
 				D4056E6C2968E17700D3894D /* FirebaseStorageCombine-Community */,
+				D4056E7B296F0C7000D3894D /* Lottie */,
+				D4056E9D2971FCC400D3894D /* GoogleSignIn */,
+				D4056E9F2971FCC400D3894D /* GoogleSignInSwift */,
+				D4C3E4A82986368400C2847A /* NavigationStack */,
+				D4F1D3002988C53A00599F05 /* FacebookCore */,
+				D4F1D3022988C53A00599F05 /* FacebookLogin */,
+				D4F1D3042988C53A00599F05 /* FacebookShare */,
+				D4F1D30729896BA500599F05 /* GoogleMobileAds */,
 			);
 			productName = CapGen;
 			productReference = D4005DB1295BE0E0004D695D /* CapGen Beta.app */;
@@ -607,6 +870,11 @@
 			mainGroup = D4005DA8295BE0E0004D695D;
 			packageReferences = (
 				D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D4056E7A296F0C7000D3894D /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				D4056E9C2971FCC400D3894D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
+				D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+				D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = D4005DB2295BE0E0004D695D /* Products */;
 			projectDirPath = "";
@@ -625,6 +893,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4056DDB295C0DFB00D3894D /* Blacker-Display-Medium-Italic-trial.ttf in Resources */,
+				D4056ED529788FCA00D3894D /* lightbulb_loader_lottie.json in Resources */,
 				D4056E16295C0E2A00D3894D /* GraphikLightItalic.otf in Resources */,
 				D4056E12295C0E2A00D3894D /* GraphikBoldItalic.otf in Resources */,
 				D4056E15295C0E2A00D3894D /* GraphikExtralight.otf in Resources */,
@@ -632,6 +901,7 @@
 				D4056DEE295C0DFB00D3894D /* Blacker-Text-Bold-trial.ttf in Resources */,
 				D4005DBC295BE0E1004D695D /* Preview Assets.xcassets in Resources */,
 				D4056DE3295C0DFB00D3894D /* Blacker-Text-Book-trial.ttf in Resources */,
+				D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */,
 				D4056DE9295C0DFB00D3894D /* Blacker-Display-Heavy-Italic-trial.ttf in Resources */,
 				D4056E0D295C0E2A00D3894D /* GraphikRegularItalic.otf in Resources */,
 				D4056E13295C0E2A00D3894D /* GraphikBlack.otf in Resources */,
@@ -641,30 +911,43 @@
 				D4056E2E295F8F3A00D3894D /* Tones.json in Resources */,
 				D4056DED295C0DFB00D3894D /* Blacker-Text-Regular-Italic-trial.ttf in Resources */,
 				D4056DEF295C0DFB00D3894D /* Blacker-Display-Light-trial.ttf in Resources */,
+				D4056ECF2978735A00D3894D /* btn_loader.json in Resources */,
 				D4056E0A295C0E2A00D3894D /* GraphikExtralightItalic.otf in Resources */,
+				D4056EAC2972297000D3894D /* robot_plain_lottie.json in Resources */,
 				D4056E05295C0E2A00D3894D /* GraphikSuperItalic.otf in Resources */,
 				D4056E10295C0E2A00D3894D /* GraphikMediumItalic.otf in Resources */,
 				D4056DE0295C0DFB00D3894D /* Blacker-Display-ExtraBold-trial.ttf in Resources */,
 				D4056DEA295C0DFB00D3894D /* Blacker-Text-Medium-Italic-trial.ttf in Resources */,
 				D4056E0B295C0E2A00D3894D /* GraphikThinItalic.otf in Resources */,
+				D4C3E49A298470FB00C2847A /* sad_emoji_lottie.json in Resources */,
 				D4056DF1295C0DFB00D3894D /* Blacker-Display-Heavy-trial.ttf in Resources */,
+				D4C3E4A12984D6ED00C2847A /* capacity_error_robot.json in Resources */,
 				D4056DE5295C0DFB00D3894D /* Blacker-Display-Bold-italic-trial.ttf in Resources */,
+				D4056EBD2974931D00D3894D /* coin_pile_lottie.json in Resources */,
+				D4C3E4A22984D6ED00C2847A /* general_error_robot.json in Resources */,
 				D4056DE8295C0DFB00D3894D /* Blacker-Display-ExtraBold-Italic-trial.ttf in Resources */,
 				D4056E14295C0E2A00D3894D /* GraphikBlackItalic.otf in Resources */,
 				D4056DDD295C0DFB00D3894D /* Blacker-Display-Light-Italic-trial.ttf in Resources */,
 				D4005DB9295BE0E1004D695D /* Assets.xcassets in Resources */,
+				D4056EBE2974931D00D3894D /* coin_wallet_purple_lottie.json in Resources */,
 				D4056E0E295C0E2A00D3894D /* GraphikLight.otf in Resources */,
+				D4056E87296F87F700D3894D /* robot_lottie.json in Resources */,
 				D4056DEB295C0DFB00D3894D /* Blacker-Display-Bold-trial.ttf in Resources */,
 				D4056E08295C0E2A00D3894D /* GraphikSuper.otf in Resources */,
+				D4056EC829775B7D00D3894D /* piggy_bank_lottie.json in Resources */,
 				D4056DF0295C0DFB00D3894D /* Blacker-Text-Regular-trial.ttf in Resources */,
 				D4056E06295C0E2A00D3894D /* GraphikThin.otf in Resources */,
+				D4056EB629728E8D00D3894D /* gold_coin_lottie.json in Resources */,
 				D4056E07295C0E2A00D3894D /* GraphikBold.otf in Resources */,
 				D4056DE1295C0DFB00D3894D /* Blacker-Text-Heavy-trial.ttf in Resources */,
+				D4056EB02972872600D3894D /* speech_bubble.json in Resources */,
 				D4056DE6295C0DFB00D3894D /* Blacker-Text-Book-Italic-trial.ttf in Resources */,
 				D4056E0F295C0E2A00D3894D /* GraphikRegular.otf in Resources */,
+				D4C3E485298087CE00C2847A /* crane_hand_lottie.json in Resources */,
 				D4056DDF295C0DFB00D3894D /* Blacker-Text-Bold-Italic-trial.ttf in Resources */,
 				D4056DE7295C0DFB00D3894D /* Blacker-Text-Light-trial.ttf in Resources */,
 				D4056E0C295C0E2A00D3894D /* GraphikMedium.otf in Resources */,
+				D4C3E48C2981C10B00C2847A /* SocialMediaPlatforms.json in Resources */,
 				D4056DE2295C0DFB00D3894D /* Blacker-Text-Light-Italic-trial.ttf in Resources */,
 				D4056DE4295C0DFB00D3894D /* Blacker-Display-Medium-trial.ttf in Resources */,
 				D4056DDE295C0DFB00D3894D /* Blacker-Display-Regular-Italic-trial.ttf in Resources */,
@@ -773,7 +1056,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist\n\n# Get references to dev and prod versions of the GoogleService-Info.plist\n# NOTE: These should only live on the file system and should NOT be part of the target (since we'll be adding them to the target manually)\nGOOGLESERVICE_INFO_DEV=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Dev/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_PROD=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Prod/${GOOGLESERVICE_INFO_PLIST}\n\n# Make sure the dev version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_DEV}\"\nif [ ! -f $GOOGLESERVICE_INFO_DEV ]\nthen\n    echo \"No Development GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Make sure the prod version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_PROD}\"\nif [ ! -f $GOOGLESERVICE_INFO_PROD ]\nthen\n    echo \"No Production GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Get a reference to the destination location for the GoogleService-Info.plist\nPLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\necho \"Will copy ${GOOGLESERVICE_INFO_PLIST} to final destination: ${PLIST_DESTINATION}\"\n\n# Copy over the prod GoogleService-Info.plist for Release builds\nif [ \"${CONFIGURATION}\" == \"Release - PROD\" ] ||  [ \"${CONFIGURATION}\" == \"Debug - PROD\" ] \nthen\n    echo \"Using ${GOOGLESERVICE_INFO_PROD}\"\n    cp \"${GOOGLESERVICE_INFO_PROD}\" \"${PLIST_DESTINATION}\"\nelse\n    echo \"Using ${GOOGLESERVICE_INFO_DEV}\"\n    cp \"${GOOGLESERVICE_INFO_DEV}\" \"${PLIST_DESTINATION}\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist\n\n# Get references to dev and prod versions of the GoogleService-Info.plist\n# NOTE: These should only live on the file system and should NOT be part of the target (since we'll be adding them to the target manually)\nGOOGLESERVICE_INFO_DEV=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Dev/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_PROD=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Prod/${GOOGLESERVICE_INFO_PLIST}\n\n# Make sure the dev version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_DEV}\"\nif [ ! -f $GOOGLESERVICE_INFO_DEV ]\nthen\n    echo \"No Development GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Make sure the prod version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_PROD}\"\nif [ ! -f $GOOGLESERVICE_INFO_PROD ]\nthen\n    echo \"No Production GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Get a reference to the destination location for the GoogleService-Info.plist\nPLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\necho \"Will copy ${GOOGLESERVICE_INFO_PLIST} to final destination: ${PLIST_DESTINATION}\"\n\n# Copy over the prod GoogleService-Info.plist for Release builds\nif [ \"${CONFIGURATION}\" == \"Release-PROD\" ] ||  [ \"${CONFIGURATION}\" == \"Debug-PROD\" ] \nthen\n    echo \"Using ${GOOGLESERVICE_INFO_PROD}\"\n    cp \"${GOOGLESERVICE_INFO_PROD}\" \"${PLIST_DESTINATION}\"\nelse\n    echo \"Using ${GOOGLESERVICE_INFO_DEV}\"\n    cp \"${GOOGLESERVICE_INFO_DEV}\" \"${PLIST_DESTINATION}\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -782,23 +1065,65 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4056EA22971FD6200D3894D /* GoogleAuthManager.swift in Sources */,
+				D4056EA829721BC300D3894D /* ProfileView.swift in Sources */,
 				D4056E362962030800D3894D /* CaptionLengthsModel.swift in Sources */,
+				D4C3E4872980883D00C2847A /* DeleteModalView.swift in Sources */,
+				D4056E992971EB9600D3894D /* AuthManager.swift in Sources */,
+				D4056EBA297373E400D3894D /* RewardedAdView.swift in Sources */,
+				D4056ECD297796B900D3894D /* CreditsDepletedModalView.swift in Sources */,
+				D4056EC62977460200D3894D /* CreditCounterView.swift in Sources */,
+				D4056E972970F33E00D3894D /* SignInWithAppleDelegate.swift in Sources */,
+				D4C3E49829844F7400C2847A /* SupportEmailModel.swift in Sources */,
+				D4056E83296F867D00D3894D /* LaunchView.swift in Sources */,
+				D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */,
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
+				D4C3E496298437B600C2847A /* ShareableData.swift in Sources */,
+				D4C3E4A6298577B400C2847A /* ErrorModel.swift in Sources */,
+				D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */,
 				D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */,
+				D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */,
+				D4056E9B2971EF6F00D3894D /* FBAuthManager.swift in Sources */,
 				D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */,
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
+				D4C3E4AC298639AE00C2847A /* Router.swift in Sources */,
+				D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */,
+				D4056EC429751BD200D3894D /* UserManager.swift in Sources */,
+				D4056E81296F0CB900D3894D /* LottieView.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
+				D4C3E4922982105300C2847A /* Notifications.swift in Sources */,
+				D4056EAA29721DA800D3894D /* EmptyCaptionsView.swift in Sources */,
+				D4C3E49E2984C02D00C2847A /* AppStoreModel.swift in Sources */,
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
+				D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */,
+				D4C3E48A29819C6500C2847A /* CaptionsGroupMock.swift in Sources */,
+				D4056EB829736F6E00D3894D /* GoogleRewardedAds.swift in Sources */,
+				D4C3E4A42984F7C500C2847A /* FallbackView.swift in Sources */,
+				D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */,
+				D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
+				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
+				D4056E79296E2C1700D3894D /* String.swift in Sources */,
+				D4C3E49C2984710E00C2847A /* DeleteProfileModalView.swift in Sources */,
+				D4056E85296F868800D3894D /* HomeView.swift in Sources */,
+				D4056ED329788FAF00D3894D /* OverlayedLoaderView.swift in Sources */,
+				D4F1D30A298AD45500599F05 /* Haptics.swift in Sources */,
+				D4056ED12978750D00D3894D /* DisplayAdBtnView.swift in Sources */,
 				D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */,
+				D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */,
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
+				D4056EC02974AF6D00D3894D /* CongratsModalView.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
 				D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */,
+				D4C3E4B029885FFD00C2847A /* CaptionConfigsViewModel.swift in Sources */,
+				D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */,
+				D4C3E4AE2987368300C2847A /* CaptionEditViewModel.swift in Sources */,
 				D4056E382963178D00D3894D /* CaptionView.swift in Sources */,
+				D4056EC229751ACA00D3894D /* UserModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -959,6 +1284,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CapGen/CapGen.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -968,7 +1294,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -980,14 +1306,18 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
+				PRODUCT_MODULE_NAME = CapGen;
 				PRODUCT_NAME = "CapGen Beta";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Provisioning Profile Dev";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen App Development Provisioning";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Debug-DEV";
 		};
@@ -997,6 +1327,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CapGen/CapGen.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1006,7 +1337,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1018,14 +1349,17 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
 				PRODUCT_NAME = "CapGen Beta";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Provisioning Profile Dev 1673192299";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Dev Provisioning Apple Sign in Capabilities";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Release-DEV";
 		};
@@ -1176,7 +1510,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = CapGen/CapGen.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CapGen/Preview Content\"";
@@ -1185,7 +1520,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1197,14 +1532,17 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Provisioning Profile Prod";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Provisioning Profile Prod Dist";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Debug-PROD";
 		};
@@ -1309,6 +1647,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CapGen/CapGen.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1318,7 +1657,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1330,14 +1669,17 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CapGen Provisioning Profile Prod Dist";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Release-PROD";
 		};
@@ -1439,6 +1781,46 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		D4056E7A296F0C7000D3894D /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+		D4056E9C2971FCC400D3894D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/matteopuc/swiftui-navigation-stack.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+		D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1506,6 +1888,46 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		D4056E7B296F0C7000D3894D /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E7A296F0C7000D3894D /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		D4056E9D2971FCC400D3894D /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E9C2971FCC400D3894D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		D4056E9F2971FCC400D3894D /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4056E9C2971FCC400D3894D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		D4C3E4A82986368400C2847A /* NavigationStack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
+			productName = NavigationStack;
+		};
+		D4F1D3002988C53A00599F05 /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		D4F1D3022988C53A00599F05 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
+		D4F1D3042988C53A00599F05 /* FacebookShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookShare;
+		};
+		D4F1D30729896BA500599F05 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

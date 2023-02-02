@@ -1,7 +1,8 @@
 [
-    {"id": 0, "value": "minimum of 1 word and a maximum of 40 words", "title": "Very short (1-10 words)"},
-    {"id": 1, "value": "minimum of 11 words and a maximum of 20 words", "title": "Short (11-20 words)"},
-    {"id": 2, "value": "minimum of 21 words and a maximum of 40 words", "title": "Moderate (21-40 words)"},
-    {"id": 3, "value": "minimum of 40 words and a maximum of 80 words", "title": "Long (41-80 words)"},
-    {"id": 4, "value": "minimum of 81 words and more", "title": "Very long (81+ words)"}
+    {"id": 0, "value": "between 1 and 5 words", "title": "Extremely short (1-5 words)", "type": "extremelyShort"},
+    {"id": 1, "value": "between 5 and 15 words", "title": "Very short (5-15 words)", "type": "veryShort"},
+    {"id": 2, "value": "between 15 and 25 words", "title": "Short (15-25 words)", "type": "short"},
+    {"id": 3, "value": "between 25 and 40 words", "title": "Moderate (25-40 words)", "type": "moderate"},
+    {"id": 4, "value": "between 40 and 80 words", "title": "Long (40-80 words)", "type": "long"},
+    {"id": 5, "value": "a minimum of 81 words", "title": "Very long (81+ words)", "type": "veryLong"}
 ]

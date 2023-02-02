@@ -10,13 +10,13 @@ import SwiftUI
 extension TextEditor {
     func customStyle() -> some View {
         self
-            .font(.ui.graphikRegular)
+            .font(.ui.headlineRegular)
             .foregroundColor(Color.ui.richBlack)
             .padding(14)
             .lineSpacing(6)
             .scrollContentBackground(.hidden)
             .overlay(
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 12)
                     .stroke(.black, lineWidth: 2)
                     .shadow(
                         color: Color.ui.shadowGray.opacity(0.8),
@@ -24,10 +24,10 @@ extension TextEditor {
                         x: 1,
                         y: 2
                     )
-
+                
             )
             .background(
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 12)
                     .fill(Color.ui.lightOldPaper)
             )
     }
@@ -39,8 +39,6 @@ struct TextAreaView: View {
     @State var placeholderText: String = "Example: Please generate a caption for a photo of my dog playing in the park. She's a rescue and brings so much joy to my life. Please come up with a caption that celebrates the love and happiness that pets bring into our lives."
     
     @State private var lastText: String = ""
-    
-    var isKeyboardFocused: FocusState<Bool>.Binding
     
     var body: some View {
         GeometryReader { geo in
@@ -54,20 +52,29 @@ struct TextAreaView: View {
                 TextEditor(text: $text)
                     .customStyle()
                     .opacity(text.isEmpty ? 0.75 : 1)
-                    .focused(isKeyboardFocused)
                     .onChange(of: text) { text in
+                        // Limit number of characters typed
                         if (text.count <= charLimit) {
                             lastText = text
                         } else {
                             self.text = lastText
                         }
+                        
+                        // Detect when 'done' or a newline is generated
+                        if !text.filter({ $0.isNewline }).isEmpty {
+                            self.text = String(text.dropLast())
+                            hideKeyboard()
+                        }
                     }
-                 
+                    .submitLabel(.done)
+                
                 Text("\(text.count)/\(charLimit)")
-                    .font(.ui.graphikRegular)
+                    .font(.ui.headlineRegular)
                     .foregroundColor(.ui.cadetBlueCrayola)
-                    .position(x: geo.size.width / 1.12, y: geo.size.height / 1.05)
-                    
+                    .frame(width: geo.size.width * 0.95, height: geo.size.height * 0.95, alignment: .bottomTrailing)
+            }
+            .onTapGesture {
+                Haptics.shared.play(.soft)
             }
         }
     }
