@@ -31,7 +31,7 @@ class AuthManager: NSObject, ObservableObject {
     func login(credential: AuthCredential, completionBlock: @escaping (_ success: Bool) -> Void) {
         Auth.auth().signIn(with: credential, completion: { (result, error) in
             if error != nil {
-                self.appError = ErrorType(error: .genericError)
+                self.appError = ErrorType(error: .loginError)
                 print("ERROR logging into Firebase", error!.localizedDescription)
                 return
             }

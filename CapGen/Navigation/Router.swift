@@ -60,4 +60,8 @@ class Router {
     func toGenericFallbackView() {
         self.navStack.push(FallbackView(lottieFileName: "general_error_robot", title: "Uh oh!", message: "Something went wrong, but it's not your fault! Our team is fixing it, please try again later.", onClick: { self.navStack.pop(to: .view(withId: HOME_SCREEN)) }))
     }
+    
+    func toLoginFallbackView() {
+        self.navStack.push(FallbackView(lottieFileName: "general_error_robot", title: "Oops!", message: "Something went wrong while logging in. Don't worry, we're on it. Please try again later.", onClick: { self.navStack.pop(to: .previous) }))
+    }
 }
