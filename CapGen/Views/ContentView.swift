@@ -25,8 +25,8 @@ struct ContentView: View {
         }
         .onReceive(authManager.$appError) { value in
             if let error = value?.error {
-                if error == .genericError {
-                    self.router?.toGenericFallbackView()
+                if error == .loginError {
+                    self.router?.toLoginFallbackView()
                 }
             }
         }
