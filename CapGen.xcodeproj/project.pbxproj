@@ -1737,7 +1737,7 @@
 				D4056E462968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-PROD";
+			defaultConfigurationName = "Release-DEV";
 		};
 		D4005DD5295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGen" */ = {
 			isa = XCConfigurationList;
@@ -1748,7 +1748,7 @@
 				D4056E472968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-PROD";
+			defaultConfigurationName = "Release-DEV";
 		};
 		D4005DD8295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenTests" */ = {
 			isa = XCConfigurationList;
@@ -1759,7 +1759,7 @@
 				D4056E482968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-PROD";
+			defaultConfigurationName = "Release-DEV";
 		};
 		D4005DDB295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenUITests" */ = {
 			isa = XCConfigurationList;
@@ -1770,7 +1770,7 @@
 				D4056E492968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-PROD";
+			defaultConfigurationName = "Release-DEV";
 		};
 /* End XCConfigurationList section */
 
