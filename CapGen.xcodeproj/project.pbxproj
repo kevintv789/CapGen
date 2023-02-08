@@ -296,6 +296,7 @@
 		D4056EDB2978A06900D3894D /* space_man_empty.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = space_man_empty.json; sourceTree = "<group>"; };
 		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
 		D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulatedCaptionsView.swift; sourceTree = "<group>"; };
+		D47303FF299336A300179FEB /* CapGenRelease-DEV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CapGenRelease-DEV.entitlements"; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaglistViewModel.swift; sourceTree = "<group>"; };
 		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
@@ -429,6 +430,7 @@
 		D4005DB3295BE0E0004D695D /* CapGen */ = {
 			isa = PBXGroup;
 			children = (
+				D47303FF299336A300179FEB /* CapGenRelease-DEV.entitlements */,
 				D4056E912970AC6E00D3894D /* CapGen.entitlements */,
 				D4056E7D296F0C7E00D3894D /* Lottie */,
 				D4056E6E2968E6CE00D3894D /* Firebase */,
@@ -1327,7 +1329,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = CapGen/CapGen.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "CapGen/CapGenRelease-DEV.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
