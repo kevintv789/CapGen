@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 extension View {
     func customShadow() -> some View {
@@ -80,6 +81,7 @@ struct SignInWithAppleView: View {
     
     var body: some View {
         Button {
+            Analytics.logEvent("Apple Sign in View", parameters: ["name": "LaunchView", "full_text": "Sign in button pressed"])
             AuthManager.shared.appleAuthManager.setDelegate()
             AuthManager.shared.appleAuthManager.signIn()
             Haptics.shared.play(.soft)
