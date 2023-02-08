@@ -103,7 +103,7 @@ platform :ios do
       scheme: ENV["SCHEME_NAME"], 
       output_name: output_name,
       configuration: ENV["CONFIG_NAME"],
-      skip_codesigning: true,
+      skip_codesigning: false,
       cloned_source_packages_path: "~/Library/Developer/Xcode/DerivedData",
       export_team_id: ENV['TEAM_ID'],
       export_options: {
