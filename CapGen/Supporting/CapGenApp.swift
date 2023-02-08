@@ -18,6 +18,15 @@ let SCREEN_HEIGHT = UIScreen.main.bounds.height
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        if let APMUserDefaults = NSClassFromString("APMUserDefaults") as AnyObject?,
+           let userDefaults = APMUserDefaults.perform(#selector(getter: UserDefaults.standard))?.takeUnretainedValue() {
+           _ = userDefaults.perform(#selector(NSMutableDictionary.setObject(_:forKey:)),
+                                    with: true,
+                                    with: "/google/measurement/debug_mode")
+        }
+        UserDefaults.standard.set(true, forKey: "/google/firebase/debug_mode")
+        
         FirebaseApp.configure()
         
         // Initialize the Google Mobile Ads SDK.
