@@ -79,6 +79,7 @@ class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate {
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        Analytics.logEvent("Apple Sign in", parameters: ["name": "onError", "full_text": error.localizedDescription])
         onError(error)
     }
 }
@@ -119,6 +120,7 @@ class SignInWithApple: ObservableObject {
     }
     
     func signIn() {
+        Analytics.logEvent("Apple Sign in", parameters: ["name": "signIn()", "full_text": "Start of signing in"])
         let request = ASAuthorizationAppleIDProvider().createRequest()
         request.requestedScopes = [.fullName, .email]
         request.nonce = sha256(currentNonce)
@@ -136,12 +138,14 @@ class SignInWithApple: ObservableObject {
     static func authenticate(credential: ASAuthorizationAppleIDCredential, currentNonce: String) {
         // Retrieving token
         guard let token = credential.identityToken else {
+            Analytics.logEvent("Apple Sign in", parameters: ["name": "authenticate()", "full_text": "Unable to retrieve identityToken with Apple Sign In"])
             print("Unable to retrieve identityToken with Apple Sign In")
             return
         }
         
         // Token string
         guard let idTokenString = String(data: token, encoding: .utf8) else {
+            Analytics.logEvent("Apple Sign in", parameters: ["name": "authenticate()", "full_text": "Unable to convert token data to String"])
             print("Unable to convert token data to String")
             return
         }
