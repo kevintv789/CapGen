@@ -116,7 +116,7 @@ class SignInWithApple: ObservableObject {
         } onCompletePassword: { credential in
             print("ONPASSWORD", credential)
         } onError: { error in
-            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "setDelegate_error", "items": ["error" : error.localizedDescription]])
+            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "setDelegate_error", "items": [AnalyticsParameterScreenName : error.localizedDescription]])
             self.tempError = error.localizedDescription
             print(error)
         }

@@ -78,6 +78,7 @@ struct SignInWithAppleView: View {
      For example, you can use ObservableObject and @ObservedObject to create a shared data model that multiple views can access and update. When the data model changes, the views that use the model will automatically update.
      */
     @ObservedObject var signInWithApple = SignInWithApple()
+    @State var tempError: String = ""
     
     var body: some View {
         Button {
@@ -98,10 +99,13 @@ struct SignInWithAppleView: View {
                     )
                     .frame(width: 55, height: 55)
                 
-                Text(AuthManager.shared.appleAuthManager.tempError ?? "")
+                Text(tempError)
                     .foregroundColor(.ui.richBlack)
             }
            
+        }
+        .onReceive(AuthManager.shared.appleAuthManager.$tempError) { value in
+            tempError = value ?? "NIL"
         }
     }
 }
