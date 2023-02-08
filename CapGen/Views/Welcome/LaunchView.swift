@@ -81,7 +81,7 @@ struct SignInWithAppleView: View {
     
     var body: some View {
         Button {
-            Analytics.logEvent("Apple Sign in View", parameters: ["name": "LaunchView", "full_text": "Sign in button pressed"])
+            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "LaunchView", "full_text": "Sign in button pressed"])
             AuthManager.shared.appleAuthManager.setDelegate()
             AuthManager.shared.appleAuthManager.signIn()
             Haptics.shared.play(.soft)

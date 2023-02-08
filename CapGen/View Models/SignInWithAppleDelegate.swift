@@ -115,14 +115,16 @@ class SignInWithApple: ObservableObject {
         } onCompletePassword: { credential in
             print("ONPASSWORD", credential)
         } onError: { error in
+            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "setDelegate_error", "full_text": error.localizedDescription])
             print(error)
         }
     }
     
     func signIn() {
-        Analytics.logEvent("Apple Sign in", parameters: ["name": "signIn()", "full_text": "Start of signing in"])
+        Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "signIn()", "full_text": "Start of signing in"])
         let request = ASAuthorizationAppleIDProvider().createRequest()
         request.requestedScopes = [.fullName, .email]
+        Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "signIn()_nonce", "full_text": sha256(currentNonce)])
         request.nonce = sha256(currentNonce)
         
         let controller = ASAuthorizationController(authorizationRequests: [request])
@@ -138,14 +140,14 @@ class SignInWithApple: ObservableObject {
     static func authenticate(credential: ASAuthorizationAppleIDCredential, currentNonce: String) {
         // Retrieving token
         guard let token = credential.identityToken else {
-            Analytics.logEvent("Apple Sign in", parameters: ["name": "authenticate()", "full_text": "Unable to retrieve identityToken with Apple Sign In"])
+            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "authenticate()", "full_text": "Unable to retrieve identityToken with Apple Sign In"])
             print("Unable to retrieve identityToken with Apple Sign In")
             return
         }
         
         // Token string
         guard let idTokenString = String(data: token, encoding: .utf8) else {
-            Analytics.logEvent("Apple Sign in", parameters: ["name": "authenticate()", "full_text": "Unable to convert token data to String"])
+            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "authenticate()", "full_text": "Unable to convert token data to String"])
             print("Unable to convert token data to String")
             return
         }
