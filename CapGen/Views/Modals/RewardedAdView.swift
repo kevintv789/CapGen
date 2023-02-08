@@ -52,6 +52,8 @@ struct RewardedAdView: View {
             .padding(.top, 35)
         }
         .onAppear {
+            logScreenAnalytics(for: "\(RewardedAdView.self)")
+            
             // Dismiss bottom sheet modal when ad is exited
             guard let isAdDone = self.isAdDone else { return }
             if (isAdDone) {

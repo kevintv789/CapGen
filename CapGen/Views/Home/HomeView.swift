@@ -96,6 +96,7 @@ struct HomeView: View {
             .ignoresSafeArea(.keyboard, edges: .bottom)
         }
         .onAppear() {
+            logScreenAnalytics(for: "\(HomeView.self)")
             self.router = Router(navStack: navStack)
             
             if AuthManager.shared.isSignedIn ?? false {
