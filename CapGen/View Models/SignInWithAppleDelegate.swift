@@ -60,21 +60,17 @@ func sha256(_ input: String) -> String {
 
 class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate {
     var onComplete: (ASAuthorizationAppleIDCredential) -> Void
-    var onCompletePassword: (ASPasswordCredential) -> Void
     var onError: (Error) -> Void
     private var controller: ASAuthorizationController?
     
-    init(onComplete: @escaping (ASAuthorizationAppleIDCredential) -> Void, onCompletePassword: @escaping (ASPasswordCredential) -> Void, onError: @escaping (Error) -> Void) {
+    init(onComplete: @escaping (ASAuthorizationAppleIDCredential) -> Void, onError: @escaping (Error) -> Void) {
         self.onComplete = onComplete
-        self.onCompletePassword = onCompletePassword
         self.onError = onError
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             onComplete(appleIDCredential)
-        } else if authorization.credential is ASPasswordCredential {
-            onCompletePassword(authorization.credential as! ASPasswordCredential)
         }
     }
     
@@ -92,7 +88,6 @@ class SignInWithApple: ObservableObject {
     @Published var appleSignedInStatus: AppleSignInStatus = .signedOut
     @Published var email: String?
     @Published var fullName: String?
-    @Published var tempError: String?
     
     var delegate: SignInWithAppleDelegate?
     var currentNonce: String
@@ -113,20 +108,14 @@ class SignInWithApple: ObservableObject {
             
             self.fullName = "\(firstName) \(lastName)"
             
-        } onCompletePassword: { credential in
-            print("ONPASSWORD", credential)
         } onError: { error in
-            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "setDelegate_error", "items": [AnalyticsParameterScreenName : error.localizedDescription]])
-            self.tempError = error.localizedDescription
             print(error)
         }
     }
     
     func signIn() {
-        Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "signIn()", "full_text": "Start of signing in"])
         let request = ASAuthorizationAppleIDProvider().createRequest()
         request.requestedScopes = [.fullName, .email]
-        Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "signIn()_nonce", "full_text": sha256(currentNonce)])
         request.nonce = sha256(currentNonce)
         
         let controller = ASAuthorizationController(authorizationRequests: [request])
@@ -142,14 +131,12 @@ class SignInWithApple: ObservableObject {
     static func authenticate(credential: ASAuthorizationAppleIDCredential, currentNonce: String) {
         // Retrieving token
         guard let token = credential.identityToken else {
-            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "authenticate()", "full_text": "Unable to retrieve identityToken with Apple Sign In"])
             print("Unable to retrieve identityToken with Apple Sign In")
             return
         }
         
         // Token string
         guard let idTokenString = String(data: token, encoding: .utf8) else {
-            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "authenticate()", "full_text": "Unable to convert token data to String"])
             print("Unable to convert token data to String")
             return
         }
