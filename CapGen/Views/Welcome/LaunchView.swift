@@ -86,16 +86,22 @@ struct SignInWithAppleView: View {
             AuthManager.shared.appleAuthManager.signIn()
             Haptics.shared.play(.soft)
         } label: {
-            Circle()
-                .fill(Color.ui.richBlack)
-                .customShadow()
-                .overlay(
-                    Image("apple-icon")
-                        .resizable()
-                        .frame(width: 25, height: 25)
-                    
-                )
-                .frame(width: 55, height: 55)
+            VStack {
+                Circle()
+                    .fill(Color.ui.richBlack)
+                    .customShadow()
+                    .overlay(
+                        Image("apple-icon")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                        
+                    )
+                    .frame(width: 55, height: 55)
+                
+                Text(AuthManager.shared.appleAuthManager.tempError ?? "")
+                    .foregroundColor(.ui.richBlack)
+            }
+           
         }
     }
 }

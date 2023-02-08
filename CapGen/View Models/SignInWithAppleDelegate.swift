@@ -92,6 +92,7 @@ class SignInWithApple: ObservableObject {
     @Published var appleSignedInStatus: AppleSignInStatus = .signedOut
     @Published var email: String?
     @Published var fullName: String?
+    @Published var tempError: String?
     
     var delegate: SignInWithAppleDelegate?
     var currentNonce: String
@@ -115,7 +116,8 @@ class SignInWithApple: ObservableObject {
         } onCompletePassword: { credential in
             print("ONPASSWORD", credential)
         } onError: { error in
-            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "setDelegate_error", "full_text": error.localizedDescription])
+            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "setDelegate_error", "items": ["error" : error.localizedDescription]])
+            self.tempError = error.localizedDescription
             print(error)
         }
     }
