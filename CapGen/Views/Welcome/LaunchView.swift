@@ -78,34 +78,23 @@ struct SignInWithAppleView: View {
      For example, you can use ObservableObject and @ObservedObject to create a shared data model that multiple views can access and update. When the data model changes, the views that use the model will automatically update.
      */
     @ObservedObject var signInWithApple = SignInWithApple()
-    @State var tempError: String = ""
     
     var body: some View {
         Button {
-            Analytics.logEvent("Apple_Sign_in_View", parameters: ["name": "LaunchView", "full_text": "Sign in button pressed"])
             AuthManager.shared.appleAuthManager.setDelegate()
             AuthManager.shared.appleAuthManager.signIn()
             Haptics.shared.play(.soft)
         } label: {
-            VStack {
-                Circle()
-                    .fill(Color.ui.richBlack)
-                    .customShadow()
-                    .overlay(
-                        Image("apple-icon")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                        
-                    )
-                    .frame(width: 55, height: 55)
-                
-                Text(tempError)
-                    .foregroundColor(.ui.richBlack)
-            }
-           
-        }
-        .onReceive(AuthManager.shared.appleAuthManager.$tempError) { value in
-            tempError = value ?? "NIL"
+            Circle()
+                .fill(Color.ui.richBlack)
+                .customShadow()
+                .overlay(
+                    Image("apple-icon")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                    
+                )
+                .frame(width: 55, height: 55)
         }
     }
 }
