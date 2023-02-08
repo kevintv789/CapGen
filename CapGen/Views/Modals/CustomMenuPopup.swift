@@ -74,5 +74,8 @@ struct CustomMenuPopup: View {
             
             Haptics.shared.play(.soft)
         }
+        .onAppear() {
+            logScreenAnalytics(for: "\(CustomMenuPopup.self)")
+        }
     }
 }

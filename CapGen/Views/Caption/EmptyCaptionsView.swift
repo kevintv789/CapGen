@@ -35,6 +35,7 @@ struct EmptyCaptionsView: View {
             }
         }
         .onAppear() {
+            logScreenAnalytics(for: "\(EmptyCaptionsView.self)")
             self.captionConfigs.resetConfigs()
         }
        

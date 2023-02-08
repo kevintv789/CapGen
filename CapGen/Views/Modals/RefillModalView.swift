@@ -43,6 +43,7 @@ struct RefillModalView: View {
             .padding(30)
         }
         .onAppear {
+            logScreenAnalytics(for: "\(RefillModalView.self)")
             // Dismiss bottom sheet modal when ad is exited
             guard let isAdDone = self.isAdDone else { return }
             if (isAdDone) {

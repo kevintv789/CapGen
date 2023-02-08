@@ -61,6 +61,9 @@ struct CongratsModalView: View {
             }
             .padding()
         }
+        .onAppear() {
+            logScreenAnalytics(for: "\(CongratsModalView.self)")
+        }
         
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Firebase
 
 struct RoundedCorner: Shape {
     
@@ -20,6 +21,11 @@ struct RoundedCorner: Shape {
 }
 
 extension View {
+    
+    // Analytics
+    func logScreenAnalytics(for screenName: String) {
+         Analytics.logEvent(AnalyticsEventScreenView, parameters: [AnalyticsParameterScreenName: screenName, AnalyticsParameterScreenClass: screenName])
+    }
     
     func removePredictiveSuggestions() -> some View {
         self.keyboardType(.alphabet)

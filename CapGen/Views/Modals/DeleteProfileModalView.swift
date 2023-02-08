@@ -82,6 +82,9 @@ struct DeleteProfileModalView: View {
             .padding()
            
         }
+        .onAppear() {
+            logScreenAnalytics(for: "\(DeleteProfileModalView.self)")
+        }
     }
 }
 

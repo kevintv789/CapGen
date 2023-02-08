@@ -225,6 +225,7 @@ struct CaptionView: View {
             
         }
         .onAppear() {
+            logScreenAnalytics(for: "\(CaptionView.self)")
             if (self.openAiConnector.mutableCaptionGroup != nil) {
                 self.mutableCaptionGroup = self.openAiConnector.mutableCaptionGroup!
             }
