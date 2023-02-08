@@ -297,6 +297,8 @@
 		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
 		D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulatedCaptionsView.swift; sourceTree = "<group>"; };
 		D47303FF299336A300179FEB /* CapGenRelease-DEV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CapGenRelease-DEV.entitlements"; sourceTree = "<group>"; };
+		D4730400299408A800179FEB /* CapGenRelease-PROD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CapGenRelease-PROD.entitlements"; sourceTree = "<group>"; };
+		D4730401299408CB00179FEB /* CapGenDebug-DEV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CapGenDebug-DEV.entitlements"; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaglistViewModel.swift; sourceTree = "<group>"; };
 		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
@@ -430,6 +432,8 @@
 		D4005DB3295BE0E0004D695D /* CapGen */ = {
 			isa = PBXGroup;
 			children = (
+				D4730401299408CB00179FEB /* CapGenDebug-DEV.entitlements */,
+				D4730400299408A800179FEB /* CapGenRelease-PROD.entitlements */,
 				D47303FF299336A300179FEB /* CapGenRelease-DEV.entitlements */,
 				D4056E912970AC6E00D3894D /* CapGen.entitlements */,
 				D4056E7D296F0C7E00D3894D /* Lottie */,
@@ -1286,7 +1290,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = CapGen/CapGen.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "CapGen/CapGenDebug-DEV.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1649,7 +1653,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = CapGen/CapGen.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "CapGen/CapGenRelease-PROD.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1737,7 +1741,7 @@
 				D4056E462968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Debug-DEV";
+			defaultConfigurationName = "Release-PROD";
 		};
 		D4005DD5295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGen" */ = {
 			isa = XCConfigurationList;
@@ -1748,7 +1752,7 @@
 				D4056E472968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Debug-DEV";
+			defaultConfigurationName = "Release-PROD";
 		};
 		D4005DD8295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenTests" */ = {
 			isa = XCConfigurationList;
@@ -1759,7 +1763,7 @@
 				D4056E482968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Debug-DEV";
+			defaultConfigurationName = "Release-PROD";
 		};
 		D4005DDB295BE0E1004D695D /* Build configuration list for PBXNativeTarget "CapGenUITests" */ = {
 			isa = XCConfigurationList;
@@ -1770,7 +1774,7 @@
 				D4056E492968C90600D3894D /* Release-PROD */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Debug-DEV";
+			defaultConfigurationName = "Release-PROD";
 		};
 /* End XCConfigurationList section */
 
