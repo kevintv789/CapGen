@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 extension View {
     func customShadow() -> some View {
