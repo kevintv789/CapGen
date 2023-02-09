@@ -60,25 +60,22 @@ func sha256(_ input: String) -> String {
 
 class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate {
     var onComplete: (ASAuthorizationAppleIDCredential) -> Void
-    var onCompletePassword: (ASPasswordCredential) -> Void
     var onError: (Error) -> Void
     private var controller: ASAuthorizationController?
     
-    init(onComplete: @escaping (ASAuthorizationAppleIDCredential) -> Void, onCompletePassword: @escaping (ASPasswordCredential) -> Void, onError: @escaping (Error) -> Void) {
+    init(onComplete: @escaping (ASAuthorizationAppleIDCredential) -> Void, onError: @escaping (Error) -> Void) {
         self.onComplete = onComplete
-        self.onCompletePassword = onCompletePassword
         self.onError = onError
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             onComplete(appleIDCredential)
-        } else if authorization.credential is ASPasswordCredential {
-            onCompletePassword(authorization.credential as! ASPasswordCredential)
         }
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        Analytics.logEvent("Apple Sign in", parameters: ["name": "onError", "full_text": error.localizedDescription])
         onError(error)
     }
 }
@@ -111,8 +108,6 @@ class SignInWithApple: ObservableObject {
             
             self.fullName = "\(firstName) \(lastName)"
             
-        } onCompletePassword: { credential in
-            print("ONPASSWORD", credential)
         } onError: { error in
             print(error)
         }
