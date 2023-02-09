@@ -89,6 +89,7 @@ platform :ios do
     # turn off automatic signing during build so correct code signing identity is guaranteed to be used
     update_code_signing_settings(
       use_automatic_signing: false,
+      entitlements_file_path: "CapGen/CapGen.entitlements",
       targets: ["CapGen"],
       code_sign_identity: "Apple Distribution", # replace with name of code signing identity if different
       bundle_identifier: app_identifier,
@@ -102,7 +103,7 @@ platform :ios do
       scheme: ENV["SCHEME_NAME"], 
       output_name: output_name,
       configuration: ENV["CONFIG_NAME"],
-      skip_codesigning: true,
+      skip_codesigning: false,
       cloned_source_packages_path: "~/Library/Developer/Xcode/DerivedData",
       export_team_id: ENV['TEAM_ID'],
       export_options: {
