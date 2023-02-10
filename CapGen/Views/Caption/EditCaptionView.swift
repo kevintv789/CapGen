@@ -170,7 +170,6 @@ struct EditCaptionView: View {
             }
         }
         .onAppear() {
-            logScreenAnalytics(for: "\(EditCaptionView.self)")
             self.captionEditVm.editableText = self.caption
             self.textCount = self.caption.count
             self.hashtagCount = self.countHashtags(text: self.caption)

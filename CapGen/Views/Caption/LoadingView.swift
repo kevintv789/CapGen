@@ -83,7 +83,6 @@ struct LoadingView: View {
                     )
             }
             .onAppear() {
-                logScreenAnalytics(for: "\(LoadingView.self)")
                 self.router = Router(navStack: navStack)
                 self.animateSpinner()
                 

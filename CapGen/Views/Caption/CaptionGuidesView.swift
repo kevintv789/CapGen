@@ -56,9 +56,6 @@ struct CaptionGuidesView: View {
             }
            
         }
-        .onAppear() {
-            logScreenAnalytics(for: "\(CaptionGuidesView.self)")
-        }
     }
 }
 

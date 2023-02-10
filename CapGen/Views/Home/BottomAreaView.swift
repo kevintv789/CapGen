@@ -136,7 +136,6 @@ struct BottomAreaView: View {
                 .offset(x: 0, y: expandArea ? 50 : MIN_HEIGHT / 1.2)
         }
         .onAppear() {
-            logScreenAnalytics(for: "\(BottomAreaView.self)")
             self.router = Router(navStack: self.navStack)
         }
         .onReceive(self.rewardedAd.$appError) { value in

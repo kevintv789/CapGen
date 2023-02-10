@@ -203,7 +203,6 @@ struct PopulatedCaptionsView: View {
                 }
             }
             .onAppear() {
-                logScreenAnalytics(for: "\(PopulatedCaptionsView.self)")
                 self.captionConfigs.resetConfigs()
                 
                 let group: [AIRequest] = AuthManager.shared.userManager.user?.captionsGroup ?? []
