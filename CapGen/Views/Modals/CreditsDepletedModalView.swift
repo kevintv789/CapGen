@@ -73,7 +73,6 @@ struct CreditsDepletedModalView: View {
             .padding(.top, 35)
         }
         .onAppear {
-            logScreenAnalytics(for: "\(CreditsDepletedModalView.self)")
             
             self.router = Router(navStack: navStack)
             // Dismiss bottom sheet modal when ad is exited

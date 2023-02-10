@@ -70,9 +70,6 @@ struct DeleteModalView: View {
             }
             .padding(.top, 35)
         }
-        .onAppear() {
-            logScreenAnalytics(for: "\(DeleteModalView.self)")
-        }
     }
 }
 

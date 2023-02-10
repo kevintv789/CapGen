@@ -40,9 +40,6 @@ struct LaunchView: View {
                 SSOLoginView()
                     .ignoresSafeArea(.all)
             }
-            .onAppear() {
-                logScreenAnalytics(for: "\(LaunchView.self)")
-            }
         }
     }
 }

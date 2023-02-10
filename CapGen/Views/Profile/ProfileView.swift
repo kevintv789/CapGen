@@ -103,7 +103,6 @@ struct ProfileView: View {
             }
         }
         .onAppear() {
-            logScreenAnalytics(for: "\(ProfileView.self)")
             self.router = Router(navStack: navStack)
             self.captionConfigs.resetConfigs()
         }
