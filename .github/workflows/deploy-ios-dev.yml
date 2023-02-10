@@ -5,6 +5,9 @@ on:
    branches:
      - dev
 
+concurrency:
+  group: deploy-dev
+
 jobs:
  deploy:
    runs-on: macos-latest
