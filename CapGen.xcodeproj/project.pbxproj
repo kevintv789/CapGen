@@ -174,6 +174,7 @@
 		D47306C72996CEAC00179FEB /* CaptionLengthsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E352962030800D3894D /* CaptionLengthsModel.swift */; };
 		D47306C82996CEAC00179FEB /* CaptionLengthsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E352962030800D3894D /* CaptionLengthsModel.swift */; };
 		D47306C92996CEAF00179FEB /* ToneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E2B295F8F0100D3894D /* ToneModel.swift */; };
+		D47306CB2996E49E00179FEB /* loading_paperplane.json in Resources */ = {isa = PBXBuildFile; fileRef = D47306CA2996E49E00179FEB /* loading_paperplane.json */; };
 		D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */; };
 		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
 		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
@@ -969,6 +970,7 @@
 		D47306BE2996CE3A00179FEB /* libBasebandCapabilities.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libBasebandCapabilities.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/libBasebandCapabilities.tbd; sourceTree = DEVELOPER_DIR; };
 		D47306BF2996CE3A00179FEB /* MLCompute.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MLCompute.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/System/Library/Frameworks/MLCompute.framework; sourceTree = DEVELOPER_DIR; };
 		D47306C02996CE3A00179FEB /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/System/Library/Frameworks/EventKit.framework; sourceTree = DEVELOPER_DIR; };
+		D47306CA2996E49E00179FEB /* loading_paperplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_paperplane.json; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaglistViewModel.swift; sourceTree = "<group>"; };
 		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
@@ -2003,6 +2005,7 @@
 			isa = PBXGroup;
 			children = (
 				D4C3E484298087CE00C2847A /* crane_hand_lottie.json */,
+				D47306CA2996E49E00179FEB /* loading_paperplane.json */,
 				D4C3E49F2984D6ED00C2847A /* capacity_error_robot.json */,
 				D4C3E4A02984D6ED00C2847A /* general_error_robot.json */,
 				D4056EDB2978A06900D3894D /* space_man_empty.json */,
@@ -2283,6 +2286,7 @@
 				D4056DDA295C0DFB00D3894D /* Blacker-Display-Regular-trial.ttf in Resources */,
 				D4056E34296202E900D3894D /* CaptionLengths.json in Resources */,
 				D4056DDC295C0DFB00D3894D /* Blacker-Text-Heavy-Italic-trial.ttf in Resources */,
+				D47306CB2996E49E00179FEB /* loading_paperplane.json in Resources */,
 				D4056E2E295F8F3A00D3894D /* Tones.json in Resources */,
 				D4056DED295C0DFB00D3894D /* Blacker-Text-Regular-Italic-trial.ttf in Resources */,
 				D4056DEF295C0DFB00D3894D /* Blacker-Display-Light-trial.ttf in Resources */,
