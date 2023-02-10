@@ -126,6 +126,7 @@
 		D4056ED529788FCA00D3894D /* lightbulb_loader_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */; };
 		D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EDB2978A06900D3894D /* space_man_empty.json */; };
 		D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */; };
+		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */; };
 		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
 		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
@@ -338,6 +339,7 @@
 				D4056E5F2968E17700D3894D /* FirebaseDatabase in Frameworks */,
 				D4056E572968E17700D3894D /* FirebaseAnalyticsSwift in Frameworks */,
 				D4056E6D2968E17700D3894D /* FirebaseStorageCombine-Community in Frameworks */,
+				D47304042995BF4B00179FEB /* Heap in Frameworks */,
 				D4056E652968E17700D3894D /* FirebaseFirestoreCombine-Community in Frameworks */,
 				D4F1D3012988C53A00599F05 /* FacebookCore in Frameworks */,
 				D4056E7C296F0C7000D3894D /* Lottie in Frameworks */,
@@ -793,6 +795,7 @@
 				D4F1D3022988C53A00599F05 /* FacebookLogin */,
 				D4F1D3042988C53A00599F05 /* FacebookShare */,
 				D4F1D30729896BA500599F05 /* GoogleMobileAds */,
+				D47304032995BF4B00179FEB /* Heap */,
 			);
 			productName = CapGen;
 			productReference = D4005DB1295BE0E0004D695D /* CapGen Beta.app */;
@@ -875,6 +878,7 @@
 				D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
 				D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk" */,
 			);
 			productRefGroup = D4005DB2295BE0E0004D695D /* Products */;
 			projectDirPath = "";
@@ -1306,7 +1310,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
 				PRODUCT_MODULE_NAME = CapGen;
 				PRODUCT_NAME = "CapGen Beta";
@@ -1351,7 +1355,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
 				PRODUCT_NAME = "CapGen Beta";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1535,7 +1539,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1674,7 +1678,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1803,6 +1807,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/heap/heap-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 		D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/matteopuc/swiftui-navigation-stack.git";
@@ -1909,6 +1921,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D4056E9C2971FCC400D3894D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		D47304032995BF4B00179FEB /* Heap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk" */;
+			productName = Heap;
 		};
 		D4C3E4A82986368400C2847A /* NavigationStack */ = {
 			isa = XCSwiftPackageProductDependency;
