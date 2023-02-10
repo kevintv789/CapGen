@@ -381,7 +381,7 @@ struct ConnectSectionView: View {
     private func generateMessage(appStore: AppStoreModel) -> String? {
         let link: String = {
             if !appStore.storeId.isEmpty {
-                return appStore.storeId
+                return "https://apps.apple.com/us/app/capgen-ai-powered/id\(appStore.storeId)"
             } else if (!appStore.website.isEmpty) {
                 return appStore.website
             }
@@ -392,7 +392,7 @@ struct ConnectSectionView: View {
         if (!link.isEmpty) {
             var message: String {
                 """
-                Check out this new app I found called ⚡CapGen⚡! It's like an AI brain for your captions, no more struggling for the perfect words for your gram. Trust me, give it a try!"
+                Check out this new app I found called ⚡CapGen⚡! It's like an AI brain for your captions, no more struggling to find the perfect words for your gram. Trust me, give it a try!"
                 
                 \(link)
                 """
