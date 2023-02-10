@@ -11,6 +11,7 @@ import Firebase
 import GoogleMobileAds
 import NavigationStack
 import FBSDKCoreKit
+import Heap
 
 let SCREEN_WIDTH = UIScreen.main.bounds.width
 let SCREEN_HEIGHT = UIScreen.main.bounds.height
@@ -18,15 +19,6 @@ let SCREEN_HEIGHT = UIScreen.main.bounds.height
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        
-        if let APMUserDefaults = NSClassFromString("APMUserDefaults") as AnyObject?,
-           let userDefaults = APMUserDefaults.perform(#selector(getter: UserDefaults.standard))?.takeUnretainedValue() {
-           _ = userDefaults.perform(#selector(NSMutableDictionary.setObject(_:forKey:)),
-                                    with: true,
-                                    with: "/google/measurement/debug_mode")
-        }
-        UserDefaults.standard.set(true, forKey: "/google/firebase/debug_mode")
-        
         FirebaseApp.configure()
         
         // Initialize the Google Mobile Ads SDK.
@@ -37,6 +29,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
+        
+        let heapAppId: String = Bundle.main.infoDictionary?["HEAP_APP_ID"] as! String
+        // Initialize Heap for analytics
+        Heap.initialize(heapAppId)
         
         return true
     }

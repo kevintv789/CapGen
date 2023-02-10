@@ -23,6 +23,8 @@
 	<string>${ADMOB_APP_ID}</string>
 	<key>ENV</key>
 	<string>${ENV}</string>
+    <key>HEAP_APP_ID</key>
+    <string>${HEAP_APP_ID}</string>
 	<key>FacebookAppID</key>
 	<string>${FB_APP_ID}</string>
 	<key>FacebookClientToken</key>
