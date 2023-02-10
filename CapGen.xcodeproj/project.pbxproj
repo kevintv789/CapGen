@@ -175,6 +175,7 @@
 		D47306C82996CEAC00179FEB /* CaptionLengthsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E352962030800D3894D /* CaptionLengthsModel.swift */; };
 		D47306C92996CEAF00179FEB /* ToneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E2B295F8F0100D3894D /* ToneModel.swift */; };
 		D47306CB2996E49E00179FEB /* loading_paperplane.json in Resources */ = {isa = PBXBuildFile; fileRef = D47306CA2996E49E00179FEB /* loading_paperplane.json */; };
+		D47306CC2996EBC100179FEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4005DB8295BE0E1004D695D /* Assets.xcassets */; };
 		D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */; };
 		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
 		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
@@ -2339,6 +2340,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D47306CC2996EBC100179FEB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
