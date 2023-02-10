@@ -34,9 +34,6 @@ struct EmptyCaptionsView: View {
                 Spacer()
             }
         }
-        .onAppear() {
-            self.captionConfigs.resetConfigs()
-        }
        
     }
 }

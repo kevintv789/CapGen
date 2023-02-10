@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-import Firebase
+
 
 struct OpenAIResponseModel: Codable {
     var id: String
