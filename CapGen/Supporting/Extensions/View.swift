@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Firebase
 
 struct RoundedCorner: Shape {
     
@@ -20,7 +21,6 @@ struct RoundedCorner: Shape {
 }
 
 extension View {
-    
     func removePredictiveSuggestions() -> some View {
         self.keyboardType(.alphabet)
             .disableAutocorrection(true)

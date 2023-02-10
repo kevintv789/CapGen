@@ -46,7 +46,7 @@ class Router {
     }
     
     func toLoadingView() {
-        self.navStack.push(LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270)))
+        self.navStack.push(LoadingView())
     }
     
     func toEditCaptionView(color: Color, title: String, platform: String, caption: String) {
