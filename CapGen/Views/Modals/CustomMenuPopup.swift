@@ -19,11 +19,13 @@ struct CustomMenuPopup: View {
     @State var menuTheme: MenuTheme = .light
     @State var orientation: Orientation = .vertical
     @Binding var shareableData: ShareableData?
+    @State var socialMediaPlatform: String? = nil
     var edit: (() -> Void)?
     var copy: (() -> Void)?
     var delete: (() -> Void)?
     var reset: (() -> Void)?
     var onMenuOpen: (() -> Void)?
+    var onCopyAndGo: (() -> Void)?
     
     var body: some View {
         Menu {
@@ -48,6 +50,18 @@ struct CustomMenuPopup: View {
                 }
             }
             
+            if (socialMediaPlatform != nil && onCopyAndGo != nil) {
+                Button {
+                    onCopyAndGo!()
+                } label: {
+                    HStack {
+                        Image(socialMediaPlatform!)
+                        Text("Copy & Go")
+                    }
+                  
+                }
+            }
+            
             if (delete != nil) {
                 Button(role: .destructive, action: { delete!(); Haptics.shared.play(.soft) }) {
                     Label("Delete", systemImage: "trash")
@@ -59,7 +73,6 @@ struct CustomMenuPopup: View {
                     Label("Reset", systemImage: "arrow.clockwise")
                 }
             }
-            
         } label: {
             Image(systemName: "ellipsis")
                 .rotationEffect(orientation == .vertical ? .degrees(90) : .degrees(0))

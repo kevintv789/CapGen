@@ -16,6 +16,9 @@ public class OpenAIConnector: ObservableObject {
     
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
 
+    /*
+     * Generates the prompt for the Open AI API
+     */
     func generatePrompt(platform: String, prompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String) {
         self.requestModel = AIRequest(platform: platform, prompt: prompt, tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength)
         
@@ -47,6 +50,9 @@ public class OpenAIConnector: ObservableObject {
         self.mutableCaptionGroup?.title = title
     }
     
+    /*
+     * Processes the prompt and returns the generated captions
+     */
     @MainActor
     public func processPrompt(apiKey: String?) async -> String? {
         print("PROMPT", self.prompt)
@@ -86,6 +92,9 @@ public class OpenAIConnector: ObservableObject {
         return nil
     }
     
+    /*
+     * Executes a request to the Open AI API
+     */
     private func executeRequest(request: URLRequest, withSessionConfig sessionConfig: URLSessionConfiguration?) async -> OpenAIResponseModel? {
         let session: URLSession
         
