@@ -56,6 +56,7 @@ struct SearchBar: View {
                 Haptics.shared.play(.soft)
                 onCancelSearch()
                 hideKeyboard()
+                searchText.removeAll()
             }, label: {
                 Text("Cancel")
                     .foregroundColor(.ui.richBlack)

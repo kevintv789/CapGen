@@ -126,7 +126,6 @@
 		D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EDB2978A06900D3894D /* space_man_empty.json */; };
 		D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */; };
 		D45707A8299A9AD2001D80AD /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707A7299A9AD2001D80AD /* SearchBar.swift */; };
-		D45707AA299AA111001D80AD /* FilteredPopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707A9299AA111001D80AD /* FilteredPopulatedCaptionsView.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D47304062996C3F400179FEB /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
@@ -350,7 +349,6 @@
 		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
 		D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulatedCaptionsView.swift; sourceTree = "<group>"; };
 		D45707A7299A9AD2001D80AD /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
-		D45707A9299AA111001D80AD /* FilteredPopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredPopulatedCaptionsView.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
 		D47304522996CE1900179FEB /* libAudioDSPCore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libAudioDSPCore.tbd; path = usr/lib/libAudioDSPCore.tbd; sourceTree = SDKROOT; };
@@ -2064,7 +2062,6 @@
 				D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */,
 				D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */,
 				D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */,
-				D45707A9299AA111001D80AD /* FilteredPopulatedCaptionsView.swift */,
 			);
 			path = Caption;
 			sourceTree = "<group>";
@@ -2518,7 +2515,6 @@
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
 				D4056EC02974AF6D00D3894D /* CongratsModalView.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
-				D45707AA299AA111001D80AD /* FilteredPopulatedCaptionsView.swift in Sources */,
 				D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */,
 				D4C3E4B029885FFD00C2847A /* CaptionConfigsViewModel.swift in Sources */,
 				D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */,
