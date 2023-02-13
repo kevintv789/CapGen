@@ -14,7 +14,7 @@ class CaptionEditViewModel: ObservableObject {
     @Published var captionsGroupParsed: [String] = []
     @Published var captionGroupTitle: String = ""
     @Published var textSizes: [CGSize] = []
-    
+
     func resetCaptionView() {
         DispatchQueue.main.async {
             self.editableText = ""
