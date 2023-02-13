@@ -17,19 +17,19 @@ extension String {
         let regex = try! NSRegularExpression(pattern: pattern)
         let matches = regex.matches(in: self, range: NSRange(startIndex..., in: self))
         let splits = [startIndex]
-        + matches
+            + matches
             .map { Range($0.range, in: self)! }
-            .flatMap { [ $0.lowerBound, $0.upperBound ] }
-        + [endIndex]
-        
+            .flatMap { [$0.lowerBound, $0.upperBound] }
+            + [endIndex]
+
         return zip(splits, splits.dropFirst())
-            .map { String(self[$0 ..< $1])}
+            .map { String(self[$0 ..< $1]) }
     }
-    
+
     subscript(offset: Int) -> Character {
         self[index(startIndex, offsetBy: offset)]
     }
-    
+
     // Get total width of a string
     func getSize(of type: SizeTye = .width) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 20)

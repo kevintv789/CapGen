@@ -5,15 +5,14 @@
 //  Created by Kevin Vu on 12/30/22.
 //
 
+import Firebase
 import Foundation
 import SwiftUI
-import Firebase
 
 struct RoundedCorner: Shape {
-    
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = .allCorners
-    
+
     func path(in rect: CGRect) -> Path {
         let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
         return Path(path.cgPath)
@@ -21,21 +20,32 @@ struct RoundedCorner: Shape {
 }
 
 extension View {
+    func placeholder<Content: View>(
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content) -> some View {
+            
+            ZStack(alignment: alignment) {
+                placeholder().opacity(shouldShow ? 1 : 0)
+                self
+            }
+        }
+    
     func removePredictiveSuggestions() -> some View {
-        self.keyboardType(.alphabet)
+        keyboardType(.alphabet)
             .disableAutocorrection(true)
     }
-    
+
     // To use: .cornerRadius(14, corners: [.topLeft, .topRight])
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape( RoundedCorner(radius: radius, corners: corners) )
+        clipShape(RoundedCorner(radius: radius, corners: corners))
     }
-    
+
     func hideKeyboard() {
         let resign = #selector(UIResponder.resignFirstResponder)
         UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
     }
-    
+
     /// Applies the given transform if the given condition evaluates to `true`.
     /// - Parameters:
     ///   - condition: The condition to evaluate.
@@ -48,12 +58,11 @@ extension View {
             self
         }
     }
-    
+
     // Create extension for pop-up view
     // use the @ViewBuilder to create child views for a specific SwiftUI view in a readable way without having to use any return keywords.
-    func modalView<Content: View>(horizontalPadding: CGFloat = 40.0, show: Binding<Bool>, @ViewBuilder content: @escaping () -> Content, onClickExit: (() -> ())?) -> some View {
-        return self
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+    func modalView<Content: View>(horizontalPadding: CGFloat = 40.0, show: Binding<Bool>, @ViewBuilder content: @escaping () -> Content, onClickExit: (() -> Void)?) -> some View {
+        return frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .overlay {
                 if show.wrappedValue {
                     Color.ui.richBlack.opacity(0.35).ignoresSafeArea(.all)
@@ -62,11 +71,10 @@ extension View {
                         }
                     GeometryReader { geo in
                         let size = geo.size
-                        
+
                         ZStack {
-                            
                             content()
-                            
+
                             Button {
                                 onClickExit?()
                             } label: {
@@ -79,7 +87,6 @@ extension View {
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                             .opacity(onClickExit?() != nil ? 1 : 0)
                             .disabled(onClickExit?() == nil)
-                            
                         }
                         .cornerRadius(16)
                         .frame(width: size.width - horizontalPadding, height: size.height / 2.5, alignment: .center)

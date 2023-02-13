@@ -9,7 +9,7 @@ import SwiftUI
 
 extension Color {
     static let ui = Color.UI()
-    
+
     struct UI {
         let middleYellowRed = Color("Middle Yellow Red")
         let middleBluePurple = Color("Middle Blue Purple")

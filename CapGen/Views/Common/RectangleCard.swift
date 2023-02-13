@@ -11,7 +11,7 @@ struct RectangleCard: View {
     let title: String
     let description: String?
     let isSelected: Bool
-    
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16)
@@ -27,25 +27,22 @@ struct RectangleCard: View {
                             .font(.ui.graphikBold)
                             .padding(.top, 10)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        
+
                         Spacer()
                             .frame(height: 10)
-                        
-                        if (description != nil) {
+
+                        if description != nil {
                             Text(description!)
                                 .foregroundColor(isSelected ? Color.ui.richBlack : Color.ui.cadetBlueCrayola)
                                 .font(.ui.blackerTextMediumSmall)
                                 .multilineTextAlignment(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        
+
                         Spacer()
-                        
                     }
-                        .padding(5)
+                    .padding(5)
                 )
-            
         }
-        
     }
 }

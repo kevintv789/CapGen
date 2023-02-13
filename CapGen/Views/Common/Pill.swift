@@ -9,10 +9,10 @@ import SwiftUI
 
 struct Pill: View {
     @ScaledMetric var scaledSize: CGFloat = 1
-    
+
     let title: String
     let isToggled: Bool
-    
+
     var body: some View {
         RoundedRectangle(cornerRadius: 100)
             .fill(isToggled ? Color.ui.middleBluePurple : Color.ui.cultured)
@@ -23,8 +23,8 @@ struct Pill: View {
                     Image(title)
                         .resizable()
                         .frame(width: 25 * scaledSize, height: 25 * scaledSize)
-                    
-                    if (isToggled) {
+
+                    if isToggled {
                         Text(title)
                             .font(.ui.title4)
                             .foregroundColor(Color.ui.cultured)
