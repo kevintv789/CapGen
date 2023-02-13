@@ -45,21 +45,6 @@ struct EditCaptionView: View {
         }
     }
     
-    private func openLink() {
-        let socialMediaFiltered = socialMediaPlatforms.first(where: { $0.title == self.platform })
-        let url = URL(string: socialMediaFiltered!.link)!
-        let application = UIApplication.shared
-        
-        // Check if the App is installed
-        if application.canOpenURL(url) {
-            application.open(url)
-        } else {
-            // If Facebook App is not installed, open Safari Link
-            application.open(URL(string: socialMediaFiltered!.websiteLink)!)
-        }
-        openURL(URL(string: socialMediaFiltered!.link)!)
-    }
-    
     var body: some View {
         ZStack(alignment: .topLeading) {
             bgColor.ignoresSafeArea(.all)
@@ -86,7 +71,7 @@ struct EditCaptionView: View {
                         
                         Spacer()
                         
-                        CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, copy: {
+                        CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, socialMediaPlatform: self.platform, copy: {
                             // Copy selected
                             self.isTextCopied = true
                             UIPasteboard.general.string = String(self.captionEditVm.editableText)
@@ -96,6 +81,11 @@ struct EditCaptionView: View {
                             self.captionEditVm.editableText = self.caption
                         }, onMenuOpen: {
                             self.shareableData = mapShareableData(caption: self.captionEditVm.editableText, captionGroup: self.openAiConnector.mutableCaptionGroup)
+                        }, onCopyAndGo: {
+                            // Copy and go run openSocialMediaLink(for: platform)
+                            UIPasteboard.general.string = String(self.captionEditVm.editableText)
+                            openSocialMediaLink(for: platform)
+                            Haptics.shared.play(.soft)
                         })
                         .padding(.horizontal)
                     }
@@ -149,7 +139,7 @@ struct EditCaptionView: View {
                     Haptics.shared.play(.soft)
                 } onPlatformClick: {
                     // On platform
-                    self.openLink()
+                    openSocialMediaLink(for: platform)
                     Haptics.shared.play(.soft)
                 }
 

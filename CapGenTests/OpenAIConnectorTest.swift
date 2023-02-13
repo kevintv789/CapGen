@@ -19,6 +19,9 @@ final class OpenAIConnectorTest: XCTestCase {
         sut = nil
     }
 
+    /**
+     Tests that the prompt is generated correctly
+     */
     func test_generatePrompt() {
         let tones: [ToneModel] = [ToneModel(id: 1, title: "Formal", description: "Professional, respectful, and polite.", icon: "🤵")]
         let mockPromptOptions: AIRequest = AIRequest(id: "123", platform: "Instagram", prompt: "Give me a caption about my dogs", tones: tones, includeEmojis: false, includeHashtags: false, captionLength: "veryShort", title: "", dateCreated: "", captions: [])
@@ -31,5 +34,4 @@ final class OpenAIConnectorTest: XCTestCase {
         
         XCTAssertEqual(actualPrompt, expectedPrompt)
     }
-
 }

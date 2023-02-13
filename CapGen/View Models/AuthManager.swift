@@ -22,25 +22,42 @@ class AuthManager: NSObject, ObservableObject {
     static let shared = AuthManager()
     var handle : AuthStateDidChangeListenerHandle?
     
+    /*
+     * Initializes the AuthManager
+     */
     override private init() {
+        // Set the initial state of the user
         isSignedIn = false
         super.init()
         handle = auth.addStateDidChangeListener(authStateChanged)
     }
     
+    /*
+     * Logs the user in using Firebase
+     */
     func login(credential: AuthCredential, completionBlock: @escaping (_ success: Bool) -> Void) {
+        // Sign in with Firebase
         Auth.auth().signIn(with: credential, completion: { (result, error) in
+            // Check for errors
             if error != nil {
                 self.appError = ErrorType(error: .loginError)
                 print("ERROR logging into Firebase", error!.localizedDescription)
                 return
             }
             
+            // User is signed in
             guard let userId = self.auth.currentUser?.uid else { return }
 
+            // Call the completion block
             completionBlock(error == nil)
+
+            // Create the user document
             self.userManager.createUserDoc(auth: self.auth)
+
+            // Bind the user document
             self.userManager.getUser(with: userId)
+
+            // Set the signed in state
             self.isSignedIn = true
         })
     }
