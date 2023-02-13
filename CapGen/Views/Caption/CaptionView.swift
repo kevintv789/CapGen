@@ -23,8 +23,7 @@ func mapShareableData(caption: String, captionGroup: AIRequest?) -> ShareableDat
     }
     
     return nil
-}
-
+}  
 
 struct CaptionView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -183,7 +182,7 @@ struct CaptionView: View {
                                     }
                                 } label: {
                                     if index < 5 {
-                                        CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index], shareableData: self.$shareableData,
+                                        CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, socialMediaPlatform: self.openAiConnector.mutableCaptionGroup?.platform ?? "", colorFilled: $cardColorFill[index], shareableData: self.$shareableData,
                                         edit: {
                                             // edit
                                             self.captionEditVm.selectedIndex = index
@@ -191,6 +190,11 @@ struct CaptionView: View {
                                             self.router?.toEditCaptionView(color: cardColorFill[index], title: self.captionEditVm.captionGroupTitle, platform: self.platform, caption: caption)
                                         }, onMenuOpen: {
                                             self.shareableData = mapShareableData(caption: caption, captionGroup: self.mutableCaptionGroup)
+                                        }, onCopyAndGo: {
+                                            // copy text and run openSocialMediaLink function  
+                                            UIPasteboard.general.string = String(caption)
+                                            Haptics.shared.play(.soft)
+                                            openSocialMediaLink(for: self.openAiConnector.mutableCaptionGroup?.platform ?? "")
                                         })
                                         .padding(10)
                                         
@@ -352,12 +356,14 @@ struct EditableTitleView: View {
 struct CaptionCard: View {
     var caption: String
     var isCaptionSelected: Bool
+    var socialMediaPlatform: String
     @State private var phase = 0.0
     @Binding var colorFilled: Color
     @Binding var shareableData: ShareableData?
     
     var edit: () -> Void
     var onMenuOpen: () -> Void
+    var onCopyAndGo: () -> Void
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -377,11 +383,13 @@ struct CaptionCard: View {
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    CustomMenuPopup(menuTheme: .dark, shareableData: $shareableData,
+                    CustomMenuPopup(menuTheme: .dark, shareableData: $shareableData, socialMediaPlatform: socialMediaPlatform,
                     edit: {
                         edit()
                     }, onMenuOpen: {
                         onMenuOpen()
+                    }, onCopyAndGo: {
+                        onCopyAndGo()
                     })
                     .onTapGesture { }
                     .frame(maxHeight: .infinity, alignment: .topTrailing)

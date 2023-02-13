@@ -176,6 +176,7 @@
 		D47306C92996CEAF00179FEB /* ToneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E2B295F8F0100D3894D /* ToneModel.swift */; };
 		D47306CB2996E49E00179FEB /* loading_paperplane.json in Resources */ = {isa = PBXBuildFile; fileRef = D47306CA2996E49E00179FEB /* loading_paperplane.json */; };
 		D47306CC2996EBC100179FEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4005DB8295BE0E1004D695D /* Assets.xcassets */; };
+		D47306CF29993D5E00179FEB /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47306CE29993D5E00179FEB /* Helpers.swift */; };
 		D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */; };
 		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
 		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
@@ -972,6 +973,7 @@
 		D47306BF2996CE3A00179FEB /* MLCompute.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MLCompute.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/System/Library/Frameworks/MLCompute.framework; sourceTree = DEVELOPER_DIR; };
 		D47306C02996CE3A00179FEB /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/System/Library/Frameworks/EventKit.framework; sourceTree = DEVELOPER_DIR; };
 		D47306CA2996E49E00179FEB /* loading_paperplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_paperplane.json; sourceTree = "<group>"; };
+		D47306CE29993D5E00179FEB /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaglistViewModel.swift; sourceTree = "<group>"; };
 		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
@@ -1860,6 +1862,7 @@
 			isa = PBXGroup;
 			children = (
 				D4005DB4295BE0E0004D695D /* CapGenApp.swift */,
+				D47306CD29993D5100179FEB /* Common */,
 				D4005DE5295C0736004D695D /* Fonts */,
 				D4005DE2295C041C004D695D /* Extensions */,
 				D4056E412967283D00D3894D /* Config-dev.xcconfig */,
@@ -2074,6 +2077,14 @@
 				D4056E82296F867D00D3894D /* LaunchView.swift */,
 			);
 			path = Welcome;
+			sourceTree = "<group>";
+		};
+		D47306CD29993D5100179FEB /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				D47306CE29993D5E00179FEB /* Helpers.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		D4C3E48829819C4300C2847A /* Mocks */ = {
@@ -2489,6 +2500,7 @@
 				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
 				D4056E79296E2C1700D3894D /* String.swift in Sources */,
+				D47306CF29993D5E00179FEB /* Helpers.swift in Sources */,
 				D4C3E49C2984710E00C2847A /* DeleteProfileModalView.swift in Sources */,
 				D4056E85296F868800D3894D /* HomeView.swift in Sources */,
 				D4056ED329788FAF00D3894D /* OverlayedLoaderView.swift in Sources */,
