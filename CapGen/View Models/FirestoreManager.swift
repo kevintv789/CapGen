@@ -135,7 +135,7 @@ class FirestoreManager: ObservableObject {
     /**
         This function deletes the specific caption group
      */
-    func onCaptionsGroupDelete(for uid: String?, element: AIRequest, captionsGroup: [AIRequest]) {
+    func onCaptionsGroupDelete(for uid: String?, element: AIRequest, captionsGroup: [AIRequest], onComplete: () -> Void) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             return
@@ -149,6 +149,8 @@ class FirestoreManager: ObservableObject {
                 docRef.updateData(["captionsGroup": FieldValue.arrayRemove([captionsGroup[indexOfGroup!].dictionary])])
             }
         }
+        
+        onComplete()
     }
 
     func getCaptionsCount(using captionsGroup: [AIRequest]) -> Int {
