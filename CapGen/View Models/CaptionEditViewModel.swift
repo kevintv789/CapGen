@@ -8,13 +8,18 @@
 
 import Foundation
 
+struct CaptionGroupTextSize: Identifiable {
+    var id: String
+    var textSize: CGSize
+}
+
 class CaptionEditViewModel: ObservableObject {
     @Published var editableText: String = ""
     @Published var selectedIndex: Int = 0
     @Published var captionsGroupParsed: [String] = []
     @Published var captionGroupTitle: String = ""
-    @Published var textSizes: [CGSize] = []
-    
+    @Published var immutableCgTextSizes: [CaptionGroupTextSize] = []
+
     func resetCaptionView() {
         DispatchQueue.main.async {
             self.editableText = ""

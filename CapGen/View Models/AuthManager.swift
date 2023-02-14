@@ -5,23 +5,23 @@
 //  Created by Kevin Vu on 1/13/23.
 //
 
-import Foundation
 import Firebase
 import FirebaseAuth
+import Foundation
 import SwiftUI
 
 class AuthManager: NSObject, ObservableObject {
     @Published var isSignedIn: Bool?
-    @Published var googleAuthMan: GoogleAuthManager = GoogleAuthManager()
-    @Published var fbAuthManager: FBAuthManager = FBAuthManager()
-    @Published var appleAuthManager: SignInWithApple = SignInWithApple()
-    @Published var userManager: UserManager = UserManager()
+    @Published var googleAuthMan: GoogleAuthManager = .init()
+    @Published var fbAuthManager: FBAuthManager = .init()
+    @Published var appleAuthManager: SignInWithApple = .init()
+    @Published var userManager: UserManager = .init()
     @Published var appError: ErrorType?
-    
+
     private let auth = Auth.auth()
     static let shared = AuthManager()
-    var handle : AuthStateDidChangeListenerHandle?
-    
+    var handle: AuthStateDidChangeListenerHandle?
+
     /*
      * Initializes the AuthManager
      */
@@ -31,20 +31,20 @@ class AuthManager: NSObject, ObservableObject {
         super.init()
         handle = auth.addStateDidChangeListener(authStateChanged)
     }
-    
+
     /*
      * Logs the user in using Firebase
      */
     func login(credential: AuthCredential, completionBlock: @escaping (_ success: Bool) -> Void) {
         // Sign in with Firebase
-        Auth.auth().signIn(with: credential, completion: { (result, error) in
+        Auth.auth().signIn(with: credential, completion: { _, error in
             // Check for errors
             if error != nil {
                 self.appError = ErrorType(error: .loginError)
                 print("ERROR logging into Firebase", error!.localizedDescription)
                 return
             }
-            
+
             // User is signed in
             guard let userId = self.auth.currentUser?.uid else { return }
 
@@ -61,57 +61,60 @@ class AuthManager: NSObject, ObservableObject {
             self.isSignedIn = true
         })
     }
-    
+
+    /*
+     * Logs the user out
+     */
     func setSignOut() {
-        self.isSignedIn = false
-        self.unbindAuth()
-        self.userManager.unbindSnapshot()
+        isSignedIn = false
+        unbindAuth()
+        userManager.unbindSnapshot()
     }
-    
+
     func logout() {
         do {
-            if (googleAuthMan.googleSignInState == .signedIn) {
+            if googleAuthMan.googleSignInState == .signedIn {
                 // We know Google SSO was used, sign out using Google
                 // so that users can login into a different account
                 googleAuthMan.signOut()
             }
-            
-            if (appleAuthManager.appleSignedInStatus == .signedIn) {
+
+            if appleAuthManager.appleSignedInStatus == .signedIn {
                 appleAuthManager.signOut()
             }
-            
-            if (fbAuthManager.fbSignedInStatus == .signedIn) {
+
+            if fbAuthManager.fbSignedInStatus == .signedIn {
                 fbAuthManager.signOut()
             }
-            
+
             try Auth.auth().signOut()
-            
-            self.setSignOut()
-            
+
+            setSignOut()
+
         } catch let error as NSError {
             self.appError = ErrorType(error: .genericError)
             print("Failed to sign out", error)
         }
     }
-    
-    private func authStateChanged(with auth: Auth, user: User?) {
+
+    private func authStateChanged(with _: Auth, user: User?) {
         if user != nil {
             // User is signed in
             let userId = user!.uid
-            self.userManager.getUser(with: userId)
-            
-            self.isSignedIn = true
+            userManager.getUser(with: userId)
+
+            isSignedIn = true
         } else {
-            self.setSignOut()
+            setSignOut()
         }
     }
-    
+
     func unbindAuth() {
         if let handle = handle {
             Auth.auth().removeStateDidChangeListener(handle)
         }
     }
-    
+
     deinit {
         unbindAuth()
     }

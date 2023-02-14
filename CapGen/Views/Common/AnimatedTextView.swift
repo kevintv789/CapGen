@@ -13,12 +13,12 @@ struct AnimatedTextView: View {
     var isRepeat: Bool
     var timeInterval: CGFloat
     var typingSpeed: CGFloat
-    
+
     func typeWriter(at position: Int = 0) {
         if position == 0 {
-            self.initialText = ""
+            initialText = ""
         }
-        
+
         if position < finalText.count {
             DispatchQueue.main.asyncAfter(deadline: .now() + typingSpeed) {
                 // get the character from finalText and append it to text
@@ -28,12 +28,12 @@ struct AnimatedTextView: View {
             }
         }
     }
-    
+
     var body: some View {
         Text(initialText)
-            .onAppear() {
+            .onAppear {
                 typeWriter()
-                if (isRepeat) {
+                if isRepeat {
                     Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: isRepeat) { _ in
                         typeWriter()
                     }

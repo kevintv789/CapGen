@@ -7,9 +7,9 @@
 
 /**
  Family: Graphik Font names: ["Graphik-Regular", "Graphik-RegularItalic", "Graphik-Thin", "Graphik-ThinItalic", "Graphik-Extralight", "Graphik-ExtralightItalic", "Graphik-Light", "Graphik-LightItalic", "Graphik-Medium", "Graphik-MediumItalic", "Graphik-Semibold", "Graphik-SemiboldItalic", "Graphik-Bold", "Graphik-BoldItalic", "Graphik-Black", "Graphik-BlackItalic", "Graphik-Super", "Graphik-SuperItalic"]
- 
+
  Family: Blacker Display Font names: ["BlackerDisplay-Regular", "BlackerDisplay-Italic", "BlackerDisplay-Light", "BlackerDisplay-LightItalic", "BlackerDisplay-Medium", "BlackerDisplay-MediumItalic", "BlackerDisplay-Bold", "BlackerDisplay-BoldItalic", "BlackerDisplay-ExtraBold", "BlackerDisplay-ExtraBoldItalic", "BlackerDisplay-Heavy", "BlackerDisplay-HeavyItalic"]
- 
+
  Family: Blacker Text Font names: ["BlackerText-Book", "BlackerText-Regular", "BlackerText-BookItalic", "BlackerText-Italic", "BlackerText-Light", "BlackerText-LightItalic", "BlackerText-Medium", "BlackerText-MediumItalic", "BlackerText-Bold", "BlackerText-BoldItalic", "BlackerText-Heavy", "BlackerText-HeavyItalic"]
  */
 
@@ -39,7 +39,7 @@ extension Font {
         let graphikBoldMed = Font.custom("Graphik-Bold", size: sizes.MEDIUM)
         let graphikLightItalic = Font.custom("Graphik-LightItalic", size: sizes.SMALL)
         let blackerTextMediumSmall = Font.custom("BlackerText-Medium", size: sizes.SMALL)
-        
+
         let largeTitle = Font.custom("Graphik-Black", size: 34, relativeTo: .largeTitle)
         let largeTitleMd = Font.custom("Graphik-Black", size: 28, relativeTo: .largeTitle)
         let largeTitleSm = Font.custom("Graphik-Bold", size: 26, relativeTo: .largeTitle)
