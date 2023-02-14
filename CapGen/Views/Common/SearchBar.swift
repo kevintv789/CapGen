@@ -16,7 +16,7 @@ struct SearchBar: View {
     var onCancelSearch: () -> Void
 
     var body: some View {
-        // search bar with an image icon 
+        // search bar with an image icon
         HStack {
             RoundedRectangle(cornerRadius: 8)
                 .fill(Color.ui.cultured)
@@ -36,7 +36,7 @@ struct SearchBar: View {
                             .font(.ui.headline)
                             .focused($isFocused)
                             .foregroundColor(.ui.richBlack)
-                           
+
                         if !searchText.isEmpty {
                             Button {
                                 Haptics.shared.play(.soft)
@@ -47,7 +47,6 @@ struct SearchBar: View {
                                     .foregroundColor(.ui.cadetBlueCrayola)
                             }
                         }
-                      
                     }
                     .padding()
                 )
@@ -66,7 +65,7 @@ struct SearchBar: View {
             .padding(.leading, 15)
         }
         .onChange(of: self.isSearching, perform: { isSearching in
-            if (isSearching) {
+            if isSearching {
                 self.isFocused.toggle()
             }
         })

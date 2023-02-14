@@ -9,12 +9,11 @@ import Foundation
 
 let captionsGroupMock: [AIRequest] = [
     AIRequest(id: "123", platform: "Instagram", prompt: "HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO", tones: [ToneModel(id: 123, title: "Dark", description: "asd", icon: "")], includeEmojis: true, includeHashtags: true, captionLength: "veryShort", title: "HI 1", dateCreated: "Jan", captions: [
-    
         GeneratedCaptions(description: "Rise and shine! 🌞"),
         GeneratedCaptions(description: "Life is a journey, enjoy the ride! 🚀"),
         GeneratedCaptions(description: "Never stop dreaming! 💭💫"),
         GeneratedCaptions(description: "Time flies when you're having fun! ⏰🎉"),
-        GeneratedCaptions(description: "The best things in life are the people we love, the places we've been, and the memories we've made along the way. ❤️🌍📷")
+        GeneratedCaptions(description: "The best things in life are the people we love, the places we've been, and the memories we've made along the way. ❤️🌍📷"),
 
     ]),
 

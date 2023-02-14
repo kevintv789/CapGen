@@ -143,7 +143,6 @@ struct PopulatedCaptionsView: View {
                         .overlay(
                             VStack(spacing: 0) {
                                 ZStack(alignment: .top) {
-                                 
                                     SearchBar(searchBarWidth: self.isSearching ? SCREEN_WIDTH * 0.7 : 0, isSearching: self.$isSearching, searchText: self.$searchText) {
                                         // on cancel search with spring animation
                                         self.isSearching.toggle()
@@ -159,7 +158,7 @@ struct PopulatedCaptionsView: View {
                                                 .padding(.leading, 15)
                                                 .padding(.bottom, 20)
                                                 .padding(.top, 15)
-                                            
+
                                             Button {
                                                 Haptics.shared.play(.soft)
                                                 self.isSearching.toggle()
@@ -173,7 +172,7 @@ struct PopulatedCaptionsView: View {
                                     }
                                     .animation(.spring(), value: self.isSearching)
                                 }
-                                
+
                                 if !self.isSearching {
                                     PlatformHeaderView(platforms: platforms, platformSelected: $platformSelected)
                                 }
@@ -183,24 +182,24 @@ struct PopulatedCaptionsView: View {
                         )
 
                     ScrollView(.vertical, showsIndicators: false) {
-                        if (self.isSearching && self.searchText.isEmpty) {
+                        if self.isSearching && self.searchText.isEmpty {
                             // Initial search
                             NoSearchResultsView(title: "Looking for something specific?", subtitle: "Type your search term above and we'll scour our content for any captions that match your keyword.")
-                        } else if (self.isSearching && !self.searchText.isEmpty && mutableCaptionsGroup.isEmpty) {
+                        } else if self.isSearching && !self.searchText.isEmpty && mutableCaptionsGroup.isEmpty {
                             // Search with nothing found
                             NoSearchResultsView(title: "No captions found", subtitle: " Looks like we couldn't find any captions for your search")
                         } else {
                             LazyVStack {
+                                // Fix for LazyVStack bug where it would stutter at the top item
+                                Rectangle().foregroundColor(.clear).frame(height: 1.0)
                                 ForEach(Array(mutableCaptionsGroup.enumerated()), id: \.element) { index, element in
                                     ZStack(alignment: .topLeading) {
                                         if (element.platform == self.platformSelected || self.isSearching) && self.captionEditVm.immutableCgTextSizes.count > 0 {
-                                            
-                                            if (self.cgTextSizes.count == self.mutableCaptionsGroup.count) {
+                                            if self.cgTextSizes.count == self.mutableCaptionsGroup.count {
                                                 StackedCardsView(viewHeight: self.cgTextSizes[index].textSize.height)
                                             } else {
                                                 StackedCardsView(viewHeight: self.captionEditVm.immutableCgTextSizes[index].textSize.height)
                                             }
-                                           
 
                                             VStack(alignment: .leading, spacing: 20) {
                                                 CardTitleHeaderView(title: element.title, shareableData: self.$shareableData, edit: {
@@ -220,7 +219,7 @@ struct PopulatedCaptionsView: View {
                                                     Haptics.shared.play(.soft)
                                                 } label: {
                                                     VStack(alignment: .leading) {
-                                                        CaptionPromptTextView(prompt: element.prompt, index: index)
+                                                        CaptionPromptTextView(prompt: element.prompt, index: index, isSearching: self.$isSearching)
 
                                                         Spacer()
 
@@ -245,6 +244,9 @@ struct PopulatedCaptionsView: View {
                             }
                         }
                     }
+                    // when the id of the scroll view changes, the scrollview is rebuilt
+                    // and will scroll to the top
+                    .id(self.platformSelected)
                 }
             }
             .onAppear {
@@ -255,6 +257,19 @@ struct PopulatedCaptionsView: View {
                     let platformSet = Set(group.map { $0.platform })
                     self.platforms = Array(platformSet).sorted()
                     
+                    // This piece of code only updates if there's an update within the original captions group array
+                    // We put this on the main thread to asynchronously update when the user has saved/deleted
+                    // a captions group. Without this, textSizes would return the incorrect values
+                    DispatchQueue.main.async {
+                        if self.captionEditVm.immutableCgTextSizes.count != group.count {
+                            group.forEach { element in
+                                if !self.captionEditVm.immutableCgTextSizes.contains(where: { $0.id == element.id }) {
+                                    self.captionEditVm.immutableCgTextSizes.append(CaptionGroupTextSize(id: element.id, textSize: CGSize(width: 0, height: 0)))
+                                }
+                            }
+                        }
+                    }
+
                     if !self.platforms.isEmpty {
                         self.platformSelected = self.platforms[0] // initiate the first item to be selected by default
                     }
@@ -266,22 +281,15 @@ struct PopulatedCaptionsView: View {
                 if user != nil {
                     let value = user!.captionsGroup
                     if !value.isEmpty {
-                        
-                        // This piece of code only updates if there's an update within the original captions group array
-                        // We put this on the main thread to asynchronously update when the user has saved/deleted
-                        // a captions group. Without this, textSizes would return the incorrect values
-                        DispatchQueue.main.async {
-                            if self.cgTextSizes.count != value.count {
-                                value.forEach { element in
-                                    if !self.captionEditVm.immutableCgTextSizes.contains(where: { $0.id == element.id }) {
-                                        self.captionEditVm.immutableCgTextSizes.append(CaptionGroupTextSize(id: element.id, textSize: CGSize(width: 0, height: 0)))
-                                    }
-                                    
-                                }
-                            }
+                        if !self.isSearching {
+                            self.mutableCaptionsGroup = value
+                        } else if !searchText.isEmpty {
+                            // Update the mutable captions group based on change of captions group (i.e., onDelete())
+                            // during search
+                            let searchUndercase = searchText.lowercased()
+                            self.mutableCaptionsGroup = value.filter { $0.title.lowercased().contains(searchUndercase) || $0.prompt.lowercased().contains(searchUndercase) || $0.tones.description.lowercased().contains(searchUndercase) || $0.captions.filter { $0.description.lowercased().contains(searchUndercase) }.count > 0 }
                         }
-                        
-                        self.mutableCaptionsGroup = value
+                       
                         self.hasCaptions = true
                         let platformSet = Set(value.map { $0.platform })
                         self.platforms = Array(platformSet).sorted()
@@ -292,24 +300,28 @@ struct PopulatedCaptionsView: View {
             }
             .onChange(of: self.searchText, perform: { searchText in
                 let searchUndercase = searchText.lowercased()
-                
+
                 guard let group = AuthManager.shared.userManager.user?.captionsGroup else { return }
-                
+
                 // filter based on:
                 // Caption group title, prompt, tone description and generated captions
                 if !searchText.isEmpty {
-                    self.mutableCaptionsGroup = group.filter { $0.title.lowercased().contains(searchUndercase) || $0.prompt.lowercased().contains(searchUndercase) || $0.tones.description.lowercased().contains(searchUndercase) || $0.captions.filter( { $0.description.lowercased().contains(searchUndercase) }).count > 0}
+                    self.mutableCaptionsGroup = group.filter { $0.title.lowercased().contains(searchUndercase) || $0.prompt.lowercased().contains(searchUndercase) || $0.tones.description.lowercased().contains(searchUndercase) || $0.captions.filter { $0.description.lowercased().contains(searchUndercase) }.count > 0 }
                 } else {
                     self.mutableCaptionsGroup = group
                 }
-                
+
                 // filter caption edit vm cg text sizes based on the mutable captions group id
                 let mutableCGIds = self.mutableCaptionsGroup.map { $0.id }
-                self.cgTextSizes = self.captionEditVm.immutableCgTextSizes.filter { mutableCGIds.contains( $0.id )}
+                self.cgTextSizes = self.captionEditVm.immutableCgTextSizes.filter { mutableCGIds.contains($0.id) }
             })
             .modalView(horizontalPadding: 40, show: $showDeleteModal) {
                 DeleteModalView(title: "Deleting Captions", subTitle: "You’re about to delete these captions. This action cannot be undone. Are you sure? 🫢", lottieFile: "crane_hand_lottie", showView: $showDeleteModal, onDelete: {
-                    firestore.onCaptionsGroupDelete(for: AuthManager.shared.userManager.user?.id ?? nil, element: self.currentCaptionSelected, captionsGroup: AuthManager.shared.userManager.user?.captionsGroup ?? [])
+                    firestore.onCaptionsGroupDelete(for: AuthManager.shared.userManager.user?.id ?? nil, element: self.currentCaptionSelected, captionsGroup: AuthManager.shared.userManager.user?.captionsGroup ?? []) {
+                        
+                        // on delete complete
+                        self.cgTextSizes = self.captionEditVm.immutableCgTextSizes.filter { $0.id != self.currentCaptionSelected.id }
+                    }
                 })
             } onClickExit: {
                 self.showDeleteModal = false
@@ -343,6 +355,7 @@ struct CaptionPromptTextView: View {
     @EnvironmentObject var captionEditVm: CaptionEditViewModel
     var prompt: String
     var index: Int
+    @Binding var isSearching: Bool
     
     var body: some View {
         Text(prompt)
@@ -353,7 +366,9 @@ struct CaptionPromptTextView: View {
             .lineSpacing(3)
             .background(ViewGeometry())
             .onPreferenceChange(ViewSizeKey.self) {
-                self.captionEditVm.immutableCgTextSizes[index].textSize = $0
+                if !self.isSearching {
+                    self.captionEditVm.immutableCgTextSizes[index].textSize = $0
+                }
             }
     }
 }
@@ -361,13 +376,13 @@ struct CaptionPromptTextView: View {
 struct NoSearchResultsView: View {
     var title: String
     var subtitle: String
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text(title)
                 .foregroundColor(.ui.cadetBlueCrayola)
                 .font(.ui.headline)
-            
+
             Text(subtitle)
                 .foregroundColor(.ui.cadetBlueCrayola)
                 .font(.ui.headlineRegular)
