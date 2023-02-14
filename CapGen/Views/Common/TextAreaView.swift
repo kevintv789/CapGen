@@ -59,8 +59,8 @@ struct TextAreaView: View {
                         }
 
                         // Detect when 'done' or a newline is generated
-                        if !text.filter({ $0.isNewline }).isEmpty {
-                            self.text = String(text.dropLast())
+                        if text.contains("\n") {
+                            self.text.removeAll(where: { $0.isNewline })
                             hideKeyboard()
                         }
                     }
