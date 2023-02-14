@@ -5,35 +5,36 @@
 //  Created by Kevin Vu on 12/27/22.
 //
 
-import SwiftUI
-import FirebaseCore
-import Firebase
-import GoogleMobileAds
-import NavigationStack
 import FBSDKCoreKit
+import Firebase
+import FirebaseCore
+import GoogleMobileAds
 import Heap
+import NavigationStack
+import SwiftUI
 
 let SCREEN_WIDTH = UIScreen.main.bounds.width
 let SCREEN_HEIGHT = UIScreen.main.bounds.height
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool
+    {
         FirebaseApp.configure()
-        
+
         // Initialize the Google Mobile Ads SDK.
         GADMobileAds.sharedInstance().start(completionHandler: nil)
-        
+
         // Initialize Facebook SDK
         FBSDKCoreKit.ApplicationDelegate.shared.application(
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-        
+
         let heapAppId: String = Bundle.main.infoDictionary?["HEAP_APP_ID"] as! String
         // Initialize Heap for analytics
         Heap.initialize(heapAppId)
-        
+
         return true
     }
 }
@@ -42,7 +43,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct CapGenApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView(navigationStack: NavigationStackCompat())

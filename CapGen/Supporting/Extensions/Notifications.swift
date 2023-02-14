@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 1/25/23.
 //
 
+import Combine
 import Foundation
 import UIKit
-import Combine
 
 extension Notification {
     var keyboardHeight: CGFloat {
@@ -21,10 +21,10 @@ extension Publishers {
         // 2. Wrap the willShow and willHide notifications into publishers. Whenever the notification center broadcasts a willShow or willHide notification, the corresponding publisher will also emit the notification as its value. We also use the map operator since we are only interested in keyboard height.
         let willShow = NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)
             .map { $0.keyboardHeight }
-        
+
         let willHide = NotificationCenter.default.publisher(for: UIApplication.keyboardWillHideNotification)
             .map { _ in CGFloat(0) }
-        
+
         // 3. Combine multiple publishers into one by merging their emitted values.
         return MergeMany(willShow, willHide)
             .eraseToAnyPublisher()
