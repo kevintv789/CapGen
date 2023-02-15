@@ -194,10 +194,11 @@ struct PopulatedCaptionsView: View {
                                 Rectangle().foregroundColor(.clear).frame(height: 1.0)
                                 ForEach(Array(mutableCaptionsGroup.enumerated()), id: \.element) { index, element in
                                     ZStack(alignment: .topLeading) {
-                                        if (element.platform == self.platformSelected || self.isSearching) && self.captionEditVm.immutableCgTextSizes.count > 0 {
+                                        if (element.platform == self.platformSelected || self.isSearching) && self.captionEditVm.immutableCgTextSizes.count > 0 || self.cgTextSizes.count > 0 {
+                                            
                                             if self.cgTextSizes.count == self.mutableCaptionsGroup.count {
                                                 StackedCardsView(viewHeight: self.cgTextSizes[index].textSize.height)
-                                            } else {
+                                            } else if self.captionEditVm.immutableCgTextSizes.count == self.mutableCaptionsGroup.count {
                                                 StackedCardsView(viewHeight: self.captionEditVm.immutableCgTextSizes[index].textSize.height)
                                             }
 
@@ -229,10 +230,20 @@ struct PopulatedCaptionsView: View {
                                                             ConfigurationIndicatorsView(element: element)
 
                                                             Spacer()
+                                                            
+                                                            HStack {
+                                                                if (self.isSearching) {
+                                                                    Image(element.platform)
+                                                                        .resizable()
+                                                                        .frame(width: 25, height: 25)
+                                                                }
+                                                                
+                                                                Text(element.dateCreated)
+                                                                    .foregroundColor(.ui.cultured)
+                                                                    .font(.ui.headlineMd)
+                                                            }
 
-                                                            Text(element.dateCreated)
-                                                                .foregroundColor(.ui.cultured)
-                                                                .font(.ui.headlineMd)
+                                                           
                                                         }
                                                     }
                                                 }
