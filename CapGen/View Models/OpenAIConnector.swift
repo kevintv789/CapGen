@@ -31,7 +31,7 @@ public class OpenAIConnector: ObservableObject {
             }
         }
 
-        self.prompt = "Generate 5 captions and a title. Conform each caption to the standards of an \(platform) post. The title should be a catchy title that is no more than 5 words. The user's prompt is: \(prompt == "" ? "Make me feel good" : prompt). The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual") and the length of each caption should be \(captionLength). Emojis, Hashtags and Numbers should be excluded from the word count. \(includeEmojis ? "Include emojis in each caption" : "Do not use emojis"). \(includeHashtags ? "Include hashtags in each caption" : "Do not use hashtags"). Each caption should be displayed as a numbered list. The caption title should be the sixth item on the list, listed as 6. and without the Title word."
+        self.prompt = "Generate 5 captions and a title. Conform each caption to the standards of an \(platform) post. The title should be a catchy title that is no more than 5 words. The user's prompt is: \(prompt == "" ? "Make me feel good" : prompt). The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual") and the length of each caption should be \(captionLength). Emojis, Hashtags and Numbers should be excluded from the word count. \(includeEmojis ? "Include emojis in each caption" : "Do not use emojis"). \(includeHashtags ? "Include hashtags in each caption" : "Do not use hashtags"). Each caption should be displayed as a numbered list, each number should be followed by a period such as '1.', '2.', etc... The caption title should be the sixth item on the list, listed as 6. and without the Title word."
     }
 
     func generateNewRequestModel(title: String, captions: [GeneratedCaptions]) {
