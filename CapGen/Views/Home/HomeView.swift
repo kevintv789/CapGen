@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 1/11/23.
 //
 
-import SwiftUI
 import FirebaseAuth
 import NavigationStack
+import SwiftUI
 
 struct HomeView: View {
     @State var credits: Int = AuthManager.shared.userManager.user?.credits ?? 0
@@ -15,18 +15,18 @@ struct HomeView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
-    
+
     @State var router: Router? = nil
-    
+
     @FocusState private var isKeyboardFocused: Bool
     @State var expandBottomArea: Bool = false
     @State var showRefillModal: Bool = false
     @State var showCongratsModal: Bool = false
     @State var isAdLoading: Bool = false
-    
+
     @FocusState private var isFocused: Bool
     @ScaledMetric var platformScrollViewHeight: CGFloat = 75
-    
+
     var body: some View {
         ZStack {
             Color.ui.cultured.ignoresSafeArea()
@@ -35,20 +35,20 @@ struct HomeView: View {
                 .onTapGesture {
                     hideKeyboard()
                 }
-            
+
             VStack {
                 HStack(alignment: .center) {
                     Text("Which platform is this for?")
                         .padding(.leading, 16)
                         .font(.ui.headline)
                         .foregroundColor(Color.ui.richBlack)
-                    
+
                     Spacer()
-                    
+
                     CreditCounterView(credits: $credits, showModal: $showRefillModal)
                         .padding(.trailing, 16)
                 }
-                
+
                 ScrollViewReader { scrollProxy in
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(alignment: .top, spacing: 15) {
@@ -57,10 +57,9 @@ struct HomeView: View {
                                     withAnimation(.spring()) {
                                         self.captionConfigs.platformSelected = platform.title
                                     }
-                                    
+
                                 } label: {
                                     Pill(title: platform.title, isToggled: platform.title == self.captionConfigs.platformSelected)
-                                    
                                 }
                                 .id(platform.title)
                             }
@@ -71,13 +70,12 @@ struct HomeView: View {
                         withAnimation {
                             scrollProxy.scrollTo(value, anchor: .center)
                         }
-                        
+
                         Haptics.shared.play(.soft)
                     }
                     .frame(height: platformScrollViewHeight)
-                    
                 }
-                
+
                 // Create a Text Area view that is the main component for typing input
                 TextAreaView(text: $captionConfigs.promptText)
                     .frame(width: SCREEN_WIDTH / 1.1, height: SCREEN_HEIGHT / 2)
@@ -88,16 +86,16 @@ struct HomeView: View {
                             self.expandBottomArea = false
                         }
                     }
-                
+
                 BottomAreaView(expandArea: $expandBottomArea, platformSelected: $captionConfigs.platformSelected, promptText: $captionConfigs.promptText, credits: $credits, isAdLoading: $isAdLoading)
                     .frame(maxHeight: SCREEN_HEIGHT)
             }
             .scrollDismissesKeyboard(.interactively)
             .ignoresSafeArea(.keyboard, edges: .bottom)
         }
-        .onAppear() {
+        .onAppear {
             self.router = Router(navStack: navStack)
-            
+
             if AuthManager.shared.isSignedIn ?? false {
                 firestoreManager.fetchKey()
             }
@@ -132,7 +130,6 @@ struct HomeView: View {
             OverlayedLoaderView()
         }, onClickExit: nil)
     }
-    
 }
 
 struct HomeView_Previews: PreviewProvider {
@@ -143,7 +140,7 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(FirestoreManager())
             .environmentObject(CaptionConfigsViewModel())
             .environmentObject(NavigationStackCompat())
-        
+
         HomeView()
             .environmentObject(TaglistViewModel())
             .environmentObject(CaptionConfigsViewModel())

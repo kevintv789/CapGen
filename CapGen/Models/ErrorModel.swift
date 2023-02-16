@@ -9,7 +9,7 @@ import Foundation
 
 enum ErrorModel: Error, LocalizedError {
     case genericError, capacityError, loginError
-    
+
     var errorDescription: String? {
         switch self {
         case .genericError:

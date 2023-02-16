@@ -19,47 +19,60 @@ struct CustomMenuPopup: View {
     @State var menuTheme: MenuTheme = .light
     @State var orientation: Orientation = .vertical
     @Binding var shareableData: ShareableData?
+    @State var socialMediaPlatform: String? = nil
     var edit: (() -> Void)?
     var copy: (() -> Void)?
     var delete: (() -> Void)?
     var reset: (() -> Void)?
     var onMenuOpen: (() -> Void)?
-    
+    var onCopyAndGo: (() -> Void)?
+
     var body: some View {
         Menu {
-            if (edit != nil) {
+            if edit != nil {
                 Button(action: {
                     Haptics.shared.play(.soft)
                     edit!(
-                    ) }) {
-                        Label("Edit", systemImage: "pencil")
-                    }
+                    )
+                }) {
+                    Label("Edit", systemImage: "pencil")
+                }
             }
-            
-            if (copy != nil) {
+
+            if copy != nil {
                 Button(action: { copy!(); Haptics.shared.play(.soft) }) {
                     Label("Copy", systemImage: "doc.on.doc")
                 }
             }
-            
-            if (shareableData != nil) {
+
+            if shareableData != nil {
                 ShareLink(item: shareableData!.item, subject: Text(shareableData!.subject)) {
                     Label("Share", systemImage: "arrowshape.turn.up.right")
                 }
             }
-            
-            if (delete != nil) {
+
+            if socialMediaPlatform != nil && onCopyAndGo != nil {
+                Button {
+                    onCopyAndGo!()
+                } label: {
+                    HStack {
+                        Image(socialMediaPlatform!)
+                        Text("Copy & Go")
+                    }
+                }
+            }
+
+            if delete != nil {
                 Button(role: .destructive, action: { delete!(); Haptics.shared.play(.soft) }) {
                     Label("Delete", systemImage: "trash")
                 }
             }
-            
-            if (reset != nil) {
+
+            if reset != nil {
                 Button(role: .destructive, action: { reset!(); Haptics.shared.play(.soft) }) {
                     Label("Reset", systemImage: "arrow.clockwise")
                 }
             }
-            
         } label: {
             Image(systemName: "ellipsis")
                 .rotationEffect(orientation == .vertical ? .degrees(90) : .degrees(0))
@@ -68,10 +81,10 @@ struct CustomMenuPopup: View {
                 .frame(width: 50, height: 50)
         }
         .onTapGesture {
-            if (onMenuOpen != nil) {
+            if onMenuOpen != nil {
                 onMenuOpen!()
             }
-            
+
             Haptics.shared.play(.soft)
         }
     }

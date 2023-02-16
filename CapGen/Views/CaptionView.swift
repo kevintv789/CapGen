@@ -13,11 +13,11 @@ struct CaptionView: View {
     @State var captionsParsed: [String] = []
     @State var captionSelected: String = ""
     @State var cardColorFill: [Color] = [.ui.middleYellowRed, .ui.darkSalmon, .ui.frenchBlueSky, .ui.lightCyan, .ui.middleBluePurple]
-    
+
     var body: some View {
         ZStack(alignment: .leading) {
             Color.ui.lighterLavBlue.ignoresSafeArea()
-            
+
             VStack(alignment: .leading) {
                 Button {
                     backBtnClicked.toggle()
@@ -28,15 +28,15 @@ struct CaptionView: View {
                         .padding(-30)
                         .padding(.leading, 15)
                 }
-                
+
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading) {
                         Text("Your results")
                             .font(.ui.graphikSemiboldLarge)
                             .foregroundColor(.ui.richBlack)
-                        
+
                         Spacer()
-                        
+
                         ForEach(Array(captionsParsed.enumerated()), id: \.element) { index, caption in
                             Button {
                                 self.captionSelected = caption
@@ -45,28 +45,22 @@ struct CaptionView: View {
                                 CaptionCard(caption: caption, isCaptionSelected: caption == captionSelected, colorFilled: $cardColorFill[index])
                                     .padding(10)
                             }
-                            
-                            
                         }
-                        
                     }
                     .padding()
                 }
             }
-            
-            
         }
         .navigationDestination(isPresented: $backBtnClicked) {
-            ContentView(platformSelected: SocialMediaPlatforms.init().platforms[0])
+            ContentView(platformSelected: SocialMediaPlatforms().platforms[0])
                 .navigationBarBackButtonHidden(true)
         }
-        .onAppear() {
+        .onAppear {
             captionsParsed = captionStr?
                 .components(separatedBy: "\n")
                 .filter { element in
-                    return !element.isEmpty
+                    !element.isEmpty
                 } ?? []
-            
         }
     }
 }
@@ -82,7 +76,7 @@ struct CaptionCard: View {
     var isCaptionSelected: Bool
     @State private var phase = 0.0
     @Binding var colorFilled: Color
-    
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14)
@@ -91,21 +85,21 @@ struct CaptionCard: View {
                     RoundedRectangle(cornerRadius: 14)
                         .fill(colorFilled)
                 )
-            
+
             VStack(alignment: .trailing, spacing: 0) {
                 Text(caption.dropFirst(3))
-                    .padding(EdgeInsets.init(top: 15, leading: 10, bottom: 15, trailing: 10))
+                    .padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 10))
                     .font(.ui.graphikRegular)
                     .lineSpacing(4)
                     .foregroundColor(.ui.richBlack)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                
-                if (isCaptionSelected) {
+
+                if isCaptionSelected {
                     Text("Copied!")
                         .foregroundColor(Color.ui.richBlack)
                         .font(.ui.graphikMediumMed)
-                        .padding(EdgeInsets.init(top: 10, leading: 10, bottom: 10, trailing: 10))
+                        .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
                         .frame(height: 30)
                         .overlay(
                             RoundedRectangle(cornerRadius: 100)
@@ -116,9 +110,8 @@ struct CaptionCard: View {
                                         phase += 20
                                     }
                                 }
-                            
                         )
-                        .padding(EdgeInsets.init(top: 10, leading: 10, bottom: 10, trailing: 12))
+                        .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 12))
                 }
             }
         }

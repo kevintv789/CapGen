@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 1/16/23.
 //
 
-import Foundation
-import FirebaseFirestoreSwift
 import Firebase
+import FirebaseFirestoreSwift
+import Foundation
 
 struct UserModel: Codable {
     var id: String
