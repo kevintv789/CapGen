@@ -5,14 +5,14 @@
 //  Created by Kevin Vu on 1/14/23.
 //
 
-import SwiftUI
 import NavigationStack
+import SwiftUI
 
 struct BackArrowView: View {
     var action: (() -> Void)?
-    
+
     var body: some View {
-        if (action != nil) {
+        if action != nil {
             Button {
                 action!()
                 Haptics.shared.play(.soft)
@@ -27,9 +27,9 @@ struct BackArrowView: View {
                     .resizable()
                     .frame(width: 50, height: 40)
             }
-            .simultaneousGesture(TapGesture().onEnded({ _ in
+            .simultaneousGesture(TapGesture().onEnded { _ in
                 Haptics.shared.play(.soft)
-            }))
+            })
         }
     }
 }

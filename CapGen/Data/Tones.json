@@ -8,5 +8,6 @@
     {"id": 7, "title": "Passionate", "description": "Heartfelt, enthusiastic, dedicated.", "icon": "🔥", "size": 0},
     {"id": 8, "title": "Romantic", "description": "Loving, affectionate, heartfelt.", "icon": "❤️", "size": 0},
     {"id": 9, "title": "Informative", "description": "Detailed, factual, educational.", "icon": "📜", "size": 0},
+    {"id": 10, "title": "Nonchalant", "description": "Nonchalant, melancholic.", "icon": "🤷‍♂️", "size": 0},
 ]
 
