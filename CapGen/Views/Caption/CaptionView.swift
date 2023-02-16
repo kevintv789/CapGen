@@ -233,22 +233,25 @@ struct CaptionView: View {
             if var originalString = captionStr, self.captionEditVm.captionsGroupParsed.isEmpty {
                 // Removes trailing and leading white spaces
                 originalString = captionStr!.trimmingCharacters(in: .whitespaces)
-
-                let uniqueStr = UUID().uuidString
-
-                let regex = try! NSRegularExpression(pattern: "(?m)^\\n\\d\\.|\\n\\d\\.", options: [])
-                let modifiedString = regex.stringByReplacingMatches(in: originalString, options: [], range: NSRange(location: 0, length: originalString.utf16.count), withTemplate: uniqueStr)
-                let stringArray = modifiedString.components(separatedBy: uniqueStr)
-                var parsedArray = stringArray.filter { ele in
-                    ele != "" && ele != "\n" && ele != "\n\n"
-                }
-
-                // Removing the first character because it is an empty space
-                self.captionEditVm.captionGroupTitle = String(parsedArray.removeLast().trimmingCharacters(in: .whitespaces))
-
-                self.captionEditVm.captionsGroupParsed = parsedArray.map { element in
-                    // removing leading and trailing white spaces
-                    element.trimmingCharacters(in: .whitespaces)
+                
+                /**
+                 (?m)       // Enable "multiline" mode, where ^ and $ match the start and end of a line
+                 ^          // Match the start of a line
+                 \\s*       // Match zero or more whitespace characters (spaces, tabs, etc.)
+                 \\d+       // Match one or more digits
+                 \\.        // Match a period character
+                 \\s*       // Match zero or more whitespace characters again
+                 (.+)       // Capture one or more characters (any character except line breaks)
+                 */
+                let pattern = "(?m)^\\s*\\d+\\.\\s*(.+)"
+                if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+                    let range = NSRange(originalString.startIndex..., in: originalString)
+                    let matches = regex.matches(in: originalString, options: [], range: range)
+                    let results = matches.map {
+                        String(originalString[Range($0.range(at: 1), in: originalString)!])
+                    }
+                    self.captionEditVm.captionGroupTitle = results.last ?? ""
+                    self.captionEditVm.captionsGroupParsed = results
                 }
             }
         }
@@ -267,7 +270,7 @@ struct CaptionView: View {
 
 struct CaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        CaptionView(captionStr: .constant(" \n\n1. Loo🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n3. Nothing cuter than seeing two doggies playing in a rainbowNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playin 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. Two Pups, One Rainbow Roadddddd! 🌈"), platform: "Instagram")
+        CaptionView(captionStr: .constant(" \n\n1. Loo🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n\n 3. Nothing cuter than seeing two doggies playing in a rainbowNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playin 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n 6. Two Pups, One Rainbow Roadddddd! 🌈"), platform: "Instagram")
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
