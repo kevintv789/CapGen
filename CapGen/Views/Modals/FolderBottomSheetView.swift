@@ -24,7 +24,7 @@ struct FolderBottomSheetView: View {
             return
         }
         
-        
+        // Call API to update firebase
     }
 
     var body: some View {

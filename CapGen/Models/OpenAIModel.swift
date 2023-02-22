@@ -39,12 +39,12 @@ struct AIRequest: Codable, Identifiable, Comparable, Hashable {
     var includeHashtags: Bool = false
     var captionLength: String = ""
     var title: String = ""
-    var dateCreated: String = getCurrentDate()
+    var dateCreated: String = Utils.getCurrentDate()
     var captions: [GeneratedCaptions] = []
 
     static func < (lhs: AIRequest, rhs: AIRequest) -> Bool {
-        let leftDate = convertStringToDate(date: lhs.dateCreated) ?? Date()
-        let rightDate = convertStringToDate(date: rhs.dateCreated) ?? Date()
+        let leftDate = Utils.convertStringToDate(date: lhs.dateCreated) ?? Date()
+        let rightDate = Utils.convertStringToDate(date: rhs.dateCreated) ?? Date()
 
         return leftDate < rightDate
     }
@@ -80,20 +80,5 @@ struct AIRequest: Codable, Identifiable, Comparable, Hashable {
         self.includeEmojis = includeEmojis
         self.includeHashtags = includeHashtags
         self.captionLength = captionLength
-    }
-
-    static func getCurrentDate() -> String {
-        let date = Date()
-        let df = DateFormatter()
-        df.dateFormat = "MMM d, h:mm a"
-        df.timeZone = TimeZone.current
-        return df.string(from: date)
-    }
-
-    static func convertStringToDate(date: String?) -> Date? {
-        guard let date = date else { return nil }
-        let df = DateFormatter()
-        df.dateFormat = "MMM d, h:mm a"
-        return df.date(from: date)
     }
 }

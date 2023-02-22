@@ -44,3 +44,20 @@ func calculateTimeOfDay() -> DayType {
 
     return timeOfDay
 }
+
+struct Utils {
+    static func getCurrentDate() -> String {
+        let date = Date()
+        let df = DateFormatter()
+        df.dateFormat = "MMM d, h:mm a"
+        df.timeZone = TimeZone.current
+        return df.string(from: date)
+    }
+
+    static func convertStringToDate(date: String?) -> Date? {
+        guard let date = date else { return nil }
+        let df = DateFormatter()
+        df.dateFormat = "MMM d, h:mm a"
+        return df.date(from: date)
+    }
+}
