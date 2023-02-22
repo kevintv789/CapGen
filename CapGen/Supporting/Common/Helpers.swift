@@ -33,7 +33,7 @@ public func openSocialMediaLink(for platform: String) {
 func calculateTimeOfDay() -> DayType {
     var timeOfDay: DayType = .afternoon
     let hour: Int = Calendar.current.component(.hour, from: Date())
-    
+
     // 6PM - 4AM = Good evening
     if (18 ... 23).contains(hour) || (0 ... 3).contains(hour) {
         timeOfDay = .evening
@@ -41,6 +41,6 @@ func calculateTimeOfDay() -> DayType {
         // 5AM - 11AM = Good morning
         timeOfDay = .morning
     }
-    
+
     return timeOfDay
 }

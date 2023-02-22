@@ -149,7 +149,7 @@ class FirestoreManager: ObservableObject {
                 docRef.updateData(["captionsGroup": FieldValue.arrayRemove([captionsGroup[indexOfGroup!].dictionary])])
             }
         }
-        
+
         onComplete()
     }
 

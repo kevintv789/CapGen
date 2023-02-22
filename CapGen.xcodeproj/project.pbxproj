@@ -130,6 +130,8 @@
 		D45707AE29A57669001D80AD /* SavedCaptionsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */; };
 		D45707B029A57A5C001D80AD /* ImageButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AF29A57A5C001D80AD /* ImageButtonView.swift */; };
 		D45707B229A5B1D1001D80AD /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B129A5B1D1001D80AD /* FolderView.swift */; };
+		D45707B429A655E9001D80AD /* FolderBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */; };
+		D45707B629A67F41001D80AD /* PrimaryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B529A67F41001D80AD /* PrimaryButtonView.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D47304062996C3F400179FEB /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
@@ -357,6 +359,8 @@
 		D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionsHomeView.swift; sourceTree = "<group>"; };
 		D45707AF29A57A5C001D80AD /* ImageButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonView.swift; sourceTree = "<group>"; };
 		D45707B129A5B1D1001D80AD /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
+		D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderBottomSheetView.swift; sourceTree = "<group>"; };
+		D45707B529A67F41001D80AD /* PrimaryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonView.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
 		D47304522996CE1900179FEB /* libAudioDSPCore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libAudioDSPCore.tbd; path = usr/lib/libAudioDSPCore.tbd; sourceTree = SDKROOT; };
@@ -1989,6 +1993,7 @@
 				D45707A7299A9AD2001D80AD /* SearchBar.swift */,
 				D45707AB29A46935001D80AD /* LogoView.swift */,
 				D45707AF29A57A5C001D80AD /* ImageButtonView.swift */,
+				D45707B529A67F41001D80AD /* PrimaryButtonView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2050,6 +2055,7 @@
 				D4C3E482298059C800C2847A /* CustomMenuPopup.swift */,
 				D4C3E4862980883D00C2847A /* DeleteModalView.swift */,
 				D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */,
+				D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */,
 			);
 			path = Modals;
 			sourceTree = "<group>";
@@ -2495,10 +2501,12 @@
 				D45707A8299A9AD2001D80AD /* SearchBar.swift in Sources */,
 				D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */,
 				D4056E9B2971EF6F00D3894D /* FBAuthManager.swift in Sources */,
+				D45707B629A67F41001D80AD /* PrimaryButtonView.swift in Sources */,
 				D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */,
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
+				D45707B429A655E9001D80AD /* FolderBottomSheetView.swift in Sources */,
 				D4C3E4AC298639AE00C2847A /* Router.swift in Sources */,
 				D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */,
 				D45707AC29A46935001D80AD /* LogoView.swift in Sources */,

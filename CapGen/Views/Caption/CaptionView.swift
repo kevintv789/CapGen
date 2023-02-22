@@ -233,7 +233,7 @@ struct CaptionView: View {
             if var originalString = captionStr, self.captionEditVm.captionsGroupParsed.isEmpty {
                 // Removes trailing and leading white spaces
                 originalString = captionStr!.trimmingCharacters(in: .whitespaces)
-                
+
                 /**
                  (?m)       // Enable "multiline" mode, where ^ and $ match the start and end of a line
                  ^          // Match the start of a line

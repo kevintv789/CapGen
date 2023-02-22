@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ImageButtonView: View {
     @ScaledMetric var scaledSize: CGFloat = 1
-    
+
     let imgName: String
     var action: () -> Void
-    
+
     var body: some View {
         Button {
             action()

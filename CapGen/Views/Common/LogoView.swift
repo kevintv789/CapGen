@@ -13,7 +13,7 @@ struct LogoView: View {
             Image("appIcon-ref")
                 .resizable()
                 .frame(width: 30, height: 30)
-            
+
             Text("CapGen")
                 .font(.ui.headline)
                 .foregroundColor(.ui.richBlack)
