@@ -126,6 +126,10 @@
 		D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EDB2978A06900D3894D /* space_man_empty.json */; };
 		D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */; };
 		D45707A8299A9AD2001D80AD /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707A7299A9AD2001D80AD /* SearchBar.swift */; };
+		D45707AC29A46935001D80AD /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AB29A46935001D80AD /* LogoView.swift */; };
+		D45707AE29A57669001D80AD /* SavedCaptionsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */; };
+		D45707B029A57A5C001D80AD /* ImageButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AF29A57A5C001D80AD /* ImageButtonView.swift */; };
+		D45707B229A5B1D1001D80AD /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B129A5B1D1001D80AD /* FolderView.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D47304062996C3F400179FEB /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
@@ -349,6 +353,10 @@
 		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
 		D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulatedCaptionsView.swift; sourceTree = "<group>"; };
 		D45707A7299A9AD2001D80AD /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		D45707AB29A46935001D80AD /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
+		D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionsHomeView.swift; sourceTree = "<group>"; };
+		D45707AF29A57A5C001D80AD /* ImageButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonView.swift; sourceTree = "<group>"; };
+		D45707B129A5B1D1001D80AD /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
 		D47304522996CE1900179FEB /* libAudioDSPCore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libAudioDSPCore.tbd; path = usr/lib/libAudioDSPCore.tbd; sourceTree = SDKROOT; };
@@ -1979,6 +1987,8 @@
 				D4C3E4A32984F7C500C2847A /* FallbackView.swift */,
 				D4F1D309298AD45500599F05 /* Haptics.swift */,
 				D45707A7299A9AD2001D80AD /* SearchBar.swift */,
+				D45707AB29A46935001D80AD /* LogoView.swift */,
+				D45707AF29A57A5C001D80AD /* ImageButtonView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2048,6 +2058,7 @@
 			isa = PBXGroup;
 			children = (
 				D4056E84296F868800D3894D /* HomeView.swift */,
+				D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */,
 				D4056E25295F639100D3894D /* BottomAreaView.swift */,
 			);
 			path = Home;
@@ -2062,6 +2073,7 @@
 				D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */,
 				D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */,
 				D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */,
+				D45707B129A5B1D1001D80AD /* FolderView.swift */,
 			);
 			path = Caption;
 			sourceTree = "<group>";
@@ -2470,10 +2482,12 @@
 				D4056EC62977460200D3894D /* CreditCounterView.swift in Sources */,
 				D4056E972970F33E00D3894D /* SignInWithAppleDelegate.swift in Sources */,
 				D4C3E49829844F7400C2847A /* SupportEmailModel.swift in Sources */,
+				D45707AE29A57669001D80AD /* SavedCaptionsHomeView.swift in Sources */,
 				D4056E83296F867D00D3894D /* LaunchView.swift in Sources */,
 				D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */,
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
+				D45707B229A5B1D1001D80AD /* FolderView.swift in Sources */,
 				D4C3E496298437B600C2847A /* ShareableData.swift in Sources */,
 				D4C3E4A6298577B400C2847A /* ErrorModel.swift in Sources */,
 				D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */,
@@ -2487,6 +2501,7 @@
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
 				D4C3E4AC298639AE00C2847A /* Router.swift in Sources */,
 				D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */,
+				D45707AC29A46935001D80AD /* LogoView.swift in Sources */,
 				D4056EC429751BD200D3894D /* UserManager.swift in Sources */,
 				D4056E81296F0CB900D3894D /* LottieView.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
@@ -2500,6 +2515,7 @@
 				D4C3E4A42984F7C500C2847A /* FallbackView.swift in Sources */,
 				D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */,
 				D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */,
+				D45707B029A57A5C001D80AD /* ImageButtonView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
 				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,

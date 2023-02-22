@@ -8,6 +8,10 @@
 import Foundation
 import SwiftUI
 
+enum DayType {
+    case morning, afternoon, evening
+}
+
 public func openSocialMediaLink(for platform: String) {
     @Environment(\.openURL) var openURL
 
@@ -24,4 +28,19 @@ public func openSocialMediaLink(for platform: String) {
     }
 
     openURL(URL(string: socialMediaFiltered!.link)!)
+}
+
+func calculateTimeOfDay() -> DayType {
+    var timeOfDay: DayType = .afternoon
+    let hour: Int = Calendar.current.component(.hour, from: Date())
+    
+    // 6PM - 4AM = Good evening
+    if (18 ... 23).contains(hour) || (0 ... 3).contains(hour) {
+        timeOfDay = .evening
+    } else if (5 ... 11).contains(hour) {
+        // 5AM - 11AM = Good morning
+        timeOfDay = .morning
+    }
+    
+    return timeOfDay
 }
