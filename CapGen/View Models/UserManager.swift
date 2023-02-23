@@ -66,6 +66,7 @@ class UserManager: ObservableObject {
             let userPrefsDict = snapshot?.get("userPrefs") as? [String: Any]
             let dateCreatedTimestamp = snapshot?.get("dateCreated") as? Timestamp ?? nil
             let captionsGroup = self.convertCaptionGroup(for: snapshot?.get("captionsGroup") as? [[String: AnyObject]] ?? nil)
+            let folders = self.convertFolderModel(for: snapshot?.get("folders") as? [[String: AnyObject]] ?? nil)
 
             guard let dateCreated = dateCreatedTimestamp?.dateValue() else { return }
 
@@ -75,7 +76,7 @@ class UserManager: ObservableObject {
                 let userPref = try? decoder.decode(UserPreferences.self, from: userPrefsDict)
 
                 if userPref != nil {
-                    self.user = UserModel(id: uid, fullName: fullName, credits: credits, email: email, userPrefs: userPref!, dateCreated: dateCreated, captionsGroup: captionsGroup)
+                    self.user = UserModel(id: uid, fullName: fullName, credits: credits, email: email, userPrefs: userPref!, dateCreated: dateCreated, captionsGroup: captionsGroup, folders: folders)
                 }
             }
         }
@@ -119,6 +120,25 @@ class UserManager: ObservableObject {
                 }
             }
         }
+    }
+    
+    private func convertFolderModel(for folders: [[String: AnyObject]]?) -> [FolderModel] {
+        guard let folders = folders else { return [] }
+        
+        var result: [FolderModel] = []
+        
+        folders.forEach { folder in
+            let id = folder["id"] as! String
+            let name = folder["name"] as! String
+            let dateCreated = folder["dateCreated"] as! String
+            let folderType = folder["folderType"] as! String
+            let captions = Utils.convertGeneratedCaptions(for:  folder["captions"] as? [[String: AnyObject]])
+            
+            let mappedFolder = FolderModel(id: id, name: name, dateCreated: dateCreated, folderType: FolderType(rawValue: folderType)!, captions: captions)
+            result.append(mappedFolder)
+        }
+        
+        return result
     }
 
     /**

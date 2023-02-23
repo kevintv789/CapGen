@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FolderType: Codable {
+enum FolderType: String, Codable {
     case General, Instagram, Twitter, Facebook, Snapchat, LinkedIn, Pinterest, TikTok, Reddit, YouTube
 }
 
@@ -33,5 +33,18 @@ struct FolderModel: Identifiable, Codable, Comparable, Hashable {
         self.name = name
         self.folderType = folderType
         self.captions = captions
+    }
+    
+    init(id: String, name: String, dateCreated: String, folderType: FolderType, captions: [GeneratedCaptions]) {
+        self.id = id
+        self.name = name
+        self.folderType = folderType
+        self.captions = captions
+        self.dateCreated = dateCreated
+    }
+    
+    var dictionary: [String: Any] {
+        let data = (try? JSONEncoder().encode(self)) ?? Data()
+        return (try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any]) ?? [:]
     }
 }

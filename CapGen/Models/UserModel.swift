@@ -17,6 +17,7 @@ struct UserModel: Codable {
     var userPrefs: UserPreferences
     var dateCreated: Date
     var captionsGroup: [AIRequest] = []
+    var folders: [FolderModel] = []
 }
 
 struct UserPreferences: Codable {

@@ -161,6 +161,41 @@ class FirestoreManager: ObservableObject {
 
         return count
     }
+    
+    func saveFolder(for uid: String?, folder: FolderModel, onComplete: @escaping () -> Void) {
+        guard let userId = uid else {
+            appError = ErrorType(error: .genericError)
+            onComplete()
+            return
+        }
+        
+        let docRef = db.collection("Users").document("\(userId)")
+        
+        docRef.getDocument { doc, error in
+            if error != nil {
+                self.appError = ErrorType(error: .genericError)
+                print("Error within saveFolder()")
+                return
+            }
+            
+            if let doc = doc, doc.exists {
+                let data = doc.data()
+                
+                // Determine if folders array already exists
+                if let foldersUncoded = data?["folders"] as? [[String: AnyObject]] {
+                    if !foldersUncoded.isEmpty {
+                        // folders array already exist, add onto array
+                        docRef.updateData(["folders": FieldValue.arrayUnion([folder.dictionary])])
+                    }
+                } else {
+                    // Create new data field since it does not exist
+                    docRef.setData(["folders": [folder.dictionary]], merge: true)
+                }
+            }
+        }
+        
+        onComplete()
+    }
 
     private func fetch(from collection: String, documentId: String, completion: @escaping (_ data: [String: Any]?) -> Void) {
         let docRef = db.collection(collection).document(documentId)

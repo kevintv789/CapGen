@@ -133,6 +133,7 @@
 		D45707B429A655E9001D80AD /* FolderBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */; };
 		D45707B629A67F41001D80AD /* PrimaryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B529A67F41001D80AD /* PrimaryButtonView.swift */; };
 		D45707B829A68B7C001D80AD /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B729A68B7C001D80AD /* FolderModel.swift */; };
+		D45707BA29A6CFCD001D80AD /* FoldersArrayMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B929A6CFCD001D80AD /* FoldersArrayMock.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D47304062996C3F400179FEB /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
@@ -363,6 +364,7 @@
 		D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderBottomSheetView.swift; sourceTree = "<group>"; };
 		D45707B529A67F41001D80AD /* PrimaryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonView.swift; sourceTree = "<group>"; };
 		D45707B729A68B7C001D80AD /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
+		D45707B929A6CFCD001D80AD /* FoldersArrayMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersArrayMock.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
 		D47304522996CE1900179FEB /* libAudioDSPCore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libAudioDSPCore.tbd; path = usr/lib/libAudioDSPCore.tbd; sourceTree = SDKROOT; };
@@ -2115,6 +2117,7 @@
 			isa = PBXGroup;
 			children = (
 				D4C3E48929819C6500C2847A /* CaptionsGroupMock.swift */,
+				D45707B929A6CFCD001D80AD /* FoldersArrayMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -2498,6 +2501,7 @@
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
 				D45707B229A5B1D1001D80AD /* FolderView.swift in Sources */,
+				D45707BA29A6CFCD001D80AD /* FoldersArrayMock.swift in Sources */,
 				D4C3E496298437B600C2847A /* ShareableData.swift in Sources */,
 				D4C3E4A6298577B400C2847A /* ErrorModel.swift in Sources */,
 				D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */,

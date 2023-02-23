@@ -60,4 +60,20 @@ struct Utils {
         df.dateFormat = "MMM d, h:mm a"
         return df.date(from: date)
     }
+    
+    static func convertGeneratedCaptions(for generatedCaptions: [[String: AnyObject]]?) -> [GeneratedCaptions] {
+        guard let captions = generatedCaptions else { return [] }
+        
+        var result: [GeneratedCaptions] = []
+        
+        captions.forEach({ caption in
+            let id = caption["id"] as! String
+            let description = caption["description"] as! String
+            
+            let mappedCaption = GeneratedCaptions(id: id, description: description)
+            result.append(mappedCaption)
+        })
+        
+        return result
+    }
 }

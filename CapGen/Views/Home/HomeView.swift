@@ -374,7 +374,7 @@ struct CreditsTextView: View {
 
             +
 
-            Text(" remaining.\nClick here and get more!")
+            Text(" remaining.\nClick here to get more!")
             .foregroundColor(.ui.cadetBlueCrayola)
             .font(.ui.headline)
     }

@@ -15,11 +15,17 @@ enum Orientation {
     case vertical, horizontal
 }
 
+enum Size {
+    case large, medium
+}
+
 struct CustomMenuPopup: View {
     @State var menuTheme: MenuTheme = .light
     @State var orientation: Orientation = .vertical
     @Binding var shareableData: ShareableData?
     @State var socialMediaPlatform: String? = nil
+    @State var size: Size = .large
+    @State var opacity: CGFloat = 1
     var edit: (() -> Void)?
     var copy: (() -> Void)?
     var delete: (() -> Void)?
@@ -76,8 +82,8 @@ struct CustomMenuPopup: View {
         } label: {
             Image(systemName: "ellipsis")
                 .rotationEffect(orientation == .vertical ? .degrees(90) : .degrees(0))
-                .font(.ui.title)
-                .foregroundColor(menuTheme == .light ? .ui.cultured : .ui.richBlack)
+                .font(size == .large ? .ui.title : .ui.title2)
+                .foregroundColor(menuTheme == .light ? .ui.cultured.opacity(opacity) : .ui.richBlack.opacity(opacity))
                 .frame(width: 50, height: 50)
         }
         .onTapGesture {

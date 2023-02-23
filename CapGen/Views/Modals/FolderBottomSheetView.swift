@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct FolderBottomSheetView: View {
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var firestoreMan: FirestoreManager
+    
     @State var title: String = "Create your folder"
     var isEditing: Bool
 
     @State var folderName: String = ""
-    @State var selectedPlatform: String = "General" // default selected
+    @State var selectedPlatform: FolderType = .General // default selected
     @State var isLoading: Bool = false
     @State var isFolderNameError: Bool = false
     
@@ -24,7 +27,17 @@ struct FolderBottomSheetView: View {
             return
         }
         
+        self.isLoading = true
+        
         // Call API to update firebase
+        let userId = AuthManager.shared.userManager.user?.id ?? nil
+        
+        let newFolder = FolderModel(name: folderName, folderType: selectedPlatform, captions: [])
+
+        firestoreMan.saveFolder(for: userId, folder: newFolder) {
+            self.isLoading = false
+            dismiss()
+        }
     }
 
     var body: some View {
@@ -116,7 +129,7 @@ struct FolderNameInput: View {
 
 struct PlatformGridView: View {
     @ScaledMetric var scaledSize: CGFloat = 1
-    @Binding var selectedPlatform: String
+    @Binding var selectedPlatform: FolderType
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -133,7 +146,7 @@ struct PlatformGridView: View {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(socialMediaPlatforms) { platform in
                     Button {
-                        self.selectedPlatform = platform.title
+                        self.selectedPlatform = FolderType(rawValue: platform.title)!
                     } label: {
                         VStack(spacing: 10) {
                             Image("\(platform.title)-circle")
@@ -141,7 +154,7 @@ struct PlatformGridView: View {
                                 .frame(width: 35 * scaledSize, height: 35 * scaledSize)
                                 .background(
                                     ZStack(alignment: .topTrailing) {
-                                        if (self.selectedPlatform == platform.title) {
+                                        if (self.selectedPlatform == FolderType(rawValue: platform.title)!) {
                                             Circle()
                                                 .strokeBorder(Color.ui.middleBluePurple, lineWidth: 3)
                                                 
@@ -161,7 +174,7 @@ struct PlatformGridView: View {
                                 .padding(10)
                             
                             Text(platform.title)
-                                .foregroundColor(self.selectedPlatform == platform.title ? .ui.middleBluePurple : .ui.lighterLavBlue)
+                                .foregroundColor(self.selectedPlatform == FolderType(rawValue: platform.title)! ? .ui.middleBluePurple : .ui.lighterLavBlue)
                                 .font(.ui.headline)
                         }
                     }
