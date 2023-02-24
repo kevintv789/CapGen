@@ -121,23 +121,28 @@ class UserManager: ObservableObject {
             }
         }
     }
-    
+
     private func convertFolderModel(for folders: [[String: AnyObject]]?) -> [FolderModel] {
         guard let folders = folders else { return [] }
-        
+
         var result: [FolderModel] = []
-        
+
         folders.forEach { folder in
             let id = folder["id"] as! String
             let name = folder["name"] as! String
             let dateCreated = folder["dateCreated"] as! String
             let folderType = folder["folderType"] as! String
-            let captions = Utils.convertGeneratedCaptions(for:  folder["captions"] as? [[String: AnyObject]])
-            
+            let captions = Utils.convertGeneratedCaptions(for: folder["captions"] as? [[String: AnyObject]])
+
             let mappedFolder = FolderModel(id: id, name: name, dateCreated: dateCreated, folderType: FolderType(rawValue: folderType)!, captions: captions)
             result.append(mappedFolder)
         }
-        
+
+        // Sort by most recent created
+        let df = DateFormatter()
+        df.dateFormat = "MMM d, h:mm a"
+        result.sort(by: { df.date(from: $0.dateCreated)!.compare(df.date(from: $1.dateCreated)!) == .orderedDescending })
+
         return result
     }
 

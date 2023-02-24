@@ -10,33 +10,57 @@ import SwiftUI
 struct FolderBottomSheetView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var firestoreMan: FirestoreManager
-    
+    @EnvironmentObject var folderVm: FolderViewModel
+
     @State var title: String = "Create your folder"
-    var isEditing: Bool
+
+    // If the user is going to edit the folder
+    @Binding var isEditing: Bool
+    @State var folder: FolderModel? = nil
 
     @State var folderName: String = ""
     @State var selectedPlatform: FolderType = .General // default selected
     @State var isLoading: Bool = false
     @State var isFolderNameError: Bool = false
-    
+
     private func onSubmit() {
-        self.isFolderNameError = false
-        
+        isFolderNameError = false
+
         if folderName.isEmpty {
-            self.isFolderNameError = true
+            isFolderNameError = true
             return
         }
-        
-        self.isLoading = true
-        
+
+        isLoading = true
+
         // Call API to update firebase
         let userId = AuthManager.shared.userManager.user?.id ?? nil
-        
+
         let newFolder = FolderModel(name: folderName, folderType: selectedPlatform, captions: [])
 
-        firestoreMan.saveFolder(for: userId, folder: newFolder) {
-            self.isLoading = false
-            dismiss()
+        if !isEditing {
+            // Creating a new folder
+            firestoreMan.saveFolder(for: userId, folder: newFolder) {
+                self.isLoading = false
+                dismiss()
+            }
+        } else {
+            // Editing a folder
+            if let curFolder = folder {
+                let currFolders = AuthManager.shared.userManager.user?.folders ?? []
+                let updatedFolder = FolderModel(id: curFolder.id, name: folderName, dateCreated: curFolder.dateCreated, folderType: selectedPlatform, captions: curFolder.captions)
+
+                Task {
+                    await firestoreMan.updateFolder(for: userId, newFolder: updatedFolder, currentFolders: currFolders) { updatedFolder in
+                        if let updatedFolder = updatedFolder {
+                            folderVm.editedFolder = updatedFolder
+                        }
+
+                        self.isLoading = false
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 
@@ -57,7 +81,7 @@ struct FolderBottomSheetView: View {
 
                     // Choose a platform 3x3 grid
                     PlatformGridView(selectedPlatform: $selectedPlatform)
-                    
+
                     // Submit button
                     PrimaryButtonView(title: "Create", isLoading: $isLoading) {
                         // Run API to create the specified folder
@@ -70,12 +94,13 @@ struct FolderBottomSheetView: View {
                 }
                 .padding()
             }
-           
         }
-        .onAppear {
-            // Update data based on user action
-            if isEditing {
+        .onReceive(folderVm.$currentFolder) { folder in
+            if !folder.name.isEmpty, isEditing {
+                self.folder = folder
                 self.title = "Edit folder"
+                self.selectedPlatform = folder.folderType
+                self.folderName = folder.name
             }
         }
     }
@@ -118,11 +143,8 @@ struct FolderNameInput: View {
                             }
                             .padding(.trailing)
                         }
-
-                        
                     }
                 )
-              
         }
     }
 }
@@ -135,14 +157,14 @@ struct PlatformGridView: View {
         GridItem(.flexible()),
         GridItem(.flexible()),
     ]
-    
+
     var body: some View {
         VStack {
             Text("Choose a platform")
                 .foregroundColor(.ui.cadetBlueCrayola)
                 .font(.ui.headline)
                 .padding(.bottom)
-            
+
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(socialMediaPlatforms) { platform in
                     Button {
@@ -154,10 +176,10 @@ struct PlatformGridView: View {
                                 .frame(width: 35 * scaledSize, height: 35 * scaledSize)
                                 .background(
                                     ZStack(alignment: .topTrailing) {
-                                        if (self.selectedPlatform == FolderType(rawValue: platform.title)!) {
+                                        if self.selectedPlatform == FolderType(rawValue: platform.title)! {
                                             Circle()
                                                 .strokeBorder(Color.ui.middleBluePurple, lineWidth: 3)
-                                                
+
                                             Circle()
                                                 .fill(Color.ui.middleBluePurple)
                                                 .overlay(
@@ -169,20 +191,17 @@ struct PlatformGridView: View {
                                                 .frame(width: 22 * scaledSize, height: 22 * scaledSize)
                                         }
                                     }
-                                        .frame(width: 65 * scaledSize, height: 65 * scaledSize)
+                                    .frame(width: 65 * scaledSize, height: 65 * scaledSize)
                                 )
                                 .padding(10)
-                            
+
                             Text(platform.title)
                                 .foregroundColor(self.selectedPlatform == FolderType(rawValue: platform.title)! ? .ui.middleBluePurple : .ui.lighterLavBlue)
                                 .font(.ui.headline)
                         }
                     }
-                    
                 }
             }
-            
-           
         }
     }
 }

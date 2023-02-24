@@ -130,6 +130,7 @@ struct HomeView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
+    @EnvironmentObject var folderVm: FolderViewModel
 
     // user data
     @State var userFirstName: String?
@@ -138,6 +139,7 @@ struct HomeView: View {
     // show modal requests
     @State var showRefillModal: Bool = false
     @State var showCongratsModal: Bool = false
+    @State var showFolderDeleteModal: Bool = false
 
     // nav instances
     @State var router: Router? = nil
@@ -185,6 +187,7 @@ struct HomeView: View {
                     // Generate captions button
                     GenerateCaptionsButtonView(title: "Create captions with a prompt", imgName: "gen_captions_robot") {
                         // Navigate to generate captions views
+                        self.navStack.push(EnterPromptView())
                     }
                     .padding()
                 }
@@ -231,6 +234,7 @@ struct HomeView: View {
                 self.creditAmount = user.credits
             }
         }
+        // Show credits refill modal
         .modalView(horizontalPadding: 40, show: $showRefillModal) {
             RefillModalView(isViewPresented: $showRefillModal, showCongratsModal: $showCongratsModal)
         } onClickExit: {
@@ -238,12 +242,40 @@ struct HomeView: View {
                 self.showRefillModal = false
             }
         }
+        // Show congrats modal after ad
         .modalView(horizontalPadding: 40, show: $showCongratsModal) {
             CongratsModalView(showView: $showCongratsModal)
         } onClickExit: {
             withAnimation {
                 self.showCongratsModal = false
             }
+        }
+        // Show folder delete modal
+        .modalView(horizontalPadding: 40, show: $showFolderDeleteModal) {
+            DeleteModalView(title: "Remove folder", subTitle: "Deleting this folder will permanently erase all its contents. Are you sure you want to proceed? 🫢", lottieFile: "crane_hand_lottie", showView: $showFolderDeleteModal, onDelete: {
+                if !folderVm.currentFolder.id.isEmpty {
+                    let uid = AuthManager.shared.userManager.user?.id ?? nil
+                    let currentFolders = authManager.userManager.user?.folders ?? []
+
+                    Task {
+                        await firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {}
+                    }
+                }
+
+            })
+        } onClickExit: {
+            withAnimation {
+                self.showFolderDeleteModal = false
+            }
+        }
+        .onReceive(folderVm.$isDeleting) { value in
+            // Assign published value to a State to use in the onClickExit() function from modalView
+            // This is a necessary work around for modifying published state during a view update
+            self.showFolderDeleteModal = value
+        }
+        .onChange(of: self.showFolderDeleteModal) { newValue in
+            // Resets the published value back to original state when the delete modal disappears
+            folderVm.isDeleting = newValue
         }
     }
 }
@@ -288,6 +320,7 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(CaptionConfigsViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
+            .environmentObject(FolderViewModel())
 
         HomeView()
             .environmentObject(TaglistViewModel())
@@ -296,6 +329,7 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(CaptionConfigsViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
+            .environmentObject(FolderViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

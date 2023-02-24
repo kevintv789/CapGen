@@ -6,11 +6,16 @@
 //
 
 import SwiftUI
+import NavigationStack
 
-struct FolderView: View {
-    @State var showCreateFolderBottomSheet: Bool = false
+struct FolderGridView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
+    @EnvironmentObject var folderVm: FolderViewModel
+    
+    @State var showFolderBottomSheet: Bool = false
     @State var folders: [FolderModel] = []
-
+    @State var isEditing: Bool = false
+    
     let columns = [
         GridItem(.flexible(minimum: 10), spacing: 0),
         GridItem(.flexible(minimum: 10), spacing: 0),
@@ -22,37 +27,51 @@ struct FolderView: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
-                ForEach(Array(folders.enumerated()), id: \.element) { index, data in
-                    if index == 0 {
-                        AddFolderButtonView {
-                            Haptics.shared.play(.soft)
-                            
-                            // show bottom sheet
-                            self.showCreateFolderBottomSheet = true
-                        }
-                        .padding(.top, 20)
-                    }
+                AddFolderButtonView {
+                    Haptics.shared.play(.soft)
                     
+                    // show bottom sheet
+                    self.isEditing = false
+                    self.showFolderBottomSheet = true
+                }
+                .padding(.top, 20)
+                
+                .padding(.top, 20)
+                ForEach(Array(folders.enumerated()), id: \.element) { _, data in
                     HStack(spacing: 0) {
                         FolderButtonView(folder: data)
                         
-                        CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), size: .medium, opacity: 0.25)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                            .padding(.leading, -33)
-                            .padding(.top)
+                        CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), size: .medium, opacity: 0.25,
+                                        edit: {
+                            // on edit, show bottom sheet with identifying information
+                            folderVm.currentFolder = data
+                            self.isEditing = true
+                            self.showFolderBottomSheet = true
+                            
+                        }, delete: {
+                            // on delete, remove from firebase
+                            folderVm.currentFolder = data
+                            folderVm.isDeleting.toggle()
+                        })
+                        
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                        .padding(.leading, -33)
+                        .padding(.top)
                     }
-                    
                 }
                 .padding(.bottom, -10)
             }
         }
-        .sheet(isPresented: $showCreateFolderBottomSheet) {
-            FolderBottomSheetView(isEditing: false)
+        .sheet(isPresented: $showFolderBottomSheet) {
+            FolderBottomSheetView(isEditing: $isEditing)
                 .presentationDetents([.fraction(0.8)])
         }
         .onReceive(AuthManager.shared.userManager.$user) { user in
             if let user = user {
                 self.folders = user.folders
+                
+                // Resets selected folder back to nil so that the bottom sheet wil only retain most updated data
+                folderVm.resetFolder()
             }
         }
     }
@@ -60,7 +79,7 @@ struct FolderView: View {
 
 struct AddFolderButtonView: View {
     var action: () -> Void
-
+    
     var body: some View {
         Button {
             action()
@@ -76,7 +95,7 @@ struct AddFolderButtonView: View {
                             .frame(width: 60, height: 60)
                             .shadow(color: .ui.richBlack.opacity(0.35), radius: 3, x: 1, y: 2)
                     )
-
+                
                 Text("Create folder")
                     .foregroundColor(.ui.richBlack).opacity(0.5)
                     .font(.ui.headlineMd)
@@ -86,12 +105,11 @@ struct AddFolderButtonView: View {
 }
 
 struct FolderButtonView: View {
-    let folder: FolderModel
+    @State var folder: FolderModel
     
     var body: some View {
-        Button {
-            
-        } label: {
+        PushView(destination:  FolderView(folder: $folder))
+        {
             VStack(spacing: 0) {
                 ZStack(alignment: .bottomTrailing) {
                     Image("main_folder")
@@ -109,27 +127,20 @@ struct FolderButtonView: View {
                                                 Circle()
                                                     .fill(Color.ui.cultured)
                                                     .frame(width: 35, height: 35)
-                                                    
                                             )
                                             .padding(30)
                                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                                             .padding(.top, 5)
                                     }
-                                    
-                                        
                                 }
-                               
                             }
                         )
-                    
-                
                     
                     Text("\(folder.captions.count)")
                         .padding(30)
                         .padding(.trailing, -5)
                         .font(.ui.headlineMd)
                         .foregroundColor(.ui.richBlack.opacity(0.5))
-                    
                 }
                 
                 Text(folder.name)
@@ -139,12 +150,12 @@ struct FolderButtonView: View {
                     .multilineTextAlignment(.center)
                     .padding(.top, -15)
                 
-                
                 Spacer()
             }
-           
-           
         }
-       
+        .simultaneousGesture(TapGesture().onEnded { _ in
+            Haptics.shared.play(.soft)
+        })
+        
     }
 }

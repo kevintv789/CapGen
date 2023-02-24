@@ -59,6 +59,7 @@ struct CapGenApp: App {
                 .environmentObject(NavigationStackCompat())
                 .environmentObject(CaptionEditViewModel())
                 .environmentObject(CaptionConfigsViewModel())
+                .environmentObject(FolderViewModel())
         }
     }
 }

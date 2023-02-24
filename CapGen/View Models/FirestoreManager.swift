@@ -161,39 +161,126 @@ class FirestoreManager: ObservableObject {
 
         return count
     }
-    
+
+    /**
+     This function creates a new folder by checking if a folders data field array already exists
+     - If exist, add onto the array with a union call
+     - If does not exist, then create a folders data field array
+     */
     func saveFolder(for uid: String?, folder: FolderModel, onComplete: @escaping () -> Void) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             onComplete()
             return
         }
-        
+
         let docRef = db.collection("Users").document("\(userId)")
-        
+
         docRef.getDocument { doc, error in
             if error != nil {
                 self.appError = ErrorType(error: .genericError)
                 print("Error within saveFolder()")
                 return
             }
-            
+
             if let doc = doc, doc.exists {
                 let data = doc.data()
-                
                 // Determine if folders array already exists
                 if let foldersUncoded = data?["folders"] as? [[String: AnyObject]] {
                     if !foldersUncoded.isEmpty {
                         // folders array already exist, add onto array
                         docRef.updateData(["folders": FieldValue.arrayUnion([folder.dictionary])])
+                        onComplete()
+                        return
                     }
-                } else {
-                    // Create new data field since it does not exist
-                    docRef.setData(["folders": [folder.dictionary]], merge: true)
+                }
+
+                // Create new data field since it does not exist
+                docRef.setData(["folders": [folder.dictionary]], merge: true)
+                onComplete()
+                return
+            }
+        }
+    }
+
+    /**
+     This function update an existing folder by
+     - Retrieving it from the current array
+     - Removing that item
+     - Adding in a new item with a different ID and same date created
+     */
+    @MainActor
+    func updateFolder(for uid: String?, newFolder: FolderModel, currentFolders: [FolderModel], onComplete: @escaping (_ updatedFolder: FolderModel?) -> Void) async {
+        guard let userId = uid else {
+            appError = ErrorType(error: .genericError)
+            onComplete(nil)
+            return
+        }
+
+        if !currentFolders.isEmpty {
+            let docRef = db.collection("Users").document("\(userId)")
+
+            // Update array with new item
+            let indexOfFolder = currentFolders.firstIndex { $0.id == newFolder.id }
+
+            if indexOfFolder != nil {
+                // Create a new folder with a different ID and date created
+                // The ID needs to be different to avoid intermittent issues with ForEach reading from the same ID
+                let updatedFolder = FolderModel(id: UUID().uuidString, name: newFolder.name, dateCreated: currentFolders[indexOfFolder!].dateCreated, folderType: newFolder.folderType, captions: newFolder.captions)
+
+                // Remove current folder
+                do {
+                    try await docRef.updateData(["folders": FieldValue.arrayRemove([currentFolders[indexOfFolder!].dictionary])])
+                } catch {
+                    print("Error on deleting folders - updateFolder()")
+                    appError = ErrorType(error: .genericError)
+                    onComplete(nil)
+                    return
+                }
+
+                // Adding updated folder onto the existing data field
+                do {
+                    try await docRef.updateData(["folders": FieldValue.arrayUnion([updatedFolder.dictionary])])
+                    onComplete(updatedFolder)
+                } catch {
+                    print("Error on adding folders")
+                    appError = ErrorType(error: .genericError)
+                    onComplete(nil)
+                    return
                 }
             }
         }
+
         
+    }
+
+    /**
+     This function deletes a folder by
+     - Retrieving it from the current array
+     - Removing that item
+     */
+    func onFolderDelete(for uid: String?, curFolder: FolderModel, currentFolders: [FolderModel], onComplete: @escaping () -> Void) async {
+        guard let userId = uid else {
+            appError = ErrorType(error: .genericError)
+            onComplete()
+            return
+        }
+
+        let docRef = db.collection("Users").document("\(userId)")
+
+        if !currentFolders.isEmpty {
+            // Find the folder to be deleted
+            let indexOfFolder = currentFolders.firstIndex { $0.id == curFolder.id }
+
+            // Remove current folder
+            do {
+                try await docRef.updateData(["folders": FieldValue.arrayRemove([currentFolders[indexOfFolder!].dictionary])])
+            } catch {
+                print("Error on deleting folders - onFolderDelete()")
+                appError = ErrorType(error: .genericError)
+                return
+            }
+        }
         onComplete()
     }
 

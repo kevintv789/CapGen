@@ -45,7 +45,7 @@ func calculateTimeOfDay() -> DayType {
     return timeOfDay
 }
 
-struct Utils {
+enum Utils {
     static func getCurrentDate() -> String {
         let date = Date()
         let df = DateFormatter()
@@ -60,20 +60,36 @@ struct Utils {
         df.dateFormat = "MMM d, h:mm a"
         return df.date(from: date)
     }
-    
-    static func convertGeneratedCaptions(for generatedCaptions: [[String: AnyObject]]?) -> [GeneratedCaptions] {
+
+    static func convertGeneratedCaptions(for generatedCaptions: [[String: AnyObject]]?) -> [CaptionModel] {
         guard let captions = generatedCaptions else { return [] }
-        
-        var result: [GeneratedCaptions] = []
-        
-        captions.forEach({ caption in
-            let id = caption["id"] as! String
-            let description = caption["description"] as! String
+
+        var result: [CaptionModel] = []
+
+        captions.forEach { element in
+            let captionLength = element["captionLength"] as! String
+            let captionDescription = element["captionDescription"] as! String
+            let dateCreated = element["dateCreated"] as! String
+            let id = element["id"] as! String
+            let includeEmojis = element["includeEmojis"] as! Bool
+            let includeHashtags = element["includeHashtags"] as! Bool
+            let prompt = element["prompt"] as! String
+            let title = element["title"] as! String
+            let folderId = element["folderId"] as! String
+            let color = element["color"] as! String
             
-            let mappedCaption = GeneratedCaptions(id: id, description: description)
+            let tonesDict = element["tones"] as? [[String: AnyObject]] ?? []
+            var tones: [ToneModel] = []
+            tonesDict.forEach { ele in
+                let tone = ToneModel(id: ele["id"] as! Int, title: ele["title"] as! String, description: ele["description"] as! String, icon: ele["icon"] as! String)
+                tones.append(tone)
+            }
+            
+            let mappedCaption = CaptionModel(id: id, captionLength: captionLength, dateCreated: dateCreated, captionDescription: captionDescription, includeEmojis: includeEmojis, includeHashtags: includeHashtags, folderId: folderId, prompt: prompt, title: title, tones: tones, color: color)
+            
             result.append(mappedCaption)
-        })
-        
+        }
+
         return result
     }
 }

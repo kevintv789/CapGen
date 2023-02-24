@@ -129,11 +129,17 @@
 		D45707AC29A46935001D80AD /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AB29A46935001D80AD /* LogoView.swift */; };
 		D45707AE29A57669001D80AD /* SavedCaptionsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */; };
 		D45707B029A57A5C001D80AD /* ImageButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AF29A57A5C001D80AD /* ImageButtonView.swift */; };
-		D45707B229A5B1D1001D80AD /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B129A5B1D1001D80AD /* FolderView.swift */; };
+		D45707B229A5B1D1001D80AD /* FolderGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B129A5B1D1001D80AD /* FolderGridView.swift */; };
 		D45707B429A655E9001D80AD /* FolderBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */; };
 		D45707B629A67F41001D80AD /* PrimaryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B529A67F41001D80AD /* PrimaryButtonView.swift */; };
 		D45707B829A68B7C001D80AD /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B729A68B7C001D80AD /* FolderModel.swift */; };
 		D45707BA29A6CFCD001D80AD /* FoldersArrayMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B929A6CFCD001D80AD /* FoldersArrayMock.swift */; };
+		D45707BC29A83CC8001D80AD /* FolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707BB29A83CC8001D80AD /* FolderViewModel.swift */; };
+		D45707BF29A8F5AC001D80AD /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707BE29A8F5AC001D80AD /* FolderView.swift */; };
+		D45707C129A8FDBB001D80AD /* BlankCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C029A8FDBB001D80AD /* BlankCaptionsView.swift */; };
+		D45707C329A9105E001D80AD /* CaptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C229A9105E001D80AD /* CaptionModel.swift */; };
+		D45707C529A9169D001D80AD /* CaptionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C429A9169D001D80AD /* CaptionCardView.swift */; };
+		D45707C829A91C88001D80AD /* EnterPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C729A91C88001D80AD /* EnterPromptView.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D47304062996C3F400179FEB /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
@@ -360,11 +366,17 @@
 		D45707AB29A46935001D80AD /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionsHomeView.swift; sourceTree = "<group>"; };
 		D45707AF29A57A5C001D80AD /* ImageButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonView.swift; sourceTree = "<group>"; };
-		D45707B129A5B1D1001D80AD /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
+		D45707B129A5B1D1001D80AD /* FolderGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderGridView.swift; sourceTree = "<group>"; };
 		D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderBottomSheetView.swift; sourceTree = "<group>"; };
 		D45707B529A67F41001D80AD /* PrimaryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonView.swift; sourceTree = "<group>"; };
 		D45707B729A68B7C001D80AD /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
 		D45707B929A6CFCD001D80AD /* FoldersArrayMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersArrayMock.swift; sourceTree = "<group>"; };
+		D45707BB29A83CC8001D80AD /* FolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewModel.swift; sourceTree = "<group>"; };
+		D45707BE29A8F5AC001D80AD /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
+		D45707C029A8FDBB001D80AD /* BlankCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankCaptionsView.swift; sourceTree = "<group>"; };
+		D45707C229A9105E001D80AD /* CaptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionModel.swift; sourceTree = "<group>"; };
+		D45707C429A9169D001D80AD /* CaptionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionCardView.swift; sourceTree = "<group>"; };
+		D45707C729A91C88001D80AD /* EnterPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPromptView.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
 		D47304522996CE1900179FEB /* libAudioDSPCore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libAudioDSPCore.tbd; path = usr/lib/libAudioDSPCore.tbd; sourceTree = SDKROOT; };
@@ -1841,6 +1853,7 @@
 				D4C3E49D2984C02D00C2847A /* AppStoreModel.swift */,
 				D4C3E4A5298577B400C2847A /* ErrorModel.swift */,
 				D45707B729A68B7C001D80AD /* FolderModel.swift */,
+				D45707C229A9105E001D80AD /* CaptionModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1851,7 +1864,9 @@
 				D4005DB6295BE0E0004D695D /* ContentView.swift */,
 				D4056ED929789CDB00D3894D /* Welcome */,
 				D4056ED629789CB000D3894D /* Home */,
+				D45707C629A91C72001D80AD /* GenerateCaptions */,
 				D4056ED829789CC900D3894D /* Profile */,
+				D45707BD29A8F569001D80AD /* Folders */,
 				D4056ED729789CBC00D3894D /* Caption */,
 				D4056ECB2977968D00D3894D /* Modals */,
 				D4056E1E295CC92100D3894D /* Common */,
@@ -1873,6 +1888,7 @@
 				D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */,
 				D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */,
 				D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */,
+				D45707BB29A83CC8001D80AD /* FolderViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -1999,6 +2015,8 @@
 				D45707AB29A46935001D80AD /* LogoView.swift */,
 				D45707AF29A57A5C001D80AD /* ImageButtonView.swift */,
 				D45707B529A67F41001D80AD /* PrimaryButtonView.swift */,
+				D45707C029A8FDBB001D80AD /* BlankCaptionsView.swift */,
+				D45707C429A9169D001D80AD /* CaptionCardView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2084,7 +2102,6 @@
 				D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */,
 				D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */,
 				D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */,
-				D45707B129A5B1D1001D80AD /* FolderView.swift */,
 			);
 			path = Caption;
 			sourceTree = "<group>";
@@ -2103,6 +2120,23 @@
 				D4056E82296F867D00D3894D /* LaunchView.swift */,
 			);
 			path = Welcome;
+			sourceTree = "<group>";
+		};
+		D45707BD29A8F569001D80AD /* Folders */ = {
+			isa = PBXGroup;
+			children = (
+				D45707B129A5B1D1001D80AD /* FolderGridView.swift */,
+				D45707BE29A8F5AC001D80AD /* FolderView.swift */,
+			);
+			path = Folders;
+			sourceTree = "<group>";
+		};
+		D45707C629A91C72001D80AD /* GenerateCaptions */ = {
+			isa = PBXGroup;
+			children = (
+				D45707C729A91C88001D80AD /* EnterPromptView.swift */,
+			);
+			path = GenerateCaptions;
 			sourceTree = "<group>";
 		};
 		D47306CD29993D5100179FEB /* Common */ = {
@@ -2499,17 +2533,20 @@
 				D4056E83296F867D00D3894D /* LaunchView.swift in Sources */,
 				D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */,
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
+				D45707C529A9169D001D80AD /* CaptionCardView.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
-				D45707B229A5B1D1001D80AD /* FolderView.swift in Sources */,
+				D45707B229A5B1D1001D80AD /* FolderGridView.swift in Sources */,
 				D45707BA29A6CFCD001D80AD /* FoldersArrayMock.swift in Sources */,
 				D4C3E496298437B600C2847A /* ShareableData.swift in Sources */,
 				D4C3E4A6298577B400C2847A /* ErrorModel.swift in Sources */,
 				D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */,
 				D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */,
+				D45707C329A9105E001D80AD /* CaptionModel.swift in Sources */,
 				D45707A8299A9AD2001D80AD /* SearchBar.swift in Sources */,
 				D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */,
 				D4056E9B2971EF6F00D3894D /* FBAuthManager.swift in Sources */,
 				D45707B629A67F41001D80AD /* PrimaryButtonView.swift in Sources */,
+				D45707BC29A83CC8001D80AD /* FolderViewModel.swift in Sources */,
 				D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */,
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
@@ -2545,6 +2582,8 @@
 				D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */,
 				D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */,
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
+				D45707C829A91C88001D80AD /* EnterPromptView.swift in Sources */,
+				D45707C129A8FDBB001D80AD /* BlankCaptionsView.swift in Sources */,
 				D4056EC02974AF6D00D3894D /* CongratsModalView.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
 				D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */,
@@ -2552,6 +2591,7 @@
 				D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */,
 				D4C3E4AE2987368300C2847A /* CaptionEditViewModel.swift in Sources */,
 				D4056E382963178D00D3894D /* CaptionView.swift in Sources */,
+				D45707BF29A8F5AC001D80AD /* FolderView.swift in Sources */,
 				D4056EC229751ACA00D3894D /* UserModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

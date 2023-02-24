@@ -11,7 +11,7 @@ struct PrimaryButtonView: View {
     let title: String
     @Binding var isLoading: Bool
     var action: () -> Void
-    
+
     func displayBtnOverlay() -> some View {
         if isLoading {
             return AnyView(
@@ -26,7 +26,7 @@ struct PrimaryButtonView: View {
             )
         }
     }
-    
+
     var body: some View {
         Button {
             Haptics.shared.play(.soft)
