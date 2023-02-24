@@ -60,6 +60,7 @@ struct CapGenApp: App {
                 .environmentObject(CaptionEditViewModel())
                 .environmentObject(CaptionConfigsViewModel())
                 .environmentObject(FolderViewModel())
+                .environmentObject(GenerateByPromptViewModel())
         }
     }
 }

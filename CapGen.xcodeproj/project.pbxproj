@@ -140,6 +140,8 @@
 		D45707C329A9105E001D80AD /* CaptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C229A9105E001D80AD /* CaptionModel.swift */; };
 		D45707C529A9169D001D80AD /* CaptionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C429A9169D001D80AD /* CaptionCardView.swift */; };
 		D45707C829A91C88001D80AD /* EnterPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C729A91C88001D80AD /* EnterPromptView.swift */; };
+		D45707CA29A9680B001D80AD /* SimpleDeleteModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C929A9680B001D80AD /* SimpleDeleteModal.swift */; };
+		D45707CC29A96CBE001D80AD /* GenerateByPromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D47304062996C3F400179FEB /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
@@ -377,6 +379,8 @@
 		D45707C229A9105E001D80AD /* CaptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionModel.swift; sourceTree = "<group>"; };
 		D45707C429A9169D001D80AD /* CaptionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionCardView.swift; sourceTree = "<group>"; };
 		D45707C729A91C88001D80AD /* EnterPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPromptView.swift; sourceTree = "<group>"; };
+		D45707C929A9680B001D80AD /* SimpleDeleteModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDeleteModal.swift; sourceTree = "<group>"; };
+		D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateByPromptViewModel.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
 		D47304522996CE1900179FEB /* libAudioDSPCore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libAudioDSPCore.tbd; path = usr/lib/libAudioDSPCore.tbd; sourceTree = SDKROOT; };
@@ -1889,6 +1893,7 @@
 				D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */,
 				D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */,
 				D45707BB29A83CC8001D80AD /* FolderViewModel.swift */,
+				D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -2079,6 +2084,7 @@
 				D4C3E4862980883D00C2847A /* DeleteModalView.swift */,
 				D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */,
 				D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */,
+				D45707C929A9680B001D80AD /* SimpleDeleteModal.swift */,
 			);
 			path = Modals;
 			sourceTree = "<group>";
@@ -2550,12 +2556,14 @@
 				D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */,
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
+				D45707CA29A9680B001D80AD /* SimpleDeleteModal.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
 				D45707B429A655E9001D80AD /* FolderBottomSheetView.swift in Sources */,
 				D4C3E4AC298639AE00C2847A /* Router.swift in Sources */,
 				D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */,
 				D45707AC29A46935001D80AD /* LogoView.swift in Sources */,
 				D4056EC429751BD200D3894D /* UserManager.swift in Sources */,
+				D45707CC29A96CBE001D80AD /* GenerateByPromptViewModel.swift in Sources */,
 				D4056E81296F0CB900D3894D /* LottieView.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
 				D4C3E4922982105300C2847A /* Notifications.swift in Sources */,

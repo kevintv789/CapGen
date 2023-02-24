@@ -61,7 +61,7 @@ extension View {
 
     // Create extension for pop-up view
     // use the @ViewBuilder to create child views for a specific SwiftUI view in a readable way without having to use any return keywords.
-    func modalView<Content: View>(horizontalPadding: CGFloat = 40.0, show: Binding<Bool>, @ViewBuilder content: @escaping () -> Content, onClickExit: (() -> Void)?) -> some View {
+    func modalView<Content: View>(horizontalPadding: CGFloat = 40.0, show: Binding<Bool>, @ViewBuilder content: @escaping () -> Content, onClickExit: (() -> Void)? = nil) -> some View {
         return frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .overlay {
                 if show.wrappedValue {
@@ -95,4 +95,16 @@ extension View {
                 }
             }
     }
+    
+    func animate(duration: CGFloat, _ execute: @escaping () -> Void) async {
+           await withCheckedContinuation { continuation in
+               withAnimation(.linear(duration: duration)) {
+                   execute()
+               }
+
+               DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                   continuation.resume()
+               }
+           }
+       }
 }
