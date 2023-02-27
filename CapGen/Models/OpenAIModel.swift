@@ -10,12 +10,12 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
-struct OpenAIResponseModel: Codable {
+struct OpenAIResponseModel: Identifiable, Codable {
     var id: String
-    var object: String
-    var created: Int
-    var model: String
-    var choices: [Choice]
+    var object: String?
+    var created: Int?
+    var model: String?
+    var choices: [Choice]?
 }
 
 struct Choice: Codable {
@@ -75,6 +75,14 @@ struct AIRequest: Codable, Identifiable, Comparable, Hashable {
 
     init(platform: String, prompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String) {
         self.platform = platform
+        self.prompt = prompt
+        self.tones = tones
+        self.includeEmojis = includeEmojis
+        self.includeHashtags = includeHashtags
+        self.captionLength = captionLength
+    }
+    
+    init(prompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String) {
         self.prompt = prompt
         self.tones = tones
         self.includeEmojis = includeEmojis

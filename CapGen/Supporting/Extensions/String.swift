@@ -37,4 +37,15 @@ extension String {
         let size = (self as NSString).size(withAttributes: attributes)
         return type == .width ? size.width : size.height
     }
+
+    // Create a function that returns a number of words from a string using enumeratedSubstrings
+     var wordCount: Int {
+        var count = 0
+        let range = startIndex..<endIndex
+        enumerateSubstrings(in: range, options: [.byWords, .substringNotRequired, .localized], { _, _, _, _ -> () in
+            count += 1
+        })
+        return count
+    }
+
 }

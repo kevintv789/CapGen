@@ -82,7 +82,7 @@ struct CaptionView: View {
 
         // Store caption group title and caption cards
         var mappedCaptions: [GeneratedCaptions] = []
-        captionEditVm.captionsGroupParsed.forEach { caption in
+        openAiConnector.captionsGroupParsed.forEach { caption in
             mappedCaptions.append(GeneratedCaptions(id: UUID().uuidString, description: caption))
         }
 
@@ -92,7 +92,7 @@ struct CaptionView: View {
 
         // Generate request model for saving new generated captions
         if isEditing == nil || (isEditing != nil && !isEditing!) {
-            openAiConnector.generateNewRequestModel(title: captionEditVm.captionGroupTitle, captions: mappedCaptions)
+            openAiConnector.generateNewRequestModel(title: openAiConnector.captionGroupTitle, captions: mappedCaptions)
 
             // Save new entry to database
             Task {
@@ -106,7 +106,7 @@ struct CaptionView: View {
         } else {
             // Update caption group
             if mutableCaptionGroup != nil && openAiConnector.mutableCaptionGroup != nil {
-                openAiConnector.updateMutableCaptionGroupWithNewCaptions(with: mappedCaptions, title: captionEditVm.captionGroupTitle)
+                openAiConnector.updateMutableCaptionGroupWithNewCaptions(with: mappedCaptions, title: openAiConnector.captionGroupTitle)
 
                 Task {
                     await firestore.saveCaptions(for: userId, with: self.openAiConnector.mutableCaptionGroup!, captionsGroup: captionsGroup) {
@@ -168,7 +168,7 @@ struct CaptionView: View {
                             }
                             Spacer()
 
-                            ForEach(Array(self.captionEditVm.captionsGroupParsed.enumerated()), id: \.element) { index, caption in
+                            ForEach(Array(self.openAiConnector.captionsGroupParsed.enumerated()), id: \.element) { index, caption in
                                 Button {
                                     withAnimation {
                                         self.captionSelected = caption
@@ -183,7 +183,7 @@ struct CaptionView: View {
                                                         // edit
                                                         self.captionEditVm.selectedIndex = index
 
-                                                        self.router?.toEditCaptionView(color: cardColorFill[index], title: self.captionEditVm.captionGroupTitle, platform: self.platform, caption: caption)
+                                                        self.router?.toEditCaptionView(color: cardColorFill[index], title: self.openAiConnector.captionGroupTitle, platform: self.platform, caption: caption)
                                                     }, onMenuOpen: {
                                                         self.shareableData = mapShareableData(caption: caption, captionGroup: self.mutableCaptionGroup)
                                                     }, onCopyAndGo: {
@@ -229,38 +229,14 @@ struct CaptionView: View {
             // Initialize router
             self.router = Router(navStack: self.navStack)
 
-            // Initial parse of raw text to captions
-            if var originalString = captionStr, self.captionEditVm.captionsGroupParsed.isEmpty {
-                // Removes trailing and leading white spaces
-                originalString = captionStr!.trimmingCharacters(in: .whitespaces)
-
-                /**
-                 (?m)       // Enable "multiline" mode, where ^ and $ match the start and end of a line
-                 ^          // Match the start of a line
-                 \\s*       // Match zero or more whitespace characters (spaces, tabs, etc.)
-                 \\d+       // Match one or more digits
-                 \\.        // Match a period character
-                 \\s*       // Match zero or more whitespace characters again
-                 (.+)       // Capture one or more characters (any character except line breaks)
-                 */
-                let pattern = "(?m)^\\s*\\d+\\.\\s*(.+)"
-                if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
-                    let range = NSRange(originalString.startIndex..., in: originalString)
-                    let matches = regex.matches(in: originalString, options: [], range: range)
-                    let results = matches.map {
-                        String(originalString[Range($0.range(at: 1), in: originalString)!])
-                    }
-                    self.captionEditVm.captionGroupTitle = results.last ?? ""
-                    self.captionEditVm.captionsGroupParsed = results
-                }
-            }
+           
         }
         .onAppear {
             // Secondary pull after caption has been edited
-            if !self.captionEditVm.captionsGroupParsed.isEmpty {
+            if !self.openAiConnector.captionsGroupParsed.isEmpty {
                 // Only runs if the value has been updated
-                if !self.captionEditVm.editableText.isEmpty && self.captionEditVm.captionsGroupParsed[self.captionEditVm.selectedIndex] != self.captionEditVm.editableText {
-                    self.captionEditVm.captionsGroupParsed[self.captionEditVm.selectedIndex] = self.captionEditVm.editableText
+                if !self.captionEditVm.editableText.isEmpty && self.openAiConnector.captionsGroupParsed[self.captionEditVm.selectedIndex] != self.captionEditVm.editableText {
+                    self.openAiConnector.captionsGroupParsed[self.captionEditVm.selectedIndex] = self.captionEditVm.editableText
                     self.captionEditVm.editableText.removeAll()
                 }
             }
@@ -270,7 +246,7 @@ struct CaptionView: View {
 
 struct CaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        CaptionView(captionStr: .constant(" \n\n1. Loo🌈 \n2. My two doggos are having the time of their lives on the rainbow road - I wish I could join them! 🐶\n\n 3. Nothing cuter than seeing two doggies playing in a rainbowNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playin 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n 6. Two Pups, One Rainbow Roadddddd! 🌈"), platform: "Instagram")
+        CaptionView(captionStr: .constant(" \n\n1. Loo🌈 \n2. My two doggos are having the time \n\nof their lives on the rainbow \nroad - I wish I could join them! 🐶\n\n3. Nothing cuter than seeing two doggies playing in a rainbowNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playinNothing cuter than seeing two doggies playin 🌈 \n4. My two furry friends enjoying the beautiful rainbow road 🤗 \n5. The best part of my day? Watching my two pups have a blast on the rainbow road 🤩 \n6. Two Pups, One Rainbow Roadddddd! 🌈"), platform: "Instagram")
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
@@ -287,7 +263,7 @@ struct CaptionView_Previews: PreviewProvider {
 }
 
 struct EditableTitleView: View {
-    @EnvironmentObject var captionEditVm: CaptionEditViewModel
+    @EnvironmentObject var openAiConnector: OpenAIConnector
     @FocusState var isFocusOn: Bool
     @Binding var isError: Bool
 
@@ -296,7 +272,7 @@ struct EditableTitleView: View {
     var body: some View {
         HStack {
             if !isEditing && !isError {
-                Text("\(self.captionEditVm.captionGroupTitle)")
+                Text("\(self.openAiConnector.captionGroupTitle)")
                     .font(.ui.title)
                     .foregroundColor(.ui.richBlack)
                     .scaledToFit()
@@ -308,7 +284,7 @@ struct EditableTitleView: View {
                     .strokeBorder(style: StrokeStyle(lineWidth: 1))
                     .foregroundColor(isError ? Color.red : Color.ui.shadowGray)
                     .overlay(
-                        TextField("", text: self.$captionEditVm.captionGroupTitle)
+                        TextField("", text: self.$openAiConnector.captionGroupTitle)
                             .focused($isFocusOn)
                             .font(.ui.title)
                             .foregroundColor(.ui.shadowGray)
@@ -320,7 +296,7 @@ struct EditableTitleView: View {
                                 isEditing.toggle()
                                 isFocusOn.toggle()
                             }
-                            .onChange(of: self.captionEditVm.captionGroupTitle, perform: { title in
+                            .onChange(of: self.openAiConnector.captionGroupTitle, perform: { title in
                                 if title.isEmpty || title == " " {
                                     isError = true
                                 } else {

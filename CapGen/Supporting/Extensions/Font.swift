@@ -59,6 +59,7 @@ extension Font {
         let headlineLightSm = Font.custom("Graphik-Light", size: 16, relativeTo: .headline)
         let headlineMd = Font.custom("Graphik-Medium", size: 15, relativeTo: .headline)
         let headlineSm = Font.custom("Graphik-Medium", size: 13, relativeTo: .headline)
+        let subheadlineLarge = Font.custom("Graphik-RegularItalic", size: 18, relativeTo: .subheadline)
         let subheadline = Font.custom("Graphik-RegularItalic", size: 15, relativeTo: .subheadline)
         let bodyLargest = Font.custom("Graphik-Regular", size: 18, relativeTo: .body)
         let bodyLarge = Font.custom("Graphik-Regular", size: 16, relativeTo: .body)

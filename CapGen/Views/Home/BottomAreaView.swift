@@ -56,7 +56,7 @@ struct BottomAreaView: View {
             modifiedSelectedTones.append(newTone)
         }
 
-        openAiConnector.generatePrompt(platform: platformSelected, prompt: promptText, tones: modifiedSelectedTones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: lengthValue, captionLengthType: captionLengthType)
+//        openAiConnector.generatePrompt(prompt: promptText, tones: modifiedSelectedTones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: lengthValue, captionLengthType: captionLengthType)
     }
 
     var body: some View {
@@ -409,7 +409,7 @@ struct LengthSelectionSection: View {
                 .padding(.leading, 15)
                 .offset(y: -10)
 
-            SnappableSliderView(values: $sliderValues) { value in
+            SnappableSliderView(values: $sliderValues, selectedValue: .constant(0)) { value in
                 self.selectedValue = Int(value)
                 self.lengthValue = captionLengths[Int(value)].value
                 self.captionLengthType = captionLengths[Int(value)].type

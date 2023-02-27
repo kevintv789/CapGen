@@ -10,28 +10,29 @@ import Foundation
 public class OpenAIConnector: ObservableObject {
     @Published var requestModel: AIRequest = .init()
     @Published var mutableCaptionGroup: AIRequest?
-    @Published var prompt: String = ""
     @Published var captionLengthType: String = ""
     @Published var appError: ErrorType? = nil
+    @Published var captionsGroupParsed: [String] = []
+    @Published var captionGroupTitle: String = ""
 
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
 
     /*
      * Generates the prompt for the Open AI API
      */
-    func generatePrompt(platform: String, prompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String) {
-        requestModel = AIRequest(platform: platform, prompt: prompt, tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength)
+    func generatePrompt(userInputPrompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String) -> String {
+        requestModel = AIRequest(prompt: userInputPrompt, tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength)
 
         self.captionLengthType = captionLengthType
 
         var generatedToneStr = ""
         if !tones.isEmpty {
             tones.forEach { tone in
-                generatedToneStr += "\(tone.title), \(tone.description)"
+                generatedToneStr += "\(tone.title), \(tone.description) "
             }
         }
-
-        self.prompt = "Generate 5 captions and a title. Conform each caption to the standards of an \(platform) post. The title should be a catchy title that is no more than 5 words. The user's prompt is: \(prompt == "" ? "Make me feel good" : prompt). The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual") and the length of each caption should be \(captionLength). Emojis, Hashtags and Numbers should be excluded from the word count. \(includeEmojis ? "Include emojis in each caption" : "Do not use emojis"). \(includeHashtags ? "Include hashtags in each caption" : "Do not use hashtags"). Each caption should be displayed as a numbered list, each number should be followed by a period such as '1.', '2.', etc... The caption title should be the sixth item on the list, listed as 6. and without the Title word."
+        
+        return "Forget everything we've ever written. Now write me exactly 5 captions and a title. The title should be catchy and less than 6 words. It is mandatory to make the length of each caption be a \(captionLength) excluding emojis and hashtags from the word count. The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual") \(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis"). \(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags"). Each caption should be displayed as a numbered list, each number should be followed by a period such as '1.', '2.', etc... The caption title should be the sixth item on the list, listed as 6 followed by a period and without the Title word. The user's prompt is: \"\(userInputPrompt == "" ? "Give me a positive daily affirmation" : userInputPrompt)\""
     }
 
     func generateNewRequestModel(title: String, captions: [GeneratedCaptions]) {
@@ -54,7 +55,7 @@ public class OpenAIConnector: ObservableObject {
      * Processes the prompt and returns the generated captions
      */
     @MainActor
-    public func processPrompt(apiKey: String?) async -> String? {
+    public func processPrompt(apiKey: String?, prompt: String) async -> String? {
         print("PROMPT", prompt)
 
         guard let openAIKey = apiKey else {
@@ -70,8 +71,11 @@ public class OpenAIConnector: ObservableObject {
 
         let httpBody: [String: Any] = [
             "prompt": prompt,
-            "max_tokens": 2000,
-            "temperature": 0.7,
+            "max_tokens": 3000,
+            "temperature": 0.75,
+            "top_p": 1,
+            "frequency_penalty": 0.5,
+            "presence_penalty": 0.5
         ]
 
         var httpBodyJson: Data
@@ -86,12 +90,111 @@ public class OpenAIConnector: ObservableObject {
         request.httpBody = httpBodyJson
         if let requestData = await executeRequest(request: request, withSessionConfig: nil) {
             print(requestData)
-            return requestData.choices[0].text
+            
+            if let data = requestData.choices {
+                return data.map { choice in
+                    return choice.text
+                }.first ?? nil
+            }
         }
 
         return nil
     }
+    
+    /**
+     * Processes the output from the Open AI API into an array of captions
+     * - Parameter openAiResponse: The response from the Open AI API
+     */
+    @MainActor
+    func processOutputIntoArray(openAiResponse: String?) async {
+        // Initial parse of raw text to captions
+        if var originalString = openAiResponse, self.captionsGroupParsed.isEmpty {
+            // Removes trailing and leading white spaces
+            originalString = openAiResponse!.trimmingCharacters(in: .whitespaces)
 
+            /**
+             (?m): Enable multiline mode so that ^ and $ match the start and end of lines in the input string.
+             ^: Match the start of a line.
+             \s*: Match zero or more whitespace characters (spaces, tabs, and newlines).
+             \d+: Match one or more digits.
+             \.: Match a period.
+             [ \t]*: Match zero or more spaces or tabs.
+             (: Start capturing group 1.
+             .*: Match any characters (except newline) zero or more times.
+             (?:: Start a non-capturing group.
+             \n+: Match one or more newline characters.
+             (?!\d+\.): Use negative lookahead to assert that the next characters are not one or more digits followed by a period (i.e. the start of a new numbered caption).
+             [^\n]*: Match any characters (except newline) zero or more times.
+             )*: End the non-capturing group and make it optional (so that we can match the last caption even if it doesn't have a newline after it
+             */
+            let pattern = "(?m)^\\s*\\d+\\.[ \\t]*(.*(?:\\n+(?!\\d+\\.)[^\n]*)*)"
+            if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+                let range = NSRange(originalString.startIndex..., in: originalString)
+                let matches = regex.matches(in: originalString, options: [], range: range)
+                var results = matches.map {
+                    String(originalString[Range($0.range(at: 1), in: originalString)!])
+                }
+                self.captionGroupTitle = results.removeLast()
+                self.captionsGroupParsed = results
+                
+            }
+        }
+    }
+    
+    @MainActor
+    func updateCaptionBasedOnWordCountIfNecessary(apiKey: String?, onComplete: @escaping () -> Void) async {
+        guard apiKey != nil else {
+            appError = ErrorType(error: .genericError)
+            print("Error retrieving Open AI Key -- updateCaptionBasedOnWordCountIfNecessary()")
+            onComplete()
+            return
+        }
+        
+        var mutableCaptions: [String] = []
+        
+        // Get correct caption length
+        let filteredCaptionLength = captionLengths.first(where: { $0.value == self.requestModel.captionLength })
+        
+        self.captionsGroupParsed.forEach { caption in
+            Task {
+                let wordCount = caption.wordCount
+
+                if let length = filteredCaptionLength {
+                    let min = length.min
+                    let max = length.max
+
+                    // If word count is shorter than the minimum requirement
+                    // Then generate a new prompt and replace
+                    if wordCount < min {
+                        let newPrompt = "This caption has \(wordCount) words: \"\(caption)\". Add words until it reaches a minimum of \(min) words to a max of \(max) words."
+
+                        async let response = self.processPrompt(apiKey: apiKey, prompt: newPrompt)
+                        
+                        if let newCaption = await response {
+                            mutableCaptions.append(newCaption.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
+                        }
+                        
+                    } else {
+                        mutableCaptions.append(caption)
+                    }
+
+                    if mutableCaptions.count == self.captionsGroupParsed.count {
+                        self.captionsGroupParsed = mutableCaptions
+                        onComplete()
+                    }
+
+                }
+
+            }
+        }
+    }
+    
+    func resetResponse() {
+        self.captionsGroupParsed.removeAll()
+        self.captionGroupTitle.removeAll()
+        self.captionLengthType.removeAll()
+    }
+    
     /*
      * Executes a request to the Open AI API
      */
@@ -110,6 +213,7 @@ public class OpenAIConnector: ObservableObject {
             let (data, response) = try await session.data(for: request as URLRequest)
 
             if let httpResponse = response as? HTTPURLResponse {
+                print("Http response", httpResponse)
                 if httpResponse.statusCode >= 500 {
                     DispatchQueue.main.async {
                         self.appError = ErrorType(error: .capacityError)
@@ -148,8 +252,12 @@ public class OpenAIConnector: ObservableObject {
             let decodedData = try decoder.decode(OpenAIResponseModel.self, from: data)
             return decodedData
         } catch {
-            appError = ErrorType(error: .genericError)
-            print("Can't decode open AI JSON", error.localizedDescription)
+            DispatchQueue.main.async {
+                self.appError = ErrorType(error: .genericError)
+                print("Can't decode open AI JSON", error)
+                debugPrint(error)
+            }
+            
             return nil
         }
     }

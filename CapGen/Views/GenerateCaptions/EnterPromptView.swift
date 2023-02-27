@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct EnterPromptView: View {
-    @EnvironmentObject var genPrompVm: GenerateByPromptViewModel
+    @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
+    @EnvironmentObject var navStack: NavigationStackCompat
     
     // private variables
     @State var expandPromptArea: Bool = false
@@ -37,6 +39,7 @@ struct EnterPromptView: View {
                     // header
                     GenerateCaptionsHeaderView(title: "Write your prompt") {
                         // on click next
+                        self.navStack.push(PersonalizeOptionsView())
                     }
                    
                     
@@ -78,7 +81,7 @@ struct EnterPromptView: View {
         .modalView(horizontalPadding: 50, show: $showEraseModal) {
             SimpleDeleteModal(showView: $showEraseModal) {
                 // on delete
-                genPrompVm.resetInput()
+                genPromptVm.resetInput()
             }
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -100,6 +103,8 @@ struct EnterPromptView_Previews: PreviewProvider {
 struct GenerateCaptionsHeaderView: View {
     @ScaledMetric var scaledSize: CGFloat = 1
     let title: String
+    var isOptional: Bool? = false
+    var isNextSubmit: Bool? = false
     let nextAction: () -> Void
 
     var body: some View {
@@ -109,9 +114,20 @@ struct GenerateCaptionsHeaderView: View {
             
             Spacer()
 
-            Text(title)
-                .foregroundColor(.ui.richBlack.opacity(0.5))
-                .font(.ui.title4)
+            VStack(alignment: .center, spacing: 5) {
+                Text(title)
+                    .foregroundColor(.ui.richBlack.opacity(0.5))
+                    .font(.ui.title4)
+                    .fixedSize(horizontal: true, vertical: false)
+                
+                if isOptional ?? false {
+                    Text("Optional")
+                        .font(.ui.subheadlineLarge)
+                        .foregroundColor(.ui.richBlack.opacity(0.5))
+                }
+            }
+            .padding(.top, isOptional ?? false ? 15 : 0)
+            
 
             Spacer()
 
@@ -119,7 +135,7 @@ struct GenerateCaptionsHeaderView: View {
             Button {
                 nextAction()
             } label: {
-                Image("next")
+                Image(isNextSubmit ?? false ? "play-button" : "next")
                     .resizable()
                     .frame(width: 40, height: 40)
             }
@@ -131,7 +147,7 @@ struct GenerateCaptionsHeaderView: View {
 }
 
 struct PromptInputBottomView: View {
-    @EnvironmentObject var genPrompVm: GenerateByPromptViewModel
+    @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
 
     let charLimit: Int = 500
     @State private var lastText: String = ""
@@ -164,7 +180,7 @@ struct PromptInputBottomView: View {
                         VStack {
                             // Text counter and erase button
                             HStack {
-                                Text("\(genPrompVm.promptInput.count)/\(charLimit) text")
+                                Text("\(genPromptVm.promptInput.count)/\(charLimit) text")
                                     .foregroundColor(.ui.lighterLavBlue)
                                     .font(.ui.largeTitleMd)
                                 
@@ -183,7 +199,7 @@ struct PromptInputBottomView: View {
                             }.padding(10)
                             
                             ZStack(alignment: .topLeading) {
-                                if genPrompVm.promptInput.isEmpty {
+                                if genPromptVm.promptInput.isEmpty {
                                     Text("\(placeholderText)")
                                         .foregroundColor(.ui.lighterLavBlue)
                                         .font(.ui.bodyLargest)
@@ -191,26 +207,26 @@ struct PromptInputBottomView: View {
                                         .padding(.leading, -10)
                                         .padding(.top, -5)
                                         .lineSpacing(6)
-                                        .opacity(genPrompVm.promptInput.isEmpty ? 1 : 0)
+                                        .opacity(genPromptVm.promptInput.isEmpty ? 1 : 0)
                                 }
                                 
                                 // Input text here
-                                TextEditor(text: $genPrompVm.promptInput)
+                                TextEditor(text: $genPromptVm.promptInput)
                                     .font(.ui.bodyLargest)
                                     .foregroundColor(Color.ui.cultured)
                                     .lineSpacing(6)
                                     .scrollContentBackground(.hidden)
-                                    .onChange(of: genPrompVm.promptInput) { text in
+                                    .onChange(of: genPromptVm.promptInput) { text in
                                         // Limit number of characters typed
                                         if text.count <= charLimit {
                                             lastText = text
                                         } else {
-                                            self.genPrompVm.promptInput = lastText
+                                            self.genPromptVm.promptInput = lastText
                                         }
 
                                         // Detect when 'done' or a newline is generated
                                         if text.contains("\n") {
-                                            self.genPrompVm.promptInput.removeAll(where: { $0.isNewline })
+                                            self.genPromptVm.promptInput.removeAll(where: { $0.isNewline })
                                             hideKeyboard()
                                         }
                                     }

@@ -142,6 +142,8 @@
 		D45707C829A91C88001D80AD /* EnterPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C729A91C88001D80AD /* EnterPromptView.swift */; };
 		D45707CA29A9680B001D80AD /* SimpleDeleteModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C929A9680B001D80AD /* SimpleDeleteModal.swift */; };
 		D45707CC29A96CBE001D80AD /* GenerateByPromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */; };
+		D45707CE29A98A19001D80AD /* PersonalizeOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CD29A98A19001D80AD /* PersonalizeOptionsView.swift */; };
+		D45707D029ABB5E0001D80AD /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CF29ABB5E0001D80AD /* Bool.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D47304062996C3F400179FEB /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
@@ -381,6 +383,8 @@
 		D45707C729A91C88001D80AD /* EnterPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPromptView.swift; sourceTree = "<group>"; };
 		D45707C929A9680B001D80AD /* SimpleDeleteModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDeleteModal.swift; sourceTree = "<group>"; };
 		D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateByPromptViewModel.swift; sourceTree = "<group>"; };
+		D45707CD29A98A19001D80AD /* PersonalizeOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizeOptionsView.swift; sourceTree = "<group>"; };
+		D45707CF29ABB5E0001D80AD /* Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
 		D47304522996CE1900179FEB /* libAudioDSPCore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libAudioDSPCore.tbd; path = usr/lib/libAudioDSPCore.tbd; sourceTree = SDKROOT; };
@@ -1919,6 +1923,7 @@
 				D4056E27295F659B00D3894D /* View.swift */,
 				D4056E78296E2C1700D3894D /* String.swift */,
 				D4C3E4912982105300C2847A /* Notifications.swift */,
+				D45707CF29ABB5E0001D80AD /* Bool.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2141,6 +2146,7 @@
 			isa = PBXGroup;
 			children = (
 				D45707C729A91C88001D80AD /* EnterPromptView.swift */,
+				D45707CD29A98A19001D80AD /* PersonalizeOptionsView.swift */,
 			);
 			path = GenerateCaptions;
 			sourceTree = "<group>";
@@ -2561,6 +2567,7 @@
 				D45707B429A655E9001D80AD /* FolderBottomSheetView.swift in Sources */,
 				D4C3E4AC298639AE00C2847A /* Router.swift in Sources */,
 				D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */,
+				D45707D029ABB5E0001D80AD /* Bool.swift in Sources */,
 				D45707AC29A46935001D80AD /* LogoView.swift in Sources */,
 				D4056EC429751BD200D3894D /* UserManager.swift in Sources */,
 				D45707CC29A96CBE001D80AD /* GenerateByPromptViewModel.swift in Sources */,
@@ -2572,6 +2579,7 @@
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */,
 				D4C3E48A29819C6500C2847A /* CaptionsGroupMock.swift in Sources */,
+				D45707CE29A98A19001D80AD /* PersonalizeOptionsView.swift in Sources */,
 				D4056EB829736F6E00D3894D /* GoogleRewardedAds.swift in Sources */,
 				D4C3E4A42984F7C500C2847A /* FallbackView.swift in Sources */,
 				D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */,

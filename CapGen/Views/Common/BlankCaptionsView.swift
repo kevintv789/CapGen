@@ -16,12 +16,6 @@ struct BlankCaptionsView: View {
             Image("sad_empty_robot")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .background(
-                    Circle()
-                        .fill(Color.ui.cultured.opacity(0.5))
-                        .blur(radius: 100)
-                        .frame(width: 300 * scaledSize, height: 300 * scaledSize)
-                )
 
             Text(title)
                 .multilineTextAlignment(.center)
