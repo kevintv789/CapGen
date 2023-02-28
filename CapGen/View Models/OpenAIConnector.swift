@@ -32,7 +32,7 @@ public class OpenAIConnector: ObservableObject {
             }
         }
         
-        return "Forget everything we've ever written. Now write me exactly 5 captions and a title. The title should be catchy and less than 6 words. It is mandatory to make the length of each caption be a \(captionLength) excluding emojis and hashtags from the word count. The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual") \(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis"). \(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags"). Each caption should be displayed as a numbered list, each number should be followed by a period such as '1.', '2.', etc... The caption title should be the sixth item on the list, listed as 6 followed by a period and without the Title word. The user's prompt is: \"\(userInputPrompt == "" ? "Give me a positive daily affirmation" : userInputPrompt)\""
+        return "Forget everything we've ever written. Now write me exactly 5 captions and a title. The title should be catchy and less than 6 words. It is mandatory to make the length of each caption be a \(captionLength) excluding emojis and hashtags from the word count. The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual") \(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis"). \(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags"). Each caption should be displayed as a numbered list and a title at the very end, each number should be followed by a period such as '1.', '2.', '3.', '4.', '5.', '6.' The caption title should be the sixth item on the list, listed as 6 followed by a period and without the Title word. The user's prompt is: \"\(userInputPrompt == "" ? "Give me a positive daily affirmation" : userInputPrompt)\""
     }
 
     func generateNewRequestModel(title: String, captions: [GeneratedCaptions]) {
@@ -71,7 +71,7 @@ public class OpenAIConnector: ObservableObject {
 
         let httpBody: [String: Any] = [
             "prompt": prompt,
-            "max_tokens": 3000,
+            "max_tokens": 2000,
             "temperature": 0.75,
             "top_p": 1,
             "frequency_penalty": 0.5,
@@ -106,9 +106,9 @@ public class OpenAIConnector: ObservableObject {
      * - Parameter openAiResponse: The response from the Open AI API
      */
     @MainActor
-    func processOutputIntoArray(openAiResponse: String?) async {
+    func processOutputIntoArray(openAiResponse: String?, ingoreCaptionGroupSave: Bool = false) async -> [String]? {
         // Initial parse of raw text to captions
-        if var originalString = openAiResponse, self.captionsGroupParsed.isEmpty {
+        if var originalString = openAiResponse {
             // Removes trailing and leading white spaces
             originalString = openAiResponse!.trimmingCharacters(in: .whitespaces)
 
@@ -134,11 +134,24 @@ public class OpenAIConnector: ObservableObject {
                 var results = matches.map {
                     String(originalString[Range($0.range(at: 1), in: originalString)!])
                 }
-                self.captionGroupTitle = results.removeLast()
-                self.captionsGroupParsed = results
+                // If counts are less than 6, then title is not included
+                // This is a fail safe to include a random title to not throw off the parsing
+                if !ingoreCaptionGroupSave {
+                    if results.count < 6 {
+                        results.append("Customize your title.")
+                    } else {
+                        self.captionGroupTitle = results.removeLast()
+                        self.captionsGroupParsed = results
+                    }
+                    
+                    return []
+                }
                 
+                return results
             }
         }
+        
+        return []
     }
     
     @MainActor
@@ -155,38 +168,75 @@ public class OpenAIConnector: ObservableObject {
         // Get correct caption length
         let filteredCaptionLength = captionLengths.first(where: { $0.value == self.requestModel.captionLength })
         
+        var num = 1
+        var promptBatch: String = ""
+        
         self.captionsGroupParsed.forEach { caption in
-            Task {
-                let wordCount = caption.wordCount
-
-                if let length = filteredCaptionLength {
-                    let min = length.min
-                    let max = length.max
-
-                    // If word count is shorter than the minimum requirement
-                    // Then generate a new prompt and replace
-                    if wordCount < min {
-                        let newPrompt = "This caption has \(wordCount) words: \"\(caption)\". Add words until it reaches a minimum of \(min) words to a max of \(max) words."
-
-                        async let response = self.processPrompt(apiKey: apiKey, prompt: newPrompt)
-                        
-                        if let newCaption = await response {
-                            mutableCaptions.append(newCaption.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
-                        }
-                        
-                    } else {
-                        mutableCaptions.append(caption)
-                    }
-
-                    if mutableCaptions.count == self.captionsGroupParsed.count {
-                        self.captionsGroupParsed = mutableCaptions
-                        onComplete()
-                    }
-
+            let wordCount = caption.wordCount
+            
+            if let length = filteredCaptionLength {
+                let min = length.min
+                let max = length.max
+                
+                // If word count is shorter than the minimum requirement
+                if wordCount < min {
+                    let newPrompt = "\(num). This caption has \(wordCount) words: \"\(caption)\". Add words until it reaches a minimum of \(min) words to a max of \(max) words.\n"
+                    promptBatch += newPrompt
                 }
-
+                else {
+                    mutableCaptions.append(caption)
+                }
             }
+            
+            num += 1
         }
+        
+        if !promptBatch.isEmpty {
+            let response = await self.processPrompt(apiKey: apiKey, prompt: "Process the below list separately. Each caption should be displayed as a numbered list, each number should be followed by a period such as '1.', '2.', '3.', '4.', '5.',, etc..\n\(promptBatch)")
+            let results = await self.processOutputIntoArray(openAiResponse: response, ingoreCaptionGroupSave: true)
+            mutableCaptions.append(contentsOf: results ?? [])
+        }
+        
+        
+        print("COUNT", mutableCaptions.count, self.captionsGroupParsed.count)
+        if mutableCaptions.count == self.captionsGroupParsed.count {
+            self.captionsGroupParsed = mutableCaptions
+            onComplete()
+        }
+        
+//        self.captionsGroupParsed.forEach { caption in
+//            Task {
+//                let wordCount = caption.wordCount
+//
+//                if let length = filteredCaptionLength {
+//                    let min = length.min
+//                    let max = length.max
+//
+//                    // If word count is shorter than the minimum requirement
+//                    // Then generate a new prompt and replace
+//                    if wordCount < min {
+//                        let newPrompt = "This caption has \(wordCount) words: \"\(caption)\". Add words until it reaches a minimum of \(min) words to a max of \(max) words."
+//
+//                        async let response = self.processPrompt(apiKey: apiKey, prompt: newPrompt)
+//
+//                        if let newCaption = await response {
+//                            mutableCaptions.append(newCaption.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
+//                        } else {
+//                           mutableCaptions.append(caption)
+//                       }
+//                    } else {
+//                        mutableCaptions.append(caption)
+//                    }
+//
+//                    if mutableCaptions.count == self.captionsGroupParsed.count {
+//                        self.captionsGroupParsed = mutableCaptions
+//                        onComplete()
+//                    }
+//
+//                }
+//
+//            }
+//        }
     }
     
     func resetResponse() {
@@ -213,7 +263,6 @@ public class OpenAIConnector: ObservableObject {
             let (data, response) = try await session.data(for: request as URLRequest)
 
             if let httpResponse = response as? HTTPURLResponse {
-                print("Http response", httpResponse)
                 if httpResponse.statusCode >= 500 {
                     DispatchQueue.main.async {
                         self.appError = ErrorType(error: .capacityError)

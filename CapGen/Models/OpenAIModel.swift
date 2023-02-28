@@ -19,10 +19,10 @@ struct OpenAIResponseModel: Identifiable, Codable {
 }
 
 struct Choice: Codable {
-    var text: String
+    var text: String?
     var index: Int
     var logprobs: String?
-    var finish_reason: String
+    var finish_reason: String?
 }
 
 struct GeneratedCaptions: Codable, Identifiable, Hashable {
