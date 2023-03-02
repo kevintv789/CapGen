@@ -113,11 +113,11 @@ struct PopulatedCaptionsView: View {
     }
 
     private func pushToCaptionView() {
-        navStack.push(CaptionView(captionStr: $unparsedCaptionStr, savedCaptions: savedCaptions, isEditing: true, platform: openAiConnector.mutableCaptionGroup?.platform ?? "",
-                                  onBackBtnClicked: {
-                                      // On exit
-                                      self.unparsedCaptionStr?.removeAll()
-                                  }))
+//        navStack.push(CaptionView(captionStr: $unparsedCaptionStr, savedCaptions: savedCaptions, isEditing: true, platform: openAiConnector.mutableCaptionGroup?.platform ?? "",
+//                                  onBackBtnClicked: {
+//                                      // On exit
+//                                      self.unparsedCaptionStr?.removeAll()
+//                                  }))
     }
 
     // variable that calculate height SCREEN_HEIGHT * (SCREEN_HEIGHT < 700 ? 0.2 : 0.15)

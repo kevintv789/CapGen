@@ -9,16 +9,16 @@ import SwiftUI
 
 struct CaptionCardView: View {
     var caption: CaptionModel
-    
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14)
                 .stroke(Color.ui.cultured, lineWidth: 4)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
-                        .fill(Color.init(hex: caption.color))
+                        .fill(Color(hex: caption.color))
                 )
-            
+
             VStack(alignment: .trailing, spacing: 0) {
                 VStack(alignment: .leading) {
                     HStack {
@@ -30,27 +30,26 @@ struct CaptionCardView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                         CustomMenuPopup(menuTheme: .light, shareableData: .constant(nil))
-                                        .onTapGesture {}
-                                        .frame(maxHeight: .infinity, alignment: .topTrailing)
-                                        .padding(.trailing, -10)
+                            .onTapGesture {}
+                            .frame(maxHeight: .infinity, alignment: .topTrailing)
+                            .padding(.trailing, -10)
                     }
-                    
+
                     Text(caption.captionDescription.trimmingCharacters(in: .whitespaces))
                         .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 15))
                         .font(.ui.bodyLarge)
                         .foregroundColor(.ui.cultured)
                         .lineLimit(2)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
+
                     HStack {
                         CircularIndicatorView(caption: caption)
-                        
+
                         Spacer()
-                        
+
                         VStack {
-                            // TODO - Folder information if exists
-                            
-                            
+                            // TODO: - Folder information if exists
+
                             // Date
                             Text(caption.dateCreated)
                                 .foregroundColor(.ui.cultured)
@@ -58,10 +57,7 @@ struct CaptionCardView: View {
                         }
                     }
                     .padding()
-                    
-                    
                 }
-              
             }
         }
     }

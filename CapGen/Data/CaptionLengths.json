@@ -4,5 +4,5 @@
     {"id": 2, "value": "a minimum of 15 words to a max of 25 words", "title": "Short (15-25 words)", "type": "short", "min": 15, "max": 25},
     {"id": 3, "value": "a minimum of 25 words to a max of 40 words", "title": "Moderate (25-40 words)", "type": "moderate", "min": 21, "max": 40},
     {"id": 4, "value": "a minimum of 40 words to a max of 80 words", "title": "Long (40-80 words)", "type": "long", "min": 40, "max": 80},
-    {"id": 5, "value": "a minimum of 120 words to a max of 250 words", "title": "Very long (81+ words)", "type": "veryLong", "min": 120, "max": 250}
+    {"id": 5, "value": "a minimum of 110 words to a max of 200 words", "title": "Very long (81+ words)", "type": "veryLong", "min": 110, "max": 200}
 ]

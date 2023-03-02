@@ -95,16 +95,16 @@ extension View {
                 }
             }
     }
-    
-    func animate(duration: CGFloat, _ execute: @escaping () -> Void) async {
-           await withCheckedContinuation { continuation in
-               withAnimation(.linear(duration: duration)) {
-                   execute()
-               }
 
-               DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                   continuation.resume()
-               }
-           }
-       }
+    func animate(duration: CGFloat, _ execute: @escaping () -> Void) async {
+        await withCheckedContinuation { continuation in
+            withAnimation(.linear(duration: duration)) {
+                execute()
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                continuation.resume()
+            }
+        }
+    }
 }

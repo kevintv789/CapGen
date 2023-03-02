@@ -144,6 +144,8 @@
 		D45707CC29A96CBE001D80AD /* GenerateByPromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */; };
 		D45707CE29A98A19001D80AD /* PersonalizeOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CD29A98A19001D80AD /* PersonalizeOptionsView.swift */; };
 		D45707D029ABB5E0001D80AD /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CF29ABB5E0001D80AD /* Bool.swift */; };
+		D45707D229AEC3DC001D80AD /* CaptionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707D129AEC3DC001D80AD /* CaptionViewModel.swift */; };
+		D45707D429AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707D329AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D47304062996C3F400179FEB /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
@@ -385,6 +387,8 @@
 		D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateByPromptViewModel.swift; sourceTree = "<group>"; };
 		D45707CD29A98A19001D80AD /* PersonalizeOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizeOptionsView.swift; sourceTree = "<group>"; };
 		D45707CF29ABB5E0001D80AD /* Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
+		D45707D129AEC3DC001D80AD /* CaptionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionViewModel.swift; sourceTree = "<group>"; };
+		D45707D329AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionOptimizationBottomSheetView.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
 		D47304522996CE1900179FEB /* libAudioDSPCore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libAudioDSPCore.tbd; path = usr/lib/libAudioDSPCore.tbd; sourceTree = SDKROOT; };
@@ -1898,6 +1902,7 @@
 				D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */,
 				D45707BB29A83CC8001D80AD /* FolderViewModel.swift */,
 				D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */,
+				D45707D129AEC3DC001D80AD /* CaptionViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -2090,6 +2095,7 @@
 				D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */,
 				D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */,
 				D45707C929A9680B001D80AD /* SimpleDeleteModal.swift */,
+				D45707D329AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift */,
 			);
 			path = Modals;
 			sourceTree = "<group>";
@@ -2552,11 +2558,13 @@
 				D4C3E496298437B600C2847A /* ShareableData.swift in Sources */,
 				D4C3E4A6298577B400C2847A /* ErrorModel.swift in Sources */,
 				D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */,
+				D45707D429AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift in Sources */,
 				D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */,
 				D45707C329A9105E001D80AD /* CaptionModel.swift in Sources */,
 				D45707A8299A9AD2001D80AD /* SearchBar.swift in Sources */,
 				D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */,
 				D4056E9B2971EF6F00D3894D /* FBAuthManager.swift in Sources */,
+				D45707D229AEC3DC001D80AD /* CaptionViewModel.swift in Sources */,
 				D45707B629A67F41001D80AD /* PrimaryButtonView.swift in Sources */,
 				D45707BC29A83CC8001D80AD /* FolderViewModel.swift in Sources */,
 				D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */,

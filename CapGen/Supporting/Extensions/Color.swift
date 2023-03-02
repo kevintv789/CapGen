@@ -9,7 +9,7 @@ import SwiftUI
 
 extension Color {
     static let ui = Color.UI()
-    
+
     struct UI {
         let middleYellowRed = Color("Middle Yellow Red")
         let middleBluePurple = Color("Middle Blue Purple")
@@ -28,7 +28,7 @@ extension Color {
         let orangeWeb = Color("Orange Web")
         let darkerPurple = Color("Darker Purple")
     }
-    
+
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
@@ -44,12 +44,12 @@ extension Color {
         default:
             (a, r, g, b) = (1, 1, 1, 0)
         }
-        
+
         self.init(
             .sRGB,
             red: Double(r) / 255,
             green: Double(g) / 255,
-            blue:  Double(b) / 255,
+            blue: Double(b) / 255,
             opacity: Double(a) / 255
         )
     }

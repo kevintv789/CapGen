@@ -77,16 +77,16 @@ enum Utils {
             let title = element["title"] as! String
             let folderId = element["folderId"] as! String
             let color = element["color"] as! String
-            
+
             let tonesDict = element["tones"] as? [[String: AnyObject]] ?? []
             var tones: [ToneModel] = []
             tonesDict.forEach { ele in
                 let tone = ToneModel(id: ele["id"] as! Int, title: ele["title"] as! String, description: ele["description"] as! String, icon: ele["icon"] as! String)
                 tones.append(tone)
             }
-            
+
             let mappedCaption = CaptionModel(id: id, captionLength: captionLength, dateCreated: dateCreated, captionDescription: captionDescription, includeEmojis: includeEmojis, includeHashtags: includeHashtags, folderId: folderId, prompt: prompt, title: title, tones: tones, color: color)
-            
+
             result.append(mappedCaption)
         }
 

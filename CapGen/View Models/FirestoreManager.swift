@@ -250,8 +250,6 @@ class FirestoreManager: ObservableObject {
                 }
             }
         }
-
-        
     }
 
     /**

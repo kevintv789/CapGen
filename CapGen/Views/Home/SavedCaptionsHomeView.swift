@@ -45,7 +45,7 @@ struct SavedCaptionsHomeView: View {
                 }
             }
 
-            FolderGridView(isExpanded: isExpanded)
+            FolderGridView()
         }
         .padding()
         .padding(.top, isExpanded ? 15 : 30)

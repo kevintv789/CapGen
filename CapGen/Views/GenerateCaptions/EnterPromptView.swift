@@ -5,22 +5,22 @@
 //  Created by Kevin Vu on 2/24/23.
 //
 
-import SwiftUI
 import NavigationStack
+import SwiftUI
 
 struct EnterPromptView: View {
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
-    
+
     // private variables
     @State var expandPromptArea: Bool = false
     @State var promptInput: String = ""
     @State var showEraseModal: Bool = false
     @State var imageOpacity: CGFloat = 1
     @State var initialTextOpacity: CGFloat = 1
-    
+
     var body: some View {
-        GeometryReader { geo in
+        GeometryReader { _ in
             ZStack {
                 Color.ui.lightOldPaper.ignoresSafeArea()
                     .onTapGesture {
@@ -34,23 +34,22 @@ struct EnterPromptView: View {
                             }
                         }
                     }
-                
+
                 VStack {
                     // header
                     GenerateCaptionsHeaderView(title: "Write your prompt") {
                         // on click next
                         self.navStack.push(PersonalizeOptionsView())
                     }
-                   
-                    
+
                     // cute robot illustration
                     Image("prompt_writing_robot")
                         .resizable()
                         .aspectRatio(1, contentMode: .fit)
                         .opacity(self.imageOpacity)
-                    
+
                     Spacer()
-                    
+
                     // Bottom typing area
                     PromptInputBottomView(isExpanded: self.$expandPromptArea, initialTextOpacity: $initialTextOpacity) {
                         // on erase
@@ -58,25 +57,23 @@ struct EnterPromptView: View {
                         Haptics.shared.play(.soft)
                     }
                     .frame(height: self.expandPromptArea ? SCREEN_HEIGHT / 1.2 : SCREEN_HEIGHT / (SCREEN_HEIGHT < 800 ? 2 : 3))
-                       
-                        .onTapGesture {
-                            Task {
-                                await animate(duration: 0.25) {
-                                    Haptics.shared.play(.soft)
-                                    self.expandPromptArea = true
-                                    
-                                    // Wait for animation to finish before showing views
-                                    imageOpacity = 0
-                                    initialTextOpacity = 0
-                                    
-                                }
+
+                    .onTapGesture {
+                        Task {
+                            await animate(duration: 0.25) {
+                                Haptics.shared.play(.soft)
+                                self.expandPromptArea = true
+
+                                // Wait for animation to finish before showing views
+                                imageOpacity = 0
+                                initialTextOpacity = 0
                             }
-                            
                         }
+                    }
                 }
             }
         }
-        
+
         // Show erase text modal
         .modalView(horizontalPadding: 50, show: $showEraseModal) {
             SimpleDeleteModal(showView: $showEraseModal) {
@@ -92,7 +89,7 @@ struct EnterPromptView_Previews: PreviewProvider {
     static var previews: some View {
         EnterPromptView()
             .environmentObject(GenerateByPromptViewModel())
-        
+
         EnterPromptView()
             .environmentObject(GenerateByPromptViewModel())
             .previewDevice("iPhone SE (3rd generation)")
@@ -111,7 +108,7 @@ struct GenerateCaptionsHeaderView: View {
         // Header
         HStack {
             BackArrowView()
-            
+
             Spacer()
 
             VStack(alignment: .center, spacing: 5) {
@@ -119,7 +116,7 @@ struct GenerateCaptionsHeaderView: View {
                     .foregroundColor(.ui.richBlack.opacity(0.5))
                     .font(.ui.title4)
                     .fixedSize(horizontal: true, vertical: false)
-                
+
                 if isOptional ?? false {
                     Text("Optional")
                         .font(.ui.subheadlineLarge)
@@ -127,7 +124,6 @@ struct GenerateCaptionsHeaderView: View {
                 }
             }
             .padding(.top, isOptional ?? false ? 15 : 0)
-            
 
             Spacer()
 
@@ -139,7 +135,6 @@ struct GenerateCaptionsHeaderView: View {
                     .resizable()
                     .frame(width: 40, height: 40)
             }
-            
         }
         .padding(.bottom, 20)
         .padding(.horizontal)
@@ -152,13 +147,13 @@ struct PromptInputBottomView: View {
     let charLimit: Int = 500
     @State private var lastText: String = ""
     @FocusState var isFocused: Bool
-    
+
     @Binding var isExpanded: Bool
     @Binding var initialTextOpacity: CGFloat
     var onErase: () -> Void
-    
+
     var placeholderText: String = "Example: Please generate a caption for a photo of my dog playing in the park. She's a rescue and brings so much joy to my life. Please come up with a caption that celebrates the love and happiness that pets bring into our lives."
-    
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color.ui.richBlack
@@ -175,17 +170,16 @@ struct PromptInputBottomView: View {
                             .padding(.horizontal)
                             .opacity(initialTextOpacity)
                             .frame(height: initialTextOpacity == 1 ? SCREEN_HEIGHT : 0)
-                           
-                        
+
                         VStack {
                             // Text counter and erase button
                             HStack {
                                 Text("\(genPromptVm.promptInput.count)/\(charLimit) text")
                                     .foregroundColor(.ui.lighterLavBlue)
                                     .font(.ui.largeTitleMd)
-                                
+
                                 Spacer()
-                                
+
                                 Button {
                                     onErase()
                                     Haptics.shared.play(.soft)
@@ -195,9 +189,9 @@ struct PromptInputBottomView: View {
                                         .resizable()
                                         .frame(width: 35, height: 35)
                                 }
-                               
+
                             }.padding(10)
-                            
+
                             ZStack(alignment: .topLeading) {
                                 if genPromptVm.promptInput.isEmpty {
                                     Text("\(placeholderText)")
@@ -209,7 +203,7 @@ struct PromptInputBottomView: View {
                                         .lineSpacing(6)
                                         .opacity(genPromptVm.promptInput.isEmpty ? 1 : 0)
                                 }
-                                
+
                                 // Input text here
                                 TextEditor(text: $genPromptVm.promptInput)
                                     .font(.ui.bodyLargest)
@@ -232,13 +226,11 @@ struct PromptInputBottomView: View {
                                     }
                                     .submitLabel(.done)
                             }
-                            
                         }
                         .opacity(initialTextOpacity == 1 ? 0 : 1)
                     }
-                        .padding()
+                    .padding()
                 )
-            
         }
     }
 }

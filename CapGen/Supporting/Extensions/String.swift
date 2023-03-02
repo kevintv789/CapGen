@@ -39,13 +39,12 @@ extension String {
     }
 
     // Create a function that returns a number of words from a string using enumeratedSubstrings
-     var wordCount: Int {
+    var wordCount: Int {
         var count = 0
-        let range = startIndex..<endIndex
-        enumerateSubstrings(in: range, options: [.byWords, .substringNotRequired, .localized], { _, _, _, _ -> () in
+        let range = startIndex ..< endIndex
+        enumerateSubstrings(in: range, options: [.byWords, .substringNotRequired, .localized]) { _, _, _, _ in
             count += 1
-        })
+        }
         return count
     }
-
 }

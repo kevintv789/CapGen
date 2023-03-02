@@ -81,7 +81,7 @@ struct AIRequest: Codable, Identifiable, Comparable, Hashable {
         self.includeHashtags = includeHashtags
         self.captionLength = captionLength
     }
-    
+
     init(prompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String) {
         self.prompt = prompt
         self.tones = tones

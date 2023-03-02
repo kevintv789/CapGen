@@ -5,19 +5,19 @@
 //  Created by Kevin Vu on 2/24/23.
 //
 
-import SwiftUI
 import NavigationStack
+import SwiftUI
 
 struct FolderView: View {
     @ScaledMetric var scaledSize: CGFloat = 1
     @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var firestoreManager: FirestoreManager
     @EnvironmentObject var navStack: NavigationStackCompat
-    
+
     // private variables
     @State var showFolderBottomSheet: Bool = false
     @State var showFolderDeleteModal: Bool = false
-    
+
     // dependencies
     @Binding var folder: FolderModel
 
@@ -124,7 +124,7 @@ struct FolderHeaderView: View {
     @ScaledMetric var scaledSize: CGFloat = 1
     let platform: String
     @Binding var shareableData: ShareableData?
-    
+
     let onEdit: () -> Void
     let onDelete: () -> Void
 
@@ -157,4 +157,3 @@ struct FolderHeaderView: View {
         .padding(.bottom, 20)
     }
 }
-
