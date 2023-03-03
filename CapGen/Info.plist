@@ -49,7 +49,7 @@
 		<string>linkedin</string>
 	</array>
     <key>NSUserTrackingUsageDescription</key>
-    <string>To provide you with a personalized experience and relevant ads, we use device data for tracking and analytics. By allowing tracking, you help us improve our app and provide you with better content. Your data is always secure and we never share it with third parties.</string>
+    <string>To improve your CapGen experience, we use your device data for personalized content. Your data is secure and never shared with third parties.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

@@ -12,7 +12,6 @@ import GoogleMobileAds
 import Heap
 import NavigationStack
 import SwiftUI
-import AppTrackingTransparency
 
 let SCREEN_WIDTH = UIScreen.main.bounds.width
 let SCREEN_HEIGHT = UIScreen.main.bounds.height
@@ -36,12 +35,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         let heapAppId: String = Bundle.main.infoDictionary?["HEAP_APP_ID"] as! String
         // Initialize Heap for analytics
         Heap.initialize(heapAppId)
-        
-        // Add App Tracking Transparency dialog
-        ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
-            //you got permission to track
-            print("Permission granted")
-        })
+
+        AppodealProvider.shared.initializeSDK()
         
         return true
     }

@@ -33,8 +33,7 @@ class AppodealProvider: NSObject, ObservableObject  {
     static let shared: AppodealProvider = AppodealProvider()
     
     // MARK: Public methods
-    override init() {
-        super.init()
+    func initializeSDK() {
         
         // Custom settings
         Appodeal.setLogLevel(AppodealConstants.logLevel)
