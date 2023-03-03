@@ -125,6 +125,7 @@
 		D4056ED529788FCA00D3894D /* lightbulb_loader_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */; };
 		D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EDB2978A06900D3894D /* space_man_empty.json */; };
 		D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */; };
+		D4373F7929B18B5900C186B3 /* AppodealProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F7829B18B5900C186B3 /* AppodealProvider.swift */; };
 		D45707A8299A9AD2001D80AD /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707A7299A9AD2001D80AD /* SearchBar.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
@@ -348,6 +349,7 @@
 		D4056EDB2978A06900D3894D /* space_man_empty.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = space_man_empty.json; sourceTree = "<group>"; };
 		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
 		D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulatedCaptionsView.swift; sourceTree = "<group>"; };
+		D4373F7829B18B5900C186B3 /* AppodealProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppodealProvider.swift; sourceTree = "<group>"; };
 		D45707A7299A9AD2001D80AD /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
@@ -1856,6 +1858,7 @@
 				D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */,
 				D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */,
 				D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */,
+				D4373F7829B18B5900C186B3 /* AppodealProvider.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -2118,6 +2121,8 @@
 				D4005DAE295BE0E0004D695D /* Frameworks */,
 				D4056E722968E78400D3894D /* Setup Firebase Environment GoogleService-Info.plist */,
 				D4005DAF295BE0E0004D695D /* Resources */,
+				5E13B7AF7D5F4DE494354613 /* [CP] Embed Pods Frameworks */,
+				5D8CCA27D489CEDB3F597FB6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2217,6 +2222,8 @@
 				D4005DC7295BE0E1004D695D /* Sources */,
 				D4005DC8295BE0E1004D695D /* Frameworks */,
 				D4005DC9295BE0E1004D695D /* Resources */,
+				39C3A78BAC2A16F9C0D5D50B /* [CP] Embed Pods Frameworks */,
+				803B2A5CD3A122ED0398FDEA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2390,6 +2397,74 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		39C3A78BAC2A16F9C0D5D50B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5D8CCA27D489CEDB3F597FB6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5E13B7AF7D5F4DE494354613 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		803B2A5CD3A122ED0398FDEA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A5E736975D43B0C377446941 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2502,6 +2577,7 @@
 				D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
 				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
+				D4373F7929B18B5900C186B3 /* AppodealProvider.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
 				D4056E79296E2C1700D3894D /* String.swift in Sources */,
 				D47306CF29993D5E00179FEB /* Helpers.swift in Sources */,
@@ -2713,8 +2789,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.1.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
 				PRODUCT_MODULE_NAME = CapGen;
 				PRODUCT_NAME = "CapGen Beta";
@@ -2758,8 +2834,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.1.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
 				PRODUCT_NAME = "CapGen Beta";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2944,8 +3020,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.1.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3084,8 +3160,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.1.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
