@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct RewardedAdView: View {
+    @ObservedObject var ad = AppodealProvider.shared
     @EnvironmentObject var firestoreMan: FirestoreManager
-    @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @Binding var isViewPresented: Bool
-    @State var isAdDone: Bool? = false
-    @State var isAdLoading: Bool = false
     @Binding var showCongratsModal: Bool
 
     let authManager = AuthManager.shared.userManager
+    
+    @State var isAdDone: Bool = false
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -39,7 +39,7 @@ struct RewardedAdView: View {
                     .frame(width: SCREEN_WIDTH, height: 250)
                     .padding(.bottom, -70)
 
-                DisplayAdBtnView(title: "Collect Credits", isAdDone: $isAdDone)
+                DisplayAdBtnView(title: "Collect Credits")
 
                 Button {
                     isViewPresented = false
@@ -51,12 +51,13 @@ struct RewardedAdView: View {
             }
             .padding(.top, 35)
         }
-        .onAppear {
-            // Dismiss bottom sheet modal when ad is exited
-            guard let isAdDone = self.isAdDone else { return }
-            if isAdDone {
+        .onChange(of: self.ad.isRewardedVideoFinished, perform: { isFinished in
+            self.isAdDone = isFinished
+        })
+        .onChange(of: self.isAdDone, perform: { isDone in
+            if isDone {
                 self.isViewPresented = false
-
+                
                 withAnimation {
                     guard let showCongratsModal = authManager.user?.userPrefs.showCongratsModal else { return }
                     if showCongratsModal {
@@ -64,7 +65,7 @@ struct RewardedAdView: View {
                     }
                 }
             }
-        }
+        })
     }
 }
 
