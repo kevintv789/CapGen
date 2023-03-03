@@ -11,7 +11,7 @@ import Foundation
 
 class FirestoreManager: ObservableObject {
     @Published var openAiKey: String?
-    @Published var admobUnitId: String?
+    @Published var appodealAppId: String?
     @Published var appStoreModel: AppStoreModel?
     @Published var appError: ErrorType? = nil
 
@@ -23,12 +23,6 @@ class FirestoreManager: ObservableObject {
         fetch(from: "Secrets", documentId: "OpenAI") { data in
             if let data = data {
                 self.openAiKey = data["Key"] as? String ?? nil
-            }
-        }
-
-        fetch(from: "Secrets", documentId: "Admob") { data in
-            if let data = data {
-                self.admobUnitId = data["ADMOB_REWARDED_AD_UNIT_ID"] as? String ?? nil
             }
         }
 

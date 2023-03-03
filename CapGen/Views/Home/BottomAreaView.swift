@@ -25,8 +25,8 @@ extension Text {
 }
 
 struct BottomAreaView: View {
+    @ObservedObject var ad = AppodealProvider.shared
     @EnvironmentObject var firestoreMan: FirestoreManager
-    @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
 
@@ -46,7 +46,7 @@ struct BottomAreaView: View {
 
     @State var showCreditsDepletedBottomSheet: Bool = false
 
-    @State var isAdDone: Bool = false
+    @State var isShowingAdFromBottomView: Bool = false
 
     func mapAllRequests() {
         // Zero out all sizes for tones since it's not needed at this point and will cause database conflicts during edit
@@ -82,22 +82,17 @@ struct BottomAreaView: View {
 
                                     guard let userManager = AuthManager.shared.userManager.user else { return }
                                     mapAllRequests()
-
+                                    isShowingAdFromBottomView = true
                                     if credits < 1 {
                                         // Only show the bottom sheet modal if user has not selected 'Just play ad next time'
                                         if userManager.userPrefs.showCreditDepletedModal {
                                             self.showCreditsDepletedBottomSheet = true
                                         } else {
                                             // play ad and display load view
-                                            self.isAdLoading = true
-                                            self.rewardedAd.loadAd(adUnitId: firestoreMan.admobUnitId) { isLoadDone in
-                                                if isLoadDone {
-                                                    self.isAdLoading = false
-                                                    self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                                                        self.router?.toLoadingView()
-                                                        firestoreMan.incrementCredit(for: userManager.id)
-                                                    })
-                                                }
+                                            if self.ad.isRewardedReady {
+                                                self.ad.presentRewarded()
+                                            } else {
+                                                self.isAdLoading = true
                                             }
                                         }
                                     } else {
@@ -109,7 +104,6 @@ struct BottomAreaView: View {
                                         .resizable()
                                         .frame(width: 90, height: 90)
                                 }
-                                .disabled(self.isAdLoading)
                                 .dropInAndOutAnimation(value: expandArea)
                             }
                             .offset(x: 0, y: expandArea ? 0 : SCREEN_HEIGHT)
@@ -135,13 +129,31 @@ struct BottomAreaView: View {
         .onAppear {
             self.router = Router(navStack: self.navStack)
         }
-        .onReceive(self.rewardedAd.$appError) { value in
+        .onReceive(self.ad.$isRewardedVideoFinished, perform: { isFinished in
+            // use isShowingAdFromBottomView to determine the context on when to show loading view
+            // we only want to show loadingView() upon press of the bottom view button
+            if isFinished && isShowingAdFromBottomView {
+                self.showCreditsDepletedBottomSheet = false
+                self.router?.toLoadingView()
+            }
+        })
+        .onReceive(self.ad.$appError) { value in
             if let error = value?.error {
                 if error == .genericError {
                     self.router?.toGenericFallbackView()
                 }
             }
         }
+        .onReceive(self.ad.$isRewardedReady, perform: { isReady in
+            if isReady && isShowingAdFromBottomView {
+                self.isAdLoading = false
+            }
+        })
+        .onChange(of: self.isAdLoading, perform: { isLoading in
+            if !isLoading && isShowingAdFromBottomView {
+                self.ad.presentRewarded()
+            }
+        })
         .sheet(isPresented: $showCreditsDepletedBottomSheet) {
             CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet)
                 .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])

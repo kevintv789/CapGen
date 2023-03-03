@@ -13,49 +13,67 @@ enum ButtonLength {
 }
 
 struct DisplayAdBtnView: View {
+    @ObservedObject var ad = AppodealProvider.shared
     @EnvironmentObject var firestoreMan: FirestoreManager
-    @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @EnvironmentObject var navStack: NavigationStackCompat
 
     @State var router: Router? = nil
 
     @State var btnLength: ButtonLength = .full
-    @State var isLoading: Bool = false
     let authManager = AuthManager.shared.userManager
 
     @State var title: String
-    @Binding var isAdDone: Bool?
 
+    var body: some View {
+        FullscreenSection(
+            text: title,
+            ad: self.ad,
+            keyPath: \.isRewardedReady,
+            btnLength: btnLength
+        ) {
+            Haptics.shared.play(.soft)
+            self.ad.presentRewarded()
+        }
+        .onAppear {
+            self.router = Router(navStack: navStack)
+        }
+        .onReceive(self.ad.$appError) { value in
+            if let error = value?.error {
+                if error == .genericError {
+                    self.router?.toGenericFallbackView()
+                }
+            }
+        }
+    }
+}
+
+struct FullscreenSection<T>: View where T: ObservableObject {
+    typealias Action = () -> Void
+    let text: String
+    @ObservedObject var ad: T
+    var keyPath: ReferenceWritableKeyPath<T,Bool>
+    var btnLength: ButtonLength = .full
+    var action: Action
+    
     func displayBtnOverlay() -> some View {
-        if isLoading {
+        // if is loading
+        if !ad[keyPath: keyPath] {
             return AnyView(
                 LottieView(name: "btn_loader", loopMode: .loop, isAnimating: true)
                     .frame(width: 100, height: 100)
             )
         } else {
             return AnyView(
-                Text(title)
+                Text(text)
                     .foregroundColor(.ui.cultured)
                     .font(.ui.title2)
             )
         }
     }
-
+    
     var body: some View {
         Button {
-            Haptics.shared.play(.soft)
-
-            // load new ads
-            self.isLoading = true
-            self.rewardedAd.loadAd(adUnitId: firestoreMan.admobUnitId) { isLoadDone in
-                if isLoadDone {
-                    self.isLoading = false
-                    self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                        firestoreMan.incrementCredit(for: authManager.user?.id as? String ?? nil)
-                    })
-                }
-            }
-
+            action()
         } label: {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.ui.orangeWeb)
@@ -63,17 +81,7 @@ struct DisplayAdBtnView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .overlay(displayBtnOverlay())
         }
-
-        .disabled(self.isLoading)
-        .onAppear {
-            self.router = Router(navStack: navStack)
-        }
-        .onReceive(self.rewardedAd.$appError) { value in
-            if let error = value?.error {
-                if error == .genericError {
-                    self.router?.toGenericFallbackView()
-                }
-            }
-        }
+        .disabled(!ad[keyPath: keyPath])
+        .transition(.slide)
     }
 }
