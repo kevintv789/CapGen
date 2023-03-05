@@ -14,8 +14,9 @@ struct SelectedCaption {
 }
 
 class CaptionViewModel: ObservableObject {
-    @Published var selectedCaption: SelectedCaption = .init(description: captionsParsedArrayMock[0], color: .ui.darkSalmon)
-    @Published var isCaptionSelected: Bool = true // show bottom sheet if true
+//    @Published var selectedCaption: SelectedCaption = .init(description: captionsParsedArrayMock[0], color: .ui.darkSalmon)
+    @Published var selectedCaption: SelectedCaption = .init()
+    @Published var isCaptionSelected: Bool = false // show bottom sheet if true
 
     func resetSelectedCaption() {
         selectedCaption = .init()

@@ -153,8 +153,8 @@ struct CaptionView: View {
         }
         .onAppear {
             // MOCK ONLY
-            self.openAiConnector.captionsGroupParsed = captionsParsedArrayMock
-            self.openAiConnector.captionGroupTitle = "Title"
+//            self.openAiConnector.captionsGroupParsed = captionsParsedArrayMock
+//            self.openAiConnector.captionGroupTitle = "Title"
         }
     }
 }
