@@ -10,7 +10,6 @@ import SwiftUI
 
 struct CongratsModalView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
-    @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @Binding var showView: Bool
 
     let userManager = AuthManager.shared.userManager
@@ -44,7 +43,7 @@ struct CongratsModalView: View {
                     .frame(width: SCREEN_WIDTH / 2 * scaledSize, height: 200 * scaledSize)
                     .padding(-60)
 
-                DisplayAdBtnView(btnLength: .short, title: "Collect More", isAdDone: .constant(nil))
+                DisplayAdBtnView(btnLength: .short, title: "Collect More")
 
                 Button {
                     withAnimation {
@@ -61,14 +60,5 @@ struct CongratsModalView: View {
             }
             .padding()
         }
-    }
-}
-
-struct CongratsModalView_Previews: PreviewProvider {
-    static var previews: some View {
-        CongratsModalView(showView: .constant(true))
-            .environmentObject(GoogleRewardedAds())
-            .environmentObject(FirestoreManager())
-            .environmentObject(NavigationStackCompat())
     }
 }

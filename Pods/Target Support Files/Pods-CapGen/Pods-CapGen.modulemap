@@ -1,0 +1,6 @@
+framework module Pods_CapGen {
+  umbrella header "Pods-CapGen-umbrella.h"
+
+  export *
+  module * { export * }
+}

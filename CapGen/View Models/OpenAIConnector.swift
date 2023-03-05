@@ -14,6 +14,7 @@ public class OpenAIConnector: ObservableObject {
     @Published var appError: ErrorType? = nil
     @Published var captionsGroupParsed: [String] = []
     @Published var captionGroupTitle: String = ""
+    @Published var prompt: String = ""
 
     let openAIURL = URL(string: "https://api.openai.com/v1/engines/text-davinci-003/completions")
 

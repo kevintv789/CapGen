@@ -9,15 +9,16 @@ import NavigationStack
 import SwiftUI
 
 struct CreditsDepletedModalView: View {
+    @ObservedObject var ad = AppodealProvider.shared
     @EnvironmentObject var firestoreMan: FirestoreManager
-    @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @EnvironmentObject var navStack: NavigationStackCompat
 
     @State var router: Router? = nil
     @Binding var isViewPresented: Bool
-
-    @State var isAdDone: Bool? = false
-    @State var isAdLoading: Bool = false
+    
+    @State var isAdInitialized: Bool = false
+    
+    @State var isAdDone: Bool = false
 
     let userId: String? = AuthManager.shared.userManager.user?.id as? String ?? nil
 
@@ -43,45 +44,44 @@ struct CreditsDepletedModalView: View {
                     .frame(width: SCREEN_WIDTH, height: 230)
                     .padding(.bottom, -70)
 
-                DisplayAdBtnView(title: "Collect Credits", isAdDone: $isAdDone)
+                DisplayAdBtnView(title: "Collect Credits")
 
-                Button {
-                    Haptics.shared.play(.soft)
+                if isAdInitialized {
+                    Button {
+                        Haptics.shared.play(.soft)
 
-                    // Update data field in firestore
-                    firestoreMan.setShowCreditDepletedModal(for: userId, to: false)
+                        // Update data field in firestore
+                        firestoreMan.setShowCreditDepletedModal(for: userId, to: false)
 
-                    // Play ad
-                    self.isAdLoading = true
-                    self.rewardedAd.loadAd(adUnitId: firestoreMan.admobUnitId) { isLoadDone in
-                        if isLoadDone {
-                            self.isAdLoading = false
-                            self.isAdDone = self.rewardedAd.showAd(rewardFunction: {
-                                firestoreMan.incrementCredit(for: userId)
-                            })
-                        }
+                        // Play ad
+                        self.ad.presentRewarded()
+                    } label: {
+                        Text("Just play ad next time")
+                            .foregroundColor(.ui.cadetBlueCrayola)
+                            .font(.ui.headline)
+                            .padding(.bottom, 30)
                     }
-
-                } label: {
-                    Text("Just play ad next time")
-                        .foregroundColor(.ui.cadetBlueCrayola)
-                        .font(.ui.headline)
-                        .padding(.bottom, 30)
                 }
-                .disabled(self.isAdLoading)
+              
             }
             .padding(.top, 35)
         }
+        .onChange(of: self.ad.isRewardedVideoFinished, perform: { isFinished in
+            self.isAdDone = isFinished
+        })
+        .onChange(of: self.isAdDone, perform: { isDone in
+            if isDone {
+                self.router?.toLoadingView()
+                self.isViewPresented = false
+            }
+        })
+        .onReceive(self.ad.$isRewardedReady, perform: { isInitialized in
+            self.isAdInitialized = isInitialized
+        })
         .onAppear {
             self.router = Router(navStack: navStack)
-            // Dismiss bottom sheet modal when ad is exited
-            guard let isAdDone = self.isAdDone else { return }
-            if isAdDone {
-                self.isViewPresented = false
-                self.router?.toLoadingView()
-            }
         }
-        .onReceive(self.rewardedAd.$appError) { value in
+        .onReceive(self.ad.$appError) { value in
             if let error = value?.error {
                 if error == .genericError {
                     self.router?.toGenericFallbackView()

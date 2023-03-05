@@ -236,7 +236,6 @@ struct PopulatedCaptionsView: View {
                                                                         .resizable()
                                                                         .frame(width: 25, height: 25)
                                                                 }
-
                                                                 Text(element.dateCreated)
                                                                     .foregroundColor(.ui.cultured)
                                                                     .font(.ui.headlineMd)
@@ -264,7 +263,6 @@ struct PopulatedCaptionsView: View {
                 if !group.isEmpty {
                     let platformSet = Set(group.map { $0.platform })
                     self.platforms = Array(platformSet).sorted()
-
                     // This piece of code only updates if there's an update within the original captions group array
                     // We put this on the main thread to asynchronously update when the user has saved/deleted
                     // a captions group. Without this, textSizes would return the incorrect values
@@ -297,7 +295,6 @@ struct PopulatedCaptionsView: View {
                             let searchUndercase = searchText.lowercased()
                             self.mutableCaptionsGroup = value.filter { $0.title.lowercased().contains(searchUndercase) || $0.prompt.lowercased().contains(searchUndercase) || $0.tones.description.lowercased().contains(searchUndercase) || $0.captions.filter { $0.description.lowercased().contains(searchUndercase) }.count > 0 }
                         }
-
                         self.hasCaptions = true
                         let platformSet = Set(value.map { $0.platform })
                         self.platforms = Array(platformSet).sorted()
@@ -363,7 +360,6 @@ struct CaptionPromptTextView: View {
     var prompt: String
     var index: Int
     @Binding var isSearching: Bool
-
     var body: some View {
         Text(prompt)
             .font(.ui.bodyLarge)

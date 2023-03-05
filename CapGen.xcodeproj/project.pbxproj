@@ -125,27 +125,28 @@
 		D4056ED529788FCA00D3894D /* lightbulb_loader_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056ED429788FCA00D3894D /* lightbulb_loader_lottie.json */; };
 		D4056EDC2978A06900D3894D /* space_man_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = D4056EDB2978A06900D3894D /* space_man_empty.json */; };
 		D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */; };
+		D4373F7929B18B5900C186B3 /* AppodealProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F7829B18B5900C186B3 /* AppodealProvider.swift */; };
+		D4373F7B29B5279C00C186B3 /* CaptionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F7A29B5279C00C186B3 /* CaptionViewModel.swift */; };
+		D4373F7D29B527D100C186B3 /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F7C29B527D100C186B3 /* FolderModel.swift */; };
+		D4373F7F29B5282700C186B3 /* CaptionOptimizationBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F7E29B5282700C186B3 /* CaptionOptimizationBottomSheetView.swift */; };
+		D4373F8329B5285900C186B3 /* FolderGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F8129B5285900C186B3 /* FolderGridView.swift */; };
+		D4373F8429B5285900C186B3 /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F8229B5285900C186B3 /* FolderView.swift */; };
+		D4373F8629B5288300C186B3 /* CaptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F8529B5288300C186B3 /* CaptionModel.swift */; };
+		D4373F8829B528F200C186B3 /* FolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F8729B528F200C186B3 /* FolderViewModel.swift */; };
+		D4373F8A29B5291000C186B3 /* FoldersArrayMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F8929B5291000C186B3 /* FoldersArrayMock.swift */; };
+		D4373F8C29B5295F00C186B3 /* BlankCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F8B29B5295E00C186B3 /* BlankCaptionsView.swift */; };
+		D4373F8E29B5297600C186B3 /* CaptionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F8D29B5297500C186B3 /* CaptionCardView.swift */; };
+		D4373F9029B52A5900C186B3 /* GenerateByPromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F8F29B52A5900C186B3 /* GenerateByPromptViewModel.swift */; };
+		D4373F9229B52AA400C186B3 /* FolderBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F9129B52AA300C186B3 /* FolderBottomSheetView.swift */; };
+		D4373F9429B52CC900C186B3 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F9329B52CC900C186B3 /* LogoView.swift */; };
+		D4373F9629B52CE800C186B3 /* SavedCaptionsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F9529B52CE800C186B3 /* SavedCaptionsHomeView.swift */; };
+		D4373F9A29B52D0A00C186B3 /* EnterPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F9829B52D0A00C186B3 /* EnterPromptView.swift */; };
+		D4373F9B29B52D0A00C186B3 /* PersonalizeOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F9929B52D0A00C186B3 /* PersonalizeOptionsView.swift */; };
+		D4373F9D29B52FE100C186B3 /* SimpleDeleteModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F9C29B52FE100C186B3 /* SimpleDeleteModal.swift */; };
+		D4373F9F29B5300200C186B3 /* ImageButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373F9E29B5300200C186B3 /* ImageButtonView.swift */; };
+		D4373FA129B5305600C186B3 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373FA029B5305600C186B3 /* Bool.swift */; };
+		D4373FA329B5307A00C186B3 /* PrimaryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4373FA229B5307A00C186B3 /* PrimaryButtonView.swift */; };
 		D45707A8299A9AD2001D80AD /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707A7299A9AD2001D80AD /* SearchBar.swift */; };
-		D45707AC29A46935001D80AD /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AB29A46935001D80AD /* LogoView.swift */; };
-		D45707AE29A57669001D80AD /* SavedCaptionsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */; };
-		D45707B029A57A5C001D80AD /* ImageButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707AF29A57A5C001D80AD /* ImageButtonView.swift */; };
-		D45707B229A5B1D1001D80AD /* FolderGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B129A5B1D1001D80AD /* FolderGridView.swift */; };
-		D45707B429A655E9001D80AD /* FolderBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */; };
-		D45707B629A67F41001D80AD /* PrimaryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B529A67F41001D80AD /* PrimaryButtonView.swift */; };
-		D45707B829A68B7C001D80AD /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B729A68B7C001D80AD /* FolderModel.swift */; };
-		D45707BA29A6CFCD001D80AD /* FoldersArrayMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707B929A6CFCD001D80AD /* FoldersArrayMock.swift */; };
-		D45707BC29A83CC8001D80AD /* FolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707BB29A83CC8001D80AD /* FolderViewModel.swift */; };
-		D45707BF29A8F5AC001D80AD /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707BE29A8F5AC001D80AD /* FolderView.swift */; };
-		D45707C129A8FDBB001D80AD /* BlankCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C029A8FDBB001D80AD /* BlankCaptionsView.swift */; };
-		D45707C329A9105E001D80AD /* CaptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C229A9105E001D80AD /* CaptionModel.swift */; };
-		D45707C529A9169D001D80AD /* CaptionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C429A9169D001D80AD /* CaptionCardView.swift */; };
-		D45707C829A91C88001D80AD /* EnterPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C729A91C88001D80AD /* EnterPromptView.swift */; };
-		D45707CA29A9680B001D80AD /* SimpleDeleteModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707C929A9680B001D80AD /* SimpleDeleteModal.swift */; };
-		D45707CC29A96CBE001D80AD /* GenerateByPromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */; };
-		D45707CE29A98A19001D80AD /* PersonalizeOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CD29A98A19001D80AD /* PersonalizeOptionsView.swift */; };
-		D45707D029ABB5E0001D80AD /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707CF29ABB5E0001D80AD /* Bool.swift */; };
-		D45707D229AEC3DC001D80AD /* CaptionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707D129AEC3DC001D80AD /* CaptionViewModel.swift */; };
-		D45707D429AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45707D329AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift */; };
 		D47304042995BF4B00179FEB /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = D47304032995BF4B00179FEB /* Heap */; };
 		D47304052996C1E700179FEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3B2963450D00D3894D /* OpenAIConnector.swift */; };
 		D47304062996C3F400179FEB /* OpenAIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4056E3D2963487500D3894D /* OpenAIModel.swift */; };
@@ -368,27 +369,28 @@
 		D4056EDB2978A06900D3894D /* space_man_empty.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = space_man_empty.json; sourceTree = "<group>"; };
 		D4056EDF297A346100D3894D /* CaptionsMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CaptionsMock.json; sourceTree = "<group>"; };
 		D4056EE0297AF22800D3894D /* PopulatedCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulatedCaptionsView.swift; sourceTree = "<group>"; };
+		D4373F7829B18B5900C186B3 /* AppodealProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppodealProvider.swift; sourceTree = "<group>"; };
+		D4373F7A29B5279C00C186B3 /* CaptionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptionViewModel.swift; sourceTree = "<group>"; };
+		D4373F7C29B527D100C186B3 /* FolderModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
+		D4373F7E29B5282700C186B3 /* CaptionOptimizationBottomSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptionOptimizationBottomSheetView.swift; sourceTree = "<group>"; };
+		D4373F8129B5285900C186B3 /* FolderGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderGridView.swift; sourceTree = "<group>"; };
+		D4373F8229B5285900C186B3 /* FolderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
+		D4373F8529B5288300C186B3 /* CaptionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptionModel.swift; sourceTree = "<group>"; };
+		D4373F8729B528F200C186B3 /* FolderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderViewModel.swift; sourceTree = "<group>"; };
+		D4373F8929B5291000C186B3 /* FoldersArrayMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoldersArrayMock.swift; sourceTree = "<group>"; };
+		D4373F8B29B5295E00C186B3 /* BlankCaptionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlankCaptionsView.swift; path = CapGen/Views/Common/BlankCaptionsView.swift; sourceTree = SOURCE_ROOT; };
+		D4373F8D29B5297500C186B3 /* CaptionCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptionCardView.swift; sourceTree = "<group>"; };
+		D4373F8F29B52A5900C186B3 /* GenerateByPromptViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenerateByPromptViewModel.swift; sourceTree = "<group>"; };
+		D4373F9129B52AA300C186B3 /* FolderBottomSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderBottomSheetView.swift; sourceTree = "<group>"; };
+		D4373F9329B52CC900C186B3 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
+		D4373F9529B52CE800C186B3 /* SavedCaptionsHomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedCaptionsHomeView.swift; sourceTree = "<group>"; };
+		D4373F9829B52D0A00C186B3 /* EnterPromptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnterPromptView.swift; sourceTree = "<group>"; };
+		D4373F9929B52D0A00C186B3 /* PersonalizeOptionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonalizeOptionsView.swift; sourceTree = "<group>"; };
+		D4373F9C29B52FE100C186B3 /* SimpleDeleteModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleDeleteModal.swift; sourceTree = "<group>"; };
+		D4373F9E29B5300200C186B3 /* ImageButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageButtonView.swift; sourceTree = "<group>"; };
+		D4373FA029B5305600C186B3 /* Bool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
+		D4373FA229B5307A00C186B3 /* PrimaryButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimaryButtonView.swift; sourceTree = "<group>"; };
 		D45707A7299A9AD2001D80AD /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
-		D45707AB29A46935001D80AD /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
-		D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionsHomeView.swift; sourceTree = "<group>"; };
-		D45707AF29A57A5C001D80AD /* ImageButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonView.swift; sourceTree = "<group>"; };
-		D45707B129A5B1D1001D80AD /* FolderGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderGridView.swift; sourceTree = "<group>"; };
-		D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderBottomSheetView.swift; sourceTree = "<group>"; };
-		D45707B529A67F41001D80AD /* PrimaryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonView.swift; sourceTree = "<group>"; };
-		D45707B729A68B7C001D80AD /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
-		D45707B929A6CFCD001D80AD /* FoldersArrayMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersArrayMock.swift; sourceTree = "<group>"; };
-		D45707BB29A83CC8001D80AD /* FolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewModel.swift; sourceTree = "<group>"; };
-		D45707BE29A8F5AC001D80AD /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
-		D45707C029A8FDBB001D80AD /* BlankCaptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankCaptionsView.swift; sourceTree = "<group>"; };
-		D45707C229A9105E001D80AD /* CaptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionModel.swift; sourceTree = "<group>"; };
-		D45707C429A9169D001D80AD /* CaptionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionCardView.swift; sourceTree = "<group>"; };
-		D45707C729A91C88001D80AD /* EnterPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterPromptView.swift; sourceTree = "<group>"; };
-		D45707C929A9680B001D80AD /* SimpleDeleteModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDeleteModal.swift; sourceTree = "<group>"; };
-		D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateByPromptViewModel.swift; sourceTree = "<group>"; };
-		D45707CD29A98A19001D80AD /* PersonalizeOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizeOptionsView.swift; sourceTree = "<group>"; };
-		D45707CF29ABB5E0001D80AD /* Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
-		D45707D129AEC3DC001D80AD /* CaptionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionViewModel.swift; sourceTree = "<group>"; };
-		D45707D329AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionOptimizationBottomSheetView.swift; sourceTree = "<group>"; };
 		D47304502996CE1900179FEB /* libsystem_secinit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_secinit.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/system/libsystem_secinit.tbd; sourceTree = DEVELOPER_DIR; };
 		D47304512996CE1900179FEB /* libSMC.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSMC.tbd; path = usr/lib/libSMC.tbd; sourceTree = SDKROOT; };
 		D47304522996CE1900179FEB /* libAudioDSPCore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libAudioDSPCore.tbd; path = usr/lib/libAudioDSPCore.tbd; sourceTree = SDKROOT; };
@@ -1864,8 +1866,8 @@
 				D4C3E49729844F7400C2847A /* SupportEmailModel.swift */,
 				D4C3E49D2984C02D00C2847A /* AppStoreModel.swift */,
 				D4C3E4A5298577B400C2847A /* ErrorModel.swift */,
-				D45707B729A68B7C001D80AD /* FolderModel.swift */,
-				D45707C229A9105E001D80AD /* CaptionModel.swift */,
+				D4373F7C29B527D100C186B3 /* FolderModel.swift */,
+				D4373F8529B5288300C186B3 /* CaptionModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1876,9 +1878,9 @@
 				D4005DB6295BE0E0004D695D /* ContentView.swift */,
 				D4056ED929789CDB00D3894D /* Welcome */,
 				D4056ED629789CB000D3894D /* Home */,
-				D45707C629A91C72001D80AD /* GenerateCaptions */,
 				D4056ED829789CC900D3894D /* Profile */,
-				D45707BD29A8F569001D80AD /* Folders */,
+				D4373F9729B52D0A00C186B3 /* GenerateCaptions */,
+				D4373F8029B5285900C186B3 /* Folders */,
 				D4056ED729789CBC00D3894D /* Caption */,
 				D4056ECB2977968D00D3894D /* Modals */,
 				D4056E1E295CC92100D3894D /* Common */,
@@ -1900,9 +1902,10 @@
 				D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */,
 				D4C3E4AD2987368300C2847A /* CaptionEditViewModel.swift */,
 				D4C3E4AF29885FFD00C2847A /* CaptionConfigsViewModel.swift */,
-				D45707BB29A83CC8001D80AD /* FolderViewModel.swift */,
-				D45707CB29A96CBE001D80AD /* GenerateByPromptViewModel.swift */,
-				D45707D129AEC3DC001D80AD /* CaptionViewModel.swift */,
+				D4373F7829B18B5900C186B3 /* AppodealProvider.swift */,
+				D4373F8729B528F200C186B3 /* FolderViewModel.swift */,
+				D4373F7A29B5279C00C186B3 /* CaptionViewModel.swift */,
+				D4373F8F29B52A5900C186B3 /* GenerateByPromptViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -1923,12 +1926,12 @@
 		D4005DE2295C041C004D695D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D4373FA029B5305600C186B3 /* Bool.swift */,
 				D4005DE3295C042F004D695D /* Color.swift */,
 				D4005DEB295C09EE004D695D /* Font.swift */,
 				D4056E27295F659B00D3894D /* View.swift */,
 				D4056E78296E2C1700D3894D /* String.swift */,
 				D4C3E4912982105300C2847A /* Notifications.swift */,
-				D45707CF29ABB5E0001D80AD /* Bool.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2013,7 +2016,9 @@
 		D4056E1E295CC92100D3894D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				D4373F8D29B5297500C186B3 /* CaptionCardView.swift */,
 				D4056EAD2972716D00D3894D /* BackArrowView.swift */,
+				D4373F8B29B5295E00C186B3 /* BlankCaptionsView.swift */,
 				D4056E1F295CCA1C00D3894D /* Pill.swift */,
 				D4056E23295E296600D3894D /* TextAreaView.swift */,
 				D4056E29295F8EA700D3894D /* RectangleCard.swift */,
@@ -2027,11 +2032,9 @@
 				D4C3E4A32984F7C500C2847A /* FallbackView.swift */,
 				D4F1D309298AD45500599F05 /* Haptics.swift */,
 				D45707A7299A9AD2001D80AD /* SearchBar.swift */,
-				D45707AB29A46935001D80AD /* LogoView.swift */,
-				D45707AF29A57A5C001D80AD /* ImageButtonView.swift */,
-				D45707B529A67F41001D80AD /* PrimaryButtonView.swift */,
-				D45707C029A8FDBB001D80AD /* BlankCaptionsView.swift */,
-				D45707C429A9169D001D80AD /* CaptionCardView.swift */,
+				D4373F9329B52CC900C186B3 /* LogoView.swift */,
+				D4373FA229B5307A00C186B3 /* PrimaryButtonView.swift */,
+				D4373F9E29B5300200C186B3 /* ImageButtonView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2086,6 +2089,7 @@
 		D4056ECB2977968D00D3894D /* Modals */ = {
 			isa = PBXGroup;
 			children = (
+				D4373F7E29B5282700C186B3 /* CaptionOptimizationBottomSheetView.swift */,
 				D4056EBF2974AF6D00D3894D /* CongratsModalView.swift */,
 				D4056EC929778FB700D3894D /* RefillModalView.swift */,
 				D4056EB9297373E400D3894D /* RewardedAdView.swift */,
@@ -2093,9 +2097,8 @@
 				D4C3E482298059C800C2847A /* CustomMenuPopup.swift */,
 				D4C3E4862980883D00C2847A /* DeleteModalView.swift */,
 				D4C3E49B2984710E00C2847A /* DeleteProfileModalView.swift */,
-				D45707B329A655E9001D80AD /* FolderBottomSheetView.swift */,
-				D45707C929A9680B001D80AD /* SimpleDeleteModal.swift */,
-				D45707D329AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift */,
+				D4373F9129B52AA300C186B3 /* FolderBottomSheetView.swift */,
+				D4373F9C29B52FE100C186B3 /* SimpleDeleteModal.swift */,
 			);
 			path = Modals;
 			sourceTree = "<group>";
@@ -2104,8 +2107,8 @@
 			isa = PBXGroup;
 			children = (
 				D4056E84296F868800D3894D /* HomeView.swift */,
-				D45707AD29A57669001D80AD /* SavedCaptionsHomeView.swift */,
 				D4056E25295F639100D3894D /* BottomAreaView.swift */,
+				D4373F9529B52CE800C186B3 /* SavedCaptionsHomeView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2139,20 +2142,20 @@
 			path = Welcome;
 			sourceTree = "<group>";
 		};
-		D45707BD29A8F569001D80AD /* Folders */ = {
+		D4373F8029B5285900C186B3 /* Folders */ = {
 			isa = PBXGroup;
 			children = (
-				D45707B129A5B1D1001D80AD /* FolderGridView.swift */,
-				D45707BE29A8F5AC001D80AD /* FolderView.swift */,
+				D4373F8129B5285900C186B3 /* FolderGridView.swift */,
+				D4373F8229B5285900C186B3 /* FolderView.swift */,
 			);
 			path = Folders;
 			sourceTree = "<group>";
 		};
-		D45707C629A91C72001D80AD /* GenerateCaptions */ = {
+		D4373F9729B52D0A00C186B3 /* GenerateCaptions */ = {
 			isa = PBXGroup;
 			children = (
-				D45707C729A91C88001D80AD /* EnterPromptView.swift */,
-				D45707CD29A98A19001D80AD /* PersonalizeOptionsView.swift */,
+				D4373F9829B52D0A00C186B3 /* EnterPromptView.swift */,
+				D4373F9929B52D0A00C186B3 /* PersonalizeOptionsView.swift */,
 			);
 			path = GenerateCaptions;
 			sourceTree = "<group>";
@@ -2169,7 +2172,7 @@
 			isa = PBXGroup;
 			children = (
 				D4C3E48929819C6500C2847A /* CaptionsGroupMock.swift */,
-				D45707B929A6CFCD001D80AD /* FoldersArrayMock.swift */,
+				D4373F8929B5291000C186B3 /* FoldersArrayMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -2194,6 +2197,8 @@
 				D4005DAE295BE0E0004D695D /* Frameworks */,
 				D4056E722968E78400D3894D /* Setup Firebase Environment GoogleService-Info.plist */,
 				D4005DAF295BE0E0004D695D /* Resources */,
+				5E13B7AF7D5F4DE494354613 /* [CP] Embed Pods Frameworks */,
+				5D8CCA27D489CEDB3F597FB6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2293,6 +2298,8 @@
 				D4005DC7295BE0E1004D695D /* Sources */,
 				D4005DC8295BE0E1004D695D /* Frameworks */,
 				D4005DC9295BE0E1004D695D /* Resources */,
+				39C3A78BAC2A16F9C0D5D50B /* [CP] Embed Pods Frameworks */,
+				803B2A5CD3A122ED0398FDEA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2466,6 +2473,74 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		39C3A78BAC2A16F9C0D5D50B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5D8CCA27D489CEDB3F597FB6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5E13B7AF7D5F4DE494354613 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen/Pods-CapGen-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		803B2A5CD3A122ED0398FDEA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A5E736975D43B0C377446941 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2539,46 +2614,40 @@
 				D4056EA22971FD6200D3894D /* GoogleAuthManager.swift in Sources */,
 				D4056EA829721BC300D3894D /* ProfileView.swift in Sources */,
 				D4056E362962030800D3894D /* CaptionLengthsModel.swift in Sources */,
+				D4373F9229B52AA400C186B3 /* FolderBottomSheetView.swift in Sources */,
 				D4C3E4872980883D00C2847A /* DeleteModalView.swift in Sources */,
 				D4056E992971EB9600D3894D /* AuthManager.swift in Sources */,
 				D4056EBA297373E400D3894D /* RewardedAdView.swift in Sources */,
 				D4056ECD297796B900D3894D /* CreditsDepletedModalView.swift in Sources */,
 				D4056EC62977460200D3894D /* CreditCounterView.swift in Sources */,
 				D4056E972970F33E00D3894D /* SignInWithAppleDelegate.swift in Sources */,
-				D45707B829A68B7C001D80AD /* FolderModel.swift in Sources */,
+				D4373F9F29B5300200C186B3 /* ImageButtonView.swift in Sources */,
 				D4C3E49829844F7400C2847A /* SupportEmailModel.swift in Sources */,
-				D45707AE29A57669001D80AD /* SavedCaptionsHomeView.swift in Sources */,
 				D4056E83296F867D00D3894D /* LaunchView.swift in Sources */,
+				D4373F7B29B5279C00C186B3 /* CaptionViewModel.swift in Sources */,
 				D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */,
+				D4373F8C29B5295F00C186B3 /* BlankCaptionsView.swift in Sources */,
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
-				D45707C529A9169D001D80AD /* CaptionCardView.swift in Sources */,
+				D4373F8329B5285900C186B3 /* FolderGridView.swift in Sources */,
 				D4056E20295CCA1C00D3894D /* Pill.swift in Sources */,
-				D45707B229A5B1D1001D80AD /* FolderGridView.swift in Sources */,
-				D45707BA29A6CFCD001D80AD /* FoldersArrayMock.swift in Sources */,
 				D4C3E496298437B600C2847A /* ShareableData.swift in Sources */,
 				D4C3E4A6298577B400C2847A /* ErrorModel.swift in Sources */,
 				D4056E8C29708D4200D3894D /* AnimatedTextView.swift in Sources */,
-				D45707D429AEC69C001D80AD /* CaptionOptimizationBottomSheetView.swift in Sources */,
 				D4056E26295F639100D3894D /* BottomAreaView.swift in Sources */,
-				D45707C329A9105E001D80AD /* CaptionModel.swift in Sources */,
 				D45707A8299A9AD2001D80AD /* SearchBar.swift in Sources */,
 				D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */,
 				D4056E9B2971EF6F00D3894D /* FBAuthManager.swift in Sources */,
-				D45707D229AEC3DC001D80AD /* CaptionViewModel.swift in Sources */,
-				D45707B629A67F41001D80AD /* PrimaryButtonView.swift in Sources */,
-				D45707BC29A83CC8001D80AD /* FolderViewModel.swift in Sources */,
 				D4056E402963AB3B00D3894D /* LoadingView.swift in Sources */,
 				D4056E302960F54900D3894D /* SnappableSliderView.swift in Sources */,
 				D4005DEC295C09EE004D695D /* Font.swift in Sources */,
-				D45707CA29A9680B001D80AD /* SimpleDeleteModal.swift in Sources */,
 				D4056E3C2963450D00D3894D /* OpenAIConnector.swift in Sources */,
-				D45707B429A655E9001D80AD /* FolderBottomSheetView.swift in Sources */,
+				D4373F9029B52A5900C186B3 /* GenerateByPromptViewModel.swift in Sources */,
+				D4373F9D29B52FE100C186B3 /* SimpleDeleteModal.swift in Sources */,
 				D4C3E4AC298639AE00C2847A /* Router.swift in Sources */,
 				D4C3E494298343B500C2847A /* FloatingNotificationView.swift in Sources */,
-				D45707D029ABB5E0001D80AD /* Bool.swift in Sources */,
-				D45707AC29A46935001D80AD /* LogoView.swift in Sources */,
 				D4056EC429751BD200D3894D /* UserManager.swift in Sources */,
-				D45707CC29A96CBE001D80AD /* GenerateByPromptViewModel.swift in Sources */,
+				D4373F8829B528F200C186B3 /* FolderViewModel.swift in Sources */,
+				D4373F9A29B52D0A00C186B3 /* EnterPromptView.swift in Sources */,
 				D4056E81296F0CB900D3894D /* LottieView.swift in Sources */,
 				D4056E24295E296600D3894D /* TextAreaView.swift in Sources */,
 				D4C3E4922982105300C2847A /* Notifications.swift in Sources */,
@@ -2587,35 +2656,42 @@
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */,
 				D4C3E48A29819C6500C2847A /* CaptionsGroupMock.swift in Sources */,
-				D45707CE29A98A19001D80AD /* PersonalizeOptionsView.swift in Sources */,
 				D4056EB829736F6E00D3894D /* GoogleRewardedAds.swift in Sources */,
 				D4C3E4A42984F7C500C2847A /* FallbackView.swift in Sources */,
+				D4373F8629B5288300C186B3 /* CaptionModel.swift in Sources */,
+				D4373F8E29B5297600C186B3 /* CaptionCardView.swift in Sources */,
 				D4056EE1297AF22800D3894D /* PopulatedCaptionsView.swift in Sources */,
+				D4373F9B29B52D0A00C186B3 /* PersonalizeOptionsView.swift in Sources */,
 				D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */,
-				D45707B029A57A5C001D80AD /* ImageButtonView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
 				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
+				D4373F7929B18B5900C186B3 /* AppodealProvider.swift in Sources */,
+				D4373FA329B5307A00C186B3 /* PrimaryButtonView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
 				D4056E79296E2C1700D3894D /* String.swift in Sources */,
+				D4373F8A29B5291000C186B3 /* FoldersArrayMock.swift in Sources */,
 				D47306CF29993D5E00179FEB /* Helpers.swift in Sources */,
 				D4C3E49C2984710E00C2847A /* DeleteProfileModalView.swift in Sources */,
 				D4056E85296F868800D3894D /* HomeView.swift in Sources */,
 				D4056ED329788FAF00D3894D /* OverlayedLoaderView.swift in Sources */,
+				D4373F9629B52CE800C186B3 /* SavedCaptionsHomeView.swift in Sources */,
 				D4F1D30A298AD45500599F05 /* Haptics.swift in Sources */,
+				D4373F8429B5285900C186B3 /* FolderView.swift in Sources */,
 				D4056ED12978750D00D3894D /* DisplayAdBtnView.swift in Sources */,
 				D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */,
 				D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */,
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
-				D45707C829A91C88001D80AD /* EnterPromptView.swift in Sources */,
-				D45707C129A8FDBB001D80AD /* BlankCaptionsView.swift in Sources */,
 				D4056EC02974AF6D00D3894D /* CongratsModalView.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
+				D4373F7D29B527D100C186B3 /* FolderModel.swift in Sources */,
+				D4373F7F29B5282700C186B3 /* CaptionOptimizationBottomSheetView.swift in Sources */,
 				D4056E752968E94300D3894D /* FirestoreManager.swift in Sources */,
 				D4C3E4B029885FFD00C2847A /* CaptionConfigsViewModel.swift in Sources */,
+				D4373F9429B52CC900C186B3 /* LogoView.swift in Sources */,
 				D4056EAE2972716D00D3894D /* BackArrowView.swift in Sources */,
+				D4373FA129B5305600C186B3 /* Bool.swift in Sources */,
 				D4C3E4AE2987368300C2847A /* CaptionEditViewModel.swift in Sources */,
 				D4056E382963178D00D3894D /* CaptionView.swift in Sources */,
-				D45707BF29A8F5AC001D80AD /* FolderView.swift in Sources */,
 				D4056EC229751ACA00D3894D /* UserModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2809,8 +2885,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.1.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
 				PRODUCT_MODULE_NAME = CapGen;
 				PRODUCT_NAME = "CapGen Beta";
@@ -2854,8 +2930,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.1.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
 				PRODUCT_NAME = "CapGen Beta";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3040,8 +3116,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.1.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3180,8 +3256,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 1.1.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
