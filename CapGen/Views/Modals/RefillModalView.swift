@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct RefillModalView: View {
+    @ObservedObject var ad = AppodealProvider.shared
     @EnvironmentObject var firestoreMan: FirestoreManager
-    @EnvironmentObject var rewardedAd: GoogleRewardedAds
     @Binding var isViewPresented: Bool
     @Binding var showCongratsModal: Bool
 
     let authManager = AuthManager.shared.userManager
 
-    @State var isAdDone: Bool? = false
-
+    @State var isAdDone: Bool = false
+    
     var body: some View {
         ZStack {
             Color.ui.cultured.ignoresSafeArea()
@@ -38,20 +38,20 @@ struct RefillModalView: View {
                     .frame(width: 200, height: 200)
                     .padding(-20)
 
-                DisplayAdBtnView(btnLength: .short, title: "Collect Credits", isAdDone: $isAdDone)
+                DisplayAdBtnView(btnLength: .short, title: "Collect Credits")
             }
             .padding(30)
         }
-        .onAppear {
-            // Dismiss bottom sheet modal when ad is exited
-            guard let isAdDone = self.isAdDone else { return }
-            if isAdDone {
+        .onChange(of: self.ad.isRewardedVideoFinished, perform: { isFinished in
+            self.isAdDone = isFinished
+        })
+        .onChange(of: self.isAdDone) { isDone in
+            if isDone {
                 self.isViewPresented = false
-
+                
                 withAnimation {
                     guard let showCongratsModal = authManager.user?.userPrefs.showCongratsModal else { return }
-
-                    print("SHOW MDOAL", showCongratsModal)
+                    
                     if showCongratsModal {
                         self.showCongratsModal = true
                     }
