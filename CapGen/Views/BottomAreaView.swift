@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-let MIN_HEIGHT: CGFloat = 50.0
-let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 1.5
+let MIN_HEIGHT: CGFloat = UIScreen.main.bounds.height * 0.2
+let MAX_HEIGHT: CGFloat = UIScreen.main.bounds.height * 0.7
+let SCREEN_WIDTH: CGFloat = UIScreen.main.bounds.width
+let SCREEN_HEIGHT: CGFloat = UIScreen.main.bounds.height
 
 extension View {
     func dropInAndOutAnimation(value: Bool) -> some View {
@@ -83,10 +85,14 @@ struct BottomAreaView: View {
                             withAnimation {
                                 expandArea.toggle()
                             }
+                            .offset(x: 0, y: expandArea ? 0 : SCREEN_HEIGHT)
+                            .padding(.top, 50)
                         }
                     })
             }
         }
+        
+        //        }
         .navigationDestination(isPresented: $displayLoadView) {
             LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270), promptRequestStr: $promptRequestStr)
                 .navigationBarBackButtonHidden(true)
@@ -97,17 +103,46 @@ struct BottomAreaView: View {
 
 struct ExpandButton: View {
     @Binding var expandArea: Bool
-
     var body: some View {
         Button {
-            withAnimation {
+            withAnimation() {
                 expandArea.toggle()
             }
         } label: {
-            Image("chevron-up")
-                .resizable()
-                .frame(width: 40, height: 40)
-                .rotationEffect(.degrees(expandArea ? -180 : 0))
+            Circle()
+                .strokeBorder(Color.ui.lighterLavBlue, lineWidth: 4)
+                .background(
+                    Circle()
+                        .foregroundColor(Color.ui.richBlack)
+                )
+                .overlay(
+                    VStack(spacing: 3) {
+                        Image("chevron-up-white")
+                            .resizable()
+                            .frame(width: expandArea ? 40 : 30, height: expandArea ? 40 : 30)
+                            .rotationEffect(.degrees(expandArea ? -180 : 0))
+                        
+ 
+                        if (showText) {
+                            Text("Next")
+                                .foregroundColor(.ui.cultured)
+                                .font(.ui.graphikBoldMed)
+                        }
+                        
+                    }
+                        .offset(y: expandArea ? 0 : -5)
+                    
+                )
+                .frame(width: 80, height: 80)
+            
+        }
+        .animation(.spring(), value: expandArea)
+        .onAppear() {
+            Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { _ in
+                withAnimation {
+                    self.showText = !expandArea
+                }
+            }
         }
     }
 }
