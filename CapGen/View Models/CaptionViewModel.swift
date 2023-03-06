@@ -8,22 +8,12 @@
 import Foundation
 import SwiftUI
 
-struct SelectedCaption {
-    var description: String = ""
-    var color: Color = .clear
-}
-
 class CaptionViewModel: ObservableObject {
-//    @Published var selectedCaption: SelectedCaption = .init(description: captionsParsedArrayMock[0], color: .ui.darkSalmon)
-    @Published var selectedCaption: SelectedCaption = .init()
+    @Published var selectedCaption: CaptionModel = CaptionModel()
     @Published var isCaptionSelected: Bool = false // show bottom sheet if true
 
     func resetSelectedCaption() {
-        selectedCaption = .init()
+        selectedCaption = CaptionModel()
         isCaptionSelected = false
-    }
-
-    func initSelectCaption(description: String, color: Color) {
-        selectedCaption = .init(description: description, color: color)
     }
 }

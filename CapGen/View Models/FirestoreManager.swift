@@ -212,6 +212,7 @@ class FirestoreManager: ObservableObject {
         }
 
         if !currentFolders.isEmpty {
+            let newFolderId: String = UUID().uuidString
             let docRef = db.collection("Users").document("\(userId)")
 
             // Update array with new item
@@ -220,7 +221,15 @@ class FirestoreManager: ObservableObject {
             if indexOfFolder != nil {
                 // Create a new folder with a different ID and date created
                 // The ID needs to be different to avoid intermittent issues with ForEach reading from the same ID
-                let updatedFolder = FolderModel(id: UUID().uuidString, name: newFolder.name, dateCreated: currentFolders[indexOfFolder!].dateCreated, folderType: newFolder.folderType, captions: newFolder.captions)
+                
+                var updatedCaptions: [CaptionModel] = []
+                newFolder.captions.forEach { caption in
+                    let updatedCaption = CaptionModel(id: caption.id, captionLength: caption.captionLength, dateCreated: caption.dateCreated, captionDescription: caption.captionDescription, includeEmojis: caption.includeEmojis, includeHashtags: caption.includeHashtags, folderId: newFolderId, prompt: caption.prompt, title: caption.title, tones: caption.tones, color: caption.color)
+                    
+                    updatedCaptions.append(updatedCaption)
+                }
+                
+                let updatedFolder = FolderModel(id: newFolderId, name: newFolder.name, dateCreated: currentFolders[indexOfFolder!].dateCreated, folderType: newFolder.folderType, captions: updatedCaptions)
 
                 // Remove current folder
                 do {
@@ -274,6 +283,54 @@ class FirestoreManager: ObservableObject {
             }
         }
         onComplete()
+    }
+    
+    /**
+        This function saves the captions to the folders
+        1. Retrieve the current folders
+        2. Find the folder to be updated
+        3. Update the folder with the new captions
+    */
+    func saveCaptionsToFolders(for uid: String?, destinationFolders: [DestinationFolder], onComplete: @escaping () -> Void) async {
+        guard let userId = uid else {
+            appError = ErrorType(error: .genericError)
+            onComplete()
+            return
+        }
+        
+        // Get current folders from the user document
+        let currentFolders = AuthManager.shared.userManager.user?.folders ?? []
+        
+        // 1
+        if !destinationFolders.isEmpty {
+            // 2
+            destinationFolders.forEach { folder in
+                Task {
+                    let folderId = folder.id
+                    var captionToSave = folder.caption as CaptionModel
+                    
+                    // Find folder to be updated from Firebase
+                    let designatedFolder = currentFolders.first(where: { $0.id == folderId })
+                    
+                    // 3 - Update folder with captions
+                    if var designatedFolder = designatedFolder {
+                        captionToSave.id = UUID().uuidString
+                        designatedFolder.captions.append(captionToSave)
+                        
+                        // Delete original folder from Firebase so we can add in a new one with the updated caption
+                        let newFolder = FolderModel(id: designatedFolder.id, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: designatedFolder.captions)
+                        
+                        await self.updateFolder(for: userId, newFolder: newFolder, currentFolders: currentFolders, onComplete: { updatedFolder in
+                            if updatedFolder != nil {
+                                onComplete()
+                            }
+                        })
+                    }
+                }
+               
+            }
+            
+        }
     }
 
     private func fetch(from collection: String, documentId: String, completion: @escaping (_ data: [String: Any]?) -> Void) {

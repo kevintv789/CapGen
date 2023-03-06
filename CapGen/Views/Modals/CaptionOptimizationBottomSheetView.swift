@@ -6,13 +6,18 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct CaptionOptimizationBottomSheetView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var captionVm: CaptionViewModel
+    @EnvironmentObject var folderVm: FolderViewModel
+    @EnvironmentObject var navStack: NavigationStackCompat
 
     // Private variables
     @State var selectedIndex: Int = 0
-    @State var offset: CGFloat = 0
+    @State var isSavingToFolder: Bool = false
+    @State var isSuccessfullySaved: Bool = false
 
     // Used in dragGesture to rotate tab between views
     private func changeView(left: Bool) {
@@ -26,55 +31,64 @@ struct CaptionOptimizationBottomSheetView: View {
                     self.selectedIndex -= 1
                 }
             }
-            
-            if self.selectedIndex == 0 {
-                self.offset = 0
-            } else {
-                self.offset = -SCREEN_WIDTH
-            }
         }
       
+    }
+    
+    private func saveCaptionsToFolder() {
+        self.isSavingToFolder = true
+        
+        let captionsToSaveWithFolderId = folderVm.captionFolderStorage
+        let userId = AuthManager.shared.userManager.user?.id ?? nil
+        
+        Task {
+            await self.firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) {
+                self.isSavingToFolder = false
+                folderVm.resetFolderStorage()
+            }
+        }
+        
+        
     }
     
     var body: some View {
         ZStack {
             Color.ui.cultured.ignoresSafeArea()
-
+            
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 25) {
                     Text("How do you want to use this caption?")
                         .font(.ui.headline)
                         .foregroundColor(.ui.richBlack)
                         .padding(.top)
-
-                    SelectedCaptionCardButton(caption: captionVm.selectedCaption.description, colorFilled: $captionVm.selectedCaption.color)
-                        {
-                            // on click, take user to edit caption screen
-                        }
-                        .frame(maxHeight: 250)
-                        .padding(.horizontal, 25)
-
                     
-                    TopTabView(selectedIndex: $selectedIndex, offset: $offset)
-                        .padding(.top)
-
-                    GeometryReader { geo in
-                        HStack(alignment: .center, spacing: 0) {
-                            SaveToFolderView()
-                                .frame(width: geo.frame(in: .global).width)
-
-                            CopyAndGoView()
-                                .frame(width: geo.frame(in: .global).width)
-                        }
-                        .offset(x: self.offset)
-                        .frame(minHeight: geo.size.height * 0.3,
-                                   maxHeight: geo.size.height * 0.3)
-                        
+                    SelectedCaptionCardButton(caption: captionVm.selectedCaption.captionDescription, colorFilled: $captionVm.selectedCaption.color)
+                    {
+                        // on click, take user to edit caption screen
+                        self.navStack.push(EditCaptionView(bgColor: Color.init(hex: captionVm.selectedCaption.color), captionTitle: captionVm.selectedCaption.title, platform: "", caption: captionVm.selectedCaption.captionDescription))
                     }
+                    .frame(maxHeight: 250)
+                    .padding(.horizontal, 25)
                     
-                    Spacer()
-                   
+                    
+                    TopTabView(selectedIndex: $selectedIndex)
+                        .padding(.top)
+                    
+                    if self.selectedIndex == 0 {
+                        SaveToFolderView(isLoading: $isSavingToFolder, isSaved: $isSuccessfullySaved, onApplyClick: {
+                            // Save all captions from temp storage to firebase
+                            self.saveCaptionsToFolder()
+                        })
+                        .frame(width: SCREEN_WIDTH * 0.9)
+                        .frame(minHeight: SCREEN_HEIGHT / 2)
+                    } else {
+                        CopyAndGoView()
+                            .frame(width: SCREEN_WIDTH * 0.95)
+                    }
                 }
+                
+                Spacer()
+                
             }
             // Create drag gesture to rotate between views
             .highPriorityGesture(
@@ -98,7 +112,7 @@ struct CaptionOptimizationBottomSheetView: View {
 
 struct SelectedCaptionCardButton: View {
     var caption: String
-    @Binding var colorFilled: Color
+    @Binding var colorFilled: String
 
     var action: () -> Void
 
@@ -112,7 +126,7 @@ struct SelectedCaptionCardButton: View {
                     .shadow(color: .ui.richBlack.opacity(0.4), radius: 4, x: 0, y: 2)
 
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(colorFilled)
+                    .fill(Color.init(hex: colorFilled))
 
                 ScrollView {
                     VStack(alignment: .trailing, spacing: 0) {
@@ -134,7 +148,6 @@ struct SelectedCaptionCardButton: View {
 
 struct TopTabView: View {
     @Binding var selectedIndex: Int
-    @Binding var offset: CGFloat
 
     var body: some View {
         HStack {
@@ -142,7 +155,6 @@ struct TopTabView: View {
                 Button {
                     withAnimation {
                         self.selectedIndex = 0
-                        self.offset = 0
                     }
 
                 } label: {
@@ -164,7 +176,6 @@ struct TopTabView: View {
                 Button {
                     withAnimation {
                         self.selectedIndex = 1
-                        self.offset = -SCREEN_WIDTH
                     }
 
                 } label: {
@@ -183,32 +194,42 @@ struct TopTabView: View {
 }
 
 struct SaveToFolderView: View {
+    @EnvironmentObject var folderVm: FolderViewModel
+    
+    @Binding var isLoading: Bool
+    @Binding var isSaved: Bool
+    var onApplyClick: () -> Void
+    
     var body: some View {
         VStack {
-            Text("Click on each folder you want to save your caption to.")
+            Text("Tap on each folder you want to save your caption to.")
                 .foregroundColor(.ui.richBlack.opacity(0.5))
                 .font(.ui.subheadlineLarge)
                 .lineSpacing(5)
                 .frame(height: 50)
             
-            FolderGridView()
+            if !folderVm.captionFolderStorage.isEmpty {
+                ApplyButtonView(isLoading: $isLoading, onApplyClick: onApplyClick)
+            }
+            
+            else if folderVm.captionFolderStorage.isEmpty && !isLoading && isSaved {
+                SavedTagView()
+            }
+           
+            FolderGridView(context: .saveToFolder, disableTap: $isLoading)
             
             Spacer()
         }
-//        .padding(.horizontal)
-//        .frame(height: SCREEN_HEIGHT)
     }
 }
 
 struct CopyAndGoView: View {
     var body: some View {
-//        ScrollView(.vertical, showsIndicators: false) {
             VStack {
                 Text("Copy your caption and launch the social media app with a single tap.")
                     .foregroundColor(.ui.richBlack.opacity(0.5))
                     .font(.ui.subheadlineLarge)
                     .lineSpacing(5)
-                    .frame(width: SCREEN_WIDTH * 0.9)
                     .padding(.bottom)
                 
                 SocialMediaGridView()
@@ -216,9 +237,6 @@ struct CopyAndGoView: View {
                 Spacer()
             }
             .padding(.horizontal)
-//        }
-      
-//        .frame(height: SCREEN_HEIGHT)
     }
 }
 
@@ -236,7 +254,9 @@ struct SocialMediaGridView: View {
             ForEach(socialMediaPlatforms) { sp in
                 if sp.title != "General" {
                     Button {
-                        
+                        UIPasteboard.general.string = String(captionVm.selectedCaption.captionDescription)
+                        openSocialMediaLink(for: sp.title)
+                        Haptics.shared.play(.soft)
                     } label: {
                         ZStack {
                             
@@ -255,5 +275,77 @@ struct SocialMediaGridView: View {
                
             }
         }
+    }
+}
+
+struct ApplyButtonView: View {
+    @Binding var isLoading: Bool
+    var onApplyClick: () -> Void
+    
+    var body: some View {
+        Button {
+            Haptics.shared.play(.soft)
+            onApplyClick()
+        } label: {
+            Text("\(isLoading ? "" : "Apply")")
+                .font(.ui.headline)
+                .foregroundColor(.ui.cadetBlueCrayola)
+                .padding(.horizontal, 25)
+                .padding(.vertical, 5)
+                .background(
+                    ZStack {
+                        if !isLoading {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color.ui.cadetBlueCrayola, lineWidth: 3)
+                        } else {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color.ui.cultured, lineWidth: 3)
+                                .shadow(color: Color.ui.richBlack.opacity(0.5), radius: 3, x: 0, y: 2)
+                            
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color.ui.darkerPurple)
+                        }
+                       
+                    }
+                )
+                .if(isLoading) { button in
+                    return button.overlay(
+                        LottieView(name: "btn_loader", loopMode: .loop, isAnimating: true)
+                            .frame(width: 50, height: 50)
+                    )
+                }
+        }
+        .disabled(isLoading)
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        .padding(.horizontal, 20)
+    }
+}
+
+struct SavedTagView: View {
+    var body: some View {
+        HStack {
+            Image("checkmark_success_circle")
+                .resizable()
+                .frame(width: 17, height: 17)
+
+            Text("Saved!")
+                .font(.ui.headline)
+                .foregroundColor(.ui.cultured)
+        }
+        .padding(.horizontal, 25)
+        .padding(.vertical, 5)
+        .background(
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.ui.cultured, lineWidth: 4)
+                    .shadow(color: .ui.richBlack.opacity(0.4), radius: 2, x: 0, y: 2)
+
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.ui.green)
+            }
+
+        )
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        .padding(.horizontal, 20)
     }
 }

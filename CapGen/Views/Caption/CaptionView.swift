@@ -33,6 +33,7 @@ struct CaptionView: View {
     @EnvironmentObject var captionEditVm: CaptionEditViewModel
     @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
     @EnvironmentObject var captionVm: CaptionViewModel
+    @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
 
     // navigation
     @State var router: Router? = nil
@@ -94,8 +95,10 @@ struct CaptionView: View {
                             ForEach(Array(self.openAiConnector.captionsGroupParsed.enumerated()), id: \.element) { index, caption in
                                 Button {
                                     withAnimation {
-                                        // Show bottom sheet on click of caption
-                                        self.captionVm.initSelectCaption(description: caption, color: cardColorFill[index])
+                                        
+                                        // Create caption model object with required elements
+                                        self.captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "")
+                                        
                                         self.captionVm.isCaptionSelected = true
 
                                         Haptics.shared.play(.soft)
@@ -151,11 +154,6 @@ struct CaptionView: View {
                 }
             }
         }
-        .onAppear {
-            // MOCK ONLY
-//            self.openAiConnector.captionsGroupParsed = captionsParsedArrayMock
-//            self.openAiConnector.captionGroupTitle = "Title"
-        }
     }
 }
 
@@ -167,6 +165,7 @@ struct CaptionView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(CaptionConfigsViewModel())
             .environmentObject(CaptionViewModel())
+            .environmentObject(GenerateByPromptViewModel())
 
         CaptionView()
             .previewDevice("iPhone SE (3rd generation)")
@@ -176,6 +175,7 @@ struct CaptionView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(CaptionConfigsViewModel())
             .environmentObject(CaptionViewModel())
+            .environmentObject(GenerateByPromptViewModel())
     }
 }
 
