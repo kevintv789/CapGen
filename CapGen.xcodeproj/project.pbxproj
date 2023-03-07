@@ -199,6 +199,7 @@
 		D47306CB2996E49E00179FEB /* loading_paperplane.json in Resources */ = {isa = PBXBuildFile; fileRef = D47306CA2996E49E00179FEB /* loading_paperplane.json */; };
 		D47306CC2996EBC100179FEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4005DB8295BE0E1004D695D /* Assets.xcassets */; };
 		D47306CF29993D5E00179FEB /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47306CE29993D5E00179FEB /* Helpers.swift */; };
+		D4752DD429B795D200982983 /* DropdownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4752DD329B795D200982983 /* DropdownMenu.swift */; };
 		D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */; };
 		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
 		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
@@ -1018,6 +1019,7 @@
 		D47306C02996CE3A00179FEB /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/System/Library/Frameworks/EventKit.framework; sourceTree = DEVELOPER_DIR; };
 		D47306CA2996E49E00179FEB /* loading_paperplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_paperplane.json; sourceTree = "<group>"; };
 		D47306CE29993D5E00179FEB /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		D4752DD329B795D200982983 /* DropdownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownMenu.swift; sourceTree = "<group>"; };
 		D4BAA47DAB966567058EE4F8 /* Pods-CapGen-CapGenUITests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapGen-CapGenUITests.release-prod.xcconfig"; path = "Target Support Files/Pods-CapGen-CapGenUITests/Pods-CapGen-CapGenUITests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaglistViewModel.swift; sourceTree = "<group>"; };
 		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
@@ -2035,6 +2037,7 @@
 				D4373F9329B52CC900C186B3 /* LogoView.swift */,
 				D4373FA229B5307A00C186B3 /* PrimaryButtonView.swift */,
 				D4373F9E29B5300200C186B3 /* ImageButtonView.swift */,
+				D4752DD329B795D200982983 /* DropdownMenu.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2678,6 +2681,7 @@
 				D4F1D30A298AD45500599F05 /* Haptics.swift in Sources */,
 				D4373F8429B5285900C186B3 /* FolderView.swift in Sources */,
 				D4056ED12978750D00D3894D /* DisplayAdBtnView.swift in Sources */,
+				D4752DD429B795D200982983 /* DropdownMenu.swift in Sources */,
 				D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */,
 				D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */,
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
@@ -2872,6 +2876,7 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5N6F2G6M7;
 				ENABLE_PREVIEWS = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/Adjust\"",
@@ -3006,7 +3011,7 @@
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/smaato-ios-sdk/Modules/UnifiedBidding\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/smaato-ios-sdk/Modules/Video\"",
 				);
-				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CapGen/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";

@@ -51,10 +51,10 @@ struct FullscreenSection<T>: View where T: ObservableObject {
     typealias Action = () -> Void
     let text: String
     @ObservedObject var ad: T
-    var keyPath: ReferenceWritableKeyPath<T,Bool>
+    var keyPath: ReferenceWritableKeyPath<T, Bool>
     var btnLength: ButtonLength = .full
     var action: Action
-    
+
     func displayBtnOverlay() -> some View {
         // if is loading
         if !ad[keyPath: keyPath] {
@@ -70,7 +70,7 @@ struct FullscreenSection<T>: View where T: ObservableObject {
             )
         }
     }
-    
+
     var body: some View {
         Button {
             action()

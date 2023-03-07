@@ -70,9 +70,8 @@ public class OpenAIConnector: ObservableObject {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(openAIKey)", forHTTPHeaderField: "Authorization")
 
-        
         let systemRoleMessage = "You are a world famous social media influencer that can create the best social media captions that can captivate any type of audience."
-        
+
         let httpBody: [String: Any] = [
             "model": "gpt-3.5-turbo",
             "messages": [GPTMessagesType(role: "system", content: systemRoleMessage).dictionary, GPTMessagesType(role: "user", content: prompt).dictionary],
@@ -81,7 +80,7 @@ public class OpenAIConnector: ObservableObject {
             "frequency_penalty": 0.5,
             "presence_penalty": 0.5,
         ]
-        
+
         var httpBodyJson: Data
 
         do {
@@ -205,7 +204,7 @@ public class OpenAIConnector: ObservableObject {
         if mutableCaptions.count == captionsGroupParsed.count {
             captionsGroupParsed = mutableCaptions
         }
-        
+
         onComplete()
     }
 

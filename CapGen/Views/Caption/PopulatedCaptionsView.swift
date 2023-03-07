@@ -503,7 +503,7 @@ struct CardTitleHeaderView: View {
             Spacer()
 
             // Edit button
-            CustomMenuPopup(shareableData: $shareableData, edit: {
+            CustomMenuPopup(shareableData: $shareableData, socialMediaPlatform: .constant(nil), edit: {
                 edit()
             }, delete: {
                 delete()

@@ -151,7 +151,7 @@ struct FolderHeaderView: View {
 
             Spacer()
 
-            CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: $shareableData, edit: { onEdit() }, delete: { onDelete() })
+            CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: $shareableData, socialMediaPlatform: .constant(nil), edit: { onEdit() }, delete: { onDelete() })
                 .padding(.horizontal)
         }
         .padding(.bottom, 20)

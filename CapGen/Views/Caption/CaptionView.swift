@@ -95,10 +95,9 @@ struct CaptionView: View {
                             ForEach(Array(self.openAiConnector.captionsGroupParsed.enumerated()), id: \.element) { index, caption in
                                 Button {
                                     withAnimation {
-                                        
                                         // Create caption model object with required elements
                                         self.captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "")
-                                        
+
                                         self.captionVm.isCaptionSelected = true
 
                                         Haptics.shared.play(.soft)
@@ -293,7 +292,7 @@ struct CaptionCard: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     CustomMenuPopup(menuTheme: .dark, shareableData: $shareableData,
-                                    edit: {
+                                    socialMediaPlatform: .constant(nil), edit: {
                                         edit?()
                                     }, onMenuOpen: {
                                         onMenuOpen?()

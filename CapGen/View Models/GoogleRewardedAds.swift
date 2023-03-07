@@ -52,4 +52,3 @@ final class GoogleRewardedAds: ObservableObject {
         return true
     }
 }
-

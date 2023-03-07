@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 class CaptionViewModel: ObservableObject {
-    @Published var selectedCaption: CaptionModel = CaptionModel()
+    @Published var selectedCaption: CaptionModel = .init()
     @Published var isCaptionSelected: Bool = false // show bottom sheet if true
 
     func resetSelectedCaption() {

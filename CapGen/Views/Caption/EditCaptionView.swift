@@ -6,12 +6,19 @@
 //
 
 import Combine
+import NavigationStack
 import SwiftUI
 import UIKit
+
+enum EditCaptionContext {
+    case optimization, regular
+}
 
 struct EditCaptionView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var captionEditVm: CaptionEditViewModel
+    @EnvironmentObject var navStack: NavigationStackCompat
+    @EnvironmentObject var captionVm: CaptionViewModel
 
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
@@ -32,6 +39,15 @@ struct EditCaptionView: View {
     // Extra settings
     @State var keyboardHeight: CGFloat = 0
     @State var shareableData: ShareableData?
+    @State var isSelectingPlatform: Bool = false
+    @State var selectedPlatform: String? = nil
+
+    // Used to determine if platform icons should display for Dropdown menu
+    // Used to determine if CopyAndGo should be available - no if selected platform is General
+    @State var shouldShowSocialMediaPlatform: Bool = false
+
+    // Context
+    var context: EditCaptionContext = .regular
 
     private func countHashtags(text: String) -> Int {
         let hashtagRegex = "#[a-zA-Z0-9_]+"
@@ -45,6 +61,29 @@ struct EditCaptionView: View {
         }
     }
 
+    private func convertSPToDropdownOptions() -> [DropdownOptions] {
+        var options: [DropdownOptions] = []
+
+        socialMediaPlatforms.forEach { sp in
+            options.append(DropdownOptions(title: sp.title, imageName: sp.title == "General" ? "hashtag-white" : "\(sp.title)-circle", isCircularImage: sp.title != "General"))
+        }
+
+        return options
+    }
+
+    private func generateShareableData() -> ShareableData {
+        var item: String {
+            """
+            Behold the precious caption I generated from ⚡CapGen⚡\(shouldShowSocialMediaPlatform ? " for my \(selectedPlatform ?? "")" : "")!
+
+            "\(captionEditVm.editableText)"
+            """
+        }
+
+        let newShareableData = ShareableData(item: item, subject: "Check out my caption from CapGen!")
+        return newShareableData
+    }
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             bgColor.ignoresSafeArea(.all)
@@ -53,25 +92,39 @@ struct EditCaptionView: View {
                 VStack(alignment: .leading) {
                     // Header
                     HStack {
-                        BackArrowView()
-                            .padding(.leading, 8)
+                        BackArrowView {
+                            // custom action
+                            if context == .optimization {
+                                self.captionVm.isCaptionSelected = true
+                            }
+
+                            self.navStack.pop(to: .previous)
+                        }
+                        .disabled(isSelectingPlatform)
+                        .padding(.leading, 8)
 
                         Spacer()
 
-                        Image(platform)
-                            .resizable()
-                            .frame(width: 20, height: 20)
-
-                        Text(platform)
-                            .foregroundColor(.ui.richBlack)
-                            .font(.ui.headline)
-                            .scaledToFit()
-                            .minimumScaleFactor(0.5)
-                            .lineLimit(1)
+                        DropdownMenu(title: selectedPlatform == nil ? "General" : selectedPlatform!, socialMediaIcon: shouldShowSocialMediaPlatform ? selectedPlatform : nil, isMenuOpen: $isSelectingPlatform)
+                            .overlay(alignment: .top) {
+                                if isSelectingPlatform {
+                                    VStack(alignment: .center) {
+                                        Spacer(minLength: 50)
+                                        DropdownMenuList(options: convertSPToDropdownOptions(), selectedOption: DropdownOptions(title: self.selectedPlatform ?? "")) { selectedPlatform in
+                                            withAnimation {
+                                                self.selectedPlatform = selectedPlatform
+                                                self.isSelectingPlatform.toggle()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            // SwiftUI lets us stop a view from receiving any kind of taps using the allowsHitTesting() modifier. If hit testing is disallowed for a view, any taps automatically continue through the view on to whatever is behind it.
+                            .allowsHitTesting(true)
 
                         Spacer()
 
-                        CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, socialMediaPlatform: self.platform, copy: {
+                        CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, socialMediaPlatform: shouldShowSocialMediaPlatform ? $selectedPlatform : .constant(nil), copy: {
                             // Copy selected
                             self.isTextCopied = true
                             UIPasteboard.general.string = String(self.captionEditVm.editableText)
@@ -80,15 +133,16 @@ struct EditCaptionView: View {
                             // Reset to original text
                             self.captionEditVm.editableText = self.caption
                         }, onMenuOpen: {
-                            self.shareableData = mapShareableData(caption: self.captionEditVm.editableText, captionGroup: self.openAiConnector.mutableCaptionGroup)
+                            self.shareableData = generateShareableData()
                         }, onCopyAndGo: {
                             // Copy and go run openSocialMediaLink(for: platform)
                             UIPasteboard.general.string = String(self.captionEditVm.editableText)
-                            openSocialMediaLink(for: platform)
-                            Haptics.shared.play(.soft)
+                            openSocialMediaLink(for: self.selectedPlatform ?? "")
                         })
+                        .disabled(isSelectingPlatform)
                         .padding(.horizontal)
                     }
+                    .zIndex(isSelectingPlatform ? 2 : 0)
                     .padding(.bottom, 20)
 
                     // Body
@@ -107,6 +161,7 @@ struct EditCaptionView: View {
                             .padding(.horizontal, -2)
                     }
                     .padding(.horizontal, 15)
+                    .disabled(isSelectingPlatform)
                 }
                 .padding()
 
@@ -115,7 +170,17 @@ struct EditCaptionView: View {
                     .dropInAndOutAnimation(value: isTextCopied)
                     .offset(y: isTextCopied ? 30 : -SCREEN_HEIGHT)
             }
+            .zIndex(isSelectingPlatform ? 1 : 0)
             .ignoresSafeArea(.keyboard, edges: .all)
+
+            if isSelectingPlatform {
+                Color.ui.richBlack.opacity(0.35).ignoresSafeArea(.all)
+                    .onTapGesture {
+                        withAnimation {
+                            self.isSelectingPlatform.toggle()
+                        }
+                    }
+            }
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -131,15 +196,17 @@ struct EditCaptionView: View {
 
                 Spacer()
 
-                CaptionCopyBtnView(platform: platform) {
-                    // On copy
-                    self.isTextCopied = true
-                    UIPasteboard.general.string = String(self.captionEditVm.editableText)
-                    Haptics.shared.play(.soft)
-                } onPlatformClick: {
-                    // On platform
-                    openSocialMediaLink(for: platform)
-                    Haptics.shared.play(.soft)
+                if let selectedPlatform = self.selectedPlatform, shouldShowSocialMediaPlatform {
+                    CaptionCopyBtnView(platform: selectedPlatform) {
+                        // On copy
+                        self.isTextCopied = true
+                        UIPasteboard.general.string = String(self.captionEditVm.editableText)
+                        Haptics.shared.play(.soft)
+                    } onPlatformClick: {
+                        // On platform
+                        openSocialMediaLink(for: selectedPlatform)
+                        Haptics.shared.play(.soft)
+                    }
                 }
 
                 VerticalDivider(color: Color.primary)
@@ -163,10 +230,6 @@ struct EditCaptionView: View {
             self.textCount = self.caption.count
             self.hashtagCount = self.countHashtags(text: self.caption)
 
-            let socialMediaFiltered = socialMediaPlatforms.first(where: { $0.title == self.platform })
-            self.textLimit = socialMediaFiltered?.characterLimit ?? 0
-            self.hashtagLimit = socialMediaFiltered?.hashtagLimit ?? 0
-
             // Resets the flag to dismiss notification
             Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
                 if self.isTextCopied {
@@ -174,6 +237,17 @@ struct EditCaptionView: View {
                 }
             }
         }
+        .onChange(of: self.selectedPlatform, perform: { sp in
+            if let sp = sp {
+                // Update text and hashtag limits based on selected platform
+                let socialMediaFiltered = socialMediaPlatforms.first(where: { $0.title == sp })
+                self.textLimit = socialMediaFiltered?.characterLimit ?? 0
+                self.hashtagLimit = socialMediaFiltered?.hashtagLimit ?? 0
+
+                self.shouldShowSocialMediaPlatform = !sp.isEmpty && sp != "General"
+            }
+
+        })
         .onChange(of: captionEditVm.editableText) { value in
             // Count number of chars in the text
             self.textCount = value.count
@@ -191,11 +265,17 @@ struct EditCaptionView: View {
 
 struct EditCaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "Instagram", caption: "Life is so much better with a furry friend to share it with! My rescue pup brings me #so much joy and love every day. 🤗")
+        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "", caption: "Life is so much better with a furry friend to share it with! My rescue pup brings me #so much joy and love every day. 🤗")
             .environmentObject(CaptionEditViewModel())
+            .environmentObject(NavigationStackCompat())
+            .environmentObject(OpenAIConnector())
+            .environmentObject(CaptionViewModel())
 
         EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "LinkedIn", caption: "🐶💕 Life is so much better with a furry friend to share it with! My rescue pup brings me so much joy and love every day. 🤗")
             .environmentObject(CaptionEditViewModel())
+            .environmentObject(NavigationStackCompat())
+            .environmentObject(OpenAIConnector())
+            .environmentObject(CaptionViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

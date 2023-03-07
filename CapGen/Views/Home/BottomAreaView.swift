@@ -132,7 +132,7 @@ struct BottomAreaView: View {
         .onReceive(self.ad.$isRewardedVideoFinished, perform: { isFinished in
             // use isShowingAdFromBottomView to determine the context on when to show loading view
             // we only want to show loadingView() upon press of the bottom view button
-            if isFinished && isShowingAdFromBottomView {
+            if isFinished, isShowingAdFromBottomView {
                 self.showCreditsDepletedBottomSheet = false
                 self.router?.toLoadingView()
             }
@@ -145,12 +145,12 @@ struct BottomAreaView: View {
             }
         }
         .onReceive(self.ad.$isRewardedReady, perform: { isReady in
-            if isReady && isShowingAdFromBottomView {
+            if isReady, isShowingAdFromBottomView {
                 self.isAdLoading = false
             }
         })
         .onChange(of: self.isAdLoading, perform: { isLoading in
-            if !isLoading && isShowingAdFromBottomView {
+            if !isLoading, isShowingAdFromBottomView {
                 self.ad.presentRewarded()
             }
         })
@@ -427,24 +427,24 @@ struct LengthSelectionSection: View {
 //                self.captionLengthType = captionLengths[Int(value)].type
 //                Haptics.shared.play(.soft)
 //            }
-            .overlay(
-                GeometryReader { geo in
-                    let numberOfRidges = CGFloat(sliderValues.count - 1)
-                    let xPosRidge = CGFloat(geo.size.width / numberOfRidges)
+                .overlay(
+                    GeometryReader { geo in
+                        let numberOfRidges = CGFloat(sliderValues.count - 1)
+                        let xPosRidge = CGFloat(geo.size.width / numberOfRidges)
 
-                    ForEach(Array(sliderValues.enumerated()), id: \.offset) { index, element in
+                        ForEach(Array(sliderValues.enumerated()), id: \.offset) { index, element in
 
-                        if element != selectedValue {
-                            Rectangle()
-                                .fill(Color.ui.cultured)
-                                .frame(width: 3, height: 20)
-                                .position(x: CGFloat(xPosRidge * CGFloat(index)), y: 15)
+                            if element != selectedValue {
+                                Rectangle()
+                                    .fill(Color.ui.cultured)
+                                    .frame(width: 3, height: 20)
+                                    .position(x: CGFloat(xPosRidge * CGFloat(index)), y: 15)
+                            }
                         }
                     }
-                }
-            )
-            .padding(.trailing, 15)
-            .padding(.leading, 15)
+                )
+                .padding(.trailing, 15)
+                .padding(.leading, 15)
         }
         .onAppear {
             self.selectedValue = sliderValues[0]

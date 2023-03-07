@@ -7,7 +7,6 @@
 
 import NavigationStack
 import SwiftUI
-import NavigationStack
 
 enum FolderViewContext {
     case saveToFolder, view
@@ -18,19 +17,19 @@ struct FolderGridView: View {
     @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
-    
+
     @State var showFolderBottomSheet: Bool = false
     @State var folders: [FolderModel] = []
     @State var isEditing: Bool = false
-    
+
     // Nav
     @State var router: Router? = nil
-    
+
     // Context to determine determine logic
     // View context - Original context for HomeView. On click of folder will navigate user to the folder view
     // saveToFolder context - On click of folder will add a caption to the folder
     var context: FolderViewContext = .view
-    
+
     // Disable all tap actions, important if the system is currently processing something
     @Binding var disableTap: Bool
 
@@ -61,10 +60,9 @@ struct FolderGridView: View {
                             if context == .view {
                                 self.navStack.push(FolderView(folder: self.$folders[index]))
                             } else if context == .saveToFolder {
-                                
                                 // The index of the already saved caption
                                 let indexOfSavedCaption = self.folderVm.captionFolderStorage.firstIndex(where: { $0.id == folder.id && $0.caption.captionDescription == self.captionVm.selectedCaption.captionDescription }) ?? -1
-                                
+
                                 if indexOfSavedCaption < 0 {
                                     // On click, append the saved caption to a temp storage array
                                     self.folderVm.captionFolderStorage.append(DestinationFolder(id: folder.id, caption: self.captionVm.selectedCaption))
@@ -76,7 +74,7 @@ struct FolderGridView: View {
                         }
                         .disabled(disableTap)
 
-                        CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), size: .medium, opacity: 0.25,
+                        CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
                                         edit: {
                                             // on edit, show bottom sheet with identifying information
                                             folderVm.currentFolder = folder
@@ -88,10 +86,10 @@ struct FolderGridView: View {
                                             folderVm.currentFolder = folder
                                             folderVm.isDeleting.toggle()
                                         })
-                        .disabled(disableTap)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                        .padding(.leading, -33)
-                        .padding(.top)
+                                        .disabled(disableTap)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                                        .padding(.leading, -33)
+                                        .padding(.top)
                     }
                 }
                 .padding(.bottom, -10)
@@ -109,7 +107,7 @@ struct FolderGridView: View {
                 folderVm.resetFolder()
             }
         }
-        .onAppear() {
+        .onAppear {
             self.router = Router(navStack: navStack)
         }
     }
@@ -145,22 +143,22 @@ struct AddFolderButtonView: View {
 struct FolderButtonView: View {
     @EnvironmentObject var folderVm: FolderViewModel
     @State var filteredFolder: [DestinationFolder] = []
-    
+
     @Binding var folder: FolderModel
     var context: FolderViewContext
     var action: () -> Void
-    
+
     // Update caption count UI if there are items still within the temp storage
     // Only update within folders with the same ID and caption
     // Once folders are saved, then re-calculate how many captions are in each folder
-    
+
     private func calcCountOfCaptions() -> String {
-        let count = folder.captions.count + self.filteredFolder.count
-        
+        let count = folder.captions.count + filteredFolder.count
+
         if count < 1000 {
             return "\(count)"
         }
-        
+
         return "999+"
     }
 
@@ -172,7 +170,6 @@ struct FolderButtonView: View {
             }
         } label: {
             VStack(spacing: 0) {
-                
                 ZStack(alignment: .bottomTrailing) {
                     Image("main_folder")
                         .resizable()
@@ -197,7 +194,7 @@ struct FolderButtonView: View {
                                 }
                             }
                         )
-                    
+
                     if self.filteredFolder.count > 0 {
                         Text("\(calcCountOfCaptions())")
                             .font(.ui.headlineMd)
@@ -215,10 +212,10 @@ struct FolderButtonView: View {
                                 .frame(minWidth: 20, minHeight: 20)
                                 .frame(maxWidth: 150, maxHeight: 20)
                             )
-                        
+
                             .padding(35)
                             .padding(.trailing, -10)
-                        
+
                     } else {
                         Text("\(folder.captions.count)")
                             .padding(30)
@@ -226,7 +223,6 @@ struct FolderButtonView: View {
                             .font(.ui.headlineMd)
                             .foregroundColor(.ui.richBlack.opacity(0.5))
                     }
-                    
                 }
 
                 Text(folder.name)
@@ -242,7 +238,7 @@ struct FolderButtonView: View {
         .onReceive(folderVm.$captionFolderStorage) { list in
             if context == .saveToFolder {
                 // filter out to the correct folder
-                self.filteredFolder = list.filter({ $0.id == folder.id })
+                self.filteredFolder = list.filter { $0.id == folder.id }
             }
         }
     }

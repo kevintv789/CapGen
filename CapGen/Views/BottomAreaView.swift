@@ -89,7 +89,7 @@ struct BottomAreaView: View {
                     })
             }
         }
-        
+
         //        }
         .navigationDestination(isPresented: $displayLoadView) {
             LoadingView(spinnerStart: 0.0, spinnerEndS1: 0.03, spinnerEndS2S3: 0.03, rotationDegreeS1: .degrees(270), rotationDegreeS2: .degrees(270), rotationDegreeS3: .degrees(270), promptRequestStr: $promptRequestStr)
@@ -103,7 +103,7 @@ struct ExpandButton: View {
     @Binding var expandArea: Bool
     var body: some View {
         Button {
-            withAnimation() {
+            withAnimation {
                 expandArea.toggle()
             }
         } label: {
@@ -119,23 +119,19 @@ struct ExpandButton: View {
                             .resizable()
                             .frame(width: expandArea ? 40 : 30, height: expandArea ? 40 : 30)
                             .rotationEffect(.degrees(expandArea ? -180 : 0))
-                        
- 
-                        if (showText) {
+
+                        if showText {
                             Text("Next")
                                 .foregroundColor(.ui.cultured)
                                 .font(.ui.graphikBoldMed)
                         }
-                        
                     }
-                        .offset(y: expandArea ? 0 : -5)
-                    
+                    .offset(y: expandArea ? 0 : -5)
                 )
                 .frame(width: 80, height: 80)
-            
         }
         .animation(.spring(), value: expandArea)
-        .onAppear() {
+        .onAppear {
             Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { _ in
                 withAnimation {
                     self.showText = !expandArea

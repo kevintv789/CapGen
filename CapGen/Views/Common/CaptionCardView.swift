@@ -29,7 +29,7 @@ struct CaptionCardView: View {
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        CustomMenuPopup(menuTheme: .light, shareableData: .constant(nil))
+                        CustomMenuPopup(menuTheme: .light, shareableData: .constant(nil), socialMediaPlatform: .constant(nil))
                             .onTapGesture {}
                             .frame(maxHeight: .infinity, alignment: .topTrailing)
                             .padding(.trailing, -10)

@@ -17,7 +17,6 @@ let SCREEN_WIDTH = UIScreen.main.bounds.width
 let SCREEN_HEIGHT = UIScreen.main.bounds.height
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool
     {
@@ -31,13 +30,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-        
+
         let heapAppId: String = Bundle.main.infoDictionary?["HEAP_APP_ID"] as! String
         // Initialize Heap for analytics
         Heap.initialize(heapAppId)
 
         AppodealProvider.shared.initializeSDK()
-        
+
         return true
     }
 }

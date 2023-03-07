@@ -23,8 +23,8 @@ class FolderViewModel: ObservableObject {
         currentFolder = FolderModel()
         editedFolder = FolderModel()
     }
-    
+
     func resetFolderStorage() {
-        self.captionFolderStorage.removeAll()
+        captionFolderStorage.removeAll()
     }
 }

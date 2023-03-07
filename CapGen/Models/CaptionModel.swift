@@ -35,11 +35,10 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
         let data = (try? JSONEncoder().encode(self)) ?? Data()
         return (try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any]) ?? [:]
     }
-    
+
     init() {}
-    
+
     init(captionLength: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, prompt: String, title: String, tones: [ToneModel], color: String) {
-        
         self.captionLength = captionLength
         self.captionDescription = captionDescription
         self.includeEmojis = includeEmojis

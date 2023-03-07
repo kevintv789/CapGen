@@ -23,7 +23,7 @@ struct CustomMenuPopup: View {
     @State var menuTheme: MenuTheme = .light
     @State var orientation: Orientation = .vertical
     @Binding var shareableData: ShareableData?
-    @State var socialMediaPlatform: String? = nil
+    @Binding var socialMediaPlatform: String?
     @State var size: Size = .large
     @State var opacity: CGFloat = 1
     var edit: (() -> Void)?
@@ -59,6 +59,7 @@ struct CustomMenuPopup: View {
 
             if socialMediaPlatform != nil && onCopyAndGo != nil {
                 Button {
+                    Haptics.shared.play(.soft)
                     onCopyAndGo!()
                 } label: {
                     HStack {
