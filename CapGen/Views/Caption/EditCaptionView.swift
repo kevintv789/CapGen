@@ -67,19 +67,6 @@ struct EditCaptionView: View {
         return options
     }
 
-    private func generateShareableData() -> ShareableData {
-        var item: String {
-            """
-            Behold the precious caption I generated from ⚡CapGen⚡\(shouldShowSocialMediaPlatform ? " for my \(selectedPlatform ?? "") post" : "")!
-
-            "\(captionVm.editedCaption.text)"
-            """
-        }
-
-        let newShareableData = ShareableData(item: item, subject: "Check out my caption from CapGen!")
-        return newShareableData
-    }
-
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color(hex: captionVm.selectedCaption.color).ignoresSafeArea(.all)
@@ -92,7 +79,7 @@ struct EditCaptionView: View {
                             // custom action
                             if context == .optimization {
                                 self.captionVm.isCaptionSelected = true
-                                
+
                                 // Update the selected caption with the edited text
                                 self.captionVm.selectedCaption.captionDescription = self.captionVm.editedCaption.text
                             }
@@ -132,7 +119,7 @@ struct EditCaptionView: View {
                             // Reset to original text
                             self.captionVm.editedCaption.text = self.captionVm.selectedCaption.captionDescription
                         }, onMenuOpen: {
-                            self.shareableData = generateShareableData()
+                            self.shareableData = mapShareableData(caption: captionVm.editedCaption.text, platform: shouldShowSocialMediaPlatform ? selectedPlatform : nil)
                         }, onCopyAndGo: {
                             // Copy and go run openSocialMediaLink(for: platform)
                             UIPasteboard.general.string = String(self.captionVm.editedCaption.text)

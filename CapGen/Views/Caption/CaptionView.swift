@@ -8,21 +8,25 @@
 import NavigationStack
 import SwiftUI
 
-func mapShareableData(caption: String, captionGroup: AIRequest?) -> ShareableData? {
-    if captionGroup != nil {
-        var item: String {
-            """
-            Behold the precious caption I generated from ⚡CapGen⚡ for my \(captionGroup!.platform)!
+func mapShareableData(caption: String, platform: String?) -> ShareableData {
+    var item: String {
+        if let platform = platform {
+            return """
+            Behold the precious caption I generated from ⚡CapGen⚡ for my \(platform) post!
 
             "\(caption)"
             """
         }
 
-        let newShareableData = ShareableData(item: item, subject: "Check out my caption from CapGen!")
-        return newShareableData
+        return """
+        Behold the precious caption I generated from ⚡CapGen⚡!
+
+        "\(caption)"
+        """
     }
 
-    return nil
+    let newShareableData = ShareableData(item: item, subject: "Check out my caption from CapGen!")
+    return newShareableData
 }
 
 struct CaptionView: View {
@@ -70,6 +74,17 @@ struct CaptionView: View {
         }
     }
 
+    /**
+     Maps the caption that is potentially edited to the caption view model.
+     */
+    private func mapCaptionToBeEdited(index: Int, caption: String) {
+        // Create caption model object with required elements
+        captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "")
+
+        // On click, store a reference to the caption that is potentially edited
+        captionVm.editedCaption = EditedCaption(index: index, text: caption)
+    }
+
     var body: some View {
         ZStack(alignment: .leading) {
             Color.ui.cultured.ignoresSafeArea()
@@ -95,10 +110,7 @@ struct CaptionView: View {
                             ForEach(Array(self.openAiConnector.captionsGroupParsed.enumerated()), id: \.element) { index, caption in
                                 Button {
                                     withAnimation {
-                                        // Create caption model object with required elements
-                                        self.captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "")
-                                        
-                                        self.captionVm.editedCaption = EditedCaption(index: index, text: caption)
+                                        self.mapCaptionToBeEdited(index: index, caption: caption)
 
                                         self.captionVm.isCaptionSelected = true
 
@@ -109,14 +121,13 @@ struct CaptionView: View {
                                         CaptionCard(caption: caption, colorFilled: $cardColorFill[index], shareableData: self.$shareableData,
                                                     edit: {
                                                         // edit
-                                                        self.captionEditVm.selectedIndex = index
+                                                        self.mapCaptionToBeEdited(index: index, caption: caption)
+
+                                                        // on click, take user to edit caption screen
+                                                        self.navStack.push(EditCaptionView(platform: "", context: .regular))
+
                                                     }, onMenuOpen: {
-                                                        self.shareableData = mapShareableData(caption: caption, captionGroup: self.mutableCaptionGroup)
-                                                    }, onCopyAndGo: {
-                                                        // copy text and run openSocialMediaLink function
-                                                        UIPasteboard.general.string = String(caption)
-                                                        Haptics.shared.play(.soft)
-                                                        openSocialMediaLink(for: self.openAiConnector.mutableCaptionGroup?.platform ?? "")
+                                                        self.shareableData = mapShareableData(caption: caption, platform: nil)
                                                     })
                                                     .padding(10)
                                     }
@@ -144,15 +155,11 @@ struct CaptionView: View {
 
             // Initialize router
             self.router = Router(navStack: self.navStack)
-        }
-        .onAppear {
-            // Secondary pull after caption has been edited
-            if !self.openAiConnector.captionsGroupParsed.isEmpty {
-                // Only runs if the value has been updated
-                if !self.captionEditVm.editableText.isEmpty && self.openAiConnector.captionsGroupParsed[self.captionEditVm.selectedIndex] != self.captionEditVm.editableText {
-                    self.openAiConnector.captionsGroupParsed[self.captionEditVm.selectedIndex] = self.captionEditVm.editableText
-                    self.captionEditVm.editableText.removeAll()
-                }
+
+            // replace original parsed list with edited caption
+            if !self.captionVm.editedCaption.text.isEmpty {
+                self.openAiConnector.captionsGroupParsed[self.captionVm.editedCaption.index] = self.captionVm.editedCaption.text
+                self.captionVm.resetEditedCaption()
             }
         }
     }
