@@ -49,8 +49,8 @@ class Router {
         navStack.push(LoadingView())
     }
 
-    func toEditCaptionView(color: Color, title: String, platform: String, caption: String) {
-        navStack.push(EditCaptionView(bgColor: color, captionTitle: title, platform: platform, caption: caption))
+    func toEditCaptionView(platform: String) {
+        navStack.push(EditCaptionView(platform: platform))
     }
 
     func toCapacityFallbackView() {

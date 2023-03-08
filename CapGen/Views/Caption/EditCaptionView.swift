@@ -16,7 +16,6 @@ enum EditCaptionContext {
 
 struct EditCaptionView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
-    @EnvironmentObject var captionEditVm: CaptionEditViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
 
@@ -24,10 +23,7 @@ struct EditCaptionView: View {
     @Environment(\.openURL) var openURL
 
     // Requirements
-    let bgColor: Color
-    let captionTitle: String
     let platform: String
-    let caption: String
 
     // Platform limits and standards
     @State var textCount: Int = 0
@@ -74,9 +70,9 @@ struct EditCaptionView: View {
     private func generateShareableData() -> ShareableData {
         var item: String {
             """
-            Behold the precious caption I generated from ⚡CapGen⚡\(shouldShowSocialMediaPlatform ? " for my \(selectedPlatform ?? "")" : "")!
+            Behold the precious caption I generated from ⚡CapGen⚡\(shouldShowSocialMediaPlatform ? " for my \(selectedPlatform ?? "") post" : "")!
 
-            "\(captionEditVm.editableText)"
+            "\(captionVm.editedCaption.text)"
             """
         }
 
@@ -86,7 +82,7 @@ struct EditCaptionView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            bgColor.ignoresSafeArea(.all)
+            Color(hex: captionVm.selectedCaption.color).ignoresSafeArea(.all)
 
             GeometryReader { _ in
                 VStack(alignment: .leading) {
@@ -96,6 +92,9 @@ struct EditCaptionView: View {
                             // custom action
                             if context == .optimization {
                                 self.captionVm.isCaptionSelected = true
+                                
+                                // Update the selected caption with the edited text
+                                self.captionVm.selectedCaption.captionDescription = self.captionVm.editedCaption.text
                             }
 
                             self.navStack.pop(to: .previous)
@@ -127,16 +126,16 @@ struct EditCaptionView: View {
                         CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, socialMediaPlatform: shouldShowSocialMediaPlatform ? $selectedPlatform : .constant(nil), copy: {
                             // Copy selected
                             self.isTextCopied = true
-                            UIPasteboard.general.string = String(self.captionEditVm.editableText)
+                            UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
 
                         }, reset: {
                             // Reset to original text
-                            self.captionEditVm.editableText = self.caption
+                            self.captionVm.editedCaption.text = self.captionVm.selectedCaption.captionDescription
                         }, onMenuOpen: {
                             self.shareableData = generateShareableData()
                         }, onCopyAndGo: {
                             // Copy and go run openSocialMediaLink(for: platform)
-                            UIPasteboard.general.string = String(self.captionEditVm.editableText)
+                            UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
                             openSocialMediaLink(for: self.selectedPlatform ?? "")
                         })
                         .disabled(isSelectingPlatform)
@@ -147,7 +146,7 @@ struct EditCaptionView: View {
 
                     // Body
                     VStack(alignment: .leading, spacing: 15) {
-                        Text(captionTitle)
+                        Text(captionVm.selectedCaption.title)
                             .foregroundColor(.ui.richBlack)
                             .font(.ui.title)
                             .scaledToFit()
@@ -185,7 +184,7 @@ struct EditCaptionView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Button {
-                    self.captionEditVm.editableText.append("#")
+                    self.captionVm.editedCaption.text.append("#")
                     Haptics.shared.play(.soft)
                 } label: {
                     Image("\(colorScheme == .dark ? "hashtag-white" : "hashtag-black")")
@@ -200,7 +199,7 @@ struct EditCaptionView: View {
                     CaptionCopyBtnView(platform: selectedPlatform) {
                         // On copy
                         self.isTextCopied = true
-                        UIPasteboard.general.string = String(self.captionEditVm.editableText)
+                        UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
                         Haptics.shared.play(.soft)
                     } onPlatformClick: {
                         // On platform
@@ -226,9 +225,8 @@ struct EditCaptionView: View {
             }
         }
         .onAppear {
-            self.captionEditVm.editableText = self.caption
-            self.textCount = self.caption.count
-            self.hashtagCount = self.countHashtags(text: self.caption)
+            self.textCount = self.captionVm.selectedCaption.captionDescription.count
+            self.hashtagCount = self.countHashtags(text: self.captionVm.selectedCaption.captionDescription)
 
             // Resets the flag to dismiss notification
             Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
@@ -248,7 +246,7 @@ struct EditCaptionView: View {
             }
 
         })
-        .onChange(of: captionEditVm.editableText) { value in
+        .onChange(of: captionVm.editedCaption.text) { value in
             // Count number of chars in the text
             self.textCount = value.count
 
@@ -265,13 +263,13 @@ struct EditCaptionView: View {
 
 struct EditCaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "", caption: "Life is so much better with a furry friend to share it with! My rescue pup brings me #so much joy and love every day. 🤗")
+        EditCaptionView(platform: "")
             .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
 
-        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "LinkedIn", caption: "🐶💕 Life is so much better with a furry friend to share it with! My rescue pup brings me so much joy and love every day. 🤗")
+        EditCaptionView(platform: "LinkedIn")
             .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
@@ -328,11 +326,11 @@ struct PlatformLimitsView: View {
 }
 
 struct CaptionTextEditorView: View {
-    @EnvironmentObject var captionEditVm: CaptionEditViewModel
+    @EnvironmentObject var captionVm: CaptionViewModel
     @Binding var keyboardHeight: CGFloat
 
     var body: some View {
-        TextEditor(text: $captionEditVm.editableText)
+        TextEditor(text: $captionVm.editedCaption.text)
             .font(.ui.graphikRegular)
             .foregroundColor(Color.ui.richBlack)
             .lineSpacing(6)

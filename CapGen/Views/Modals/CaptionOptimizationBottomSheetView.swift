@@ -68,7 +68,7 @@ struct CaptionOptimizationBottomSheetView: View {
                     SelectedCaptionCardButton(caption: captionVm.selectedCaption.captionDescription, colorFilled: $captionVm.selectedCaption.color)
                         {
                             // on click, take user to edit caption screen
-                            self.navStack.push(EditCaptionView(bgColor: Color(hex: captionVm.selectedCaption.color), captionTitle: captionVm.selectedCaption.title, platform: "", caption: captionVm.selectedCaption.captionDescription, context: .optimization))
+                            self.navStack.push(EditCaptionView(platform: "", context: .optimization))
                         }
                         .frame(maxHeight: 250)
                         .padding(.horizontal, 25)

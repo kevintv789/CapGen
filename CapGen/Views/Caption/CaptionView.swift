@@ -97,6 +97,8 @@ struct CaptionView: View {
                                     withAnimation {
                                         // Create caption model object with required elements
                                         self.captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "")
+                                        
+                                        self.captionVm.editedCaption = EditedCaption(index: index, text: caption)
 
                                         self.captionVm.isCaptionSelected = true
 
