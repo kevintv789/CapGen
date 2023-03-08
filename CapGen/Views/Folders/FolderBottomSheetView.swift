@@ -34,34 +34,38 @@ struct FolderBottomSheetView: View {
         isLoading = true
 
         // Call API to update firebase
-        let userId = AuthManager.shared.userManager.user?.id ?? nil
+        if let user = AuthManager.shared.userManager.user {
+            let userId = user.id
+            
+            // calculates index based off current amount of folders
+            let newFolder = FolderModel(name: folderName, folderType: selectedPlatform, captions: [], index: user.folders.count)
 
-        let newFolder = FolderModel(name: folderName, folderType: selectedPlatform, captions: [])
+            if !isEditing {
+                // Creating a new folder
+                firestoreMan.saveFolder(for: userId, folder: newFolder) {
+                    self.isLoading = false
+                    dismiss()
+                }
+            } else {
+                // Editing a folder
+                if let curFolder = folder {
+                    let currFolders = AuthManager.shared.userManager.user?.folders ?? []
+                    let updatedFolder = FolderModel(id: curFolder.id, name: folderName, dateCreated: curFolder.dateCreated, folderType: selectedPlatform, captions: curFolder.captions, index: curFolder.index)
 
-        if !isEditing {
-            // Creating a new folder
-            firestoreMan.saveFolder(for: userId, folder: newFolder) {
-                self.isLoading = false
-                dismiss()
-            }
-        } else {
-            // Editing a folder
-            if let curFolder = folder {
-                let currFolders = AuthManager.shared.userManager.user?.folders ?? []
-                let updatedFolder = FolderModel(id: curFolder.id, name: folderName, dateCreated: curFolder.dateCreated, folderType: selectedPlatform, captions: curFolder.captions)
+                    Task {
+                        await firestoreMan.updateFolder(for: userId, newFolder: updatedFolder, currentFolders: currFolders) { updatedFolder in
+                            if let updatedFolder = updatedFolder {
+                                folderVm.editedFolder = updatedFolder
+                            }
 
-                Task {
-                    await firestoreMan.updateFolder(for: userId, newFolder: updatedFolder, currentFolders: currFolders) { updatedFolder in
-                        if let updatedFolder = updatedFolder {
-                            folderVm.editedFolder = updatedFolder
+                            self.isLoading = false
+                            dismiss()
                         }
-
-                        self.isLoading = false
-                        dismiss()
                     }
                 }
             }
         }
+        
     }
 
     var body: some View {

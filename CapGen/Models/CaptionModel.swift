@@ -19,6 +19,7 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
     var title: String = ""
     var tones: [ToneModel] = []
     var color: String = ""
+    var index: Int = 0
 
     static func < (lhs: CaptionModel, rhs: CaptionModel) -> Bool {
         let leftDate = Utils.convertStringToDate(date: lhs.dateCreated) ?? Date()
@@ -38,6 +39,8 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
 
     init() {}
 
+    // Used within CaptionView mapCaptionToBeEdited()
+    // for creating new captions inside a designated folder
     init(captionLength: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, prompt: String, title: String, tones: [ToneModel], color: String) {
         self.captionLength = captionLength
         self.captionDescription = captionDescription
@@ -49,7 +52,7 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
         self.color = color
     }
 
-    init(id: String, captionLength: String, dateCreated: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, folderId: String, prompt: String, title: String, tones: [ToneModel], color: String) {
+    init(id: String, captionLength: String, dateCreated: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, folderId: String, prompt: String, title: String, tones: [ToneModel], color: String, index: Int) {
         self.id = id
         self.captionLength = captionLength
         self.dateCreated = dateCreated
@@ -61,9 +64,10 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
         self.title = title
         self.tones = tones
         self.color = color
+        self.index = index
     }
 
-    init(captionLength: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, folderId: String, prompt: String, title: String, tones: [ToneModel], color: String) {
+    init(captionLength: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, folderId: String, prompt: String, title: String, tones: [ToneModel], color: String, index: Int) {
         self.captionLength = captionLength
         self.captionDescription = captionDescription
         self.includeEmojis = includeEmojis
@@ -73,5 +77,6 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
         self.title = title
         self.tones = tones
         self.color = color
+        self.index = index
     }
 }

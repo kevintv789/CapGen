@@ -34,7 +34,6 @@ struct CaptionView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var firestore: FirestoreManager
     @EnvironmentObject var navStack: NavigationStackCompat
-    @EnvironmentObject var captionEditVm: CaptionEditViewModel
     @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
@@ -69,8 +68,6 @@ struct CaptionView: View {
             } else {
                 navStack.pop(to: .view(withId: HOME_SCREEN))
             }
-
-            captionEditVm.resetCaptionView()
         }
     }
 

@@ -73,23 +73,18 @@ struct FolderGridView: View {
                             }
                         }
                         .disabled(disableTap)
+                        
+                        FolderCustomMenu(shouldShowDelete: context == .view) {
+                            folderVm.currentFolder = folder
+                            self.isEditing = true
+                            self.showFolderBottomSheet = true
 
-                        CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
-                                        edit: {
-                                            // on edit, show bottom sheet with identifying information
-                                            folderVm.currentFolder = folder
-                                            self.isEditing = true
-                                            self.showFolderBottomSheet = true
-
-                                        }, delete: {
-                                            // on delete, remove from firebase
-                                            folderVm.currentFolder = folder
-                                            folderVm.isDeleting.toggle()
-                                        })
-                                        .disabled(disableTap)
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                                        .padding(.leading, -33)
-                                        .padding(.top)
+                        } onDelete: {
+                            // on delete, remove from firebase
+                            folderVm.currentFolder = folder
+                            folderVm.isDeleting.toggle()
+                        }
+                        .disabled(disableTap)
                     }
                 }
                 .padding(.bottom, -10)
@@ -241,5 +236,37 @@ struct FolderButtonView: View {
                 self.filteredFolder = list.filter { $0.id == folder.id }
             }
         }
+    }
+}
+
+struct FolderCustomMenu: View {
+    var shouldShowDelete: Bool
+    var onEdit: () -> Void
+    var onDelete: () -> Void
+    
+    var body: some View {
+        if shouldShowDelete {
+            CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
+                            edit: {
+                onEdit()
+                
+            }, delete: {
+                onDelete()
+            })
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(.leading, -33)
+            .padding(.top)
+        } else {
+            CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
+                            edit: {
+                onEdit()
+                
+            })
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(.leading, -33)
+            .padding(.top)
+        }
+        
+        
     }
 }

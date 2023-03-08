@@ -133,8 +133,9 @@ class UserManager: ObservableObject {
             let dateCreated = folder["dateCreated"] as! String
             let folderType = folder["folderType"] as! String
             let captions = Utils.convertGeneratedCaptions(for: folder["captions"] as? [[String: AnyObject]])
+            let index = folder["index"] as! Int
 
-            let mappedFolder = FolderModel(id: id, name: name, dateCreated: dateCreated, folderType: FolderType(rawValue: folderType)!, captions: captions)
+            let mappedFolder = FolderModel(id: id, name: name, dateCreated: dateCreated, folderType: FolderType(rawValue: folderType)!, captions: captions, index: index)
             result.append(mappedFolder)
         }
 

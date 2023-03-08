@@ -224,12 +224,12 @@ class FirestoreManager: ObservableObject {
 
                 var updatedCaptions: [CaptionModel] = []
                 newFolder.captions.forEach { caption in
-                    let updatedCaption = CaptionModel(id: caption.id, captionLength: caption.captionLength, dateCreated: caption.dateCreated, captionDescription: caption.captionDescription, includeEmojis: caption.includeEmojis, includeHashtags: caption.includeHashtags, folderId: newFolderId, prompt: caption.prompt, title: caption.title, tones: caption.tones, color: caption.color)
+                    let updatedCaption = CaptionModel(id: caption.id, captionLength: caption.captionLength, dateCreated: caption.dateCreated, captionDescription: caption.captionDescription, includeEmojis: caption.includeEmojis, includeHashtags: caption.includeHashtags, folderId: newFolderId, prompt: caption.prompt, title: caption.title, tones: caption.tones, color: caption.color, index: caption.index)
 
                     updatedCaptions.append(updatedCaption)
                 }
 
-                let updatedFolder = FolderModel(id: newFolderId, name: newFolder.name, dateCreated: currentFolders[indexOfFolder!].dateCreated, folderType: newFolder.folderType, captions: updatedCaptions)
+                let updatedFolder = FolderModel(id: newFolderId, name: newFolder.name, dateCreated: currentFolders[indexOfFolder!].dateCreated, folderType: newFolder.folderType, captions: updatedCaptions, index: newFolder.index)
 
                 // Remove current folder
                 do {
@@ -314,11 +314,16 @@ class FirestoreManager: ObservableObject {
 
                     // 3 - Update folder with captions
                     if var designatedFolder = designatedFolder {
+                        let captionIndex = designatedFolder.captions.count
+                        
                         captionToSave.id = UUID().uuidString
+                        captionToSave.index = captionIndex
+                        
+                        // append new capton
                         designatedFolder.captions.append(captionToSave)
 
                         // Delete original folder from Firebase so we can add in a new one with the updated caption
-                        let newFolder = FolderModel(id: designatedFolder.id, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: designatedFolder.captions)
+                        let newFolder = FolderModel(id: designatedFolder.id, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: designatedFolder.captions, index: designatedFolder.index)
 
                         await self.updateFolder(for: userId, newFolder: newFolder, currentFolders: currentFolders, onComplete: { updatedFolder in
                             if updatedFolder != nil {
