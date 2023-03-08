@@ -4,9 +4,25 @@
 //
 //  Created by Kevin Vu on 2/24/23.
 //
+// This view is directly from inside a folder
+
 
 import NavigationStack
 import SwiftUI
+
+func mapShareableDataFromCaptionList(captions: [CaptionModel]) -> ShareableData {
+    var item: String {
+        """
+        Behold the precious captions I generated from ⚡CapGen⚡:
+
+        \(captions.enumerated().map { index, caption in
+            "\(index + 1). \(caption.captionDescription)"
+        }.joined(separator: "\n\n"))
+        """
+    }
+
+    return ShareableData(item: item, subject: "Check out my captions from CapGen!")
+}
 
 struct FolderView: View {
     @ScaledMetric var scaledSize: CGFloat = 1
@@ -19,7 +35,10 @@ struct FolderView: View {
     @State var showFolderDeleteModal: Bool = false
 
     // dependencies
-    @Binding var folder: FolderModel
+    @State var folder: FolderModel
+    
+    // Necessary to share data from the custom menu
+    @State var shareableData: ShareableData? = nil
 
     var body: some View {
         ZStack {
@@ -27,28 +46,44 @@ struct FolderView: View {
 
             VStack {
                 // Header
-                FolderHeaderView(platform: folder.folderType.rawValue, shareableData: .constant(nil)) {
+                FolderHeaderView(platform: $folder.folderType, shareableData: self.$shareableData) {
                     // on edit
-                    self.showFolderBottomSheet = true
+                    self.showFolderBottomSheet.toggle()
                     folderVm.currentFolder = folder
+                } onMenuOpen: {
+                    self.shareableData = mapShareableDataFromCaptionList(captions: folder.captions)
                 } onDelete: {
                     // on delete
                     self.showFolderDeleteModal = true
                 }
 
                 // Folder title
-                HStack {
-                    Image("empty_folder_white")
-                        .resizable()
-                        .frame(width: 38 * scaledSize, height: 38 * scaledSize, alignment: .topLeading)
+                Button {
+                    // on edit
+                    folderVm.currentFolder = folder
+                    
+                    // Set a delay to show bottom sheet
+                    // This is a direct result of having the custom menu opened right before pressing this button
+                    // which will result in a "View is already presented" error
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.showFolderBottomSheet.toggle()
+                    }
+                    
+                   
+                } label: {
+                    HStack {
+                        Image("empty_folder_white")
+                            .resizable()
+                            .frame(width: 38 * scaledSize, height: 38 * scaledSize, alignment: .topLeading)
 
-                    Text(folder.name)
-                        .font(.ui.title4Medium)
-                        .foregroundColor(.ui.cultured)
-                        .multilineTextAlignment(.leading)
-                        .padding(.top, 5)
+                        Text(folder.name)
+                            .font(.ui.title4Medium)
+                            .foregroundColor(.ui.cultured)
+                            .multilineTextAlignment(.leading)
+                            .padding(.top, 5)
 
-                    Spacer()
+                        Spacer()
+                    }
                 }
                 .padding(.leading)
 
@@ -106,12 +141,12 @@ struct FolderView: View {
 
 struct FolderView_Previews: PreviewProvider {
     static var previews: some View {
-        FolderView(folder: .constant(foldersMock[0]))
+        FolderView(folder: foldersMock[0])
             .environmentObject(FolderViewModel())
             .environmentObject(FirestoreManager())
             .environmentObject(NavigationStackCompat())
 
-        FolderView(folder: .constant(foldersMock[0]))
+        FolderView(folder: foldersMock[0])
             .environmentObject(FolderViewModel())
             .environmentObject(FirestoreManager())
             .environmentObject(NavigationStackCompat())
@@ -122,10 +157,11 @@ struct FolderView_Previews: PreviewProvider {
 
 struct FolderHeaderView: View {
     @ScaledMetric var scaledSize: CGFloat = 1
-    let platform: String
+    @Binding var platform: FolderType
     @Binding var shareableData: ShareableData?
 
     let onEdit: () -> Void
+    let onMenuOpen: () -> Void
     let onDelete: () -> Void
 
     var body: some View {
@@ -136,13 +172,13 @@ struct FolderHeaderView: View {
 
             Spacer()
 
-            if platform != "General" {
+            if platform != .General {
                 Image("\(platform)-circle")
                     .resizable()
                     .frame(width: 20 * scaledSize, height: 20 * scaledSize)
             }
 
-            Text(platform)
+            Text(platform.rawValue)
                 .foregroundColor(.ui.richBlack)
                 .font(.ui.headline)
                 .scaledToFit()
@@ -151,7 +187,7 @@ struct FolderHeaderView: View {
 
             Spacer()
 
-            CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: $shareableData, socialMediaPlatform: .constant(nil), edit: { onEdit() }, delete: { onDelete() })
+            CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: $shareableData, socialMediaPlatform: .constant(nil), edit: { onEdit() }, delete: { onDelete() }, onMenuOpen: { onMenuOpen() })
                 .padding(.horizontal)
         }
         .padding(.bottom, 20)

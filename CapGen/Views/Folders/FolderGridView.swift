@@ -58,7 +58,7 @@ struct FolderGridView: View {
                         FolderButtonView(folder: self.$folders[index], context: context) {
                             // Depending on context, do different things on click
                             if context == .view {
-                                self.navStack.push(FolderView(folder: self.$folders[index]))
+                                self.navStack.push(FolderView(folder: self.folders[index]))
                             } else if context == .saveToFolder {
                                 // The index of the already saved caption
                                 let indexOfSavedCaption = self.folderVm.captionFolderStorage.firstIndex(where: { $0.id == folder.id && $0.caption.captionDescription == self.captionVm.selectedCaption.captionDescription }) ?? -1

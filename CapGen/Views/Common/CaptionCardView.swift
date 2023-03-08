@@ -16,7 +16,7 @@ struct CaptionCardView: View {
                 .stroke(Color.ui.cultured, lineWidth: 4)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
-                        .fill(Color(hex: caption.color))
+                        .fill(Color.ui.middleBluePurple)
                 )
 
             VStack(alignment: .trailing, spacing: 0) {
