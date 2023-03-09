@@ -93,6 +93,11 @@ enum Utils {
 
             result.append(mappedCaption)
         }
+        
+        // Sort by most recent created
+        let df = DateFormatter()
+        df.dateFormat = "MMM d, h:mm a"
+        result.sort(by: { df.date(from: $0.dateCreated)!.compare(df.date(from: $1.dateCreated)!) == .orderedDescending })
 
         return result
     }

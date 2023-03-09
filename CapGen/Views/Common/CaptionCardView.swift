@@ -8,8 +8,17 @@
 import SwiftUI
 
 struct CaptionCardView: View {
+    // Scaled size
+    @ScaledMetric var scaledSize: CGFloat = 1
+    
     var caption: CaptionModel
-
+    
+    // optional dependency to display folder name
+    var showFolderInfo: Bool = false
+    
+//    @State var folderInfo: FolderModel? = foldersMock[0] // replace with nil without mock
+    @State var folderInfo: FolderModel? = nil
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14)
@@ -40,6 +49,7 @@ struct CaptionCardView: View {
                         .font(.ui.bodyLarge)
                         .foregroundColor(.ui.cultured)
                         .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     HStack {
@@ -47,23 +57,55 @@ struct CaptionCardView: View {
 
                         Spacer()
 
-                        VStack {
-                            // TODO: - Folder information if exists
+                        VStack(alignment: .trailing) {
+                            // Display folder information on each caption
+                            if showFolderInfo, folderInfo != nil {
+                                HStack(spacing: 5) {
+                                    Image(folderInfo!.folderType == .General ? "empty_folder_white" : "\(folderInfo!.folderType)-circle")
+                                        .resizable()
+                                        .frame(width: 16 * scaledSize, height: 16 * scaledSize)
+                                        .if(folderInfo!.folderType != .General) { image in
+                                            return image
+                                                .padding(2)
+                                                .background(
+                                                    Circle()
+                                                        .fill(Color.ui.cultured)
+                                                )
+                                        }
+                                    
+                                    Text(folderInfo!.name)
+                                        .font(.ui.body)
+                                        .foregroundColor(.ui.cultured)
+                                        .lineLimit(1)
+                                }
+                                .frame(maxWidth: SCREEN_WIDTH / 3, alignment: .trailing)
+                            }
 
                             // Date
                             Text(caption.dateCreated)
                                 .foregroundColor(.ui.cultured)
                                 .font(.ui.headlineMd)
                         }
+                        
+                        
                     }
                     .padding()
                 }
+            }
+        }
+        .onAppear() {
+            if let user = AuthManager.shared.userManager.user {
+                // filter to a folder for a specific caption
+                self.folderInfo = user.folders.first { $0.id == caption.folderId } ?? nil
             }
         }
     }
 }
 
 struct CircularIndicatorView: View {
+    // Scaled size
+    @ScaledMetric var scaledSize: CGFloat = 1
+    
     let caption: CaptionModel
 
     var body: some View {
@@ -80,7 +122,7 @@ struct CircularIndicatorView: View {
             CircularView(image: caption.includeHashtags ? "yes-hashtag" : "no-hashtag")
 
             // Caption length
-            CircularView(image: caption.captionLength, imageWidth: 20)
+            CircularView(image: caption.captionLength, imageWidth: 20 * scaledSize)
         }
     }
 }

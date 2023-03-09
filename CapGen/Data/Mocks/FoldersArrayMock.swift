@@ -8,10 +8,10 @@
 import Foundation
 
 let foldersMock: [FolderModel] = [
-    FolderModel(name: "General folder", folderType: .General, captions: [
-        CaptionModel(captionLength: "veryShort", captionDescription: "Short caption description", includeEmojis: false, includeHashtags: false, folderId: "1", prompt: "Short caption prompt", title: "Short caption title", tones: [ToneModel(id: 1, title: "Formal", description: "Professional, respectful, and polite.", icon: "🤵")], color: "#8C88C9", index: 0),
+    FolderModel(id: "1", name: "A super", dateCreated: "Mar 8, 4:50 PM", folderType: .General, captions: [
+        CaptionModel(captionLength: "veryShort", captionDescription: "Don't let fear hold you back, take that leap of faith and chase your dreams.", includeEmojis: false, includeHashtags: false, folderId: "1", prompt: "Short caption prompt", title: "Short caption title", tones: [ToneModel(id: 1, title: "Formal", description: "Professional, respectful, and polite.", icon: "🤵")], color: "#8C88C9", index: 0),
         CaptionModel(captionLength: "moderate", captionDescription: "Medium caption descriptionMedium caption descriptionMedium caption descriptionMedium caption descriptionMedium caption descriptionMedium caption description", includeEmojis: true, includeHashtags: true, folderId: "1", prompt: "Medium caption prompt", title: "Medium caption title", tones: [ToneModel(id: 1, title: "Formal", description: "Professional, respectful, and polite.", icon: "🤵"), ToneModel(id: 2, title: "Friendly", description: "Warm, open, and casual.", icon: "🙆‍♀️")], color: "#8C88C9", index: 0),
-        CaptionModel(captionLength: "veryLong", captionDescription: "Long caption description", includeEmojis: true, includeHashtags: true, folderId: "1", prompt: "Long caption prompt", title: "Long caption title", tones: [], color: "#8C88C9", index: 0),
+        CaptionModel(captionLength: "veryLong", captionDescription: "Someone call a plumber, because this sauce is leakin'. 💦", includeEmojis: true, includeHashtags: true, folderId: "1", prompt: "Long caption prompt", title: "Long caption title", tones: [], color: "#8C88C9", index: 0),
     ], index: 0),
     FolderModel(name: "Instagram folder", folderType: .Instagram, captions: [], index: 1),
     FolderModel(name: "Twitter folder", folderType: .Twitter, captions: [], index: 2),

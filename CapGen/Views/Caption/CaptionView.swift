@@ -159,6 +159,9 @@ struct CaptionView: View {
                 self.captionVm.resetEditedCaption()
             }
         }
+        .onDisappear() {
+            self.captionVm.resetEditedCaption()
+        }
     }
 }
 

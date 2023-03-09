@@ -7,19 +7,33 @@
 
 import SwiftUI
 
+enum ImageSize {
+    case small, regular
+}
+
 struct BlankCaptionsView: View {
     @ScaledMetric var scaledSize: CGFloat = 1
     let title: String
+    var imageSize: ImageSize = .small
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .center, spacing: 0) {
             Image("sad_empty_robot")
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .if(imageSize == .regular) { image in
+                    return image.aspectRatio(contentMode: .fit)
+                }
+                .if(imageSize == .small) { image in
+                    return image
+                        .frame(width: 200, height: 200)
+                        .padding(.bottom, -20)
+                        .padding(.top, -30)
+                }
+                
 
             Text(title)
                 .multilineTextAlignment(.center)
-                .font(.ui.headline)
+                .font(imageSize == .regular ? .ui.headline : .ui.headlineMd)
                 .foregroundColor(.ui.cultured)
                 .padding(.horizontal)
                 .lineSpacing(8)
