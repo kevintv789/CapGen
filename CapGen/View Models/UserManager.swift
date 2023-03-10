@@ -139,12 +139,10 @@ class UserManager: ObservableObject {
             result.append(mappedFolder)
         }
 
-        // Sort by most recent created
-        let df = DateFormatter()
-        df.dateFormat = "MMM d, h:mm a"
-        result.sort(by: { df.date(from: $0.dateCreated)!.compare(df.date(from: $1.dateCreated)!) == .orderedDescending })
-
-        return result
+        // returns a list of folders that is sorted by largest caption count first
+        return result.sorted { f1, f2 in
+            return f1.captions.count > f2.captions.count
+        }
     }
 
     /**

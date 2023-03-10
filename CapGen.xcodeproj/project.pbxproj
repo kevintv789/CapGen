@@ -202,6 +202,7 @@
 		D47306CC2996EBC100179FEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4005DB8295BE0E1004D695D /* Assets.xcassets */; };
 		D47306CF29993D5E00179FEB /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47306CE29993D5E00179FEB /* Helpers.swift */; };
 		D4752DD429B795D200982983 /* DropdownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4752DD329B795D200982983 /* DropdownMenu.swift */; };
+		D490991429BA9189002CBA4F /* SavedCaptionHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */; };
 		D4C3E47F297ECB4E00C2847A /* TaglistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */; };
 		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
 		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
@@ -1023,6 +1024,7 @@
 		D47306CA2996E49E00179FEB /* loading_paperplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_paperplane.json; sourceTree = "<group>"; };
 		D47306CE29993D5E00179FEB /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		D4752DD329B795D200982983 /* DropdownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownMenu.swift; sourceTree = "<group>"; };
+		D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionHomeViewModel.swift; sourceTree = "<group>"; };
 		D4C3E47E297ECB4E00C2847A /* TaglistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaglistViewModel.swift; sourceTree = "<group>"; };
 		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
 		D4C3E482298059C800C2847A /* CustomMenuPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuPopup.swift; sourceTree = "<group>"; };
@@ -1910,6 +1912,7 @@
 				D4373F8729B528F200C186B3 /* FolderViewModel.swift */,
 				D4373F7A29B5279C00C186B3 /* CaptionViewModel.swift */,
 				D4373F8F29B52A5900C186B3 /* GenerateByPromptViewModel.swift */,
+				D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -2353,10 +2356,10 @@
 				D4056E532968E17700D3894D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				D4056E7A296F0C7000D3894D /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				D4056E9C2971FCC400D3894D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
-				D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack.git" */,
+				D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
 				D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
-				D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads.git" */,
-				D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk.git" */,
+				D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk" */,
 			);
 			productRefGroup = D4005DB2295BE0E0004D695D /* Products */;
 			projectDirPath = "";
@@ -2687,6 +2690,7 @@
 				D4056ED12978750D00D3894D /* DisplayAdBtnView.swift in Sources */,
 				D4752DD429B795D200982983 /* DropdownMenu.swift in Sources */,
 				D4056E2A295F8EA700D3894D /* RectangleCard.swift in Sources */,
+				D490991429BA9189002CBA4F /* SavedCaptionHomeViewModel.swift in Sources */,
 				D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */,
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
 				D4056EC02974AF6D00D3894D /* CongratsModalView.swift in Sources */,
@@ -3535,7 +3539,7 @@
 				minimumVersion = 7.0.0;
 			};
 		};
-		D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk.git" */ = {
+		D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/heap/heap-ios-sdk.git";
 			requirement = {
@@ -3543,7 +3547,7 @@
 				minimumVersion = 9.0.0;
 			};
 		};
-		D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack.git" */ = {
+		D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/matteopuc/swiftui-navigation-stack.git";
 			requirement = {
@@ -3559,7 +3563,7 @@
 				minimumVersion = 9.0.0;
 			};
 		};
-		D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads.git" */ = {
+		D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
 			requirement = {
@@ -3652,7 +3656,7 @@
 		};
 		D47304032995BF4B00179FEB /* Heap */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk.git" */;
+			package = D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk" */;
 			productName = Heap;
 		};
 		D47304082996CD7900179FEB /* FirebaseAnalytics */ = {
@@ -3807,7 +3811,7 @@
 		};
 		D47304442996CE1800179FEB /* NavigationStack */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack.git" */;
+			package = D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
 			productName = NavigationStack;
 		};
 		D47304462996CE1800179FEB /* FacebookCore */ = {
@@ -3832,12 +3836,12 @@
 		};
 		D473044E2996CE1800179FEB /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads.git" */;
+			package = D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
 		};
 		D4C3E4A82986368400C2847A /* NavigationStack */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack.git" */;
+			package = D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
 			productName = NavigationStack;
 		};
 		D4F1D3002988C53A00599F05 /* FacebookCore */ = {
@@ -3857,7 +3861,7 @@
 		};
 		D4F1D30729896BA500599F05 /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads.git" */;
+			package = D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -203,8 +203,7 @@ class FirestoreManager: ObservableObject {
      - Removing that item
      - Adding in a new item with a different ID and same date created
      */
-    @MainActor
-    func updateFolder(for uid: String?, newFolder: FolderModel, currentFolders: [FolderModel], onComplete: @escaping (_ updatedFolder: FolderModel?) -> Void) async {
+    func updateFolder(for uid: String?, newFolder: FolderModel, currentFolders: [FolderModel], onComplete: @escaping (_ updatedFolder: FolderModel?) -> Void) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             onComplete(nil)
@@ -216,9 +215,7 @@ class FirestoreManager: ObservableObject {
             let docRef = db.collection("Users").document("\(userId)")
 
             // Update array with new item
-            let indexOfFolder = currentFolders.firstIndex { $0.id == newFolder.id }
-
-            if indexOfFolder != nil {
+            if let indexOfFolder = currentFolders.firstIndex(where: { $0.id == newFolder.id }) {
                 // Create a new folder with a different ID and date created
                 // The ID needs to be different to avoid intermittent issues with ForEach reading from the same ID
 
@@ -229,27 +226,21 @@ class FirestoreManager: ObservableObject {
                     updatedCaptions.append(updatedCaption)
                 }
 
-                let updatedFolder = FolderModel(id: newFolderId, name: newFolder.name, dateCreated: currentFolders[indexOfFolder!].dateCreated, folderType: newFolder.folderType, captions: updatedCaptions, index: newFolder.index)
-
-                // Remove current folder
-                do {
-                    try await docRef.updateData(["folders": FieldValue.arrayRemove([currentFolders[indexOfFolder!].dictionary])])
-                } catch {
-                    print("Error on deleting folders - updateFolder()")
-                    appError = ErrorType(error: .genericError)
-                    onComplete(nil)
-                    return
-                }
-
-                // Adding updated folder onto the existing data field
-                do {
-                    try await docRef.updateData(["folders": FieldValue.arrayUnion([updatedFolder.dictionary])])
-                    onComplete(updatedFolder)
-                } catch {
-                    print("Error on adding folders")
-                    appError = ErrorType(error: .genericError)
-                    onComplete(nil)
-                    return
+                let updatedFolder = FolderModel(id: newFolderId, name: newFolder.name, dateCreated: currentFolders[indexOfFolder].dateCreated, folderType: newFolder.folderType, captions: updatedCaptions, index: newFolder.index)
+                
+                // Remove at current folder
+                var mutableFolders = currentFolders
+                mutableFolders.remove(at: indexOfFolder)
+                
+                // Add in updated folder
+                mutableFolders.append(updatedFolder)
+                
+                // Remove all current folders
+                self.deleteAllFolders(for: docRef) {
+                    // Adding updated folder onto the existing data field
+                    self.addNewFolders(for: docRef, updatedFolders: mutableFolders) {
+                        onComplete(updatedFolder)
+                    }
                 }
             }
         }
@@ -257,80 +248,139 @@ class FirestoreManager: ObservableObject {
 
     /**
      This function deletes a folder by
-     - Retrieving it from the current array
-     - Removing that item
+     - Removing entire folders array from the DB
+     - Remove the particular folder from the original array in memory
+     - Write back to DB with the mutated array with the removed folder
      */
-    func onFolderDelete(for uid: String?, curFolder: FolderModel, currentFolders: [FolderModel], onComplete: @escaping () -> Void) async {
+    func onFolderDelete(for uid: String?, curFolder: FolderModel, currentFolders: [FolderModel], onComplete: @escaping () -> Void) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             onComplete()
             return
         }
 
-        let docRef = db.collection("Users").document("\(userId)")
-
+        let docRef: DocumentReference = db.collection("Users").document("\(userId)")
+        
         if !currentFolders.isEmpty {
             // Find the folder to be deleted
-            let indexOfFolder = currentFolders.firstIndex { $0.id == curFolder.id }
-
-            // Remove current folder
-            do {
-                try await docRef.updateData(["folders": FieldValue.arrayRemove([currentFolders[indexOfFolder!].dictionary])])
-            } catch {
-                print("Error on deleting folders - onFolderDelete()")
-                appError = ErrorType(error: .genericError)
-                return
+            if let indexOfFolder = currentFolders.firstIndex(where: { $0.id == curFolder.id }) {
+                // Remove current folder
+                var mutableCurrentFolders = currentFolders
+                mutableCurrentFolders.remove(at: indexOfFolder)
+                
+                // delete entire folders array
+                self.deleteAllFolders(for: docRef) {
+                    // Write back to Firebase the modified folders array with the specific folder removed
+                    self.addNewFolders(for: docRef, updatedFolders: mutableCurrentFolders) {
+                        onComplete()
+                    }
+                }
             }
         }
-        onComplete()
+        
     }
 
     /**
-         This function saves the captions to the folders
-         1. Retrieve the current folders
-         2. Find the folder to be updated
-         3. Update the folder with the new captions
+     This function saves the captions to the folders
+     1. Retrieve the current folders
+     2. Find the folder to be updated
+     3. Remove all folders that were selected from the current folders list
+     4. Update all removed folders in memory with updated caption
+     5. Delete all folder from DB and add in the new updated array list
      */
-    func saveCaptionsToFolders(for uid: String?, destinationFolders: [DestinationFolder], onComplete: @escaping () -> Void) async {
+    func saveCaptionsToFolders(for uid: String?, destinationFolders: [DestinationFolder], onComplete: @escaping () -> Void) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             onComplete()
             return
         }
+        
+        let docRef: DocumentReference = db.collection("Users").document("\(userId)")
 
         // Get current folders from the user document
-        let currentFolders = AuthManager.shared.userManager.user?.folders ?? []
-
-        // 1
+        var currentFolders = AuthManager.shared.userManager.user?.folders ?? []
+        
         if !destinationFolders.isEmpty {
-            // 2
             destinationFolders.forEach { folder in
-                Task {
-                    let folderId = folder.id
-                    var captionToSave = folder.caption as CaptionModel
+                let newFolderId: String = UUID().uuidString
+                var captionToSave = folder.caption as CaptionModel
+                captionToSave.folderId = newFolderId
+                
+                // Delete original folder from the current folders
+                if let indexOfOriginalFolder = currentFolders.firstIndex(where: { $0.id == folder.id }) {
+                    let designatedFolder = currentFolders.remove(at: indexOfOriginalFolder)
+                    
+                    var updatedCaptions: [CaptionModel] = []
+                    
+                    // Update all current captions to the new folder Id
+                    designatedFolder.captions.forEach { caption in
+                        let updatedCaption = CaptionModel(id: caption.id, captionLength: caption.captionLength, dateCreated: caption.dateCreated, captionDescription: caption.captionDescription, includeEmojis: caption.includeEmojis, includeHashtags: caption.includeHashtags, folderId: newFolderId, prompt: caption.prompt, title: caption.title, tones: caption.tones, color: caption.color, index: caption.index)
 
-                    // Find folder to be updated from Firebase
-                    let designatedFolder = currentFolders.first(where: { $0.id == folderId })
-
-                    // 3 - Update folder with captions
-                    if var designatedFolder = designatedFolder {
-                        let captionIndex = designatedFolder.captions.count
-                        
-                        captionToSave.id = UUID().uuidString
-                        captionToSave.index = captionIndex
-                        
-                        // append new capton
-                        designatedFolder.captions.append(captionToSave)
-
-                        // Delete original folder from Firebase so we can add in a new one with the updated caption
-                        let newFolder = FolderModel(id: designatedFolder.id, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: designatedFolder.captions, index: designatedFolder.index)
-
-                        await self.updateFolder(for: userId, newFolder: newFolder, currentFolders: currentFolders, onComplete: { updatedFolder in
-                            if updatedFolder != nil {
-                                onComplete()
-                            }
-                        })
+                        updatedCaptions.append(updatedCaption)
                     }
+
+                    // append the caption that needs to be saved
+                    updatedCaptions.append(captionToSave)
+                    
+                    // create a new folder object with the updated caption and ID
+                    let updatedFolder = FolderModel(id: newFolderId, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: updatedCaptions, index: designatedFolder.index)
+                    
+                    // append new updated folder
+                    currentFolders.append(updatedFolder)
+                }
+            }
+        }
+        
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        
+        self.deleteAllFolders(for: docRef) {
+            self.addNewFolders(for: docRef, updatedFolders: currentFolders) {
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            onComplete()
+        }
+    }
+    
+    /**
+     This function updates a caption within a specific folder. This will most likely be ran from within the CaptionListView or FolderView.
+     */
+    func updateSingleCaptionInFolder(for uid: String?, currentCaption: CaptionModel, onComplete: @escaping () -> Void) async {
+        guard let userId = uid else {
+            appError = ErrorType(error: .genericError)
+            onComplete()
+            return
+        }
+        
+        // Get current folders from the user document
+        let currentFolders = AuthManager.shared.userManager.user?.folders ?? []
+        
+        if !currentFolders.isEmpty {
+            // Find folder to be updated from Firebase
+            if var designatedFolder = currentFolders.first(where: { $0.id == currentCaption.folderId }) {
+                // Find the old caption within designated folder and remove it, then append the new caption with a new ID
+                if let oldCaptionIndex = designatedFolder.captions.firstIndex(where: { $0.id == currentCaption.id }), oldCaptionIndex >= 0 {
+                    // Delete original folder from Firebase so we can add in a new one with the updated caption
+                    let oldCaptionRef = designatedFolder.captions.remove(at: oldCaptionIndex)
+                    
+                    // Create a new caption model object with updated ID and description
+                    let newCaption = CaptionModel(id: UUID().uuidString, captionLength: oldCaptionRef.captionLength, dateCreated: oldCaptionRef.dateCreated, captionDescription: currentCaption.captionDescription, includeEmojis: oldCaptionRef.includeEmojis, includeHashtags: oldCaptionRef.includeHashtags, folderId: oldCaptionRef.folderId, prompt: oldCaptionRef.prompt, title: oldCaptionRef.title, tones: oldCaptionRef.tones, color: oldCaptionRef.color, index: oldCaptionRef.index)
+                    
+                    // append new caption onto the list with updated description
+                    designatedFolder.captions.append(newCaption)
+                    
+                    // Create a new folder with the same specs as original folder
+                    let newFolder = FolderModel(id: designatedFolder.id, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: designatedFolder.captions, index: designatedFolder.index)
+                    
+                    await self.updateFolder(for: userId, newFolder: newFolder, currentFolders: currentFolders, onComplete: { updatedFolder in
+                        if updatedFolder != nil {
+                            onComplete()
+                        }
+                    })
                 }
             }
         }
@@ -355,7 +405,19 @@ class FirestoreManager: ObservableObject {
             }
         }
     }
-
+    
+    private func deleteAllFolders(for docRef: DocumentReference, onComplete: @escaping () -> Void) {
+        // delete entire folders array
+        docRef.updateData(["folders": FieldValue.delete()])
+        onComplete()
+    }
+    
+    private func addNewFolders(for docRef: DocumentReference, updatedFolders: [FolderModel], onComplete: @escaping () -> Void) {
+        // Write back to Firebase the modified folders array with the specific folder removed
+        docRef.setData(["folders": updatedFolders.map({ $0.dictionary })], merge: true)
+        onComplete()
+    }
+    
     func unbindListener() async {
         snapshotListener?.remove()
     }

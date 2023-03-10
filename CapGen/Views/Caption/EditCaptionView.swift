@@ -11,19 +11,17 @@ import SwiftUI
 import UIKit
 
 enum EditCaptionContext {
-    case optimization, regular
+    case optimization, regular, captionList
 }
 
 struct EditCaptionView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
 
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
-
-    // Requirements
-    let platform: String
 
     // Platform limits and standards
     @State var textCount: Int = 0
@@ -83,7 +81,18 @@ struct EditCaptionView: View {
                                 // Update the selected caption with the edited text
                                 self.captionVm.selectedCaption.captionDescription = self.captionVm.editedCaption.text
                             }
-
+                            
+                            // once user navigates back, store edited caption into firebase
+                            // as long as the editing was from the caption list context
+                            if context == .captionList {
+                                let userId = AuthManager.shared.userManager.user?.id ?? nil
+                                
+                                Task {
+                                    captionVm.selectedCaption.captionDescription = captionVm.editedCaption.text
+                                    await firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) {}
+                                }
+                            }
+                            
                             self.navStack.pop(to: .previous)
                         }
                         .disabled(isSelectingPlatform)
@@ -215,10 +224,22 @@ struct EditCaptionView: View {
             self.textCount = self.captionVm.selectedCaption.captionDescription.count
             self.hashtagCount = self.countHashtags(text: self.captionVm.selectedCaption.captionDescription)
 
-            // Resets the flag to dismiss notification
+            // Resets the flag to dismiss notification after 3 seconds
             Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
                 if self.isTextCopied {
                     self.isTextCopied = false
+                }
+            }
+            
+            // find specific folder for a caption if editing from the caption list
+            if context == .captionList, let user = AuthManager.shared.userManager.user {
+                // filter to a folder for a specific caption
+                if let folder = user.folders.first(where: { $0.id == captionVm.selectedCaption.folderId }) {
+                    // Update platform based on folder type
+                    self.selectedPlatform = folder.folderType.rawValue
+                    
+                    // Set text to be edited
+                    captionVm.editedCaption.text = captionVm.selectedCaption.captionDescription
                 }
             }
         }
@@ -228,7 +249,7 @@ struct EditCaptionView: View {
                 let socialMediaFiltered = socialMediaPlatforms.first(where: { $0.title == sp })
                 self.textLimit = socialMediaFiltered?.characterLimit ?? 0
                 self.hashtagLimit = socialMediaFiltered?.hashtagLimit ?? 0
-
+                
                 self.shouldShowSocialMediaPlatform = !sp.isEmpty && sp != "General"
             }
 
@@ -250,17 +271,19 @@ struct EditCaptionView: View {
 
 struct EditCaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        EditCaptionView(platform: "")
+        EditCaptionView()
             .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
+            .environmentObject(FirestoreManager())
 
-        EditCaptionView(platform: "LinkedIn")
+        EditCaptionView()
             .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
+            .environmentObject(FirestoreManager())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

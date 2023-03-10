@@ -8,11 +8,7 @@
 import SwiftUI
 
 struct SavedCaptionsHomeView: View {
-    // private variables
-    @State var isGridView: Bool = true
-    
-    // dependencies
-    @Binding var isExpanded: Bool
+    @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -37,38 +33,39 @@ struct SavedCaptionsHomeView: View {
                     ImageButtonView(imgName: "magnifier") {}
 
                     // Grid/List view
-                    ImageButtonView(imgName: isGridView ? "list_menu" : "grid_menu") {
+                    ImageButtonView(imgName: savedCaptionHomeVm.isGridView ? "list_menu" : "grid_menu") {
                         withAnimation {
                             Haptics.shared.play(.soft)
-                            self.isGridView.toggle()
+                            savedCaptionHomeVm.isGridView.toggle()
                         }
                     }
 
                     // Expand
-                    ImageButtonView(imgName: isExpanded ? "collapse" : "expand") {
+                    ImageButtonView(imgName: savedCaptionHomeVm.isViewExpanded ? "collapse" : "expand") {
                         withAnimation {
                             Haptics.shared.play(.soft)
-                            self.isExpanded.toggle()
+                            savedCaptionHomeVm.isViewExpanded.toggle()
                         }
                     }
                 }
             }
 
-            if isGridView {
+            if savedCaptionHomeVm.isGridView {
                 FolderGridView(disableTap: .constant(false))
             } else {
-                CaptionListView(isExpanded: $isExpanded)
+                CaptionListView()
             }
             
         }
         .padding()
-        .padding(.top, isExpanded ? 15 : 30)
+        .padding(.top, savedCaptionHomeVm.isViewExpanded ? 15 : 30)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 }
 
  struct SavedCaptionsHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        SavedCaptionsHomeView(isExpanded: .constant(true))
+        SavedCaptionsHomeView()
+            .environmentObject(SavedCaptionHomeViewModel())
     }
  }

@@ -49,10 +49,6 @@ class Router {
         navStack.push(LoadingView())
     }
 
-    func toEditCaptionView(platform: String) {
-        navStack.push(EditCaptionView(platform: platform))
-    }
-
     func toCapacityFallbackView() {
         navStack.push(FallbackView(lottieFileName: "capacity_error_robot", title: "We’re over capacity", message: "We apologize, we're currently at over capacity. Our team is working hard to generate captions for everyone. Please try again later.", onClick: { self.navStack.pop(to: .view(withId: HOME_SCREEN)) }))
     }

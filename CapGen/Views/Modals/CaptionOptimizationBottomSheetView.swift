@@ -33,24 +33,31 @@ struct CaptionOptimizationBottomSheetView: View {
             }
         }
     }
-
+    
     private func saveCaptionsToFolder() {
         isSavingToFolder = true
-
+        
         let captionsToSaveWithFolderId = folderVm.captionFolderStorage
-        let userId = AuthManager.shared.userManager.user?.id ?? nil
-
-        Task {
-            await self.firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) {
-                folderVm.resetFolderStorage()
-                self.isSavingToFolder = false
-                self.isSuccessfullySaved = true
+        
+        if let user = AuthManager.shared.userManager.user {
+            let userId = user.id
+            
+            self.firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) {
+                // get current folders
+                let currentFolders = user.folders
+                if !currentFolders.isEmpty {
+                    withAnimation {
+                        folderVm.resetFolderStorage()
+                        self.isSavingToFolder = false
+                        self.isSuccessfullySaved = true
+                        
+                        // Resets Saved! tag after 1 second
+                        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
+                            self.isSuccessfullySaved = false
+                        }
+                    }
+                }
             }
-        }
-
-        // Resets Saved! tag after 2 seconds
-        Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-            self.isSuccessfullySaved = false
         }
     }
 
@@ -68,7 +75,7 @@ struct CaptionOptimizationBottomSheetView: View {
                     SelectedCaptionCardButton(caption: captionVm.selectedCaption.captionDescription, colorFilled: $captionVm.selectedCaption.color)
                         {
                             // on click, take user to edit caption screen
-                            self.navStack.push(EditCaptionView(platform: "", context: .optimization))
+                            self.navStack.push(EditCaptionView(context: .optimization))
                         }
                         .frame(maxHeight: 250)
                         .padding(.horizontal, 25)

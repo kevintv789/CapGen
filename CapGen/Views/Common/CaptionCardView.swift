@@ -49,6 +49,7 @@ struct CaptionCardView: View {
                         .font(.ui.bodyLarge)
                         .foregroundColor(.ui.cultured)
                         .lineLimit(2)
+                        .lineSpacing(5)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
 

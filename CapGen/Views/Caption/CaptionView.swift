@@ -78,7 +78,7 @@ struct CaptionView: View {
         // Create caption model object with required elements
         captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "")
 
-        // On click, store a reference to the caption that is potentially edited
+        // On click, store a reference to the caption that will potentially be edited
         captionVm.editedCaption = EditedCaption(index: index, text: caption)
     }
 
@@ -121,7 +121,7 @@ struct CaptionView: View {
                                                         self.mapCaptionToBeEdited(index: index, caption: caption)
 
                                                         // on click, take user to edit caption screen
-                                                        self.navStack.push(EditCaptionView(platform: "", context: .regular))
+                                                        self.navStack.push(EditCaptionView(context: .regular))
 
                                                     }, onMenuOpen: {
                                                         self.shareableData = mapShareableData(caption: caption, platform: nil)

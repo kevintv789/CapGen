@@ -131,6 +131,7 @@ struct HomeView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
     @EnvironmentObject var folderVm: FolderViewModel
+    @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
 
     // user data
     @State var userFirstName: String?
@@ -143,9 +144,6 @@ struct HomeView: View {
 
     // nav instances
     @State var router: Router? = nil
-
-    // saved captions bottom view
-    @State var isExpanded: Bool = false
 
     var body: some View {
         ZStack {
@@ -199,13 +197,13 @@ struct HomeView: View {
             VStack {
                 Spacer()
                 // Bottom level
-                Wave(isExpanded: self.isExpanded)
+                Wave(isExpanded: savedCaptionHomeVm.isViewExpanded)
                     .fill(Color.ui.lavenderBlue)
                     .rotationEffect(.degrees(180))
                     .ignoresSafeArea(.all)
-                    .frame(height: isExpanded ? SCREEN_HEIGHT : SCREEN_HEIGHT * 0.34)
+                    .frame(height: savedCaptionHomeVm.isViewExpanded ? SCREEN_HEIGHT : SCREEN_HEIGHT * 0.34)
                     .overlay(
-                        SavedCaptionsHomeView(isExpanded: self.$isExpanded)
+                        SavedCaptionsHomeView()
                     )
             }
         }
@@ -257,8 +255,11 @@ struct HomeView: View {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = authManager.userManager.user?.folders ?? []
 
-                    Task {
-                        await firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {}
+//                    Task {
+                        firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {
+                            // on complete, dismiss modal
+                            self.showFolderDeleteModal = false
+//                        }
                     }
                 }
 
@@ -321,6 +322,7 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())
+            .environmentObject(SavedCaptionHomeViewModel())
 
         HomeView()
             .environmentObject(TaglistViewModel())
@@ -330,6 +332,7 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())
+            .environmentObject(SavedCaptionHomeViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
