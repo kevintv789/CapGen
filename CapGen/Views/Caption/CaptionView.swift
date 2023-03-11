@@ -107,10 +107,14 @@ struct CaptionView: View {
                             ForEach(Array(self.openAiConnector.captionsGroupParsed.enumerated()), id: \.element) { index, caption in
                                 Button {
                                     withAnimation {
-                                        self.mapCaptionToBeEdited(index: index, caption: caption)
-
-                                        self.captionVm.isCaptionSelected = true
-
+                                        // Set a delay to show bottom sheet
+                                        // This is a direct result of having the custom menu opened right before pressing this button
+                                        // which will result in a "View is already presented" error
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                            self.mapCaptionToBeEdited(index: index, caption: caption)
+                                            self.captionVm.isCaptionSelected = true
+                                        }
+                                        
                                         Haptics.shared.play(.soft)
                                     }
                                 } label: {

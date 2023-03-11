@@ -45,16 +45,14 @@ struct CaptionListView: View {
             // reset array to avoid duplicate IDs
             self.captions.removeAll()
             
-            if let user = AuthManager.shared.userManager.user {
+            if let user = user {
                 let captionsPerFolder = user.folders.map { $0.captions }
                 
+                print("old cap", captionsPerFolder)
                 captionsPerFolder.forEach { captions in
-                    // for some reason, the folders still contain the original caption that was just edited
-                    // this bug resulted in the user seeing the previous and newly edited captions at the same time
-                    // to fix, we must filter out the previous caption from the original folders list
-                    let filteredCaptions = captions.filter({ $0.id != captionVm.selectedCaption.id })
-                    self.captions.append(contentsOf: filteredCaptions)
+                    self.captions.append(contentsOf: captions)
                 }
+                print("new cap", self.captions)
                 
                 // Sort by most recent created
                 let df = DateFormatter()

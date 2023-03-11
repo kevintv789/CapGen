@@ -35,6 +35,7 @@ struct EditCaptionView: View {
     @State var shareableData: ShareableData?
     @State var isSelectingPlatform: Bool = false
     @State var selectedPlatform: String? = nil
+    @State var isLoading: Bool = false
 
     // Used to determine if platform icons should display for Dropdown menu
     // Used to determine if CopyAndGo should be available - no if selected platform is General
@@ -68,12 +69,14 @@ struct EditCaptionView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color(hex: captionVm.selectedCaption.color).ignoresSafeArea(.all)
-
+            
             GeometryReader { _ in
                 VStack(alignment: .leading) {
                     // Header
                     HStack {
                         BackArrowView {
+                            hideKeyboard()
+                            
                             // custom action
                             if context == .optimization {
                                 self.captionVm.isCaptionSelected = true
@@ -84,16 +87,24 @@ struct EditCaptionView: View {
                             
                             // once user navigates back, store edited caption into firebase
                             // as long as the editing was from the caption list context
-                            if context == .captionList {
+                            // also only runs if there was a change in text
+                            else if context == .captionList, captionVm.selectedCaption.captionDescription != captionVm.editedCaption.text {
+                                self.isLoading = true
                                 let userId = AuthManager.shared.userManager.user?.id ?? nil
                                 
-                                Task {
-                                    captionVm.selectedCaption.captionDescription = captionVm.editedCaption.text
-                                    await firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) {}
+                                captionVm.selectedCaption.captionDescription = captionVm.editedCaption.text
+                                firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) {
+                                    // Create a half second delay here to avoid any race conditions
+                                    // without it, sometimes the pop action doesn't work
+//                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        self.isLoading = false
+                                        self.navStack.pop(to: .previous)
+//                                    }
                                 }
+                            } else {
+                                // difference is that this pops outside of the asynchronous context
+                                self.navStack.pop(to: .previous)
                             }
-                            
-                            self.navStack.pop(to: .previous)
                         }
                         .disabled(isSelectingPlatform)
                         .padding(.leading, 8)
@@ -167,6 +178,7 @@ struct EditCaptionView: View {
             }
             .zIndex(isSelectingPlatform ? 1 : 0)
             .ignoresSafeArea(.keyboard, edges: .all)
+            .blur(radius: self.isLoading ? 3 : 0)
 
             if isSelectingPlatform {
                 Color.ui.richBlack.opacity(0.35).ignoresSafeArea(.all)
@@ -176,6 +188,16 @@ struct EditCaptionView: View {
                         }
                     }
             }
+            
+            // Calls activity indicator here
+            if self.isLoading {
+                SimpleLoadingView(scaledSize: 3, title: "Saving...")
+            }
+        }
+        .disabled(self.isLoading)
+        .onDisappear() {
+            captionVm.resetSelectedCaption()
+            captionVm.resetEditedCaption()
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {

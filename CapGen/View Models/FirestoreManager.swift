@@ -281,7 +281,7 @@ class FirestoreManager: ObservableObject {
     }
 
     /**
-     This function saves the captions to the folders
+     This function saves the captions to the folders within the CaptionOptimizationBottomSheetView
      1. Retrieve the current folders
      2. Find the folder to be updated
      3. Remove all folders that were selected from the current folders list
@@ -300,9 +300,16 @@ class FirestoreManager: ObservableObject {
         // Get current folders from the user document
         var currentFolders = AuthManager.shared.userManager.user?.folders ?? []
         
+        // destinationFolders -- are the folders that will have new captions saved to it
         if !destinationFolders.isEmpty {
+            
+            // do a loop on each folder to retrieve necessities
             destinationFolders.forEach { folder in
+                
+                // sets a new folder ID to associate updated folders and captions with
                 let newFolderId: String = UUID().uuidString
+                
+                // retrieve the caption to be saved to be updated within the updated folder
                 var captionToSave = folder.caption as CaptionModel
                 captionToSave.folderId = newFolderId
                 
@@ -312,9 +319,9 @@ class FirestoreManager: ObservableObject {
                     
                     var updatedCaptions: [CaptionModel] = []
                     
-                    // Update all current captions to the new folder Id
+                    // Update all current captions to the new folder Id and caption ID
                     designatedFolder.captions.forEach { caption in
-                        let updatedCaption = CaptionModel(id: caption.id, captionLength: caption.captionLength, dateCreated: caption.dateCreated, captionDescription: caption.captionDescription, includeEmojis: caption.includeEmojis, includeHashtags: caption.includeHashtags, folderId: newFolderId, prompt: caption.prompt, title: caption.title, tones: caption.tones, color: caption.color, index: caption.index)
+                        let updatedCaption = CaptionModel(id: UUID().uuidString, captionLength: caption.captionLength, dateCreated: caption.dateCreated, captionDescription: caption.captionDescription, includeEmojis: caption.includeEmojis, includeHashtags: caption.includeHashtags, folderId: newFolderId, prompt: caption.prompt, title: caption.title, tones: caption.tones, color: caption.color, index: caption.index)
 
                         updatedCaptions.append(updatedCaption)
                     }
@@ -331,8 +338,11 @@ class FirestoreManager: ObservableObject {
             }
         }
         
+        // Create a dispatch group to keep everything synchronous
+        // FB must delete all folders and then add new folders before the view gets updated
+        // otherwise we run into duplicate keys issues
         let dispatchGroup = DispatchGroup()
-        
+
         dispatchGroup.enter()
         
         self.deleteAllFolders(for: docRef) {
@@ -349,7 +359,7 @@ class FirestoreManager: ObservableObject {
     /**
      This function updates a caption within a specific folder. This will most likely be ran from within the CaptionListView or FolderView.
      */
-    func updateSingleCaptionInFolder(for uid: String?, currentCaption: CaptionModel, onComplete: @escaping () -> Void) async {
+    func updateSingleCaptionInFolder(for uid: String?, currentCaption: CaptionModel, onComplete: @escaping () -> Void) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             onComplete()
@@ -357,31 +367,59 @@ class FirestoreManager: ObservableObject {
         }
         
         // Get current folders from the user document
-        let currentFolders = AuthManager.shared.userManager.user?.folders ?? []
+        var currentFolders = AuthManager.shared.userManager.user?.folders ?? []
+        
+        let docRef: DocumentReference = db.collection("Users").document("\(userId)")
         
         if !currentFolders.isEmpty {
+            let newFolderId: String = UUID().uuidString
+            
             // Find folder to be updated from Firebase
-            if var designatedFolder = currentFolders.first(where: { $0.id == currentCaption.folderId }) {
-                // Find the old caption within designated folder and remove it, then append the new caption with a new ID
-                if let oldCaptionIndex = designatedFolder.captions.firstIndex(where: { $0.id == currentCaption.id }), oldCaptionIndex >= 0 {
-                    // Delete original folder from Firebase so we can add in a new one with the updated caption
-                    let oldCaptionRef = designatedFolder.captions.remove(at: oldCaptionIndex)
+            if let designatedFolderIndex = currentFolders.firstIndex(where: { $0.id == currentCaption.folderId }) {
+                
+                // Remove old folder, but keep a reference to it
+                let designatedFolder = currentFolders.remove(at: designatedFolderIndex)
+                
+                var updatedCaptions: [CaptionModel] = []
+                
+                // Update all current captions to the new folder Id
+                designatedFolder.captions.forEach { caption in
+                    var updatedCaption = CaptionModel(id: caption.id, captionLength: caption.captionLength, dateCreated: caption.dateCreated, captionDescription: caption.captionDescription, includeEmojis: caption.includeEmojis, includeHashtags: caption.includeHashtags, folderId: newFolderId, prompt: caption.prompt, title: caption.title, tones: caption.tones, color: caption.color, index: caption.index)
                     
-                    // Create a new caption model object with updated ID and description
-                    let newCaption = CaptionModel(id: UUID().uuidString, captionLength: oldCaptionRef.captionLength, dateCreated: oldCaptionRef.dateCreated, captionDescription: currentCaption.captionDescription, includeEmojis: oldCaptionRef.includeEmojis, includeHashtags: oldCaptionRef.includeHashtags, folderId: oldCaptionRef.folderId, prompt: oldCaptionRef.prompt, title: oldCaptionRef.title, tones: oldCaptionRef.tones, color: oldCaptionRef.color, index: oldCaptionRef.index)
+                    // Since we are updating a particular caption
+                    // we must find the updated caption, replace it from this list
+                    // so the list can be updated with the new description
+                    if updatedCaption.id == currentCaption.id {
+                        updatedCaption.captionDescription = currentCaption.captionDescription
+                    }
                     
-                    // append new caption onto the list with updated description
-                    designatedFolder.captions.append(newCaption)
-                    
-                    // Create a new folder with the same specs as original folder
-                    let newFolder = FolderModel(id: designatedFolder.id, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: designatedFolder.captions, index: designatedFolder.index)
-                    
-                    await self.updateFolder(for: userId, newFolder: newFolder, currentFolders: currentFolders, onComplete: { updatedFolder in
-                        if updatedFolder != nil {
-                            onComplete()
-                        }
-                    })
+                    updatedCaptions.append(updatedCaption)
                 }
+                
+                // create a new folder object with the updated caption and ID
+                let updatedFolder = FolderModel(id: newFolderId, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: updatedCaptions, index: designatedFolder.index)
+                
+                // append new updated folder
+                currentFolders.append(updatedFolder)
+            }
+            
+            // Use DispatchGroup to keep everything synchronous
+            // Firebase must delete all folders and then add new folders before the view gets updated
+            // otherwise we run into duplicate keys issues
+            let group = DispatchGroup()
+            
+            group.enter()
+            self.deleteAllFolders(for: docRef) {
+                group.leave()
+            }
+            
+            group.enter()
+            self.addNewFolders(for: docRef, updatedFolders: currentFolders) {
+                group.leave()
+            }
+            
+            group.notify(queue: .main) {
+                onComplete()
             }
         }
     }
