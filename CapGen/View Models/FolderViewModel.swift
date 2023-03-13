@@ -18,6 +18,7 @@ class FolderViewModel: ObservableObject {
     @Published var isDeleting: Bool = false
     @Published var editedFolder: FolderModel = .init()
     @Published var captionFolderStorage: [DestinationFolder] = []
+    @Published var updatedFolder: FolderModel? = nil
 
     func resetFolder() {
         currentFolder = FolderModel()

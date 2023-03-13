@@ -98,6 +98,11 @@ struct CaptionOptimizationBottomSheetView: View {
 
                 Spacer()
             }
+            .onDisappear() {
+                folderVm.resetFolderStorage()
+                self.isSavingToFolder = false
+                self.isSuccessfullySaved = true
+            }
             // Create drag gesture to rotate between views
             .highPriorityGesture(
                 DragGesture()

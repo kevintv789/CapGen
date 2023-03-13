@@ -68,6 +68,8 @@ struct CaptionView: View {
             } else {
                 navStack.pop(to: .view(withId: HOME_SCREEN))
             }
+            
+            self.captionVm.resetEditedCaption()
         }
     }
 
@@ -160,11 +162,7 @@ struct CaptionView: View {
             // replace original parsed list with edited caption
             if !self.captionVm.editedCaption.text.isEmpty {
                 self.openAiConnector.captionsGroupParsed[self.captionVm.editedCaption.index] = self.captionVm.editedCaption.text
-                self.captionVm.resetEditedCaption()
             }
-        }
-        .onDisappear() {
-            self.captionVm.resetEditedCaption()
         }
     }
 }

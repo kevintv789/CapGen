@@ -22,7 +22,6 @@ class CaptionViewModel: ObservableObject {
 
     func resetSelectedCaption() {
         selectedCaption = CaptionModel()
-        isCaptionSelected = false
     }
 
     func resetEditedCaption() {

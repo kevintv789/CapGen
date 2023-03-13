@@ -19,6 +19,7 @@ struct EditCaptionView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
+    @EnvironmentObject var folderVm: FolderViewModel
 
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
@@ -79,6 +80,8 @@ struct EditCaptionView: View {
                             
                             // custom action
                             if context == .optimization {
+                                self.navStack.pop(to: .previous)
+                                
                                 self.captionVm.isCaptionSelected = true
 
                                 // Update the selected caption with the edited text
@@ -93,22 +96,24 @@ struct EditCaptionView: View {
                                 let userId = AuthManager.shared.userManager.user?.id ?? nil
                                 
                                 captionVm.selectedCaption.captionDescription = captionVm.editedCaption.text
-                                firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) {
-                                    // Create a half second delay here to avoid any race conditions
-                                    // without it, sometimes the pop action doesn't work
-//                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                        self.isLoading = false
+                                Task {
+                                    await firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) { updatedFolder in
+                                        self.folderVm.updatedFolder = updatedFolder ?? nil
                                         self.navStack.pop(to: .previous)
-//                                    }
+                                        self.isLoading = false
+                                        
+                                    }
                                 }
                             } else {
                                 // difference is that this pops outside of the asynchronous context
                                 self.navStack.pop(to: .previous)
                             }
+                            
+                            
                         }
                         .disabled(isSelectingPlatform)
                         .padding(.leading, 8)
-
+                        
                         Spacer()
 
                         DropdownMenu(title: selectedPlatform == nil ? "General" : selectedPlatform!, socialMediaIcon: shouldShowSocialMediaPlatform ? selectedPlatform : nil, isMenuOpen: $isSelectingPlatform)
@@ -196,8 +201,10 @@ struct EditCaptionView: View {
         }
         .disabled(self.isLoading)
         .onDisappear() {
-            captionVm.resetSelectedCaption()
-            captionVm.resetEditedCaption()
+            if context != .optimization {
+                captionVm.resetSelectedCaption()
+                captionVm.resetEditedCaption()
+            }
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -229,17 +236,21 @@ struct EditCaptionView: View {
                 VerticalDivider(color: Color.primary)
                     .padding(.horizontal, 10)
 
-                Button {
-                    hideKeyboard()
-                    Haptics.shared.play(.soft)
-                } label: {
+                ZStack(alignment: .trailing) {
                     Image(systemName: "chevron.down")
-                        .foregroundColor(Color.primary)
-                        .frame(width: 20, height: 20, alignment: .trailing)
+                        .resizable()
+                        .renderingMode(.template)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+
+                    Rectangle()
+                        .frame(width: 30, height: 20)
+                        .opacity(0.001)
+                        .onTapGesture {
+                            hideKeyboard()
+                            Haptics.shared.play(.soft)
+                        }
                 }
-                .frame(width: 50, alignment: .trailing)
-                .padding(.trailing, -12)
-                .padding(.leading, -5)
             }
         }
         .onAppear {
@@ -299,6 +310,7 @@ struct EditCaptionView_Previews: PreviewProvider {
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
             .environmentObject(FirestoreManager())
+            .environmentObject(FolderViewModel())
 
         EditCaptionView()
             .environmentObject(CaptionEditViewModel())
@@ -306,6 +318,7 @@ struct EditCaptionView_Previews: PreviewProvider {
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
             .environmentObject(FirestoreManager())
+            .environmentObject(FolderViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

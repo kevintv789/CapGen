@@ -86,21 +86,9 @@ struct FolderView: View {
                     }
                 }
                 .padding(.leading)
-
-                if folder.captions.isEmpty {
-                    // Empty folder view
-                    BlankCaptionsView(title: "Oops, it looks like you haven't saved any captions to this folder yet.")
-                } else {
-                    // Populated folder view
-                    ScrollView {
-                        ForEach(self.folder.captions) { caption in
-                            CaptionCardView(caption: caption)
-                                .padding(10)
-                                .padding(.horizontal, 10)
-                        }
-                    }
-                    .padding(.top)
-                }
+                
+                CaptionListView(emptyTitle: "Oops, it looks like you haven't saved any captions to this folder yet.", folderId: folder.id, context: .folder)
+                    .padding()
 
                 Spacer()
             }
@@ -121,12 +109,10 @@ struct FolderView: View {
                 if !self.folder.name.isEmpty {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = AuthManager.shared.userManager.user?.folders ?? []
-
-                    Task {
-                        await firestoreManager.onFolderDelete(for: uid, curFolder: self.folder, currentFolders: currentFolders) {
-                            // Once deleted, dismiss view or pop back to previous view
-                            self.navStack.pop(to: .previous)
-                        }
+                    
+                    firestoreManager.onFolderDelete(for: uid, curFolder: self.folder, currentFolders: currentFolders) {
+                        // Once deleted, dismiss view or pop back to previous view
+                        self.navStack.pop(to: .previous)
                     }
                 }
 

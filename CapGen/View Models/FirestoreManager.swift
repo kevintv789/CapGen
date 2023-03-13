@@ -312,6 +312,7 @@ class FirestoreManager: ObservableObject {
                 // retrieve the caption to be saved to be updated within the updated folder
                 var captionToSave = folder.caption as CaptionModel
                 captionToSave.folderId = newFolderId
+                captionToSave.id = UUID().uuidString // generate a new ID for all new captions being saved
                 
                 // Delete original folder from the current folders
                 if let indexOfOriginalFolder = currentFolders.firstIndex(where: { $0.id == folder.id }) {
@@ -359,15 +360,18 @@ class FirestoreManager: ObservableObject {
     /**
      This function updates a caption within a specific folder. This will most likely be ran from within the CaptionListView or FolderView.
      */
-    func updateSingleCaptionInFolder(for uid: String?, currentCaption: CaptionModel, onComplete: @escaping () -> Void) {
+    @MainActor
+    func updateSingleCaptionInFolder(for uid: String?, currentCaption: CaptionModel, onComplete: @escaping (_ updatedFolder: FolderModel?) -> Void) async {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
-            onComplete()
+            onComplete(nil)
             return
         }
         
         // Get current folders from the user document
         var currentFolders = AuthManager.shared.userManager.user?.folders ?? []
+        
+        var updatedFolder: FolderModel = .init()
         
         let docRef: DocumentReference = db.collection("Users").document("\(userId)")
         
@@ -397,29 +401,15 @@ class FirestoreManager: ObservableObject {
                 }
                 
                 // create a new folder object with the updated caption and ID
-                let updatedFolder = FolderModel(id: newFolderId, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: updatedCaptions, index: designatedFolder.index)
+                updatedFolder = FolderModel(id: newFolderId, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: updatedCaptions, index: designatedFolder.index)
                 
                 // append new updated folder
                 currentFolders.append(updatedFolder)
-            }
-            
-            // Use DispatchGroup to keep everything synchronous
-            // Firebase must delete all folders and then add new folders before the view gets updated
-            // otherwise we run into duplicate keys issues
-            let group = DispatchGroup()
-            
-            group.enter()
-            self.deleteAllFolders(for: docRef) {
-                group.leave()
-            }
-            
-            group.enter()
-            self.addNewFolders(for: docRef, updatedFolders: currentFolders) {
-                group.leave()
-            }
-            
-            group.notify(queue: .main) {
-                onComplete()
+                
+                await deleteAllFoldersAsync(for: docRef)
+                await addNewFoldersAsync(for: docRef, updatedFolders: currentFolders)
+                
+                onComplete(updatedFolder)
             }
         }
     }
@@ -454,6 +444,28 @@ class FirestoreManager: ObservableObject {
         // Write back to Firebase the modified folders array with the specific folder removed
         docRef.setData(["folders": updatedFolders.map({ $0.dictionary })], merge: true)
         onComplete()
+    }
+    
+    private func deleteAllFoldersAsync(for docRef: DocumentReference) async {
+        // delete entire folders array
+        do {
+            try await docRef.updateData(["folders": FieldValue.delete()])
+        } catch {
+            print("ERROR cannot delete all folders", error)
+            self.appError = ErrorType(error: .genericError)
+            return
+        }
+    }
+    
+    private func addNewFoldersAsync(for docRef: DocumentReference, updatedFolders: [FolderModel]) async {
+        // Write back to Firebase the modified folders array with the specific folder removed
+        do {
+            try await docRef.setData(["folders": updatedFolders.map({ $0.dictionary })], merge: true)
+        } catch {
+            print("ERROR cannot add folders", error)
+            self.appError = ErrorType(error: .genericError)
+            return
+        }
     }
     
     func unbindListener() async {
