@@ -93,7 +93,7 @@ enum Utils {
 
             result.append(mappedCaption)
         }
-        
+
         // Sort by most recent created
         let df = DateFormatter()
         df.dateFormat = "MMM d, h:mm a"

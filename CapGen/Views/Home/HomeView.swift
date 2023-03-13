@@ -256,9 +256,9 @@ struct HomeView: View {
                     let currentFolders = authManager.userManager.user?.folders ?? []
 
 //                    Task {
-                        firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {
-                            // on complete, dismiss modal
-                            self.showFolderDeleteModal = false
+                    firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {
+                        // on complete, dismiss modal
+                        self.showFolderDeleteModal = false
 //                        }
                     }
                 }

@@ -70,50 +70,47 @@ struct EditCaptionView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color(hex: captionVm.selectedCaption.color).ignoresSafeArea(.all)
-            
+
             GeometryReader { _ in
                 VStack(alignment: .leading) {
                     // Header
                     HStack {
                         BackArrowView {
                             hideKeyboard()
-                            
+
                             // custom action
                             if context == .optimization {
                                 self.navStack.pop(to: .previous)
-                                
+
                                 self.captionVm.isCaptionSelected = true
 
                                 // Update the selected caption with the edited text
                                 self.captionVm.selectedCaption.captionDescription = self.captionVm.editedCaption.text
                             }
-                            
+
                             // once user navigates back, store edited caption into firebase
                             // as long as the editing was from the caption list context
                             // also only runs if there was a change in text
                             else if context == .captionList, captionVm.selectedCaption.captionDescription != captionVm.editedCaption.text {
                                 self.isLoading = true
                                 let userId = AuthManager.shared.userManager.user?.id ?? nil
-                                
+
                                 captionVm.selectedCaption.captionDescription = captionVm.editedCaption.text
                                 Task {
                                     await firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) { updatedFolder in
                                         self.folderVm.updatedFolder = updatedFolder ?? nil
                                         self.navStack.pop(to: .previous)
                                         self.isLoading = false
-                                        
                                     }
                                 }
                             } else {
                                 // difference is that this pops outside of the asynchronous context
                                 self.navStack.pop(to: .previous)
                             }
-                            
-                            
                         }
                         .disabled(isSelectingPlatform)
                         .padding(.leading, 8)
-                        
+
                         Spacer()
 
                         DropdownMenu(title: selectedPlatform == nil ? "General" : selectedPlatform!, socialMediaIcon: shouldShowSocialMediaPlatform ? selectedPlatform : nil, isMenuOpen: $isSelectingPlatform)
@@ -193,14 +190,14 @@ struct EditCaptionView: View {
                         }
                     }
             }
-            
+
             // Calls activity indicator here
             if self.isLoading {
                 SimpleLoadingView(scaledSize: 3, title: "Saving...")
             }
         }
         .disabled(self.isLoading)
-        .onDisappear() {
+        .onDisappear {
             if context != .optimization {
                 captionVm.resetSelectedCaption()
                 captionVm.resetEditedCaption()
@@ -263,14 +260,15 @@ struct EditCaptionView: View {
                     self.isTextCopied = false
                 }
             }
-            
+
             // find specific folder for a caption if editing from the caption list
             if context == .captionList, let user = AuthManager.shared.userManager.user {
                 // filter to a folder for a specific caption
+                // BUG: -- If user updates the folder within FolderView(), this won't work as the folderId will change. Must choose updated folder Id
                 if let folder = user.folders.first(where: { $0.id == captionVm.selectedCaption.folderId }) {
                     // Update platform based on folder type
                     self.selectedPlatform = folder.folderType.rawValue
-                    
+
                     // Set text to be edited
                     captionVm.editedCaption.text = captionVm.selectedCaption.captionDescription
                 }
@@ -282,7 +280,7 @@ struct EditCaptionView: View {
                 let socialMediaFiltered = socialMediaPlatforms.first(where: { $0.title == sp })
                 self.textLimit = socialMediaFiltered?.characterLimit ?? 0
                 self.hashtagLimit = socialMediaFiltered?.hashtagLimit ?? 0
-                
+
                 self.shouldShowSocialMediaPlatform = !sp.isEmpty && sp != "General"
             }
 

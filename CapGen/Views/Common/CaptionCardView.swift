@@ -8,17 +8,39 @@
 import SwiftUI
 
 struct CaptionCardView: View {
+    @EnvironmentObject var folderVm: FolderViewModel
+    
     // Scaled size
     @ScaledMetric var scaledSize: CGFloat = 1
-    
+
+    // private variables
+    @State var folderInfo: FolderModel? = nil
+    @State var shouldShowSocialMediaPlatform: Bool = false
+    @State var folderType: String? = ""
+
+    // dependencies
     var caption: CaptionModel
-    
     // optional dependency to display folder name
     var showFolderInfo: Bool = false
+
+    // Custom menu actions
+    var onEdit: () -> Void
+
+    private func showSocialmediaPresence() -> Binding<String?> {
+        if shouldShowSocialMediaPlatform {
+            return $folderType
+        }
+
+        return .constant(nil)
+    }
     
-//    @State var folderInfo: FolderModel? = foldersMock[0] // replace with nil without mock
-    @State var folderInfo: FolderModel? = nil
-    
+    private func updateFolderInfo(folderInfo: FolderModel) {
+        // return true if folder type is anything but General
+        self.shouldShowSocialMediaPlatform = folderInfo.folderType != .General
+
+        self.folderType = folderInfo.folderType.rawValue
+    }
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14)
@@ -38,10 +60,16 @@ struct CaptionCardView: View {
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        CustomMenuPopup(menuTheme: .light, shareableData: .constant(nil), socialMediaPlatform: .constant(nil))
-                            .onTapGesture {}
-                            .frame(maxHeight: .infinity, alignment: .topTrailing)
-                            .padding(.trailing, -10)
+                        CustomMenuPopup(menuTheme: .light, shareableData: .constant(nil), socialMediaPlatform: showSocialmediaPresence(),
+                                        edit: onEdit,
+                                        onCopyAndGo: {
+                                            // Copy and go run openSocialMediaLink(for: platform)
+                                            UIPasteboard.general.string = caption.captionDescription
+                                            openSocialMediaLink(for: showSocialmediaPresence().wrappedValue ?? "")
+                                        })
+                                        .onTapGesture {}
+                                        .frame(maxHeight: .infinity, alignment: .topTrailing)
+                                        .padding(.trailing, -10)
                     }
 
                     Text(caption.captionDescription.trimmingCharacters(in: .whitespaces))
@@ -62,18 +90,18 @@ struct CaptionCardView: View {
                             // Display folder information on each caption
                             if showFolderInfo, folderInfo != nil {
                                 HStack(spacing: 5) {
-                                    Image(folderInfo!.folderType == .General ? "empty_folder_white" : "\(folderInfo!.folderType)-circle")
+                                    Image(shouldShowSocialMediaPlatform ? "\(folderInfo!.folderType)-circle" : "empty_folder_white")
                                         .resizable()
                                         .frame(width: 16 * scaledSize, height: 16 * scaledSize)
                                         .if(folderInfo!.folderType != .General) { image in
-                                            return image
+                                            image
                                                 .padding(2)
                                                 .background(
                                                     Circle()
                                                         .fill(Color.ui.cultured)
                                                 )
                                         }
-                                    
+
                                     Text(folderInfo!.name)
                                         .font(.ui.body)
                                         .foregroundColor(.ui.cultured)
@@ -87,18 +115,22 @@ struct CaptionCardView: View {
                                 .foregroundColor(.ui.cultured)
                                 .font(.ui.headlineMd)
                         }
-                        
-                        
                     }
                     .padding()
                 }
             }
         }
-        .onAppear() {
+        .onAppear {
             if let user = AuthManager.shared.userManager.user {
                 // filter to a folder for a specific caption
-                self.folderInfo = user.folders.first { $0.id == caption.folderId } ?? nil
+                if let folderInfo = user.folders.first(where: { $0.id == caption.folderId }) {
+                    self.folderInfo = folderInfo
+                    self.updateFolderInfo(folderInfo: folderInfo)
+                }
             }
+        }
+        .onReceive(folderVm.$editedFolder) { editedFolder in
+            self.updateFolderInfo(folderInfo: editedFolder)
         }
     }
 }
@@ -106,7 +138,7 @@ struct CaptionCardView: View {
 struct CircularIndicatorView: View {
     // Scaled size
     @ScaledMetric var scaledSize: CGFloat = 1
-    
+
     let caption: CaptionModel
 
     var body: some View {

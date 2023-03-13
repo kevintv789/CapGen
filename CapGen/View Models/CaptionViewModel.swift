@@ -25,6 +25,6 @@ class CaptionViewModel: ObservableObject {
     }
 
     func resetEditedCaption() {
-        self.editedCaption = .init(text: "")
+        editedCaption = .init(text: "")
     }
 }

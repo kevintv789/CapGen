@@ -141,7 +141,7 @@ class UserManager: ObservableObject {
 
         // returns a list of folders that is sorted by largest caption count first
         return result.sorted { f1, f2 in
-            return f1.captions.count > f2.captions.count
+            f1.captions.count > f2.captions.count
         }
     }
 

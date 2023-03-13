@@ -68,8 +68,8 @@ struct CaptionView: View {
             } else {
                 navStack.pop(to: .view(withId: HOME_SCREEN))
             }
-            
-            self.captionVm.resetEditedCaption()
+
+            captionVm.resetEditedCaption()
         }
     }
 
@@ -116,7 +116,7 @@ struct CaptionView: View {
                                             self.mapCaptionToBeEdited(index: index, caption: caption)
                                             self.captionVm.isCaptionSelected = true
                                         }
-                                        
+
                                         Haptics.shared.play(.soft)
                                     }
                                 } label: {

@@ -21,15 +21,14 @@ struct BlankCaptionsView: View {
             Image("sad_empty_robot")
                 .resizable()
                 .if(imageSize == .regular) { image in
-                    return image.aspectRatio(contentMode: .fit)
+                    image.aspectRatio(contentMode: .fit)
                 }
                 .if(imageSize == .small) { image in
-                    return image
+                    image
                         .frame(width: 200, height: 200)
                         .padding(.bottom, -20)
                         .padding(.top, -30)
                 }
-                
 
             Text(title)
                 .multilineTextAlignment(.center)

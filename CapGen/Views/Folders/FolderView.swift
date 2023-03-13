@@ -6,7 +6,6 @@
 //
 // This view is directly from inside a folder
 
-
 import NavigationStack
 import SwiftUI
 
@@ -36,7 +35,7 @@ struct FolderView: View {
 
     // dependencies
     @State var folder: FolderModel
-    
+
     // Necessary to share data from the custom menu
     @State var shareableData: ShareableData? = nil
 
@@ -55,21 +54,24 @@ struct FolderView: View {
                 } onDelete: {
                     // on delete
                     self.showFolderDeleteModal = true
+                } onBack: {
+                    // reset updated folder
+                    folderVm.updatedFolder = nil
+                    self.navStack.pop(to: .previous)
                 }
 
                 // Folder title
                 Button {
                     // on edit
                     folderVm.currentFolder = folder
-                    
+
                     // Set a delay to show bottom sheet
                     // This is a direct result of having the custom menu opened right before pressing this button
                     // which will result in a "View is already presented" error
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         self.showFolderBottomSheet.toggle()
                     }
-                    
-                   
+
                 } label: {
                     HStack {
                         Image("empty_folder_white")
@@ -86,7 +88,7 @@ struct FolderView: View {
                     }
                 }
                 .padding(.leading)
-                
+
                 CaptionListView(emptyTitle: "Oops, it looks like you haven't saved any captions to this folder yet.", folderId: folder.id, context: .folder)
                     .padding()
 
@@ -109,7 +111,7 @@ struct FolderView: View {
                 if !self.folder.name.isEmpty {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = AuthManager.shared.userManager.user?.folders ?? []
-                    
+
                     firestoreManager.onFolderDelete(for: uid, curFolder: self.folder, currentFolders: currentFolders) {
                         // Once deleted, dismiss view or pop back to previous view
                         self.navStack.pop(to: .previous)
@@ -149,11 +151,14 @@ struct FolderHeaderView: View {
     let onEdit: () -> Void
     let onMenuOpen: () -> Void
     let onDelete: () -> Void
+    let onBack: () -> Void
 
     var body: some View {
         // Header
         HStack {
-            BackArrowView()
+            BackArrowView() {
+                onBack()
+            }
                 .padding(.leading, 8)
 
             Spacer()

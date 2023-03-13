@@ -36,7 +36,7 @@ struct FolderBottomSheetView: View {
         // Call API to update firebase
         if let user = AuthManager.shared.userManager.user {
             let userId = user.id
-            
+
             // calculates index based off current amount of folders
             let newFolder = FolderModel(name: folderName, folderType: selectedPlatform, captions: [], index: user.folders.count)
 
@@ -51,21 +51,19 @@ struct FolderBottomSheetView: View {
                 if let curFolder = folder {
                     let currFolders = AuthManager.shared.userManager.user?.folders ?? []
                     let updatedFolder = FolderModel(id: curFolder.id, name: folderName, dateCreated: curFolder.dateCreated, folderType: selectedPlatform, captions: curFolder.captions, index: curFolder.index)
-
-                    Task {
-                        await firestoreMan.updateFolder(for: userId, newFolder: updatedFolder, currentFolders: currFolders) { updatedFolder in
-                            if let updatedFolder = updatedFolder {
-                                folderVm.editedFolder = updatedFolder
-                            }
-
-                            self.isLoading = false
-                            dismiss()
+                    
+                    firestoreMan.updateFolder(for: userId, newFolder: updatedFolder, currentFolders: currFolders) { updatedFolder in
+                        if let updatedFolder = updatedFolder {
+                            folderVm.editedFolder = updatedFolder
+                            folderVm.updatedFolder = updatedFolder
                         }
+                        
+                        self.isLoading = false
+                        dismiss()
                     }
                 }
             }
         }
-        
     }
 
     var body: some View {

@@ -5,10 +5,10 @@
 //  Created by Kevin Vu on 3/2/23.
 //
 
+import Appodeal
 import Combine
 import Foundation
 import SwiftUI
-import Appodeal
 
 class AppodealProvider: NSObject, ObservableObject {
     @Published var firestoreMan: FirestoreManager = .init()

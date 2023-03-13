@@ -74,7 +74,7 @@ struct FolderGridView: View {
                             }
                         }
                         .disabled(disableTap)
-                        
+
                         FolderCustomMenu(shouldShowDelete: context == .view) {
                             folderVm.currentFolder = folder
                             self.isEditing = true
@@ -244,30 +244,28 @@ struct FolderCustomMenu: View {
     var shouldShowDelete: Bool
     var onEdit: () -> Void
     var onDelete: () -> Void
-    
+
     var body: some View {
         if shouldShowDelete {
             CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
                             edit: {
-                onEdit()
-                
-            }, delete: {
-                onDelete()
-            })
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding(.leading, -33)
-            .padding(.top)
+                                onEdit()
+
+                            }, delete: {
+                                onDelete()
+                            })
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            .padding(.leading, -33)
+                            .padding(.top)
         } else {
             CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
                             edit: {
-                onEdit()
-                
-            })
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding(.leading, -33)
-            .padding(.top)
+                                onEdit()
+
+                            })
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            .padding(.leading, -33)
+                            .padding(.top)
         }
-        
-        
     }
 }

@@ -33,16 +33,16 @@ struct CaptionOptimizationBottomSheetView: View {
             }
         }
     }
-    
+
     private func saveCaptionsToFolder() {
         isSavingToFolder = true
-        
+
         let captionsToSaveWithFolderId = folderVm.captionFolderStorage
-        
+
         if let user = AuthManager.shared.userManager.user {
             let userId = user.id
-            
-            self.firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) {
+
+            firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) {
                 // get current folders
                 let currentFolders = user.folders
                 if !currentFolders.isEmpty {
@@ -50,7 +50,7 @@ struct CaptionOptimizationBottomSheetView: View {
                         folderVm.resetFolderStorage()
                         self.isSavingToFolder = false
                         self.isSuccessfullySaved = true
-                        
+
                         // Resets Saved! tag after 1 second
                         Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
                             self.isSuccessfullySaved = false
@@ -98,7 +98,7 @@ struct CaptionOptimizationBottomSheetView: View {
 
                 Spacer()
             }
-            .onDisappear() {
+            .onDisappear {
                 folderVm.resetFolderStorage()
                 self.isSavingToFolder = false
                 self.isSuccessfullySaved = true

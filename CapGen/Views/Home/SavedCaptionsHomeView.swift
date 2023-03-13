@@ -55,7 +55,6 @@ struct SavedCaptionsHomeView: View {
             } else {
                 CaptionListView()
             }
-            
         }
         .padding()
         .padding(.top, savedCaptionHomeVm.isViewExpanded ? 15 : 30)
@@ -63,9 +62,9 @@ struct SavedCaptionsHomeView: View {
     }
 }
 
- struct SavedCaptionsHomeView_Previews: PreviewProvider {
+struct SavedCaptionsHomeView_Previews: PreviewProvider {
     static var previews: some View {
         SavedCaptionsHomeView()
             .environmentObject(SavedCaptionHomeViewModel())
     }
- }
+}
