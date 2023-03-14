@@ -18,9 +18,11 @@ struct FolderGridView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
 
+    // private vars
     @State var showFolderBottomSheet: Bool = false
     @State var folders: [FolderModel] = []
     @State var isEditing: Bool = false
+    @State var shareableData: ShareableData?
 
     // Nav
     @State var router: Router? = nil
@@ -75,11 +77,13 @@ struct FolderGridView: View {
                         }
                         .disabled(disableTap)
 
-                        FolderCustomMenu(shouldShowDelete: context == .view) {
+                        FolderCustomMenu(shareableData: self.$shareableData, shouldShowDelete: context == .view) {
                             folderVm.currentFolder = folder
                             self.isEditing = true
                             self.showFolderBottomSheet = true
 
+                        } onMenuOpen: {
+                            shareableData = mapShareableDataFromCaptionList(captions: folder.captions)
                         } onDelete: {
                             // on delete, remove from firebase
                             folderVm.currentFolder = folder
@@ -241,31 +245,35 @@ struct FolderButtonView: View {
 }
 
 struct FolderCustomMenu: View {
+    @Binding var shareableData: ShareableData?
     var shouldShowDelete: Bool
     var onEdit: () -> Void
+    var onMenuOpen: () -> Void
     var onDelete: () -> Void
-
+    
     var body: some View {
         if shouldShowDelete {
-            CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
+            CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: $shareableData, socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
                             edit: {
-                                onEdit()
-
-                            }, delete: {
-                                onDelete()
-                            })
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                            .padding(.leading, -33)
-                            .padding(.top)
+                onEdit()
+                
+            }, delete: {
+                onDelete()
+            }, onMenuOpen: {
+                onMenuOpen()
+            })
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(.leading, -33)
+            .padding(.top)
         } else {
             CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
                             edit: {
-                                onEdit()
-
-                            })
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                            .padding(.leading, -33)
-                            .padding(.top)
+                onEdit()
+                
+            })
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(.leading, -33)
+            .padding(.top)
         }
     }
 }

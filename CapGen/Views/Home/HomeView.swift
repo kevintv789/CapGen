@@ -5,121 +5,6 @@
 //  Created by Kevin Vu on 1/11/23.
 //
 
-/**
- OLD CODE
-
- @State var router: Router? = nil
-
- @FocusState private var isKeyboardFocused: Bool
- @State var expandBottomArea: Bool = false
- @State var showRefillModal: Bool = false
- @State var showCongratsModal: Bool = false
- @State var isAdLoading: Bool = false
-
- @FocusState private var isFocused: Bool
- @ScaledMetric var platformScrollViewHeight: CGFloat = 75
-
-             Color.ui.lighterLavBlue.ignoresSafeArea()
-                 .opacity(0.5)
-                 .onTapGesture {
-                     hideKeyboard()
-                 }
-
-             VStack {
-                 HStack(alignment: .center) {
-                     Text("Which platform is this for?")
-                         .padding(.leading, 16)
-                         .font(.ui.headline)
-                         .foregroundColor(Color.ui.richBlack)
-
-                     Spacer()
-
-                     CreditCounterView(credits: $credits, showModal: $showRefillModal)
-                         .padding(.trailing, 16)
-                 }
-
-                 ScrollViewReader { scrollProxy in
-                     ScrollView(.horizontal, showsIndicators: false) {
-                         LazyHStack(alignment: .top, spacing: 15) {
-                             ForEach(socialMediaPlatforms) { platform in
-                                 Button {
-                                     withAnimation(.spring()) {
-                                         self.captionConfigs.platformSelected = platform.title
-                                     }
-
-                                 } label: {
-                                     Pill(title: platform.title, isToggled: platform.title == self.captionConfigs.platformSelected)
-                                 }
-                                 .id(platform.title)
-                             }
-                         }
-                         .padding()
-                     }
-                     .onChange(of: self.captionConfigs.platformSelected) { value in
-                         withAnimation {
-                             scrollProxy.scrollTo(value, anchor: .center)
-                         }
-
-                         Haptics.shared.play(.soft)
-                     }
-                     .frame(height: platformScrollViewHeight)
-                 }
-
-                  Create a Text Area view that is the main component for typing input
-                 TextAreaView(text: $captionConfigs.promptText)
-                     .frame(width: SCREEN_WIDTH / 1.1, height: SCREEN_HEIGHT / 2)
-                     .position(x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 4)
-                     .focused($isFocused)
-                     .onTapGesture {
-                         withAnimation(.interpolatingSpring(stiffness: 200, damping: 300)) {
-                             self.expandBottomArea = false
-                         }
-                     }
-
-                 BottomAreaView(expandArea: $expandBottomArea, platformSelected: $captionConfigs.platformSelected, promptText: $captionConfigs.promptText, credits: $credits, isAdLoading: $isAdLoading)
-                     .frame(maxHeight: SCREEN_HEIGHT)
-             }
-             .scrollDismissesKeyboard(.interactively)
-             .ignoresSafeArea(.keyboard, edges: .bottom)
-         }
-         .onAppear {
-             self.router = Router(navStack: navStack)
-
-             if AuthManager.shared.isSignedIn ?? false {
-                 firestoreManager.fetchKey()
-             }
-         }
-         .onReceive(firestoreManager.$appError, perform: { value in
-             if let error = value?.error {
-                 if error == .genericError {
-                     self.router?.toGenericFallbackView()
-                 }
-             }
-         })
-         .onReceive(AuthManager.shared.userManager.$user) { user in
-             if user != nil {
-                 self.credits = user!.credits
-             }
-         }
-         .modalView(horizontalPadding: 40, show: $showRefillModal) {
-             RefillModalView(isViewPresented: $showRefillModal, showCongratsModal: $showCongratsModal)
-         } onClickExit: {
-             withAnimation {
-                 self.showRefillModal = false
-             }
-         }
-         .modalView(horizontalPadding: 40, show: $showCongratsModal) {
-             CongratsModalView(showView: $showCongratsModal)
-         } onClickExit: {
-             withAnimation {
-                 self.showCongratsModal = false
-             }
-         }
-         .modalView(horizontalPadding: 80, show: $isAdLoading, content: {
-             OverlayedLoaderView()
-         }, onClickExit: nil)
- */
-
 import FirebaseAuth
 import NavigationStack
 import SwiftUI
@@ -257,15 +142,14 @@ struct HomeView: View {
                 if !folderVm.currentFolder.id.isEmpty {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = authManager.userManager.user?.folders ?? []
-
-//                    Task {
+                    
                     firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {
-                        // on complete, dismiss modal
-                        self.showFolderDeleteModal = false
-//                        }
+                        withAnimation {
+                            self.showFolderDeleteModal = false
+                        }
                     }
                 }
-
+                
             })
         } onClickExit: {
             withAnimation {

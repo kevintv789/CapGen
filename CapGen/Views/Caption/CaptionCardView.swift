@@ -18,6 +18,7 @@ struct CaptionCardView: View {
     @State var shouldShowSocialMediaPlatform: Bool = false
     @State var folderType: String? = ""
     @State var shareableData: ShareableData? = nil
+    @State var showCaptionsGuideModal: Bool = false
 
     // dependencies
     var caption: CaptionModel
@@ -91,7 +92,13 @@ struct CaptionCardView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     HStack {
-                        CircularIndicatorView(caption: caption)
+                        Button {
+                            // display caption guides on click
+                            self.showCaptionsGuideModal = true
+                        } label: {
+                            CircularIndicatorView(caption: caption)
+                        }
+                        
 
                         Spacer()
 
@@ -140,6 +147,11 @@ struct CaptionCardView: View {
         }
         .onReceive(folderVm.$editedFolder) { editedFolder in
             self.updateFolderInfo(folderInfo: editedFolder)
+        }
+        .sheet(isPresented: $showCaptionsGuideModal) {
+            CaptionGuidesView(tones: self.caption.tones, includeEmojis: self.caption.includeEmojis, includeHashtags: self.caption.includeHashtags, captionLength: self.caption.captionLength)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
         }
     }
 }
