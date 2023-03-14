@@ -19,6 +19,7 @@ class FolderViewModel: ObservableObject {
     @Published var editedFolder: FolderModel = .init()
     @Published var captionFolderStorage: [DestinationFolder] = []
     @Published var updatedFolder: FolderModel? = nil
+    @Published var captionToBeDeleted: CaptionModel? = nil
 
     func resetFolder() {
         currentFolder = FolderModel()
@@ -27,5 +28,9 @@ class FolderViewModel: ObservableObject {
 
     func resetFolderStorage() {
         captionFolderStorage.removeAll()
+    }
+
+    func resetCaptionToBeDeleted() {
+        captionToBeDeleted = nil
     }
 }

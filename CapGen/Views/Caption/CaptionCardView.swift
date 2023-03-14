@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CaptionCardView: View {
     @EnvironmentObject var folderVm: FolderViewModel
-    
+
     // Scaled size
     @ScaledMetric var scaledSize: CGFloat = 1
 
@@ -17,11 +17,13 @@ struct CaptionCardView: View {
     @State var folderInfo: FolderModel? = nil
     @State var shouldShowSocialMediaPlatform: Bool = false
     @State var folderType: String? = ""
+    @State var shareableData: ShareableData? = nil
 
     // dependencies
     var caption: CaptionModel
     // optional dependency to display folder name
     var showFolderInfo: Bool = false
+    @Binding var showCaptionDeleteModal: Bool
 
     // Custom menu actions
     var onEdit: () -> Void
@@ -33,12 +35,12 @@ struct CaptionCardView: View {
 
         return .constant(nil)
     }
-    
+
     private func updateFolderInfo(folderInfo: FolderModel) {
         // return true if folder type is anything but General
-        self.shouldShowSocialMediaPlatform = folderInfo.folderType != .General
+        shouldShowSocialMediaPlatform = folderInfo.folderType != .General
 
-        self.folderType = folderInfo.folderType.rawValue
+        folderType = folderInfo.folderType.rawValue
     }
 
     var body: some View {
@@ -60,8 +62,15 @@ struct CaptionCardView: View {
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        CustomMenuPopup(menuTheme: .light, shareableData: .constant(nil), socialMediaPlatform: showSocialmediaPresence(),
+                        CustomMenuPopup(menuTheme: .light, shareableData: self.$shareableData, socialMediaPlatform: showSocialmediaPresence(),
                                         edit: onEdit,
+                                        delete: {
+                                            // on delete of single caption
+                                            self.showCaptionDeleteModal = true
+                                            self.folderVm.captionToBeDeleted = caption
+                                        }, onMenuOpen: {
+                                            self.shareableData = mapShareableData(caption: caption.captionDescription, platform: shouldShowSocialMediaPlatform ? folderType : nil)
+                                        },
                                         onCopyAndGo: {
                                             // Copy and go run openSocialMediaLink(for: platform)
                                             UIPasteboard.general.string = caption.captionDescription

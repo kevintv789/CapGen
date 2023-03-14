@@ -34,6 +34,7 @@ struct CaptionListView: View {
     @State var folderId: String = ""
 
     var context: CaptionListContext = .list
+    @Binding var showCaptionDeleteModal: Bool
 
     private func onEdit(caption: CaptionModel) {
         // on click of caption card should take the user to the edit caption screen
@@ -51,7 +52,7 @@ struct CaptionListView: View {
                         Button {
                             onEdit(caption: caption)
                         } label: {
-                            CaptionCardView(caption: caption, showFolderInfo: context != .folder, onEdit: {
+                            CaptionCardView(caption: caption, showFolderInfo: context != .folder, showCaptionDeleteModal: $showCaptionDeleteModal, onEdit: {
                                 onEdit(caption: caption)
                             })
                             .padding(10)
@@ -70,7 +71,7 @@ struct CaptionListView: View {
         .onReceive(AuthManager.shared.userManager.$user, perform: { user in
             if let user = user {
                 self.captions.removeAll()
-                
+
                 var captionsPerFolder: [[CaptionModel]] = []
 
                 if context == .folder, !folderId.isEmpty {
@@ -96,13 +97,13 @@ struct CaptionListView: View {
 
 struct CaptionListView_Previews: PreviewProvider {
     static var previews: some View {
-        CaptionListView(context: .list)
+        CaptionListView(context: .list, showCaptionDeleteModal: .constant(false))
             .environmentObject(NavigationStackCompat())
             .environmentObject(CaptionViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
             .environmentObject(FolderViewModel())
 
-        CaptionListView(context: .folder)
+        CaptionListView(context: .folder, showCaptionDeleteModal: .constant(false))
             .environmentObject(NavigationStackCompat())
             .environmentObject(CaptionViewModel())
             .environmentObject(SavedCaptionHomeViewModel())

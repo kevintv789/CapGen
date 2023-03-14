@@ -411,6 +411,56 @@ class FirestoreManager: ObservableObject {
         }
     }
 
+    /**
+     This function facilitates the action of deleting a single caption from a folder
+     1. Get current folders
+     2. Remove the selected caption from the folder
+     3. Delete all folders from firebase
+     4. Write the updated folder back
+     */
+    func deleteSingleCaption(for uid: String?, captionToBeRemoved: CaptionModel, onComplete: @escaping () -> Void) {
+        guard let userId = uid else {
+            appError = ErrorType(error: .genericError)
+            onComplete()
+            return
+        }
+
+        let docRef: DocumentReference = db.collection("Users").document("\(userId)")
+
+        // Get current folders from the user document
+        let currentFolders = AuthManager.shared.userManager.user?.folders ?? []
+
+        let updatedFolders = currentFolders.map { folder in
+            // find folder to be updated
+            var mutableFolder = folder
+
+            if folder.id == captionToBeRemoved.folderId {
+                if let indexOfCaption = folder.captions.firstIndex(where: { $0.id == captionToBeRemoved.id }) {
+                    mutableFolder.captions.remove(at: indexOfCaption)
+                }
+            }
+
+            return mutableFolder
+        }
+
+        // Create a dispatch group to keep everything synchronous
+        // FB must delete all folders and then add new folders before the view gets updated
+        // otherwise we run into duplicate keys issues
+        let dispatchGroup = DispatchGroup()
+
+        dispatchGroup.enter()
+
+        deleteAllFolders(for: docRef) {
+            self.addNewFolders(for: docRef, updatedFolders: updatedFolders) {
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            onComplete()
+        }
+    }
+
     private func fetch(from collection: String, documentId: String, completion: @escaping (_ data: [String: Any]?) -> Void) {
         let docRef = db.collection(collection).document(documentId)
 

@@ -2025,7 +2025,6 @@
 		D4056E1E295CC92100D3894D /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				D4373F8D29B5297500C186B3 /* CaptionCardView.swift */,
 				D4056EAD2972716D00D3894D /* BackArrowView.swift */,
 				D4373F8B29B5295E00C186B3 /* BlankCaptionsView.swift */,
 				D4056E1F295CCA1C00D3894D /* Pill.swift */,
@@ -2133,6 +2132,7 @@
 				D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */,
 				D4C3E48F2981C4BB00C2847A /* EditCaptionView.swift */,
 				D419868429B94B480003FBDA /* CaptionListView.swift */,
+				D4373F8D29B5297500C186B3 /* CaptionCardView.swift */,
 			);
 			path = Caption;
 			sourceTree = "<group>";

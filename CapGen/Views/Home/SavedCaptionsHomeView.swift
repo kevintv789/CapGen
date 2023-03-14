@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SavedCaptionsHomeView: View {
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
+    @Binding var showCaptionDeleteModal: Bool
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -53,7 +54,7 @@ struct SavedCaptionsHomeView: View {
             if savedCaptionHomeVm.isGridView {
                 FolderGridView(disableTap: .constant(false))
             } else {
-                CaptionListView()
+                CaptionListView(showCaptionDeleteModal: $showCaptionDeleteModal)
             }
         }
         .padding()
@@ -64,7 +65,7 @@ struct SavedCaptionsHomeView: View {
 
 struct SavedCaptionsHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        SavedCaptionsHomeView()
+        SavedCaptionsHomeView(showCaptionDeleteModal: .constant(false))
             .environmentObject(SavedCaptionHomeViewModel())
     }
 }

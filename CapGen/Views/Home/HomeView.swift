@@ -145,6 +145,9 @@ struct HomeView: View {
     // nav instances
     @State var router: Router? = nil
 
+    // private instances
+    @State var showCaptionDeleteModal: Bool = false
+
     var body: some View {
         ZStack {
             Color.ui.cultured.ignoresSafeArea()
@@ -203,7 +206,7 @@ struct HomeView: View {
                     .ignoresSafeArea(.all)
                     .frame(height: savedCaptionHomeVm.isViewExpanded ? SCREEN_HEIGHT : SCREEN_HEIGHT * 0.34)
                     .overlay(
-                        SavedCaptionsHomeView()
+                        SavedCaptionsHomeView(showCaptionDeleteModal: $showCaptionDeleteModal)
                     )
             }
         }
@@ -250,7 +253,7 @@ struct HomeView: View {
         }
         // Show folder delete modal
         .modalView(horizontalPadding: 40, show: $showFolderDeleteModal) {
-            DeleteModalView(title: "Remove folder", subTitle: "Deleting this folder will permanently erase all its contents. Are you sure you want to proceed? 🫢", lottieFile: "crane_hand_lottie", showView: $showFolderDeleteModal, onDelete: {
+            DeleteModalView(title: "Remove folder", subTitle: "Deleting this folder will permanently erase all of its contents. Are you sure you want to proceed? 🫢", lottieFile: "crane_hand_lottie", showView: $showFolderDeleteModal, onDelete: {
                 if !folderVm.currentFolder.id.isEmpty {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = authManager.userManager.user?.folders ?? []
@@ -267,6 +270,24 @@ struct HomeView: View {
         } onClickExit: {
             withAnimation {
                 self.showFolderDeleteModal = false
+            }
+        }
+        // Show caption delete modal
+        .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
+            DeleteModalView(title: "Delete caption", subTitle: "Are you sure you want to delete this caption? 🫢 This action cannot be undone.", lottieFile: "crane_hand_lottie", showView: $showCaptionDeleteModal, onDelete: {
+                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = folderVm.captionToBeDeleted {
+                    let uid = user.id
+                    firestoreManager.deleteSingleCaption(for: uid, captionToBeRemoved: captionToBeRemoved) {
+                        withAnimation {
+                            folderVm.resetCaptionToBeDeleted()
+                            self.showCaptionDeleteModal = false
+                        }
+                    }
+                }
+            })
+        } onClickExit: {
+            withAnimation {
+                self.showCaptionDeleteModal = false
             }
         }
         .onReceive(folderVm.$isDeleting) { value in

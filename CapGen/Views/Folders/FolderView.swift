@@ -32,6 +32,7 @@ struct FolderView: View {
     // private variables
     @State var showFolderBottomSheet: Bool = false
     @State var showFolderDeleteModal: Bool = false
+    @State var showCaptionDeleteModal: Bool = false
 
     // dependencies
     @State var folder: FolderModel
@@ -89,7 +90,7 @@ struct FolderView: View {
                 }
                 .padding(.leading)
 
-                CaptionListView(emptyTitle: "Oops, it looks like you haven't saved any captions to this folder yet.", folderId: folder.id, context: .folder)
+                CaptionListView(emptyTitle: "Oops, it looks like you haven't saved any captions to this folder yet.", folderId: folder.id, context: .folder, showCaptionDeleteModal: $showCaptionDeleteModal)
                     .padding()
 
                 Spacer()
@@ -107,7 +108,7 @@ struct FolderView: View {
         }
         // Show folder delete modal
         .modalView(horizontalPadding: 40, show: $showFolderDeleteModal) {
-            DeleteModalView(title: "Remove folder", subTitle: "Deleting this folder will permanently erase all its contents. Are you sure you want to proceed? 🫢", lottieFile: "crane_hand_lottie", showView: $showFolderDeleteModal, onDelete: {
+            DeleteModalView(title: "Remove folder", subTitle: "Deleting this folder will permanently erase all of its contents. Are you sure you want to proceed? 🫢", lottieFile: "crane_hand_lottie", showView: $showFolderDeleteModal, onDelete: {
                 if !self.folder.name.isEmpty {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = AuthManager.shared.userManager.user?.folders ?? []
@@ -122,6 +123,24 @@ struct FolderView: View {
         } onClickExit: {
             withAnimation {
                 self.showFolderDeleteModal = false
+            }
+        }
+        // Show caption delete modal
+        .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
+            DeleteModalView(title: "Delete caption", subTitle: "Are you sure you want to delete this caption? 🫢 This action cannot be undone.", lottieFile: "crane_hand_lottie", showView: $showCaptionDeleteModal, onDelete: {
+                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = folderVm.captionToBeDeleted {
+                    let uid = user.id
+                    firestoreManager.deleteSingleCaption(for: uid, captionToBeRemoved: captionToBeRemoved) {
+                        withAnimation {
+                            folderVm.resetCaptionToBeDeleted()
+                            self.showCaptionDeleteModal = false
+                        }
+                    }
+                }
+            })
+        } onClickExit: {
+            withAnimation {
+                self.showCaptionDeleteModal = false
             }
         }
     }
@@ -156,10 +175,10 @@ struct FolderHeaderView: View {
     var body: some View {
         // Header
         HStack {
-            BackArrowView() {
+            BackArrowView {
                 onBack()
             }
-                .padding(.leading, 8)
+            .padding(.leading, 8)
 
             Spacer()
 

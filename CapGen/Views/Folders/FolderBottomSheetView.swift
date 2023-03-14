@@ -51,13 +51,13 @@ struct FolderBottomSheetView: View {
                 if let curFolder = folder {
                     let currFolders = AuthManager.shared.userManager.user?.folders ?? []
                     let updatedFolder = FolderModel(id: curFolder.id, name: folderName, dateCreated: curFolder.dateCreated, folderType: selectedPlatform, captions: curFolder.captions, index: curFolder.index)
-                    
+
                     firestoreMan.updateFolder(for: userId, newFolder: updatedFolder, currentFolders: currFolders) { updatedFolder in
                         if let updatedFolder = updatedFolder {
                             folderVm.editedFolder = updatedFolder
                             folderVm.updatedFolder = updatedFolder
                         }
-                        
+
                         self.isLoading = false
                         dismiss()
                     }
