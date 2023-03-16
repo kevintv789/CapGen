@@ -11,9 +11,12 @@ import NavigationStack
 struct SearchView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var searchVm: SearchViewModel
+    @EnvironmentObject var folderVm: FolderViewModel
+    @EnvironmentObject var firestoreManager: FirestoreManager
     
     @State var totalCaptions: [CaptionModel] = []
     @State var totalFolders: [FolderModel] = []
+    @State var showCaptionDeleteModal: Bool = false
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -23,7 +26,7 @@ struct SearchView: View {
                 // top header area with search bar
                 Rectangle()
                     .fill(Color.ui.lavenderBlue)
-                    .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT / 6)
+                    .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT / 7)
                     .ignoresSafeArea()
                     .overlay(alignment: .top) {
                         SearchInputView() {
@@ -42,8 +45,10 @@ struct SearchView: View {
                     EmptySearchResultsView(title: "No captions found", subtitle: "Looks like we couldn't find any captions for your search")
                 } else {
                     // captions found
-                    CaptionListView(context: .search, showCaptionDeleteModal: .constant(false))
+                    CaptionListView(context: .search, showCaptionDeleteModal: $showCaptionDeleteModal)
                         .padding()
+                        .padding(.top, -40)
+                        .ignoresSafeArea(.all)
                 }
                 
             }
@@ -106,6 +111,24 @@ struct SearchView: View {
             }
             
         }
+        // Show caption delete modal
+        .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
+            DeleteModalView(title: "Delete caption", subTitle: "Are you sure you want to delete this caption? 🫢 This action cannot be undone.", lottieFile: "crane_hand_lottie", showView: $showCaptionDeleteModal, onDelete: {
+                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = folderVm.captionToBeDeleted {
+                    let uid = user.id
+                    firestoreManager.deleteSingleCaption(for: uid, captionToBeRemoved: captionToBeRemoved) {
+                        withAnimation {
+                            folderVm.resetCaptionToBeDeleted()
+                            self.showCaptionDeleteModal = false
+                        }
+                    }
+                }
+            })
+        } onClickExit: {
+            withAnimation {
+                self.showCaptionDeleteModal = false
+            }
+        }
        
     }
 }
@@ -115,10 +138,14 @@ struct SearchView_Previews: PreviewProvider {
         SearchView()
             .environmentObject(NavigationStackCompat())
             .environmentObject(SearchViewModel())
+            .environmentObject(FolderViewModel())
+            .environmentObject(FirestoreManager())
         
         SearchView()
             .environmentObject(NavigationStackCompat())
             .environmentObject(SearchViewModel())
+            .environmentObject(FolderViewModel())
+            .environmentObject(FirestoreManager())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
@@ -154,7 +181,7 @@ struct SearchInputView: View {
                         if !searchVm.searchedText.isEmpty {
                             Button {
                                 Haptics.shared.play(.soft)
-                                searchVm.searchedText.removeAll()
+                                searchVm.resetSearchConfigs()
                                 self.isFocused = true
                             } label: {
                                 Image(systemName: "x.circle.fill")
@@ -170,7 +197,7 @@ struct SearchInputView: View {
                 Haptics.shared.play(.soft)
                 onCancelSearch()
                 hideKeyboard()
-                searchVm.searchedText.removeAll()
+                searchVm.resetSearchConfigs()
             }, label: {
                 Text("Cancel")
                     .foregroundColor(.ui.richBlack.opacity(0.7))

@@ -47,7 +47,7 @@ struct CaptionListView: View {
         captionVm.selectedCaption = caption
         navStack.push(EditCaptionView(context: .captionList))
     }
-
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             if captions.isEmpty {
@@ -67,8 +67,9 @@ struct CaptionListView: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .center)
-        .padding(.top)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .ignoresSafeArea(.all)
+        
         .onReceive(folderVm.$updatedFolder.first()) { updatedFolder in
             if context == .folder, let updatedFolder = updatedFolder {
                 self.folderId = updatedFolder.id
@@ -77,7 +78,7 @@ struct CaptionListView: View {
         .onReceive(AuthManager.shared.userManager.$user, perform: { user in
             if let user = user, context != .search {
                 self.captions.removeAll()
-
+                
                 var captionsPerFolder: [[CaptionModel]] = []
 
                 if context == .folder, !folderId.isEmpty {

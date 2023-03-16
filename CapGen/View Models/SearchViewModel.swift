@@ -10,4 +10,9 @@ import Foundation
 class SearchViewModel: ObservableObject {
     @Published var searchedText: String = ""
     @Published var searchedCaptions: [CaptionModel] = []
+    
+    func resetSearchConfigs() {
+        searchedText.removeAll()
+        searchedCaptions.removeAll()
+    }
 }
