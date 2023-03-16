@@ -20,6 +20,7 @@ struct EditCaptionView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var folderVm: FolderViewModel
+    @EnvironmentObject var searchVm: SearchViewModel
 
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
@@ -99,6 +100,10 @@ struct EditCaptionView: View {
                                 Task {
                                     await firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) { updatedFolder in
                                         self.folderVm.updatedFolder = updatedFolder ?? nil
+                                        
+                                        // also update the search object with the most recent updated captions
+                                        // for when a user wants to update the caption while searching
+                                        self.searchVm.searchedCaptions = updatedFolder?.captions ?? []
                                         self.navStack.pop(to: .previous)
                                         self.isLoading = false
                                     }

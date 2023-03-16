@@ -66,6 +66,7 @@ struct CapGenApp: App {
                 .environmentObject(CaptionViewModel())
                 .environmentObject(AppodealProvider.shared)
                 .environmentObject(SavedCaptionHomeViewModel())
+                .environmentObject(SearchViewModel())
         }
     }
 }

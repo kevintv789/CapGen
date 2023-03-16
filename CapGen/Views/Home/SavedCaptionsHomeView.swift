@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct SavedCaptionsHomeView: View {
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
+    @EnvironmentObject var navStack: NavigationStackCompat
+    
     @Binding var showCaptionDeleteModal: Bool
 
     var body: some View {
@@ -31,7 +34,10 @@ struct SavedCaptionsHomeView: View {
                 // Buttons
                 HStack(spacing: 15) {
                     // Search
-                    ImageButtonView(imgName: "magnifier") {}
+                    ImageButtonView(imgName: "magnifier") {
+                        Haptics.shared.play(.soft)
+                        navStack.push(SearchView())
+                    }
 
                     // Grid/List view
                     ImageButtonView(imgName: savedCaptionHomeVm.isGridView ? "list_menu" : "grid_menu") {
@@ -67,5 +73,6 @@ struct SavedCaptionsHomeView_Previews: PreviewProvider {
     static var previews: some View {
         SavedCaptionsHomeView(showCaptionDeleteModal: .constant(false))
             .environmentObject(SavedCaptionHomeViewModel())
+            .environmentObject(NavigationStackCompat())
     }
 }

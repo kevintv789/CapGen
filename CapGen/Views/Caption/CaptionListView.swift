@@ -19,6 +19,11 @@ enum CaptionListContext {
       This is the default context that generates a list of captions based on all available folders
      */
     case list
+    
+    /**
+      Called directly from the SearchView()
+     */
+    case search
 }
 
 struct CaptionListView: View {
@@ -26,6 +31,7 @@ struct CaptionListView: View {
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
     @EnvironmentObject var folderVm: FolderViewModel
+    @EnvironmentObject var searchVm: SearchViewModel
 
     @State var captions: [CaptionModel] = []
     var emptyTitle: String = "Oops, it looks like you haven't saved any captions yet."
@@ -69,7 +75,7 @@ struct CaptionListView: View {
             }
         }
         .onReceive(AuthManager.shared.userManager.$user, perform: { user in
-            if let user = user {
+            if let user = user, context != .search {
                 self.captions.removeAll()
 
                 var captionsPerFolder: [[CaptionModel]] = []
@@ -92,6 +98,16 @@ struct CaptionListView: View {
                 self.captions.sort(by: { df.date(from: $0.dateCreated)!.compare(df.date(from: $1.dateCreated)!) == .orderedDescending })
             }
         })
+        .onReceive(searchVm.$searchedCaptions) { searchedCaptions in
+            if context == .search {
+                self.captions = searchedCaptions
+                
+                // Sort by most recent created
+                let df = DateFormatter()
+                df.dateFormat = "MMM d, h:mm a"
+                self.captions.sort(by: { df.date(from: $0.dateCreated)!.compare(df.date(from: $1.dateCreated)!) == .orderedDescending })
+            }
+        }
     }
 }
 
@@ -102,12 +118,14 @@ struct CaptionListView_Previews: PreviewProvider {
             .environmentObject(CaptionViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
             .environmentObject(FolderViewModel())
+            .environmentObject(SearchViewModel())
 
         CaptionListView(context: .folder, showCaptionDeleteModal: .constant(false))
             .environmentObject(NavigationStackCompat())
             .environmentObject(CaptionViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
             .environmentObject(FolderViewModel())
+            .environmentObject(SearchViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

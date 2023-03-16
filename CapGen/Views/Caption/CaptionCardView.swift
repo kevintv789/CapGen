@@ -51,6 +51,7 @@ struct CaptionCardView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 14)
                         .fill(Color.ui.middleBluePurple)
+                        .shadow(color: .ui.richBlack.opacity(0.35), radius: 4, x: 0, y: 3)
                 )
 
             VStack(alignment: .trailing, spacing: 0) {
