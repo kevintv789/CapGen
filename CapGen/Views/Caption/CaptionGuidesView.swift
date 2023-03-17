@@ -33,6 +33,7 @@ struct CaptionGuidesView: View {
                         .font(.ui.headlineLightSm)
                         .lineSpacing(8)
                         .padding(.bottom, 20)
+                        .multilineTextAlignment(.leading)
 
                     Text("Your captions guide")
                         .foregroundColor(.ui.richBlack)
@@ -98,11 +99,13 @@ struct ToneDescriptionView: View {
                     .font(.ui.headlineLightSm)
                     .foregroundColor(.ui.richBlack)
                     .lineSpacing(8)
+                    .multilineTextAlignment(.leading)
             } else {
                 Text("Your captions convey a \(tones[0].description.dropLast().lowercased()) tone.")
                     .font(.ui.headlineLightSm)
                     .foregroundColor(.ui.richBlack)
                     .lineSpacing(8)
+                    .multilineTextAlignment(.leading)
             }
         }
     }
@@ -130,6 +133,8 @@ struct SettingsDescriptionView: View {
             Text(description)
                 .font(.ui.headlineLightSm)
                 .foregroundColor(.ui.richBlack)
+                .lineSpacing(8)
+                .multilineTextAlignment(.leading)
         }
     }
 }

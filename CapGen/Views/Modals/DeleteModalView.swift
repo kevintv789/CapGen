@@ -52,7 +52,6 @@ struct DeleteModalView: View {
 
                 Button {
                     onDelete()
-                    showView = false
                     Haptics.shared.play(.soft)
                 } label: {
                     RoundedRectangle(cornerRadius: 16)

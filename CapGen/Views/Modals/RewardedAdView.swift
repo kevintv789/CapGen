@@ -14,7 +14,7 @@ struct RewardedAdView: View {
     @Binding var showCongratsModal: Bool
 
     let authManager = AuthManager.shared.userManager
-    
+
     @State var isAdDone: Bool = false
 
     var body: some View {
@@ -57,7 +57,7 @@ struct RewardedAdView: View {
         .onChange(of: self.isAdDone, perform: { isDone in
             if isDone {
                 self.isViewPresented = false
-                
+
                 withAnimation {
                     guard let showCongratsModal = authManager.user?.userPrefs.showCongratsModal else { return }
                     if showCongratsModal {

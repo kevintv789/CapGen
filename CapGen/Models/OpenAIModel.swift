@@ -10,19 +10,35 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
-struct OpenAIResponseModel: Codable {
+struct OpenAIResponseModel: Identifiable, Codable {
     var id: String
-    var object: String
-    var created: Int
-    var model: String
-    var choices: [Choice]
+    var object: String?
+    var created: Int?
+    var model: String?
+    var usage: Usage?
+    var choices: [Choice]?
 }
 
 struct Choice: Codable {
-    var text: String
+    var message: GPTMessagesType
     var index: Int
-    var logprobs: String?
-    var finish_reason: String
+    var finish_reason: String?
+}
+
+struct GPTMessagesType: Codable {
+    var role: String
+    var content: String
+
+    var dictionary: [String: Any] {
+        let data = (try? JSONEncoder().encode(self)) ?? Data()
+        return (try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any]) ?? [:]
+    }
+}
+
+struct Usage: Codable {
+    var prompt_tokens: Int
+    var completion_tokens: Int
+    var total_tokens: Int
 }
 
 struct GeneratedCaptions: Codable, Identifiable, Hashable {
@@ -30,70 +46,3 @@ struct GeneratedCaptions: Codable, Identifiable, Hashable {
     var description: String
 }
 
-struct AIRequest: Codable, Identifiable, Comparable, Hashable {
-    var id: String = UUID().uuidString
-    var platform: String = ""
-    var prompt: String = ""
-    var tones: [ToneModel] = []
-    var includeEmojis: Bool = false
-    var includeHashtags: Bool = false
-    var captionLength: String = ""
-    var title: String = ""
-    var dateCreated: String = getCurrentDate()
-    var captions: [GeneratedCaptions] = []
-
-    static func < (lhs: AIRequest, rhs: AIRequest) -> Bool {
-        let leftDate = convertStringToDate(date: lhs.dateCreated) ?? Date()
-        let rightDate = convertStringToDate(date: rhs.dateCreated) ?? Date()
-
-        return leftDate < rightDate
-    }
-
-    static func == (lhs: AIRequest, rhs: AIRequest) -> Bool {
-        return lhs.id == rhs.id
-    }
-
-    var dictionary: [String: Any] {
-        let data = (try? JSONEncoder().encode(self)) ?? Data()
-        return (try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any]) ?? [:]
-    }
-
-    init() {}
-
-    init(id: String, platform: String, prompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, title: String, dateCreated: String, captions: [GeneratedCaptions]) {
-        self.id = id
-        self.platform = platform
-        self.prompt = prompt
-        self.tones = tones
-        self.includeEmojis = includeEmojis
-        self.includeHashtags = includeHashtags
-        self.captionLength = captionLength
-        self.dateCreated = dateCreated
-        self.title = title
-        self.captions = captions
-    }
-
-    init(platform: String, prompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String) {
-        self.platform = platform
-        self.prompt = prompt
-        self.tones = tones
-        self.includeEmojis = includeEmojis
-        self.includeHashtags = includeHashtags
-        self.captionLength = captionLength
-    }
-
-    static func getCurrentDate() -> String {
-        let date = Date()
-        let df = DateFormatter()
-        df.dateFormat = "MMM d, h:mm a"
-        df.timeZone = TimeZone.current
-        return df.string(from: date)
-    }
-
-    static func convertStringToDate(date: String?) -> Date? {
-        guard let date = date else { return nil }
-        let df = DateFormatter()
-        df.dateFormat = "MMM d, h:mm a"
-        return df.date(from: date)
-    }
-}
