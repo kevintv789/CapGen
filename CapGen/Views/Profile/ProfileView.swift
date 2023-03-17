@@ -231,7 +231,7 @@ struct CreditAndCaptionsAnimatedView: View {
                     LottieView(name: "speech_bubble", loopMode: .playOnce, isAnimating: animateSpeechBubble)
                         .frame(width: 90 * scaledSize, height: 100 * scaledSize)
 
-                    Text("\(firestoreMan.getCaptionsCount(using: authManager.userManager.user?.captionsGroup ?? []))\ncaptions saved")
+                    Text("\(firestoreMan.getCaptionsCount())\ncaptions saved")
                         .customProfileHeadline()
                 }
             }
@@ -332,6 +332,7 @@ struct OptionButtonView: View {
 
 struct ContentSectionView: View {
     @EnvironmentObject private var navStack: NavigationStackCompat
+    @EnvironmentObject private var savedCaptionsBottomView: SavedCaptionHomeViewModel
     @State var showBottomSheet: Bool = false
     @Binding var showCongratsModal: Bool
 
@@ -344,7 +345,10 @@ struct ContentSectionView: View {
                 .offset(y: 10)
 
             OptionButtonView(title: "📝 Saved captions", subTitle: "Easily view, export, copy and edit your generated captions.") {
-                self.navStack.push(PopulatedCaptionsView())
+                // Upon click should take the user straight to the home page with an expanded bottom area view in list format
+                self.navStack.push(HomeView())
+                self.savedCaptionsBottomView.isGridView = false
+                self.savedCaptionsBottomView.isViewExpanded = true
                 Haptics.shared.play(.soft)
             }
 

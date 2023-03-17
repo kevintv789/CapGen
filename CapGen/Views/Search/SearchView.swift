@@ -55,8 +55,10 @@ struct SearchView: View {
         }
         .onReceive(AuthManager.shared.userManager.$user, perform: { user in
             if let user = user {
+                self.totalCaptions.removeAll()
+                
                 self.totalFolders = user.folders
-                let captionsPerFolder = user.folders.map { $0.captions }
+                let captionsPerFolder = user.folders.compactMap { $0.captions }
                 
                 captionsPerFolder.forEach { captions in
                     self.totalCaptions.append(contentsOf: captions)
@@ -66,6 +68,8 @@ struct SearchView: View {
                 let df = DateFormatter()
                 df.dateFormat = "MMM d, h:mm a"
                 self.totalCaptions.sort(by: { df.date(from: $0.dateCreated)!.compare(df.date(from: $1.dateCreated)!) == .orderedDescending })
+                
+                print("TOTAL CAPTIONS", self.totalCaptions)
             }
         })
         .onReceive(searchVm.$searchedText) { searchText in
@@ -79,36 +83,33 @@ struct SearchView: View {
              - Folder name
              - Folder type
              */
-            
-            if !totalCaptions.isEmpty {
-                searchVm.searchedCaptions = totalCaptions.filter({ caption in
-                    let doesTitleMatch = caption.title.lowercased().contains(searchUndercase)
-                    let doesCaptionMatch = caption.captionDescription.lowercased().contains(searchUndercase)
-                    
-                    // Get a one dimensional map of tone's descriptions and title
-                    let tonesDescription = caption.tones.compactMap({ $0.description.lowercased() })
-                    let tonesTitle = caption.tones.compactMap({ $0.title.lowercased() })
-                    
-                    // combine both into one call
-                    let doesTonesMatch = tonesDescription.contains(where: { $0.contains(searchUndercase) }) || tonesTitle.contains(where: { $0.contains(searchUndercase) })
-                    
-                    // get folder information so we can match on folder name and type
-                    let captionFolderId = caption.folderId
-                    
-                    // get the folder from a filtered caption
-                    let filteredFolder = totalFolders.first(where: { $0.id == captionFolderId })
-                    
-                    var doesFolderNameMatch = false
-                    var doesFolderTypeMatch = false
-                    
-                    if let filteredFolder = filteredFolder {
-                        doesFolderNameMatch = filteredFolder.name.lowercased().contains(searchUndercase)
-                        doesFolderTypeMatch = filteredFolder.folderType.rawValue.lowercased().contains(searchUndercase)
-                    }
-                    
-                    return doesTitleMatch || doesCaptionMatch || doesTonesMatch || doesFolderNameMatch || doesFolderTypeMatch
-                })
-            }
+            searchVm.searchedCaptions = totalCaptions.filter({ caption in
+                let doesTitleMatch = caption.title.lowercased().contains(searchUndercase)
+                let doesCaptionMatch = caption.captionDescription.lowercased().contains(searchUndercase)
+                
+                // Get a one dimensional map of tone's descriptions and title
+                let tonesDescription = caption.tones.compactMap({ $0.description.lowercased() })
+                let tonesTitle = caption.tones.compactMap({ $0.title.lowercased() })
+                
+                // combine both into one call
+                let doesTonesMatch = tonesDescription.contains(where: { $0.contains(searchUndercase) }) || tonesTitle.contains(where: { $0.contains(searchUndercase) })
+                
+                // get folder information so we can match on folder name and type
+                let captionFolderId = caption.folderId
+                
+                // get the folder from a filtered caption
+                let filteredFolder = totalFolders.first(where: { $0.id == captionFolderId })
+                
+                var doesFolderNameMatch = false
+                var doesFolderTypeMatch = false
+                
+                if let filteredFolder = filteredFolder {
+                    doesFolderNameMatch = filteredFolder.name.lowercased().contains(searchUndercase)
+                    doesFolderTypeMatch = filteredFolder.folderType.rawValue.lowercased().contains(searchUndercase)
+                }
+                
+                return doesTitleMatch || doesCaptionMatch || doesTonesMatch || doesFolderNameMatch || doesFolderTypeMatch
+            })
             
         }
         // Show caption delete modal
@@ -118,6 +119,11 @@ struct SearchView: View {
                     let uid = user.id
                     firestoreManager.deleteSingleCaption(for: uid, captionToBeRemoved: captionToBeRemoved) {
                         withAnimation {
+                            // remove from the searched captions once deleted
+                            if let captionToBeRemovedIndex = searchVm.searchedCaptions.firstIndex(where: { $0.id == captionToBeRemoved.id }) {
+                                self.searchVm.searchedCaptions.remove(at: captionToBeRemovedIndex)
+                            }
+                           
                             folderVm.resetCaptionToBeDeleted()
                             self.showCaptionDeleteModal = false
                         }

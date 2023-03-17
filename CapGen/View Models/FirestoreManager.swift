@@ -147,10 +147,15 @@ class FirestoreManager: ObservableObject {
         onComplete()
     }
 
-    func getCaptionsCount(using captionsGroup: [AIRequest]) -> Int {
+    func getCaptionsCount() -> Int {
         var count = 0
-        captionsGroup.forEach { group in
-            count += group.captions.count
+        
+        if let user = AuthManager.shared.userManager.user {
+            let totalCaptions = user.folders.map { $0.captions }
+            
+            totalCaptions.forEach { captions in
+                count += captions.count
+            }
         }
 
         return count
