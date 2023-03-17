@@ -45,23 +45,6 @@ struct CreditsDepletedModalView: View {
                     .padding(.bottom, -70)
 
                 DisplayAdBtnView(title: "Collect Credits")
-
-                if isAdInitialized {
-                    Button {
-                        Haptics.shared.play(.soft)
-
-                        // Update data field in firestore
-                        firestoreMan.setShowCreditDepletedModal(for: userId, to: false)
-
-                        // Play ad
-                        self.ad.presentRewarded()
-                    } label: {
-                        Text("Just play ad next time")
-                            .foregroundColor(.ui.cadetBlueCrayola)
-                            .font(.ui.headline)
-                            .padding(.bottom, 30)
-                    }
-                }
             }
             .padding(.top, 35)
         }
@@ -70,7 +53,9 @@ struct CreditsDepletedModalView: View {
         })
         .onChange(of: self.isAdDone, perform: { isDone in
             if isDone {
-                self.router?.toLoadingView()
+                // Navigate to generate captions views
+                self.navStack.push(EnterPromptView())
+                
                 self.isViewPresented = false
             }
         })

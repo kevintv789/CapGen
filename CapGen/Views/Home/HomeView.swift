@@ -14,7 +14,6 @@ struct HomeView: View {
     @EnvironmentObject var firestoreManager: FirestoreManager
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
-    @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
     @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
 
@@ -32,6 +31,7 @@ struct HomeView: View {
 
     // private instances
     @State var showCaptionDeleteModal: Bool = false
+    @State var showCreditsDepletedBottomSheet: Bool = false
 
     var body: some View {
         ZStack {
@@ -72,8 +72,12 @@ struct HomeView: View {
 
                     // Generate captions button
                     GenerateCaptionsButtonView(title: "Create captions with a prompt", imgName: "gen_captions_robot") {
-                        // Navigate to generate captions views
-                        self.navStack.push(EnterPromptView())
+                        if let creditAmount = self.creditAmount, creditAmount < 1 {
+                            self.showCreditsDepletedBottomSheet = true
+                        } else {
+                            // Navigate to generate captions views
+                            self.navStack.push(EnterPromptView())
+                        }
                     }
                     .padding()
                 }
@@ -119,6 +123,11 @@ struct HomeView: View {
                 // Retrieves user's credit amount
                 self.creditAmount = user.credits
             }
+        }
+        // show the depleted credit amount modal
+        .sheet(isPresented: $showCreditsDepletedBottomSheet) {
+            CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet)
+                .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
         }
         // Show credits refill modal
         .modalView(horizontalPadding: 40, show: $showRefillModal) {
@@ -220,20 +229,14 @@ struct Wave: Shape {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .environmentObject(TaglistViewModel())
-            .environmentObject(CaptionConfigsViewModel())
             .environmentObject(FirestoreManager())
-            .environmentObject(CaptionConfigsViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
 
         HomeView()
-            .environmentObject(TaglistViewModel())
-            .environmentObject(CaptionConfigsViewModel())
             .environmentObject(FirestoreManager())
-            .environmentObject(CaptionConfigsViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())

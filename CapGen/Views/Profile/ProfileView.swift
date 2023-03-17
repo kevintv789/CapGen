@@ -21,7 +21,6 @@ extension Text {
 struct ProfileView: View {
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject private var navStack: NavigationStackCompat
-    @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
 
     @ScaledMetric var scaledSize: CGFloat = 1
 
@@ -100,7 +99,6 @@ struct ProfileView: View {
         }
         .onAppear {
             self.router = Router(navStack: navStack)
-            self.captionConfigs.resetConfigs()
         }
         .modalView(horizontalPadding: 40, show: $showCongratsModal) {
             CongratsModalView(showView: $showCongratsModal)
@@ -135,14 +133,12 @@ struct ProfileView_Previews: PreviewProvider {
         ProfileView()
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
-            .environmentObject(CaptionConfigsViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(FirestoreManager())
 
         ProfileView()
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
-            .environmentObject(CaptionConfigsViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(FirestoreManager())
             .previewDevice("iPhone SE (3rd generation)")

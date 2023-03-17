@@ -8,8 +8,6 @@
 import Foundation
 
 public class OpenAIConnector: ObservableObject {
-    @Published var requestModel: AIRequest = .init()
-    @Published var mutableCaptionGroup: AIRequest?
     @Published var captionLengthType: String = ""
     @Published var appError: ErrorType? = nil
     @Published var captionsGroupParsed: [String] = []
@@ -22,8 +20,6 @@ public class OpenAIConnector: ObservableObject {
      * Generates the prompt for the Open AI API
      */
     func generatePrompt(userInputPrompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String) -> String {
-        requestModel = AIRequest(prompt: userInputPrompt, tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength)
-
         self.captionLengthType = captionLengthType
 
         var generatedToneStr = ""
@@ -34,22 +30,6 @@ public class OpenAIConnector: ObservableObject {
         }
 
         return "[Ignore introduction] Forget everything you've ever written. Now write me exactly 5 captions and a title. The title should be catchy and less than 6 words. [It is mandatory to make the length of each caption be \(captionLength) excluding emojis and hashtags from the word count.] [The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual")] [\(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis").] [\(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags").] Each caption should be displayed as a numbered list and a title at the very end, each number should be followed by a period such as '1.', '2.', '3.', '4.', '5.', '6.' The caption title should be the sixth item on the list, listed as 6 followed by a period and without the Title word. The user's prompt is: \"\(userInputPrompt == "" ? "Give me a positive daily affirmation" : userInputPrompt)\" This is a reminder that this prompt is just a caption and should be nothing more than a caption."
-    }
-
-    func generateNewRequestModel(title: String, captions: [GeneratedCaptions]) {
-        // At this point, the requestModel should be initialized, now we just add new data
-        requestModel.captionLength = captionLengthType
-        requestModel.title = title
-        requestModel.captions = captions
-    }
-
-    func updateMutableCaptionGroup(group: AIRequest) {
-        mutableCaptionGroup = group
-    }
-
-    func updateMutableCaptionGroupWithNewCaptions(with captions: [GeneratedCaptions], title: String) {
-        mutableCaptionGroup?.captions = captions
-        mutableCaptionGroup?.title = title
     }
 
     /*
@@ -170,7 +150,7 @@ public class OpenAIConnector: ObservableObject {
         var mutableCaptions: [String] = []
 
         // Get correct caption length
-        let filteredCaptionLength = captionLengths.first(where: { $0.value == self.requestModel.captionLength })
+        let filteredCaptionLength = captionLengths.first(where: { $0.type == self.captionLengthType })
 
         var num = 1
         var promptBatch = ""

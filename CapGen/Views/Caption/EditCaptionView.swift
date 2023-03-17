@@ -308,7 +308,6 @@ struct EditCaptionView: View {
 struct EditCaptionView_Previews: PreviewProvider {
     static var previews: some View {
         EditCaptionView()
-            .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
@@ -316,7 +315,6 @@ struct EditCaptionView_Previews: PreviewProvider {
             .environmentObject(FolderViewModel())
 
         EditCaptionView()
-            .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())

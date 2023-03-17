@@ -34,7 +34,6 @@ struct CaptionView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var firestore: FirestoreManager
     @EnvironmentObject var navStack: NavigationStackCompat
-    @EnvironmentObject var captionConfigs: CaptionConfigsViewModel
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
 
@@ -54,7 +53,6 @@ struct CaptionView: View {
     @State var isEditingTitle: Bool = false
 
     // Variables below are specifically for going through saved captions screen
-    @State var mutableCaptionGroup: AIRequest?
     var isEditing: Bool?
     var onBackBtnClicked: (() -> Void)?
 
@@ -152,10 +150,6 @@ struct CaptionView: View {
                 .presentationDetents([.large])
         }
         .onAppear {
-            if self.openAiConnector.mutableCaptionGroup != nil {
-                self.mutableCaptionGroup = self.openAiConnector.mutableCaptionGroup!
-            }
-
             // Initialize router
             self.router = Router(navStack: self.navStack)
 
@@ -171,9 +165,7 @@ struct CaptionView_Previews: PreviewProvider {
     static var previews: some View {
         CaptionView()
             .environmentObject(OpenAIConnector())
-            .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
-            .environmentObject(CaptionConfigsViewModel())
             .environmentObject(CaptionViewModel())
             .environmentObject(GenerateByPromptViewModel())
 
@@ -181,9 +173,7 @@ struct CaptionView_Previews: PreviewProvider {
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
             .environmentObject(OpenAIConnector())
-            .environmentObject(CaptionEditViewModel())
             .environmentObject(NavigationStackCompat())
-            .environmentObject(CaptionConfigsViewModel())
             .environmentObject(CaptionViewModel())
             .environmentObject(GenerateByPromptViewModel())
     }
