@@ -16,6 +16,7 @@ struct HomeView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
+    @EnvironmentObject var generateByPromptVm: GenerateByPromptViewModel
 
     // user data
     @State var userFirstName: String?
@@ -72,6 +73,8 @@ struct HomeView: View {
 
                     // Generate captions button
                     GenerateCaptionsButtonView(title: "Create captions with a prompt", imgName: "gen_captions_robot") {
+                        self.generateByPromptVm.resetAll()
+                        
                         if let creditAmount = self.creditAmount, creditAmount < 1 {
                             self.showCreditsDepletedBottomSheet = true
                         } else {
@@ -234,6 +237,7 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
+            .environmentObject(GenerateByPromptViewModel())
 
         HomeView()
             .environmentObject(FirestoreManager())
@@ -241,6 +245,7 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
+            .environmentObject(GenerateByPromptViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
@@ -313,7 +318,7 @@ struct CreditsTextView: View {
 
             +
 
-            Text(creditAmount > 0 ? "\(creditAmount) credits" : "\(creditAmount) credit")
+            Text(creditAmount > 1 ? "\(creditAmount) credits" : "\(creditAmount) credit")
             .foregroundColor(.ui.orangeWeb)
             .font(.ui.headline)
 
