@@ -29,15 +29,38 @@ struct PersonalizeOptionsView: View {
                 }
 
                 // Accordion
-                ScrollView(showsIndicators: false) {
-                    VStack(alignment: .center, spacing: 20) {
-                        TonesSelectionView(isSelected: $isTonesSectionSelected)
-                        EmojisAndHashtagsView(isSelected: $isEmojisAndHashtagsViewSelected)
-                        ChooseLengthView(isSelected: $isChooseLengthViewSelected)
+                ScrollViewReader { scrollProxy in
+                    ScrollView(showsIndicators: false) {
+                        VStack(alignment: .center, spacing: 20) {
+                            TonesSelectionView(isSelected: $isTonesSectionSelected)
+                                .id("tones")
+                            EmojisAndHashtagsView(isSelected: $isEmojisAndHashtagsViewSelected)
+                                .id("emojisAndHashtags")
+                            ChooseLengthView(isSelected: $isChooseLengthViewSelected)
+                                .id("length")
+                        }
+                        .padding()
                     }
-                    .padding()
+                    .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.8)
+                    
+                    // automatically scroll to the selected option
+                    .onChange(of: isTonesSectionSelected) { _ in
+                        withAnimation {
+                            scrollProxy.scrollTo("tones", anchor: .top)
+                        }
+                    }
+                    .onChange(of: isEmojisAndHashtagsViewSelected) { _ in
+                        withAnimation {
+                            scrollProxy.scrollTo("emojisAndHashtags", anchor: .top)
+                        }
+                    }
+                    .onChange(of: isChooseLengthViewSelected) { _ in
+                        withAnimation {
+                            scrollProxy.scrollTo("length", anchor: .top)
+                        }
+                    }
                 }
-                .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.8)
+               
 
                 .padding(.top)
 
