@@ -252,6 +252,10 @@ class FirestoreManager: ObservableObject {
                 var captionToSave = folder.caption as CaptionModel
                 captionToSave.folderId = newFolderId
                 captionToSave.id = UUID().uuidString // generate a new ID for all new captions being saved
+                
+                if captionToSave.captionLength.isEmpty {
+                    captionToSave.captionLength = captionLengths.first!.type
+                }
 
                 // Delete original folder from the current folders
                 if let indexOfOriginalFolder = currentFolders.firstIndex(where: { $0.id == folder.id }) {
