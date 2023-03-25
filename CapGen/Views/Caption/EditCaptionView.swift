@@ -6,21 +6,24 @@
 //
 
 import Combine
+import NavigationStack
 import SwiftUI
 import UIKit
 
+enum EditCaptionContext {
+    case optimization, regular, captionList
+}
+
 struct EditCaptionView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var openAiConnector: OpenAIConnector
-    @EnvironmentObject var captionEditVm: CaptionEditViewModel
+    @EnvironmentObject var navStack: NavigationStackCompat
+    @EnvironmentObject var captionVm: CaptionViewModel
+    @EnvironmentObject var folderVm: FolderViewModel
+    @EnvironmentObject var searchVm: SearchViewModel
 
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
-
-    // Requirements
-    let bgColor: Color
-    let captionTitle: String
-    let platform: String
-    let caption: String
 
     // Platform limits and standards
     @State var textCount: Int = 0
@@ -32,6 +35,16 @@ struct EditCaptionView: View {
     // Extra settings
     @State var keyboardHeight: CGFloat = 0
     @State var shareableData: ShareableData?
+    @State var isSelectingPlatform: Bool = false
+    @State var selectedPlatform: String? = nil
+    @State var isLoading: Bool = false
+
+    // Used to determine if platform icons should display for Dropdown menu
+    // Used to determine if CopyAndGo should be available - no if selected platform is General
+    @State var shouldShowSocialMediaPlatform: Bool = false
+
+    // Context
+    var context: EditCaptionContext = .regular
 
     private func countHashtags(text: String) -> Int {
         let hashtagRegex = "#[a-zA-Z0-9_]+"
@@ -45,55 +58,109 @@ struct EditCaptionView: View {
         }
     }
 
+    private func convertSPToDropdownOptions() -> [DropdownOptions] {
+        var options: [DropdownOptions] = []
+
+        socialMediaPlatforms.forEach { sp in
+            options.append(DropdownOptions(title: sp.title, imageName: sp.title == "General" ? "hashtag-white" : "\(sp.title)-circle", isCircularImage: sp.title != "General"))
+        }
+
+        return options
+    }
+
     var body: some View {
         ZStack(alignment: .topLeading) {
-            bgColor.ignoresSafeArea(.all)
+            Color(hex: captionVm.selectedCaption.color).ignoresSafeArea(.all)
 
             GeometryReader { _ in
                 VStack(alignment: .leading) {
                     // Header
                     HStack {
-                        BackArrowView()
-                            .padding(.leading, 8)
+                        BackArrowView {
+                            hideKeyboard()
+
+                            // custom action
+                            if context == .optimization {
+                                self.navStack.pop(to: .previous)
+
+                                self.captionVm.isCaptionSelected = true
+
+                                // Update the selected caption with the edited text
+                                self.captionVm.selectedCaption.captionDescription = self.captionVm.editedCaption.text
+                            }
+
+                            // once user navigates back, store edited caption into firebase
+                            // as long as the editing was from the caption list context
+                            // also only runs if there was a change in text
+                            else if context == .captionList, captionVm.selectedCaption.captionDescription != captionVm.editedCaption.text {
+                                self.isLoading = true
+                                let userId = AuthManager.shared.userManager.user?.id ?? nil
+
+                                captionVm.selectedCaption.captionDescription = captionVm.editedCaption.text
+                                Task {
+                                    await firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) { updatedFolder in
+                                        self.folderVm.updatedFolder = updatedFolder ?? nil
+                                        
+                                        // also update the search object with the most recent updated captions
+                                        // for when a user wants to update the caption while searching
+                                        self.searchVm.searchedCaptions = updatedFolder?.captions ?? []
+                                        self.navStack.pop(to: .previous)
+                                        self.isLoading = false
+                                    }
+                                }
+                            } else {
+                                // difference is that this pops outside of the asynchronous context
+                                self.navStack.pop(to: .previous)
+                            }
+                        }
+                        .disabled(isSelectingPlatform)
+                        .padding(.leading, 8)
 
                         Spacer()
 
-                        Image(platform)
-                            .resizable()
-                            .frame(width: 20, height: 20)
-
-                        Text(platform)
-                            .foregroundColor(.ui.richBlack)
-                            .font(.ui.headline)
-                            .scaledToFit()
-                            .minimumScaleFactor(0.5)
-                            .lineLimit(1)
+                        DropdownMenu(title: selectedPlatform == nil ? "General" : selectedPlatform!, socialMediaIcon: shouldShowSocialMediaPlatform ? selectedPlatform : nil, isMenuOpen: $isSelectingPlatform)
+                            .overlay(alignment: .top) {
+                                if isSelectingPlatform {
+                                    VStack(alignment: .center) {
+                                        Spacer(minLength: 50)
+                                        DropdownMenuList(options: convertSPToDropdownOptions(), selectedOption: DropdownOptions(title: self.selectedPlatform ?? "")) { selectedPlatform in
+                                            withAnimation {
+                                                self.selectedPlatform = selectedPlatform
+                                                self.isSelectingPlatform.toggle()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            // SwiftUI lets us stop a view from receiving any kind of taps using the allowsHitTesting() modifier. If hit testing is disallowed for a view, any taps automatically continue through the view on to whatever is behind it.
+                            .allowsHitTesting(true)
 
                         Spacer()
 
-                        CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, socialMediaPlatform: self.platform, copy: {
+                        CustomMenuPopup(menuTheme: .dark, orientation: .horizontal, shareableData: self.$shareableData, socialMediaPlatform: shouldShowSocialMediaPlatform ? $selectedPlatform : .constant(nil), copy: {
                             // Copy selected
                             self.isTextCopied = true
-                            UIPasteboard.general.string = String(self.captionEditVm.editableText)
+                            UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
 
                         }, reset: {
                             // Reset to original text
-                            self.captionEditVm.editableText = self.caption
+                            self.captionVm.editedCaption.text = self.captionVm.selectedCaption.captionDescription
                         }, onMenuOpen: {
-                            self.shareableData = mapShareableData(caption: self.captionEditVm.editableText, captionGroup: self.openAiConnector.mutableCaptionGroup)
+                            self.shareableData = mapShareableData(caption: captionVm.editedCaption.text, platform: shouldShowSocialMediaPlatform ? selectedPlatform : nil)
                         }, onCopyAndGo: {
                             // Copy and go run openSocialMediaLink(for: platform)
-                            UIPasteboard.general.string = String(self.captionEditVm.editableText)
-                            openSocialMediaLink(for: platform)
-                            Haptics.shared.play(.soft)
+                            UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
+                            openSocialMediaLink(for: self.selectedPlatform ?? "")
                         })
+                        .disabled(isSelectingPlatform)
                         .padding(.horizontal)
                     }
+                    .zIndex(isSelectingPlatform ? 2 : 0)
                     .padding(.bottom, 20)
 
                     // Body
                     VStack(alignment: .leading, spacing: 15) {
-                        Text(captionTitle)
+                        Text(captionVm.selectedCaption.title)
                             .foregroundColor(.ui.richBlack)
                             .font(.ui.title)
                             .scaledToFit()
@@ -107,6 +174,7 @@ struct EditCaptionView: View {
                             .padding(.horizontal, -2)
                     }
                     .padding(.horizontal, 15)
+                    .disabled(isSelectingPlatform)
                 }
                 .padding()
 
@@ -115,12 +183,35 @@ struct EditCaptionView: View {
                     .dropInAndOutAnimation(value: isTextCopied)
                     .offset(y: isTextCopied ? 30 : -SCREEN_HEIGHT)
             }
+            .zIndex(isSelectingPlatform ? 1 : 0)
             .ignoresSafeArea(.keyboard, edges: .all)
+            .blur(radius: self.isLoading ? 3 : 0)
+
+            if isSelectingPlatform {
+                Color.ui.richBlack.opacity(0.35).ignoresSafeArea(.all)
+                    .onTapGesture {
+                        withAnimation {
+                            self.isSelectingPlatform.toggle()
+                        }
+                    }
+            }
+
+            // Calls activity indicator here
+            if self.isLoading {
+                SimpleLoadingView(scaledSize: 3, title: "Saving...")
+            }
+        }
+        .disabled(self.isLoading)
+        .onDisappear {
+            if context != .optimization {
+                captionVm.resetSelectedCaption()
+                captionVm.resetEditedCaption()
+            }
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Button {
-                    self.captionEditVm.editableText.append("#")
+                    self.captionVm.editedCaption.text.append("#")
                     Haptics.shared.play(.soft)
                 } label: {
                     Image("\(colorScheme == .dark ? "hashtag-white" : "hashtag-black")")
@@ -131,50 +222,75 @@ struct EditCaptionView: View {
 
                 Spacer()
 
-                CaptionCopyBtnView(platform: platform) {
-                    // On copy
-                    self.isTextCopied = true
-                    UIPasteboard.general.string = String(self.captionEditVm.editableText)
-                    Haptics.shared.play(.soft)
-                } onPlatformClick: {
-                    // On platform
-                    openSocialMediaLink(for: platform)
-                    Haptics.shared.play(.soft)
+                if let selectedPlatform = self.selectedPlatform, shouldShowSocialMediaPlatform {
+                    CaptionCopyBtnView(platform: selectedPlatform) {
+                        // On copy
+                        self.isTextCopied = true
+                        UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
+                        Haptics.shared.play(.soft)
+                    } onPlatformClick: {
+                        // On platform
+                        openSocialMediaLink(for: selectedPlatform)
+                        Haptics.shared.play(.soft)
+                    }
                 }
 
                 VerticalDivider(color: Color.primary)
                     .padding(.horizontal, 10)
 
-                Button {
-                    hideKeyboard()
-                    Haptics.shared.play(.soft)
-                } label: {
+                ZStack(alignment: .trailing) {
                     Image(systemName: "chevron.down")
-                        .foregroundColor(Color.primary)
-                        .frame(width: 20, height: 20, alignment: .trailing)
+                        .resizable()
+                        .renderingMode(.template)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+
+                    Rectangle()
+                        .frame(width: 30, height: 20)
+                        .opacity(0.001)
+                        .onTapGesture {
+                            hideKeyboard()
+                            Haptics.shared.play(.soft)
+                        }
                 }
-                .frame(width: 50, alignment: .trailing)
-                .padding(.trailing, -12)
-                .padding(.leading, -5)
             }
         }
         .onAppear {
-            self.captionEditVm.editableText = self.caption
-            self.textCount = self.caption.count
-            self.hashtagCount = self.countHashtags(text: self.caption)
+            self.textCount = self.captionVm.selectedCaption.captionDescription.count
+            self.hashtagCount = self.countHashtags(text: self.captionVm.selectedCaption.captionDescription)
 
-            let socialMediaFiltered = socialMediaPlatforms.first(where: { $0.title == self.platform })
-            self.textLimit = socialMediaFiltered?.characterLimit ?? 0
-            self.hashtagLimit = socialMediaFiltered?.hashtagLimit ?? 0
-
-            // Resets the flag to dismiss notification
+            // Resets the flag to dismiss notification after 3 seconds
             Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
                 if self.isTextCopied {
                     self.isTextCopied = false
                 }
             }
+
+            // find specific folder for a caption if editing from the caption list
+            if context == .captionList, let user = AuthManager.shared.userManager.user {
+                // filter to a folder for a specific caption
+                // BUG: -- If user updates the folder within FolderView(), this won't work as the folderId will change. Must choose updated folder Id
+                if let folder = user.folders.first(where: { $0.id == captionVm.selectedCaption.folderId }) {
+                    // Update platform based on folder type
+                    self.selectedPlatform = folder.folderType.rawValue
+
+                    // Set text to be edited
+                    captionVm.editedCaption.text = captionVm.selectedCaption.captionDescription
+                }
+            }
         }
-        .onChange(of: captionEditVm.editableText) { value in
+        .onChange(of: self.selectedPlatform, perform: { sp in
+            if let sp = sp {
+                // Update text and hashtag limits based on selected platform
+                let socialMediaFiltered = socialMediaPlatforms.first(where: { $0.title == sp })
+                self.textLimit = socialMediaFiltered?.characterLimit ?? 0
+                self.hashtagLimit = socialMediaFiltered?.hashtagLimit ?? 0
+
+                self.shouldShowSocialMediaPlatform = !sp.isEmpty && sp != "General"
+            }
+
+        })
+        .onChange(of: captionVm.editedCaption.text) { value in
             // Count number of chars in the text
             self.textCount = value.count
 
@@ -191,11 +307,19 @@ struct EditCaptionView: View {
 
 struct EditCaptionView_Previews: PreviewProvider {
     static var previews: some View {
-        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "Instagram", caption: "Life is so much better with a furry friend to share it with! My rescue pup brings me #so much joy and love every day. 🤗")
-            .environmentObject(CaptionEditViewModel())
+        EditCaptionView()
+            .environmentObject(NavigationStackCompat())
+            .environmentObject(OpenAIConnector())
+            .environmentObject(CaptionViewModel())
+            .environmentObject(FirestoreManager())
+            .environmentObject(FolderViewModel())
 
-        EditCaptionView(bgColor: Color.ui.middleYellowRed, captionTitle: "Rescued Love Unleashed", platform: "LinkedIn", caption: "🐶💕 Life is so much better with a furry friend to share it with! My rescue pup brings me so much joy and love every day. 🤗")
-            .environmentObject(CaptionEditViewModel())
+        EditCaptionView()
+            .environmentObject(NavigationStackCompat())
+            .environmentObject(OpenAIConnector())
+            .environmentObject(CaptionViewModel())
+            .environmentObject(FirestoreManager())
+            .environmentObject(FolderViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
@@ -248,11 +372,11 @@ struct PlatformLimitsView: View {
 }
 
 struct CaptionTextEditorView: View {
-    @EnvironmentObject var captionEditVm: CaptionEditViewModel
+    @EnvironmentObject var captionVm: CaptionViewModel
     @Binding var keyboardHeight: CGFloat
 
     var body: some View {
-        TextEditor(text: $captionEditVm.editableText)
+        TextEditor(text: $captionVm.editedCaption.text)
             .font(.ui.graphikRegular)
             .foregroundColor(Color.ui.richBlack)
             .lineSpacing(6)

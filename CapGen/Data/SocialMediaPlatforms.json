@@ -1,5 +1,13 @@
 [
     {
+        "id": 0,
+        "title": "General",
+        "characterLimit": 0,
+        "hashtagLimit": 0,
+        "link": "",
+        "websiteLink": ""
+    },
+    {
         "id": 1,
         "title": "Instagram",
         "characterLimit": 2200,
@@ -62,5 +70,13 @@
         "hashtagLimit": 0,
         "link": "linkedin://",
         "websiteLink": "https://linkedin.com"
+    },
+    {
+        "id": 9,
+        "title": "Snapchat",
+        "characterLimit": 0,
+        "hashtagLimit": 0,
+        "link": "snapchat://",
+        "websiteLink": "https://www.snapchat.com/"
     }
 ]

@@ -12,6 +12,8 @@ struct CaptionLengths: Decodable {
     let value: String
     let title: String
     let type: String
+    let min: Int
+    let max: Int
 }
 
 var captionLengths: [CaptionLengths] = load("CaptionLengths.json")

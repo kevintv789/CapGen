@@ -65,7 +65,7 @@ class UserManager: ObservableObject {
             let email: String = snapshot?.get("email") as? String ?? "N/A"
             let userPrefsDict = snapshot?.get("userPrefs") as? [String: Any]
             let dateCreatedTimestamp = snapshot?.get("dateCreated") as? Timestamp ?? nil
-            let captionsGroup = self.convertCaptionGroup(for: snapshot?.get("captionsGroup") as? [[String: AnyObject]] ?? nil)
+            let folders = self.convertFolderModel(for: snapshot?.get("folders") as? [[String: AnyObject]] ?? nil)
 
             guard let dateCreated = dateCreatedTimestamp?.dateValue() else { return }
 
@@ -75,7 +75,7 @@ class UserManager: ObservableObject {
                 let userPref = try? decoder.decode(UserPreferences.self, from: userPrefsDict)
 
                 if userPref != nil {
-                    self.user = UserModel(id: uid, fullName: fullName, credits: credits, email: email, userPrefs: userPref!, dateCreated: dateCreated, captionsGroup: captionsGroup)
+                    self.user = UserModel(id: uid, fullName: fullName, credits: credits, email: email, userPrefs: userPref!, dateCreated: dateCreated, folders: folders)
                 }
             }
         }
@@ -121,51 +121,27 @@ class UserManager: ObservableObject {
         }
     }
 
-    /**
-     This function converts the group of captions within Firebase to a readable/Swift format so data can be read and retrieved
-     */
-    private func convertCaptionGroup(for captionsGroup: [[String: AnyObject]]?) -> [AIRequest] {
-        guard let captionsGroup = captionsGroup else { return [] }
+    private func convertFolderModel(for folders: [[String: AnyObject]]?) -> [FolderModel] {
+        guard let folders = folders else { return [] }
 
-        var result: [AIRequest] = []
+        var result: [FolderModel] = []
 
-        captionsGroup.forEach { element in
-            let captionLength = element["captionLength"] as! String
-            let captionsDict = element["captions"] as? [[String: AnyObject]]
-            let dateCreated = element["dateCreated"] as! String
-            let id = element["id"] as! String
-            let includeEmojis = element["includeEmojis"] as! Bool
-            let includeHashtags = element["includeHashtags"] as! Bool
-            let platform = element["platform"] as! String
-            let prompt = element["prompt"] as! String
-            let title = element["title"] as! String
-            let tonesDict = element["tones"] as? [[String: AnyObject]] ?? []
+        folders.forEach { folder in
+            let id = folder["id"] as! String
+            let name = folder["name"] as! String
+            let dateCreated = folder["dateCreated"] as! String
+            let folderType = folder["folderType"] as! String
+            let captions = Utils.convertGeneratedCaptions(for: folder["captions"] as? [[String: AnyObject]])
+            let index = folder["index"] as! Int
 
-            var captions: [GeneratedCaptions] = []
-            captionsDict?.forEach { ele in
-                let captionsId = ele["id"] as! String
-                let description = ele["description"] as! String
-
-                let parsedCaptions = GeneratedCaptions(id: captionsId, description: description)
-                captions.append(parsedCaptions)
-            }
-
-            var tones: [ToneModel] = []
-            tonesDict.forEach { ele in
-                let tone = ToneModel(id: ele["id"] as! Int, title: ele["title"] as! String, description: ele["description"] as! String, icon: ele["icon"] as! String)
-                tones.append(tone)
-            }
-
-            let parsedCaptionsGroup = AIRequest(id: id, platform: platform, prompt: prompt, tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength, title: title, dateCreated: dateCreated, captions: captions)
-
-            result.append(parsedCaptionsGroup)
+            let mappedFolder = FolderModel(id: id, name: name, dateCreated: dateCreated, folderType: FolderType(rawValue: folderType)!, captions: captions, index: index)
+            result.append(mappedFolder)
         }
 
-        let df = DateFormatter()
-        df.dateFormat = "MMM d, h:mm a"
-        result.sort(by: { df.date(from: $0.dateCreated)!.compare(df.date(from: $1.dateCreated)!) == .orderedDescending })
-
-        return result
+        // returns a list of folders that is sorted by largest caption count first
+        return result.sorted { f1, f2 in
+            f1.captions.count > f2.captions.count
+        }
     }
 
     private func createGoogleUser(uid: String, credit: Int, usersPref: UserPreferences, dateCreated: Date) {

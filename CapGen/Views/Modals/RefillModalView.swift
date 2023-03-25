@@ -16,7 +16,7 @@ struct RefillModalView: View {
     let authManager = AuthManager.shared.userManager
 
     @State var isAdDone: Bool = false
-    
+
     var body: some View {
         ZStack {
             Color.ui.cultured.ignoresSafeArea()
@@ -48,10 +48,10 @@ struct RefillModalView: View {
         .onChange(of: self.isAdDone) { isDone in
             if isDone {
                 self.isViewPresented = false
-                
+
                 withAnimation {
                     guard let showCongratsModal = authManager.user?.userPrefs.showCongratsModal else { return }
-                    
+
                     if showCongratsModal {
                         self.showCongratsModal = true
                     }

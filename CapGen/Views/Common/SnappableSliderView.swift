@@ -11,11 +11,12 @@ import UIKit
 
 struct SnappableSliderView: UIViewRepresentable {
     @Binding var values: [Int]
+    @Binding var selectedValue: Int
     var callback: (Float) -> Void
 
-    var thumbColor: UIColor = .init(Color.ui.middleYellowRed)
-    var minTrackColor: UIColor = .init(Color.ui.middleYellowRed)
-    var maxTrackColor: UIColor = .init(Color.ui.cultured)
+    var thumbColor: UIColor = .init(Color.ui.darkerPurple)
+    var minTrackColor: UIColor = .init(Color.ui.darkerPurple)
+    var maxTrackColor: UIColor = .init(Color.ui.lighterLavBlue)
 
     // Create a class Coordinator to bind SwiftUI and UIKit together
     // so that a SwiftUI View can access data from this UIKit component
@@ -89,7 +90,7 @@ struct SnappableSliderView: UIViewRepresentable {
         return slider
     }
 
-    func updateUIView(_: UISlider, context _: Context) {
-//        uiView.value = Float(values[0])
+    func updateUIView(_ uiView: UISlider, context _: Context) {
+        uiView.value = Float(selectedValue)
     }
 }
