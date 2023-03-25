@@ -118,7 +118,7 @@ struct CaptionView: View {
                                         Haptics.shared.play(.soft)
                                     }
                                 } label: {
-                                    if index < 5 {
+                                    if index < Constants.TOTAL_CAPTIONS_GENERATED {
                                         CaptionCard(caption: caption, colorFilled: $cardColorFill[index], shareableData: self.$shareableData,
                                                     edit: {
                                                         // edit

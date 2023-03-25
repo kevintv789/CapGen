@@ -195,6 +195,7 @@
 		D490991929C2697A002CBA4F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991829C2697A002CBA4F /* SearchView.swift */; };
 		D490991B29C391D5002CBA4F /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991A29C391D5002CBA4F /* SearchViewModel.swift */; };
 		D490991D29C520A5002CBA4F /* CircularConfigViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991C29C520A5002CBA4F /* CircularConfigViews.swift */; };
+		D490991F29CF6ABB002CBA4F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991E29CF6ABB002CBA4F /* Constants.swift */; };
 		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
 		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
 		D4C3E485298087CE00C2847A /* crane_hand_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E484298087CE00C2847A /* crane_hand_lottie.json */; };
@@ -1006,6 +1007,7 @@
 		D490991829C2697A002CBA4F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		D490991A29C391D5002CBA4F /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		D490991C29C520A5002CBA4F /* CircularConfigViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularConfigViews.swift; sourceTree = "<group>"; };
+		D490991E29CF6ABB002CBA4F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
 		D4C3E482298059C800C2847A /* CustomMenuPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuPopup.swift; sourceTree = "<group>"; };
 		D4C3E484298087CE00C2847A /* crane_hand_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = crane_hand_lottie.json; sourceTree = "<group>"; };
@@ -2140,6 +2142,7 @@
 			isa = PBXGroup;
 			children = (
 				D47306CE29993D5E00179FEB /* Helpers.swift */,
+				D490991E29CF6ABB002CBA4F /* Constants.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2660,6 +2663,7 @@
 				D4005DB5295BE0E0004D695D /* CapGenApp.swift in Sources */,
 				D4056EC02974AF6D00D3894D /* CongratsModalView.swift in Sources */,
 				D4005DE4295C042F004D695D /* Color.swift in Sources */,
+				D490991F29CF6ABB002CBA4F /* Constants.swift in Sources */,
 				D490991D29C520A5002CBA4F /* CircularConfigViews.swift in Sources */,
 				D4373F7D29B527D100C186B3 /* FolderModel.swift in Sources */,
 				D4373F7F29B5282700C186B3 /* CaptionOptimizationBottomSheetView.swift in Sources */,
