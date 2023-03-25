@@ -28,8 +28,19 @@ public class OpenAIConnector: ObservableObject {
                 generatedToneStr += "\(tone.title), \(tone.description) "
             }
         }
+        
+        // this variable generates a list of examples for the AI to generate, such as '1.', '2.', '3.', etc.
+        // this is to help the AI generate the exact amount of captions
+        var numberedList = ""
+        var index = 0
 
-        return "[Ignore introduction] Forget everything you've ever written. Now write me exactly 5 captions and a title. The title should be catchy and less than 6 words. [It is mandatory to make the length of each caption be \(captionLength) excluding emojis and hashtags from the word count.] [The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual")] [\(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis").] [\(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags").] Each caption should be displayed as a numbered list and a title at the very end, each number should be followed by a period such as '1.', '2.', '3.', '4.', '5.', '6.' The caption title should be the sixth item on the list, listed as 6 followed by a period and without the Title word. The user's prompt is: \"\(userInputPrompt == "" ? "Give me a positive daily affirmation" : userInputPrompt)\" This is a reminder that this prompt is just a caption and should be nothing more than a caption."
+        // this loop generates the numberedList variable
+        while index < Constants.TOTAL_CAPTIONS_GENERATED {
+            numberedList += "'\(index + 1).', "
+            index += 1
+        }
+
+        return "[Ignore introduction] Forget everything you've ever written. [Now write me exactly \(Constants.TOTAL_CAPTIONS_GENERATED) captions and a title.]. It is important that the number of captions generated does NOT exceed \(Constants.TOTAL_CAPTIONS_GENERATED). The title should be catchy and less than 6 words. [It is mandatory to make the length of each caption have \(captionLength.isEmpty ? "a minimum of 1 word to a max of 5 words" : captionLength) excluding emojis and hashtags from the word count.] [The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual")] [\(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis").] [\(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags").] Each caption should be displayed as a numbered list and a title at the very end, each number should be followed by a period such as \(numberedList) The caption title should be the \(Constants.TOTAL_CAPTIONS_GENERATED + 1)th item on the list, listed as \(Constants.TOTAL_CAPTIONS_GENERATED + 1) followed by a period and without the Title word. The user's prompt is: \"\(userInputPrompt == "" ? "Give me a positive daily affirmation" : userInputPrompt)\" This is a reminder that this prompt is just a caption and should be nothing more than a caption."
     }
 
     /*
@@ -95,49 +106,33 @@ public class OpenAIConnector: ObservableObject {
         if var originalString = openAiResponse {
             // Removes trailing and leading white spaces
             originalString = openAiResponse!.trimmingCharacters(in: .whitespaces)
-
-            /**
-             (?m): Enable multiline mode so that ^ and $ match the start and end of lines in the input string.
-             ^: Match the start of a line.
-             \s*: Match zero or more whitespace characters (spaces, tabs, and newlines).
-             \d+: Match one or more digits.
-             [. ]+: Match one or more periods or spaces (to handle cases like "\n1. " or "\n\n1 ").
-             (: Start capturing group 1.
-             .*: Match any characters (except newline) zero or more times.
-             (?:: Start a non-capturing group.
-             \n+: Match one or more newline characters.
-             (?!\d+[. ]): Use negative lookahead to assert that the next characters are not one or more digits followed by a period or space (i.e. the start of a new numbered caption).
-             [^\n]*: Match any characters (except newline) zero or more times.
-             )*: End the non-capturing group and make it optional (so that we can match the last caption even if it doesn't have a newline after it)
-             ): End capturing group 1.
-             */
-            let pattern = "(?m)^\\s*\\d+[. ]+(.*(?:\\n+(?!\\d+[. ])[^\\n]*)*)"
-            if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
-                let range = NSRange(originalString.startIndex..., in: originalString)
-                let matches = regex.matches(in: originalString, options: [], range: range)
-                var results = matches.map {
-                    String(originalString[Range($0.range(at: 1), in: originalString)!])
-                }
-                // If counts are less than 6, then title is not included
-                // This is a fail safe to include a random title to not throw off the parsing
-                if !ingoreCaptionGroupSave {
-                    if results.count < 6 {
-                        results.append("Customize your title.")
-                    } else {
-                        captionGroupTitle = results.removeLast()
-                        captionsGroupParsed = results
+            
+            var results = extractNumberedLines(text: originalString)
+            
+            // If counts are less than the default amount of captions able to be generated including the title, then title is not included
+            // This is a fail safe to include a random title to not throw off the parsing
+            if !ingoreCaptionGroupSave {
+                if results.count < Constants.TOTAL_CAPTIONS_GENERATED + 1 {
+                    results.append("Customize your title.")
+                } else {
+                    captionGroupTitle = results.removeLast()
+                    
+                    if captionGroupTitle.contains("\(Constants.TOTAL_CAPTIONS_GENERATED + 1).") {
+                        captionGroupTitle = captionGroupTitle.replacingOccurrences(of: "\(Constants.TOTAL_CAPTIONS_GENERATED + 1).", with: "")
                     }
-
-                    return []
+                    
+                    captionsGroupParsed = results
                 }
-
-                return results
+                
+                return []
             }
+            
+            return results
         }
-
+        
         return []
     }
-
+    
     @MainActor
     func updateCaptionBasedOnWordCountIfNecessary(apiKey: String?, onComplete: @escaping () -> Void) async {
         guard apiKey != nil else {
@@ -154,6 +149,12 @@ public class OpenAIConnector: ObservableObject {
 
         var num = 1
         var promptBatch = ""
+        
+        // this variable generates a list of examples for the AI to generate, such as '1.', '2.', '3.', etc.
+        // this is to help the AI generate the exact amount of updated captions
+        var numberedList = ""
+        
+        var numOfCaptionsUpdated = 0
 
         captionsGroupParsed.forEach { caption in
             let wordCount = caption.wordCount
@@ -164,8 +165,11 @@ public class OpenAIConnector: ObservableObject {
 
                 // If word count is shorter than the minimum requirement
                 if wordCount < min {
-                    let newPrompt = "\n\(num). This caption has \(wordCount) words: \"\(caption)\". Add words until it reaches a minimum of \(min) words to a max of \(max) words."
+                    let newPrompt = "\n\(num). This caption has \(wordCount) words: \"\(caption)\". [It is important that you add words until it reaches a minimum of \(min) words to a max of \(max) words.]"
                     promptBatch += newPrompt
+                    
+                    numOfCaptionsUpdated += 1
+                    numberedList += "'\(numOfCaptionsUpdated).', "
                 } else {
                     mutableCaptions.append(caption)
                 }
@@ -175,7 +179,7 @@ public class OpenAIConnector: ObservableObject {
         }
 
         if !promptBatch.isEmpty {
-            let response = await processPrompt(apiKey: apiKey, prompt: "[Ignore introduction] Process the below list separately. Each caption should be displayed as a numbered list, each number should be followed by a period such as '1.', '2.', '3.', '4.', '5.'\n###\(promptBatch)\n###")
+            let response = await processPrompt(apiKey: apiKey, prompt: "[Ignore introduction] Process the below list separately. It is important that you do not exceed \(numOfCaptionsUpdated) caption(s). Each caption should be displayed as a numbered list, each number should be followed by a period such as \(numberedList)\n\nThe list:\n###\(promptBatch)\n###")
             let results = await processOutputIntoArray(openAiResponse: response, ingoreCaptionGroupSave: true)
             mutableCaptions.append(contentsOf: results ?? [])
         }

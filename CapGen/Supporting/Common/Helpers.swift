@@ -48,6 +48,53 @@ func calculateTimeOfDay() -> DayType {
     return timeOfDay
 }
 
+/// Extracts and correctly numbers the lines from the input text.
+///
+/// This function searches for lines in the input text that are either numbered or not, and returns a list of strings
+/// with the correctly numbered lines.
+///
+/// - Parameters:
+///   - text: The input text containing the lines to be extracted and numbered.
+///
+/// - Returns: An array of strings containing the correctly numbered lines.
+func extractNumberedLines(text: String) -> [String] {
+    // Define the regular expression pattern to match lines, whether they have numbers or not.
+    let regexPattern = "(?m)^\\s*(?:\\d+\\.)?\\s*(.+)"
+    var results: [String] = []
+
+    do {
+        // Create a regular expression object with the defined pattern.
+        let regex = try NSRegularExpression(pattern: regexPattern, options: [])
+        
+        // Define the range for the entire input text.
+        let nsRange = NSRange(text.startIndex..<text.endIndex, in: text)
+        
+        // Search for matches using the regular expression object.
+        let matches = regex.matches(in: text, options: [], range: nsRange)
+
+        // Iterate through the matches.
+        for match in matches {
+            // Extract the content of the line, without the number and the period.
+            if let range = Range(match.range(at: 1), in: text) {
+                var lineContent = String(text[range]).trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                // Remove any existing numbering and extra newline characters, if present.
+                if let existingNumberRange = lineContent.range(of: "^\\d+\\.\\s*\\n?", options: .regularExpression) {
+                    lineContent.removeSubrange(existingNumberRange)
+                }
+                
+                // Append the corrected line to the results array.
+                results.append(lineContent)
+            }
+        }
+    } catch {
+        print("Invalid regex pattern")
+    }
+
+    // Return the array of correctly numbered lines.
+    return results
+}
+
 enum Utils {
     static func getCurrentDate() -> String {
         let date = Date()

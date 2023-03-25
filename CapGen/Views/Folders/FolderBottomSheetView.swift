@@ -70,31 +70,39 @@ struct FolderBottomSheetView: View {
         ZStack {
             Color.ui.cultured.ignoresSafeArea()
 
-            ScrollView {
-                VStack {
-                    Text(title)
-                        .font(.ui.largeTitleSm)
-                        .foregroundColor(.ui.richBlack)
-                        .padding(.bottom, 40)
-
-                    // Folder name input
-                    FolderNameInput(folderName: $folderName, isError: $isFolderNameError)
-                        .padding(.bottom, 20)
-
-                    // Choose a platform 3x3 grid
-                    PlatformGridView(selectedPlatform: $selectedPlatform)
-
-                    // Submit button
-                    PrimaryButtonView(title: "Create", isLoading: $isLoading) {
-                        // Run API to create the specified folder
-                        onSubmit()
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    VStack {
+                        Text(title)
+                            .font(.ui.largeTitleSm)
+                            .foregroundColor(.ui.richBlack)
+                            .padding(.bottom, 40)
+                        
+                        // Folder name input
+                        FolderNameInput(folderName: $folderName, isError: $isFolderNameError)
+                            .padding(.bottom, 20)
+                            .onSubmit {
+                                withAnimation {
+                                    scrollProxy.scrollTo("submit-btn", anchor: .bottom)
+                                }
+                            }
+                        
+                        // Choose a platform 3x3 grid
+                        PlatformGridView(selectedPlatform: $selectedPlatform)
+                        
+                        // Submit button
+                        PrimaryButtonView(title: "Create", isLoading: $isLoading) {
+                            // Run API to create the specified folder
+                            onSubmit()
+                        }
+                        .id("submit-btn")
+                        .frame(width: SCREEN_WIDTH * 0.8, height: 55)
+                        .padding(.top)
+                        
+                        Spacer()
                     }
-                    .frame(width: SCREEN_WIDTH * 0.8, height: 55)
-                    .padding(.top)
-
-                    Spacer()
+                    .padding()
                 }
-                .padding()
             }
         }
         .onReceive(folderVm.$currentFolder) { folder in
@@ -125,6 +133,7 @@ struct FolderNameInput: View {
                 .overlay(
                     HStack(spacing: 0) {
                         TextField("", text: $folderName)
+                            .submitLabel(.next)
                             .padding()
                             .placeholder(when: folderName.isEmpty) {
                                 Text("Enter a folder name")
