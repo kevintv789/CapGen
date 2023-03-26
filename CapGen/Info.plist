@@ -47,6 +47,7 @@
 		<string>reddit</string>
 		<string>pinterest</string>
 		<string>linkedin</string>
+        <string>snapchat</string>
 	</array>
     <key>NSUserTrackingUsageDescription</key>
     <string>To improve your CapGen experience, we use your device data for personalized content. Your data is secure and never shared with third parties.</string>
