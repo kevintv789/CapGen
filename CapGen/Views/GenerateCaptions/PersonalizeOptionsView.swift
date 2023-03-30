@@ -7,6 +7,7 @@
 
 import NavigationStack
 import SwiftUI
+import Heap
 
 struct PersonalizeOptionsView: View {
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
@@ -24,6 +25,8 @@ struct PersonalizeOptionsView: View {
             VStack(alignment: .center) {
                 // header
                 GenerateCaptionsHeaderView(title: "Tailor your captions", isOptional: true, isNextSubmit: true) {
+                    Heap.track("onClick PersonalizedOptionsView - Next button tapped", withProperties: [ "Tone(s)": genPromptVm.selectdTones, "Include emojis?": genPromptVm.includeEmojis, "Include hashtags?": genPromptVm.includeHashtags, "Length": genPromptVm.captionLengthType ])
+                    
                     // on click next
                     self.navStack.push(LoadingView())
                 }
@@ -60,12 +63,13 @@ struct PersonalizeOptionsView: View {
                         }
                     }
                 }
-               
-
                 .padding(.top)
 
                 Spacer()
             }
+        }
+        .onAppear() {
+            Heap.track("onAppear PersonalizedOptionsView")
         }
     }
 }

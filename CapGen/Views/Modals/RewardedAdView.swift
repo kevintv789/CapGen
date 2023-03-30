@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Heap
 
 struct RewardedAdView: View {
     @ObservedObject var ad = AppodealProvider.shared
@@ -42,6 +43,7 @@ struct RewardedAdView: View {
                 DisplayAdBtnView(title: "Collect Credits")
 
                 Button {
+                    Heap.track("onClick RewardedAdView - Not now button")
                     isViewPresented = false
                 } label: {
                     Text("Not now")
@@ -56,6 +58,7 @@ struct RewardedAdView: View {
         })
         .onChange(of: self.isAdDone, perform: { isDone in
             if isDone {
+                Heap.track("onChange RewardedAdView - Ad is done")
                 self.isViewPresented = false
 
                 withAnimation {

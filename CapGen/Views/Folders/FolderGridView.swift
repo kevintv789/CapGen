@@ -7,6 +7,7 @@
 
 import NavigationStack
 import SwiftUI
+import Heap
 
 enum FolderViewContext {
     case saveToFolder, view
@@ -74,6 +75,8 @@ struct FolderGridView: View {
                                     self.folderVm.captionFolderStorage.remove(at: indexOfSavedCaption)
                                 }
                             }
+                            
+                            Heap.track("onClick FolderGridView - Folder clicked", withProperties: [ "context": context, "folder": [ "name": folders[index].name, "folder_type": folders[index].folderType, "captions_count": folders[index].captions.count, "id": folders[index].id ] ])
                         }
                         .disabled(disableTap)
 
@@ -81,6 +84,8 @@ struct FolderGridView: View {
                             folderVm.currentFolder = folder
                             self.isEditing = true
                             self.showFolderBottomSheet = true
+                            
+                            Heap.track("onClick FolderGridView Custom Menu - Edit button clicked", withProperties: [ "folder": folderVm.currentFolder ])
 
                         } onMenuOpen: {
                             shareableData = mapShareableDataFromCaptionList(captions: folder.captions)
@@ -88,6 +93,8 @@ struct FolderGridView: View {
                             // on delete, remove from firebase
                             folderVm.currentFolder = folder
                             folderVm.isDeleting.toggle()
+                            
+                            Heap.track("onClick FolderGridView Custom Menu - Delete button clicked, show pop-up", withProperties: [ "folder": folderVm.currentFolder ])
                         }
                         .disabled(disableTap)
                     }
@@ -118,6 +125,7 @@ struct AddFolderButtonView: View {
 
     var body: some View {
         Button {
+            Heap.track("onClick FolderGridView - Create folder button")
             action()
         } label: {
             VStack(spacing: 30) {

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import NavigationStack
+import Heap
 
 struct SearchView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
@@ -68,8 +69,6 @@ struct SearchView: View {
                 let df = DateFormatter()
                 df.dateFormat = "MMM d, h:mm a"
                 self.totalCaptions.sort(by: { df.date(from: $0.dateCreated)!.compare(df.date(from: $1.dateCreated)!) == .orderedDescending })
-                
-                print("TOTAL CAPTIONS", self.totalCaptions)
             }
         })
         .onReceive(searchVm.$searchedText) { searchText in
@@ -110,7 +109,7 @@ struct SearchView: View {
                 
                 return doesTitleMatch || doesCaptionMatch || doesTonesMatch || doesFolderNameMatch || doesFolderTypeMatch
             })
-            
+        
         }
         // Show caption delete modal
         .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
@@ -134,6 +133,9 @@ struct SearchView: View {
             withAnimation {
                 self.showCaptionDeleteModal = false
             }
+        }
+        .onAppear() {
+            Heap.track("onAppear SearchView")
         }
        
     }
@@ -204,6 +206,8 @@ struct SearchInputView: View {
                 onCancelSearch()
                 hideKeyboard()
                 searchVm.resetSearchConfigs()
+                
+                Heap.track("onClick SearchView - Cancel button clicked")
             }, label: {
                 Text("Cancel")
                     .foregroundColor(.ui.richBlack.opacity(0.7))

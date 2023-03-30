@@ -9,6 +9,7 @@ import Combine
 import NavigationStack
 import SwiftUI
 import UIKit
+import Heap
 
 enum EditCaptionContext {
     case optimization, regular, captionList
@@ -112,6 +113,8 @@ struct EditCaptionView: View {
                                 // difference is that this pops outside of the asynchronous context
                                 self.navStack.pop(to: .previous)
                             }
+                            
+                            Heap.track("onClick EditCaptionView - Back button", withProperties: [ "context": context, "caption": captionVm.editedCaption.text ])
                         }
                         .disabled(isSelectingPlatform)
                         .padding(.leading, 8)
@@ -141,16 +144,19 @@ struct EditCaptionView: View {
                             // Copy selected
                             self.isTextCopied = true
                             UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
+                            Heap.track("onClick EditCaptionView Custom Menu - Copy caption", withProperties: [ "caption": captionVm.editedCaption.text ])
 
                         }, reset: {
                             // Reset to original text
                             self.captionVm.editedCaption.text = self.captionVm.selectedCaption.captionDescription
+                            Heap.track("onClick EditCaptionView Custom Menu - Reset caption", withProperties: [ "caption": captionVm.editedCaption.text ])
                         }, onMenuOpen: {
                             self.shareableData = mapShareableData(caption: captionVm.editedCaption.text, platform: shouldShowSocialMediaPlatform ? selectedPlatform : nil)
                         }, onCopyAndGo: {
                             // Copy and go run openSocialMediaLink(for: platform)
                             UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
                             openSocialMediaLink(for: self.selectedPlatform ?? "")
+                            Heap.track("onClick EditCaptionView Custom Menu - Copy & Go caption", withProperties: [ "caption": captionVm.editedCaption.text ])
                         })
                         .disabled(isSelectingPlatform)
                         .padding(.horizontal)
@@ -278,6 +284,8 @@ struct EditCaptionView: View {
                     captionVm.editedCaption.text = captionVm.selectedCaption.captionDescription
                 }
             }
+            
+            Heap.track("onAppear EditCaptionView", withProperties: [ "context": context, "caption": captionVm.selectedCaption.captionDescription, "type": selectedPlatform == nil ? "General" : selectedPlatform! ])
         }
         .onChange(of: self.selectedPlatform, perform: { sp in
             if let sp = sp {
