@@ -7,6 +7,7 @@
 
 import NavigationStack
 import SwiftUI
+import Heap
 
 struct BackArrowView: View {
     var action: (() -> Void)?
@@ -14,6 +15,7 @@ struct BackArrowView: View {
     var body: some View {
         if action != nil {
             Button {
+                Heap.track("onClick BackArrowView - Back button clicked")
                 action!()
                 Haptics.shared.play(.soft)
             } label: {
@@ -28,6 +30,7 @@ struct BackArrowView: View {
                     .frame(width: 50, height: 40)
             }
             .simultaneousGesture(TapGesture().onEnded { _ in
+                Heap.track("onClick BackArrowView - Back button clicked")
                 Haptics.shared.play(.soft)
             })
         }

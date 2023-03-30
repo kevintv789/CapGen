@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Heap
 
 public class OpenAIConnector: ObservableObject {
     @Published var captionLengthType: String = ""
@@ -39,8 +40,14 @@ public class OpenAIConnector: ObservableObject {
             numberedList += "'\(index + 1).', "
             index += 1
         }
+        
+        let completePrompt = "[Ignore introduction] Forget everything you've ever written. [Now write me exactly \(Constants.TOTAL_CAPTIONS_GENERATED) captions and a title.]. It is important that the number of captions generated does NOT exceed \(Constants.TOTAL_CAPTIONS_GENERATED). The title should be catchy and less than 6 words. [It is mandatory to make the length of each caption have \(captionLength.isEmpty ? "a minimum of 1 word to a max of 5 words" : captionLength) excluding emojis and hashtags from the word count.] [The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual")] [\(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis").] [\(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags").] Each caption should be displayed as a numbered list and a title at the very end, each number should be followed by a period such as \(numberedList) The caption title should be the \(Constants.TOTAL_CAPTIONS_GENERATED + 1)th item on the list, listed as \(Constants.TOTAL_CAPTIONS_GENERATED + 1) followed by a period and without the Title word. The user's prompt is: \"\(userInputPrompt == "" ? "Give me a positive daily affirmation" : userInputPrompt)\" This is a reminder that this prompt is just a caption and should be nothing more than a caption."
+        
+        Heap.track("onAppear OpenAIConnector - Complete prompt information", withProperties: [ "complete_prompt": completePrompt, "function_name": "generatePrompt()" ])
 
-        return "[Ignore introduction] Forget everything you've ever written. [Now write me exactly \(Constants.TOTAL_CAPTIONS_GENERATED) captions and a title.]. It is important that the number of captions generated does NOT exceed \(Constants.TOTAL_CAPTIONS_GENERATED). The title should be catchy and less than 6 words. [It is mandatory to make the length of each caption have \(captionLength.isEmpty ? "a minimum of 1 word to a max of 5 words" : captionLength) excluding emojis and hashtags from the word count.] [The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual")] [\(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis").] [\(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags").] Each caption should be displayed as a numbered list and a title at the very end, each number should be followed by a period such as \(numberedList) The caption title should be the \(Constants.TOTAL_CAPTIONS_GENERATED + 1)th item on the list, listed as \(Constants.TOTAL_CAPTIONS_GENERATED + 1) followed by a period and without the Title word. The user's prompt is: \"\(userInputPrompt == "" ? "Give me a positive daily affirmation" : userInputPrompt)\" This is a reminder that this prompt is just a caption and should be nothing more than a caption."
+        return completePrompt
+        
+       
     }
 
     /*
@@ -77,8 +84,10 @@ public class OpenAIConnector: ObservableObject {
         do {
             httpBodyJson = try JSONSerialization.data(withJSONObject: httpBody, options: .prettyPrinted)
         } catch {
-            print("ERROR", error)
             appError = ErrorType(error: .genericError)
+            
+            Heap.track("onError OpenAIConnector - Cannot process prompt", withProperties: [ "error": error, "function_name": "processPrompt()" ])
+            
             return nil
         }
 
@@ -185,6 +194,7 @@ public class OpenAIConnector: ObservableObject {
         }
 
         print("COUNT", mutableCaptions.count, captionsGroupParsed.count)
+        
         if mutableCaptions.count == captionsGroupParsed.count {
             captionsGroupParsed = mutableCaptions
         }
@@ -220,12 +230,16 @@ public class OpenAIConnector: ObservableObject {
                     DispatchQueue.main.async {
                         self.appError = ErrorType(error: .capacityError)
                     }
+                    
+                    Heap.track("onError OpenAIConnector - OpenAI is at capacity", withProperties: [ "status_code": httpResponse.statusCode, "function_name": "executeRequest()", "http_response": httpResponse ])
 
                     return nil
                 } else if httpResponse.statusCode != 200 {
                     DispatchQueue.main.async {
                         self.appError = ErrorType(error: .genericError)
                     }
+                    
+                    Heap.track("onError OpenAIConnector - Failed to execute API Request", withProperties: [ "status_code": httpResponse.statusCode, "function_name": "executeRequest()", "http_response": httpResponse ])
 
                     return nil
                 } else {
@@ -240,8 +254,7 @@ public class OpenAIConnector: ObservableObject {
                 self.appError = ErrorType(error: .genericError)
             }
 
-            // Report to analytics??
-            print("Error: \(error.localizedDescription)")
+            Heap.track("onError OpenAIConnector - Failed to execute API Request", withProperties: [ "error": error, "function_name": "executeRequest()" ])
         }
 
         return nil
@@ -258,6 +271,8 @@ public class OpenAIConnector: ObservableObject {
                 self.appError = ErrorType(error: .genericError)
                 print("Can't decode open AI JSON", error)
                 debugPrint(error)
+                
+                Heap.track("onError OpenAIConnector - Can't decode open AI JSON", withProperties: [ "error": error, "function_name": "parseJSON()" ])
             }
 
             return nil

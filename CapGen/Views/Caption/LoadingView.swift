@@ -7,6 +7,7 @@
 
 import NavigationStack
 import SwiftUI
+import Heap
 
 struct LoadingView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
@@ -52,6 +53,8 @@ struct LoadingView: View {
                 }
             })
             .onAppear {
+                Heap.track("onAppear LoadingView - Currently loading captions")
+                           
                 self.router = Router(navStack: navStack)
 
                 // Reset all previous responses

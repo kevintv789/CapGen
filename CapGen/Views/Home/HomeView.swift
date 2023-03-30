@@ -8,6 +8,7 @@
 import FirebaseAuth
 import NavigationStack
 import SwiftUI
+import Heap
 
 struct HomeView: View {
     @EnvironmentObject var authManager: AuthManager
@@ -109,6 +110,8 @@ struct HomeView: View {
             if authManager.isSignedIn ?? false {
                 firestoreManager.fetchKey()
             }
+            
+            Heap.track("onAppear HomeView")
         }
         .onReceive(firestoreManager.$appError, perform: { value in
             if let error = value?.error {
@@ -125,6 +128,10 @@ struct HomeView: View {
 
                 // Retrieves user's credit amount
                 self.creditAmount = user.credits
+                
+                // Map Firebase User ID to Heap
+                Heap.identify(user.id)
+                Heap.addUserProperties([ "email": user.email, "name": user.fullName ])
             }
         }
         // show the depleted credit amount modal
@@ -158,6 +165,7 @@ struct HomeView: View {
                     firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {
                         withAnimation {
                             self.showFolderDeleteModal = false
+                            Heap.track("onClick HomeView - Successfully deleted folder", withProperties: [ "folder_to_delete": folderVm.currentFolder ])
                         }
                     }
                 }
@@ -177,6 +185,8 @@ struct HomeView: View {
                         withAnimation {
                             folderVm.resetCaptionToBeDeleted()
                             self.showCaptionDeleteModal = false
+                            
+                            Heap.track("onClick HomeView - Successfully deleted caption", withProperties: [ "caption_to_delete": captionToBeRemoved ])
                         }
                     }
                 }

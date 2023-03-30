@@ -8,6 +8,7 @@
 import FirebaseAuth
 import NavigationStack
 import SwiftUI
+import Heap
 
 extension Text {
     func customProfileHeadline() -> some View {
@@ -99,6 +100,7 @@ struct ProfileView: View {
         }
         .onAppear {
             self.router = Router(navStack: navStack)
+            Heap.track("onAppear ProfileView")
         }
         .modalView(horizontalPadding: 40, show: $showCongratsModal) {
             CongratsModalView(showView: $showCongratsModal)
@@ -269,6 +271,7 @@ struct OptionButtonView: View {
         if isButton {
             Button {
                 if action != nil {
+                    Heap.track("onClick ProfileView - \(title) button")
                     action!()
                 }
             } label: {
@@ -322,6 +325,9 @@ struct OptionButtonView: View {
                     }.offset(x: 3, y: subTitle != nil ? 0 : 5)
                 )
                 .frame(height: subTitle != nil ? 100 * scaledSize : 50 * scaledSize)
+                .onTapGesture {
+                    Heap.track("onClick \(title) button")
+                }
         }
     }
 }
