@@ -7,6 +7,7 @@
 
 import NavigationStack
 import SwiftUI
+import Heap
 
 func mapShareableData(caption: String, platform: String?) -> ShareableData {
     var item: String {
@@ -115,12 +116,14 @@ struct CaptionView: View {
                                             self.captionVm.isCaptionSelected = true
                                         }
 
+                                        Heap.track("onClick CaptionView - Clicked on caption card, show Optimzation bottom sheet view", withProperties: [ "caption": caption, "index": index ])
                                         Haptics.shared.play(.soft)
                                     }
                                 } label: {
                                     if index < Constants.TOTAL_CAPTIONS_GENERATED {
                                         CaptionCard(caption: caption, colorFilled: $cardColorFill[index], shareableData: self.$shareableData,
                                                     edit: {
+                                                    
                                                         // edit
                                                         self.mapCaptionToBeEdited(index: index, caption: caption)
 
@@ -150,6 +153,8 @@ struct CaptionView: View {
                 .presentationDetents([.large])
         }
         .onAppear {
+            Heap.track("onAppear CaptionView - Captions generated", withProperties: [ "captions": openAiConnector.captionsGroupParsed, "total_captions": openAiConnector.captionsGroupParsed.count ])
+            
             // Initialize router
             self.router = Router(navStack: self.navStack)
 
@@ -227,6 +232,7 @@ struct EditableTitleView: View {
             Spacer()
 
             Button {
+                Heap.track(isEditing ? "onClick CaptionView - Currently editing title" : "onClick CaptionView - Finished editing title, new title: \(openAiConnector.captionGroupTitle)")
                 isEditing.toggle()
                 isFocusOn.toggle()
                 Haptics.shared.play(.soft)
@@ -291,18 +297,20 @@ struct CaptionCard: View {
                         .foregroundColor(.ui.richBlack)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-
+                    
                     CustomMenuPopup(menuTheme: .dark, shareableData: $shareableData,
                                     socialMediaPlatform: .constant(nil), edit: {
-                                        edit?()
-                                    }, onMenuOpen: {
-                                        onMenuOpen?()
-                                    }, onCopyAndGo: {
-                                        onCopyAndGo?()
-                                    })
-                                    .onTapGesture {}
-                                    .frame(maxHeight: .infinity, alignment: .topTrailing)
-                                    .padding(.trailing, -10)
+                        Heap.track("onClick CaptionView Custom Menu - Edit caption", withProperties: [ "caption": caption ])
+                        edit?()
+                    }, onMenuOpen: {
+                        onMenuOpen?()
+                    }, onCopyAndGo: {
+                        Heap.track("onClick CaptionView Custom Menu - Copy & Go action", withProperties: [ "caption": caption ])
+                        onCopyAndGo?()
+                    })
+                    .onTapGesture {}
+                    .frame(maxHeight: .infinity, alignment: .topTrailing)
+                    .padding(.trailing, -10)
                 }
             }
         }

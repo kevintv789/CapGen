@@ -6,6 +6,7 @@
 //  Used for creation and editing a folder
 
 import SwiftUI
+import Heap
 
 struct FolderBottomSheetView: View {
     @Environment(\.dismiss) var dismiss
@@ -44,6 +45,7 @@ struct FolderBottomSheetView: View {
                 // Creating a new folder
                 firestoreMan.saveFolder(for: userId, folder: newFolder) {
                     self.isLoading = false
+                    Heap.track("Successfully created folder", withProperties: ["folderId": newFolder.id, "folderName": newFolder.name, "folderType": newFolder.folderType.rawValue])
                     dismiss()
                 }
             } else {

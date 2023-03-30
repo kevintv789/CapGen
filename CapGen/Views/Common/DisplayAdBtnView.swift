@@ -7,6 +7,7 @@
 
 import NavigationStack
 import SwiftUI
+import Heap
 
 enum ButtonLength {
     case short, full
@@ -31,6 +32,7 @@ struct DisplayAdBtnView: View {
             keyPath: \.isRewardedReady,
             btnLength: btnLength
         ) {
+            Heap.track("onClick DisplayAdBtnView - Show Ad")
             Haptics.shared.play(.soft)
             self.ad.presentRewarded()
         }

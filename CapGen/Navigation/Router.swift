@@ -8,6 +8,7 @@
 import Foundation
 import NavigationStack
 import SwiftUI
+import Heap
 
 let HOME_SCREEN = "homeScreen"
 
@@ -50,14 +51,17 @@ class Router {
     }
 
     func toCapacityFallbackView() {
+        Heap.track("onAppear Router FallbackView - ERROR Capacity toCapacityFallbackView()")
         navStack.push(FallbackView(lottieFileName: "capacity_error_robot", title: "We’re over capacity", message: "We apologize, we're currently at over capacity. Our team is working hard to generate captions for everyone. Please try again later.", onClick: { self.navStack.pop(to: .view(withId: HOME_SCREEN)) }))
     }
 
     func toGenericFallbackView() {
+        Heap.track("onAppear Router FallbackView - ERROR General - toGenericFallbackView()")
         navStack.push(FallbackView(lottieFileName: "general_error_robot", title: "Uh oh!", message: "Something went wrong, but it's not your fault! Our team is fixing it, please try again later.", onClick: { self.navStack.pop(to: .view(withId: HOME_SCREEN)) }))
     }
 
     func toLoginFallbackView() {
+        Heap.track("onAppear Router FallbackView - ERROR General toLoginFallbackView()")
         navStack.push(FallbackView(lottieFileName: "general_error_robot", title: "Oops!", message: "Something went wrong while logging in. Don't worry, we're on it. Please try again later.", onClick: { self.navStack.pop(to: .previous) }))
     }
 }
