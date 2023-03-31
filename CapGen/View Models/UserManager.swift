@@ -22,7 +22,7 @@ class UserManager: ObservableObject {
             if !doesExist {
                 let usersPref = UserPreferences(showCongratsModal: true, showCreditDepletedModal: true)
                 let dateCreated = Date.now
-                let credit = 0
+                let credit = 1
 
                 // Create from Apple SSO
                 self.createAppleUser(uid: uid, credit: credit, usersPref: usersPref, dateCreated: dateCreated)
