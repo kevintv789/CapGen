@@ -321,13 +321,10 @@ struct OptionButtonView: View {
                                 .lineSpacing(5)
                                 .padding(.leading, 25)
                         }
-
+                        
                     }.offset(x: 3, y: subTitle != nil ? 0 : 5)
                 )
                 .frame(height: subTitle != nil ? 100 * scaledSize : 50 * scaledSize)
-                .onTapGesture {
-                    Heap.track("onClick \(title) button")
-                }
         }
     }
 }
@@ -392,7 +389,7 @@ struct ConnectSectionView: View {
         if !link.isEmpty {
             var message: String {
                 """
-                Check out this new app I found called ⚡CapGen⚡! It's like an AI brain for your captions, no more struggling to find the perfect words for your gram. Trust me, give it a try!"
+                Check out this new app I found called ⚡CapGen⚡! It's like an AI brain for your captions, no more struggling to find the perfect words for your gram.
 
                 \(link)
                 """
