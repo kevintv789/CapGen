@@ -59,10 +59,12 @@ struct HomeView: View {
                             Haptics.shared.play(.soft)
                         })
                     }
+                    .padding(.horizontal)
 
                     // Greetings view
                     GreetingsHomeView(userName: self.userFirstName ?? "user")
                         .padding()
+                        .padding(.horizontal)
 
                     // Credits view
                     Button {
@@ -71,21 +73,42 @@ struct HomeView: View {
                     } label: {
                         CreditsView(creditAmount: self.creditAmount ?? 0)
                     }
-
-                    // Generate captions button
-                    GenerateCaptionsButtonView(title: "Create captions with a prompt", imgName: "gen_captions_robot") {
-                        self.generateByPromptVm.resetAll()
-                        
-                        if let creditAmount = self.creditAmount, creditAmount < 1 {
-                            self.showCreditsDepletedBottomSheet = true
-                        } else {
-                            // Navigate to generate captions views
-                            self.navStack.push(EnterPromptView())
+                    .padding(.horizontal)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            // Generate catpions via Prompt button
+                            GenerateCaptionsButtonView(title: "Create captions with a prompt", imgName: "gen_captions_robot", requiredCredits: 1) {
+                                self.generateByPromptVm.resetAll()
+                                
+                                if let creditAmount = self.creditAmount, creditAmount < 1 {
+                                    self.showCreditsDepletedBottomSheet = true
+                                } else {
+                                    // Navigate to generate captions views
+                                    self.navStack.push(EnterPromptView())
+                                }
+                            }
+                            .padding(.trailing)
+                            
+                            // Generate captions via Images button
+                            GenerateCaptionsButtonView(title: "Create captions using your images", imgName: "camera_robot", requiredCredits: 2) {
+                                self.generateByPromptVm.resetAll()
+                                
+                                if let creditAmount = self.creditAmount, creditAmount < 2 {
+                                    self.showCreditsDepletedBottomSheet = true
+                                } else {
+                                    // Navigate to generate captions views
+                                    self.navStack.push(ImageSelectorView())
+                                }
+                            }
+                          
                         }
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
-                    .padding()
+                    .ignoresSafeArea(.all)
+                    
                 }
-                .padding(.horizontal)
 
                 Spacer()
             }
@@ -343,6 +366,7 @@ struct CreditsTextView: View {
 struct GenerateCaptionsButtonView: View {
     let title: String
     let imgName: String
+    let requiredCredits: Int
     let action: () -> Void
 
     var body: some View {
@@ -350,49 +374,52 @@ struct GenerateCaptionsButtonView: View {
             Haptics.shared.play(.soft)
             action()
         } label: {
-            ZStack {
                 RoundedRectangle(cornerRadius: 24)
                     .fill(Color.ui.middleBluePurple)
                     .frame(width: 220, height: 220)
                     .shadow(color: Color.ui.richBlack.opacity(0.45), radius: 4, x: 2, y: 4)
                     .overlay(
                         VStack(spacing: 0) {
-                            HStack {
-                                Text(title)
-                                    .font(.ui.headline)
-                                    .foregroundColor(.ui.cultured)
-                                    .multilineTextAlignment(.leading)
-
-                                Spacer()
-                                    .frame(width: 20)
-
-                                Image(systemName: "plus")
+                            Text(title)
+                                .font(.ui.headline)
+                                .foregroundColor(.ui.cultured)
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding()
+                            
+                            ZStack {
+                                Circle()
+                                    .fill(Color.ui.lavenderBlue)
+                                    .frame(width: 135, height: 135)
+                                    .blur(radius: 35)
+                                
+                                Image(imgName)
                                     .resizable()
-                                    .frame(width: 15, height: 15)
-                                    .foregroundColor(.ui.cultured)
-                                    .background(
-                                        Circle()
-                                            .fill(Color.ui.lavenderBlue)
-                                            .frame(width: 30, height: 30)
-                                    )
+                                    .frame(width: 135, height: 135)
                             }
-                            .padding()
-
-                            Spacer()
+                            .padding(-20)
+                            
+                            // Coin image
+                            if requiredCredits > 0 {
+                                VStack {
+                                    Spacer()
+                                    
+                                    HStack(spacing: -10) {
+                                        Spacer()
+                                        
+                                        ForEach(0..<requiredCredits, id: \.self) { _ in
+                                            Image("coin-icon")
+                                                .resizable()
+                                                .frame(width: 50, height: 45)
+                                                .padding(.bottom, 10)
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                            
                         }
                     )
-
-                Image(imgName)
-                    .resizable()
-                    .frame(width: 170, height: 170)
-                    .background(
-                        Circle()
-                            .fill(Color.ui.lavenderBlue)
-                            .frame(width: 150, height: 150)
-                            .blur(radius: 35)
-                    )
-                    .padding(.top, 45)
-            }
         }
     }
 }
