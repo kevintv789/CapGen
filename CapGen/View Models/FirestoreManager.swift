@@ -14,6 +14,7 @@ class FirestoreManager: ObservableObject {
     @Published var appodealAppId: String?
     @Published var appStoreModel: AppStoreModel?
     @Published var appError: ErrorType? = nil
+    @Published var googleApiKey: String?
 
     var snapshotListener: ListenerRegistration?
 
@@ -31,6 +32,12 @@ class FirestoreManager: ObservableObject {
                 let appStoreId = data["storeId"] as? String ?? nil
                 let website = data["website"] as? String ?? nil
                 self.appStoreModel = AppStoreModel(storeId: appStoreId ?? "", website: website ?? "")
+            }
+        }
+        
+        fetch(from: "Secrets", documentId: "GOOGLE_CLOUD") { data in
+            if let data = data {
+                self.googleApiKey = data["Key"] as? String ?? nil
             }
         }
     }

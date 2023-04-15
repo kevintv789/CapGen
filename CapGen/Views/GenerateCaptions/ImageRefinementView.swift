@@ -11,6 +11,7 @@ import Heap
 
 struct ImageRefinementView: View {
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
+    @EnvironmentObject var firestoreMan: FirestoreManager
     
     @State private var imageHeight: CGFloat = 0
     @State private var isFullScreenImage: Bool = false
@@ -94,6 +95,19 @@ struct ImageRefinementView: View {
                 }
             }
         )
+        .onAppear() {
+            // TEMPORARY
+            if let imageData = photosSelectionVm.photosPickerData, let uiImage = UIImage(data: imageData), let apiKey = firestoreMan.googleApiKey {
+                photosSelectionVm.analyzeImage(image: uiImage, apiKey: apiKey) { result in
+                    switch result {
+                    case .success(let json):
+                        print(json)
+                    case .failure(let error):
+                        print("Error: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -101,9 +115,11 @@ struct ImageRefinementView_Previews: PreviewProvider {
     static var previews: some View {
         ImageRefinementView()
             .environmentObject(PhotoSelectionViewModel())
+            .environmentObject(FirestoreManager())
         
         ImageRefinementView()
             .environmentObject(PhotoSelectionViewModel())
+            .environmentObject(FirestoreManager())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

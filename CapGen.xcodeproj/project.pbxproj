@@ -194,6 +194,8 @@
 		D48460CC29E9C59700CC1D8C /* GenerateCaptionsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460CB29E9C59700CC1D8C /* GenerateCaptionsHeaderView.swift */; };
 		D48460CE29E9D95300CC1D8C /* PhotoSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460CD29E9D95300CC1D8C /* PhotoSelectionViewModel.swift */; };
 		D48460D029E9F17300CC1D8C /* ImageRefinementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460CF29E9F17300CC1D8C /* ImageRefinementView.swift */; };
+		D48460D329EA814900CC1D8C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D48460D229EA814900CC1D8C /* Alamofire */; };
+		D48460D629EA816A00CC1D8C /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = D48460D529EA816A00CC1D8C /* SwiftyJSON */; };
 		D490991429BA9189002CBA4F /* SavedCaptionHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */; };
 		D490991629BC5B2E002CBA4F /* SimpleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991529BC5B2E002CBA4F /* SimpleLoadingView.swift */; };
 		D490991929C2697A002CBA4F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991829C2697A002CBA4F /* SearchView.swift */; };
@@ -1056,6 +1058,7 @@
 				D4056E6D2968E17700D3894D /* FirebaseStorageCombine-Community in Frameworks */,
 				D47304042995BF4B00179FEB /* Heap in Frameworks */,
 				D4056E652968E17700D3894D /* FirebaseFirestoreCombine-Community in Frameworks */,
+				D48460D329EA814900CC1D8C /* Alamofire in Frameworks */,
 				D4F1D3012988C53A00599F05 /* FacebookCore in Frameworks */,
 				D4056E7C296F0C7000D3894D /* Lottie in Frameworks */,
 				D4056E592968E17700D3894D /* FirebaseAuth in Frameworks */,
@@ -1069,6 +1072,7 @@
 				D4056E692968E17700D3894D /* FirebaseFunctions in Frameworks */,
 				D4056E5B2968E17700D3894D /* FirebaseAuthCombine-Community in Frameworks */,
 				D4F1D3052988C53A00599F05 /* FacebookShare in Frameworks */,
+				D48460D629EA816A00CC1D8C /* SwiftyJSON in Frameworks */,
 				AE6F10B24719F224A37079B8 /* Pods_CapGen.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2227,6 +2231,8 @@
 				D4F1D3042988C53A00599F05 /* FacebookShare */,
 				D4F1D30729896BA500599F05 /* GoogleMobileAds */,
 				D47304032995BF4B00179FEB /* Heap */,
+				D48460D229EA814900CC1D8C /* Alamofire */,
+				D48460D529EA816A00CC1D8C /* SwiftyJSON */,
 			);
 			productName = CapGen;
 			productReference = D4005DB1295BE0E0004D695D /* CapGen Beta.app */;
@@ -2350,6 +2356,8 @@
 				D4F1D2FF2988C53A00599F05 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 				D47304022995BF4B00179FEB /* XCRemoteSwiftPackageReference "heap-ios-sdk" */,
+				D48460D129EA814900CC1D8C /* XCRemoteSwiftPackageReference "Alamofire" */,
+				D48460D429EA816A00CC1D8C /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = D4005DB2295BE0E0004D695D /* Products */;
 			projectDirPath = "";
@@ -3532,6 +3540,22 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		D48460D129EA814900CC1D8C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		D48460D429EA816A00CC1D8C /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		D4C3E4A72986368400C2847A /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/matteopuc/swiftui-navigation-stack.git";
@@ -3823,6 +3847,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D4F1D30629896BA500599F05 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
+		};
+		D48460D229EA814900CC1D8C /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D48460D129EA814900CC1D8C /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		D48460D529EA816A00CC1D8C /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D48460D429EA816A00CC1D8C /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 		D4C3E4A82986368400C2847A /* NavigationStack */ = {
 			isa = XCSwiftPackageProductDependency;
