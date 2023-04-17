@@ -1,0 +1,161 @@
+Metadata: ["{Exif}": {
+    ApertureValue = "1.169925002106682";
+    BrightnessValue = "9.823234323432343";
+    ColorSpace = 65535;
+    ComponentsConfiguration =     (
+        1,
+        2,
+        3,
+        0
+    );
+    CompositeImage = 2;
+    DateTimeDigitized = "2023:04:16 18:00:48";
+    DateTimeOriginal = "2023:04:16 18:00:48";
+    DigitalZoomRatio = "1.459459459459459";
+    ExifVersion =     (
+        2,
+        3,
+        2
+    );
+    ExposureBiasValue = 0;
+    ExposureMode = 0;
+    ExposureProgram = 2;
+    ExposureTime = "0.0002699784017278618";
+    FNumber = "1.5";
+    Flash = 16;
+    FlashPixVersion =     (
+        1,
+        0
+    );
+    FocalLenIn35mmFilm = 38;
+    FocalLength = "5.7";
+    ISOSpeedRatings =     (
+        50
+    );
+    LensMake = Apple;
+    LensModel = "iPhone 13 Pro Max back triple camera 5.7mm f/1.5";
+    LensSpecification =     (
+        "1.57",
+        9,
+        "1.5",
+        "2.8"
+    );
+    MeteringMode = 5;
+    OffsetTime = "-07:00";
+    OffsetTimeDigitized = "-07:00";
+    OffsetTimeOriginal = "-07:00";
+    PixelXDimension = 4032;
+    PixelYDimension = 3024;
+    SceneCaptureType = 0;
+    SceneType = 1;
+    SensingMethod = 2;
+    ShutterSpeedValue = "11.85475297060663";
+    SubjectArea =     (
+        2010,
+        1506,
+        2325,
+        1324
+    );
+    SubsecTimeDigitized = 299;
+    SubsecTimeOriginal = 299;
+    WhiteBalance = 0;
+}, "ColorModel": RGB, "{GPS}": {
+    Altitude = "336.5481832543444";
+    AltitudeRef = 0;
+    DestBearing = "24.30895231916964";
+    DestBearingRef = T;
+    HPositioningError = "4.579943490155626";
+    ImgDirection = "24.30895231916964";
+    ImgDirectionRef = T;
+    Latitude = "36.00570278333333";
+    LatitudeRef = N;
+    Longitude = "114.23237";
+    LongitudeRef = W;
+    Speed = 0;
+    SpeedRef = K;
+}, "Depth": 8, "{MakerApple}": {
+    1 = 14;
+    12 =     (
+        "0.3085938",
+        "0.4921875"
+    );
+    13 = 32;
+    14 = 4;
+    16 = 1;
+    2 = {length = 512, bytes = 0xa400b300 c900ed00 1e014701 33002e00 ... 39002f00 2f003100 };
+    20 = 10;
+    22 = AYDY0ETwy8fZkHTgAa0gALv0WAkr;
+    23 = 1112547328;
+    25 = 2;
+    26 = q825s;
+    3 =     {
+        epoch = 0;
+        flags = 1;
+        timescale = 1000000000;
+        value = 141844778792833;
+    };
+    31 = 0;
+    32 = "EF39C26E-1213-4494-9853-9EAB5BB42724";
+    33 = "1.568873";
+    35 =     (
+        447,
+        268435492
+    );
+    37 = 134;
+    38 = 3;
+    39 = "61.56598";
+    4 = 1;
+    40 = 1;
+    43 = "9981C3A7-C594-4179-9561-785677F68DFE";
+    45 = 5360;
+    46 = 1;
+    47 = 46;
+    48 = 0;
+    5 = 175;
+    51 = 4096;
+    52 = 4;
+    53 = 3;
+    54 = 50540;
+    55 = 4;
+    56 = 568;
+    57 = 0;
+    58 = 0;
+    59 = 0;
+    6 = 176;
+    60 = 4;
+    61 = 0;
+    63 = 41;
+    64 =     {
+        0 = 1;
+        1 = "0.5";
+        2 = 0;
+        3 = 2;
+    };
+    65 = 0;
+    66 = 0;
+    67 = 0;
+    68 = 0;
+    69 = 0;
+    7 = 1;
+    70 = 0;
+    72 = 0;
+    73 = 0;
+    74 = 2;
+    8 =     (
+        "-0.02844421",
+        "-0.9936891",
+        "-0.0350263"
+    );
+}, "DPIWidth": 72, "PixelWidth": 4032, "PixelHeight": 3024, "DPIHeight": 72, "PrimaryImage": 1, "{TIFF}": {
+    DateTime = "2023:04:16 18:00:48";
+    HostComputer = "iPhone 13 Pro Max";
+    Make = Apple;
+    Model = "iPhone 13 Pro Max";
+    Orientation = 6;
+    ResolutionUnit = 2;
+    Software = "16.4.1";
+    TileLength = 512;
+    TileWidth = 512;
+    XResolution = 72;
+    YResolution = 72;
+}, "ProfileName": Display P3, "Orientation": 6]

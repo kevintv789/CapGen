@@ -196,6 +196,9 @@
 		D48460D029E9F17300CC1D8C /* ImageRefinementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460CF29E9F17300CC1D8C /* ImageRefinementView.swift */; };
 		D48460D329EA814900CC1D8C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D48460D229EA814900CC1D8C /* Alamofire */; };
 		D48460D629EA816A00CC1D8C /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = D48460D529EA816A00CC1D8C /* SwiftyJSON */; };
+		D48460D829EDDEAA00CC1D8C /* VisionAI_Mock.json in Resources */ = {isa = PBXBuildFile; fileRef = D48460D729EDDEAA00CC1D8C /* VisionAI_Mock.json */; };
+		D48460DA29EDE8D900CC1D8C /* PhotoMetadata_Mock.json in Resources */ = {isa = PBXBuildFile; fileRef = D48460D929EDE8D900CC1D8C /* PhotoMetadata_Mock.json */; };
+		D48460DC29EDF19700CC1D8C /* ImageDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460DB29EDF19700CC1D8C /* ImageDataModel.swift */; };
 		D490991429BA9189002CBA4F /* SavedCaptionHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */; };
 		D490991629BC5B2E002CBA4F /* SimpleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991529BC5B2E002CBA4F /* SimpleLoadingView.swift */; };
 		D490991929C2697A002CBA4F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991829C2697A002CBA4F /* SearchView.swift */; };
@@ -1012,6 +1015,9 @@
 		D48460CB29E9C59700CC1D8C /* GenerateCaptionsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateCaptionsHeaderView.swift; sourceTree = "<group>"; };
 		D48460CD29E9D95300CC1D8C /* PhotoSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionViewModel.swift; sourceTree = "<group>"; };
 		D48460CF29E9F17300CC1D8C /* ImageRefinementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRefinementView.swift; sourceTree = "<group>"; };
+		D48460D729EDDEAA00CC1D8C /* VisionAI_Mock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = VisionAI_Mock.json; sourceTree = "<group>"; };
+		D48460D929EDE8D900CC1D8C /* PhotoMetadata_Mock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PhotoMetadata_Mock.json; sourceTree = "<group>"; };
+		D48460DB29EDF19700CC1D8C /* ImageDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataModel.swift; sourceTree = "<group>"; };
 		D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionHomeViewModel.swift; sourceTree = "<group>"; };
 		D490991529BC5B2E002CBA4F /* SimpleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleLoadingView.swift; sourceTree = "<group>"; };
 		D490991829C2697A002CBA4F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -1866,6 +1872,7 @@
 				D4C3E4A5298577B400C2847A /* ErrorModel.swift */,
 				D4373F7C29B527D100C186B3 /* FolderModel.swift */,
 				D4373F8529B5288300C186B3 /* CaptionModel.swift */,
+				D48460DB29EDF19700CC1D8C /* ImageDataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2007,6 +2014,8 @@
 				D4056E33296202E900D3894D /* CaptionLengths.json */,
 				D4056EDF297A346100D3894D /* CaptionsMock.json */,
 				D4C3E48B2981C10B00C2847A /* SocialMediaPlatforms.json */,
+				D48460D729EDDEAA00CC1D8C /* VisionAI_Mock.json */,
+				D48460D929EDE8D900CC1D8C /* PhotoMetadata_Mock.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -2402,6 +2411,7 @@
 				D4056DEA295C0DFB00D3894D /* Blacker-Text-Medium-Italic-trial.ttf in Resources */,
 				D4056E0B295C0E2A00D3894D /* GraphikThinItalic.otf in Resources */,
 				D4C3E49A298470FB00C2847A /* sad_emoji_lottie.json in Resources */,
+				D48460D829EDDEAA00CC1D8C /* VisionAI_Mock.json in Resources */,
 				D4056DF1295C0DFB00D3894D /* Blacker-Display-Heavy-trial.ttf in Resources */,
 				D4C3E4A12984D6ED00C2847A /* capacity_error_robot.json in Resources */,
 				D4056DE5295C0DFB00D3894D /* Blacker-Display-Bold-italic-trial.ttf in Resources */,
@@ -2411,6 +2421,7 @@
 				D4056E14295C0E2A00D3894D /* GraphikBlackItalic.otf in Resources */,
 				D4056DDD295C0DFB00D3894D /* Blacker-Display-Light-Italic-trial.ttf in Resources */,
 				D4005DB9295BE0E1004D695D /* Assets.xcassets in Resources */,
+				D48460DA29EDE8D900CC1D8C /* PhotoMetadata_Mock.json in Resources */,
 				D4056EBE2974931D00D3894D /* coin_wallet_purple_lottie.json in Resources */,
 				D4056E0E295C0E2A00D3894D /* GraphikLight.otf in Resources */,
 				D4056E87296F87F700D3894D /* robot_lottie.json in Resources */,
@@ -2663,6 +2674,7 @@
 				D4373F9B29B52D0A00C186B3 /* PersonalizeOptionsView.swift in Sources */,
 				D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
+				D48460DC29EDF19700CC1D8C /* ImageDataModel.swift in Sources */,
 				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
 				D4373F7929B18B5900C186B3 /* AppodealProvider.swift in Sources */,
 				D4373FA329B5307A00C186B3 /* PrimaryButtonView.swift in Sources */,

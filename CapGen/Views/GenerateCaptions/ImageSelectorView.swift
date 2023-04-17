@@ -16,6 +16,7 @@ struct ImageSelectorView: View {
     
     @State var selectedPhotos: [PhotosPickerItem] = []
     @State var isLoading: Bool = false
+    @State private var enabled = false
     
     var body: some View {
         ZStack {
@@ -40,6 +41,12 @@ struct ImageSelectorView: View {
                     ) {
                         PhotoSelectionCardView(backgroundColor: Color.ui.frenchBlueSky.opacity(0.4), title: "Caption Your Memories 🌟", subTitle: "Let your favorite photos inspire the perfect captions!", image: "album_robot")
                     }
+                    // TODO: Edit this to make the request better. Don't simultaneously do it when album appears
+                    .simultaneousGesture(TapGesture().onEnded { _ in
+                        PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                            enabled = status == .authorized
+                        }
+                    })
                     .onChange(of: selectedPhotos) { image in
                         isLoading = true
                         Task {
@@ -47,6 +54,7 @@ struct ImageSelectorView: View {
                             photoSelectionVm.resetPhotoSelection()
                             
                             if !image.isEmpty {
+                                // save image data to picker item
                                 await photoSelectionVm.assignPhotoPickerItem(image: image[0])
                             }
                             

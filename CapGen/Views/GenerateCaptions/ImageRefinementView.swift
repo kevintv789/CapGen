@@ -98,14 +98,15 @@ struct ImageRefinementView: View {
         .onAppear() {
             // TEMPORARY
             if let imageData = photosSelectionVm.photosPickerData, let uiImage = UIImage(data: imageData), let apiKey = firestoreMan.googleApiKey {
-                photosSelectionVm.analyzeImage(image: uiImage, apiKey: apiKey) { result in
-                    switch result {
-                    case .success(let json):
-                        print(json)
-                    case .failure(let error):
-                        print("Error: \(error.localizedDescription)")
-                    }
-                }
+//                photosSelectionVm.fetchPhotoMetadata(for: imageData)
+//                photosSelectionVm.analyzeImage(image: uiImage, apiKey: apiKey) { result in
+//                    switch result {
+//                    case .success(let json):
+//                        print(json)
+//                    case .failure(let error):
+//                        print("Error: \(error.localizedDescription)")
+//                    }
+//                }
             }
         }
     }
