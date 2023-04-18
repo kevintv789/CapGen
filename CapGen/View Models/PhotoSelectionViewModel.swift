@@ -17,6 +17,7 @@ import Heap
 class PhotoSelectionViewModel: ObservableObject {
     @Published var photosPickerData: Data? = nil
     @Published var imageAddress: ImageGeoLocationAddress? = nil
+    @Published var visionData: GoogleVisionImageData? = nil
     
     func resetPhotoSelection() {
         self.photosPickerData = nil
@@ -58,8 +59,10 @@ class PhotoSelectionViewModel: ObservableObject {
                     "image": ["content": base64Image],
                     "features": [
                         ["type": "LABEL_DETECTION", "maxResults": 20],
-                        ["type": "LANDMARK_DETECTION", "maxResults": 20] as [String : Any],
-                        ["type": "FACE_DETECTION", "maxResults": 20]
+                        ["type": "LANDMARK_DETECTION", "maxResults": 20, "model": "builtin/latest"],
+                        ["type": "FACE_DETECTION", "maxResults": 20, "model": "builtin/latest"],
+                        ["type": "TEXT_DETECTION", "maxResults": 20, "model": "builtin/latest"],
+                        ["type": "SAFE_SEARCH_DETECTION", "maxResults": 20, "model": "builtin/latest"]
                     ]
                 ] as [String : Any]
             ]
@@ -74,6 +77,20 @@ class PhotoSelectionViewModel: ObservableObject {
             case .failure(let error):
                 completionHandler(.failure(error))
             }
+        }
+    }
+    
+    func decodeGoogleVisionData(from jsonString: String) {
+        if let imageData = decodeGoogleVisionImageData(from: jsonString) {
+            let labels = imageData.labels
+            let landmarks = imageData.landmarks
+            let faceAnnotations = imageData.faceAnnotations
+            let textAnnotations = imageData.textAnnotations
+            let safeSearchAnnotations = imageData.safeSearchAnnotations
+            
+            self.visionData = GoogleVisionImageData(labels: labels, landmarks: landmarks, faceAnnotations: faceAnnotations, textAnnotations: textAnnotations, safeSearchAnnotations: safeSearchAnnotations)
+        } else {
+            print("Failed to decode JSON.")
         }
     }
     

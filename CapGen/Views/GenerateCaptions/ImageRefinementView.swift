@@ -96,17 +96,26 @@ struct ImageRefinementView: View {
             }
         )
         .onAppear() {
-            // TEMPORARY
+            // Call Google's Vision AI to detect aspects of image
             if let imageData = photosSelectionVm.photosPickerData, let uiImage = UIImage(data: imageData), let apiKey = firestoreMan.googleApiKey {
-//                photosSelectionVm.fetchPhotoMetadata(for: imageData)
-//                photosSelectionVm.analyzeImage(image: uiImage, apiKey: apiKey) { result in
-//                    switch result {
-//                    case .success(let json):
-//                        print(json)
-//                    case .failure(let error):
-//                        print("Error: \(error.localizedDescription)")
-//                    }
-//                }
+                photosSelectionVm.analyzeImage(image: uiImage, apiKey: apiKey) { result in
+                    switch result {
+                    case .success(let json):
+                        let jsonString = """
+                        {
+                          "labels": \(json["responses"][0]["labelAnnotations"]),
+                          "landmarks": \(json["responses"][0]["landmarkAnnotations"]),
+                          "faceAnnotations": \(json["responses"][0]["faceAnnotations"]),
+                          "textAnnotations": \(json["responses"][0]["textAnnotations"]),
+                          "safeSearchAnnotations": \(json["responses"][0]["safeSearchAnnotation"]),
+                        }
+                        """
+                        
+                        photosSelectionVm.decodeGoogleVisionData(from: jsonString)
+                    case .failure(let error):
+                        print("Error: \(error.localizedDescription)")
+                    }
+                }
             }
         }
     }
