@@ -41,11 +41,10 @@ class PhotoSelectionViewModel: ObservableObject {
     }
     
     // Use Google Cloud Vision API to analyze image
-    func analyzeImage(image: UIImage, apiKey: String, completionHandler: @escaping (Result<JSON, Error>) -> Void) {
+    func analyzeImage(image: UIImage, apiKey: String) async throws -> JSON {
         // Encode the image to base64
         guard let base64Image = image.jpegData(compressionQuality: 0.8)?.base64EncodedString() else {
-            completionHandler(.failure(NSError(domain: "Image encoding error", code: -1, userInfo: nil)))
-            return
+            throw NSError(domain: "Image encoding error", code: -1, userInfo: nil)
         }
         
         // Set up the request URL and headers
@@ -69,13 +68,15 @@ class PhotoSelectionViewModel: ObservableObject {
         ]
         
         // Send the request using Alamofire
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                completionHandler(.success(json))
-            case .failure(let error):
-                completionHandler(.failure(error))
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    continuation.resume(returning: json)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }

@@ -14,11 +14,84 @@ struct LoadingView: View {
     @EnvironmentObject var openAiRequest: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
+    @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
+    
+    var captionGenType: CaptionGenerationType = .prompt
 
     @State var showCaptionView: Bool = false
     @State var openAiResponse: String?
     @State var router: Router? = nil
+    
+    private func generateCaptionFromPrompt() {
+        Heap.track("onAppear LoadingView - Currently loading captions from PROMPT")
+                   
+        self.router = Router(navStack: navStack)
 
+        // Reset all previous responses
+        openAiRequest.resetResponse()
+
+        Task {
+            // Generate prompt
+            let openAiPrompt = openAiRequest.generatePrompt(userInputPrompt: genPromptVm.promptInput, tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType)
+
+            if !openAiPrompt.isEmpty {
+                let openAiResponse = await openAiRequest.processPrompt(apiKey: firestoreMan.openAiKey, prompt: openAiPrompt)
+
+                if let error = openAiRequest.appError?.error {
+                    switch error {
+                    case .capacityError:
+                        self.router?.toCapacityFallbackView()
+                    default:
+                        self.router?.toGenericFallbackView()
+                    }
+                }
+
+                if openAiResponse != nil && !openAiResponse!.isEmpty {
+                    // Process the response into arrays
+                    let _ = await openAiRequest.processOutputIntoArray(openAiResponse: openAiResponse)
+
+                    // Conform all captions to the required minimum word count
+                    await openAiRequest.updateCaptionBasedOnWordCountIfNecessary(apiKey: firestoreMan.openAiKey) {
+                        // decrement credit on success
+                        firestoreMan.decrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
+
+                        // Navigate to Caption View
+                        self.navStack.push(CaptionView())
+                    }
+                }
+            }
+        }
+    }
+    
+    private func generateCaptionFromImage() async {
+        // Call Google's Vision AI to detect aspects of image
+        if let imageData = photosSelectionVm.photosPickerData, let uiImage = UIImage(data: imageData), let apiKey = firestoreMan.googleApiKey {
+            
+            do {
+                let json = try await photosSelectionVm.analyzeImage(image: uiImage, apiKey: apiKey)
+                
+                let jsonString = """
+                                {
+                                  "labels": \(json["responses"][0]["labelAnnotations"]),
+                                  "landmarks": \(json["responses"][0]["landmarkAnnotations"]),
+                                  "faceAnnotations": \(json["responses"][0]["faceAnnotations"]),
+                                  "textAnnotations": \(json["responses"][0]["textAnnotations"]),
+                                  "safeSearchAnnotations": \(json["responses"][0]["safeSearchAnnotation"]),
+                                }
+                                """
+                photosSelectionVm.decodeGoogleVisionData(from: jsonString)
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+        
+        
+        print("Vision data", photosSelectionVm.visionData)
+        print("image address", photosSelectionVm.imageAddress)
+        
+        
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack(alignment: .topLeading) {
@@ -53,42 +126,11 @@ struct LoadingView: View {
                 }
             })
             .onAppear {
-                Heap.track("onAppear LoadingView - Currently loading captions")
-                           
-                self.router = Router(navStack: navStack)
-
-                // Reset all previous responses
-                openAiRequest.resetResponse()
-
-                Task {
-                    // Generate prompt
-                    let openAiPrompt = openAiRequest.generatePrompt(userInputPrompt: genPromptVm.promptInput, tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType)
-
-                    if !openAiPrompt.isEmpty {
-                        let openAiResponse = await openAiRequest.processPrompt(apiKey: firestoreMan.openAiKey, prompt: openAiPrompt)
-
-                        if let error = openAiRequest.appError?.error {
-                            switch error {
-                            case .capacityError:
-                                self.router?.toCapacityFallbackView()
-                            default:
-                                self.router?.toGenericFallbackView()
-                            }
-                        }
-
-                        if openAiResponse != nil && !openAiResponse!.isEmpty {
-                            // Process the response into arrays
-                            let _ = await openAiRequest.processOutputIntoArray(openAiResponse: openAiResponse)
-
-                            // Conform all captions to the required minimum word count
-                            await openAiRequest.updateCaptionBasedOnWordCountIfNecessary(apiKey: firestoreMan.openAiKey) {
-                                // decrement credit on success
-                                firestoreMan.decrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
-
-                                // Navigate to Caption View
-                                self.navStack.push(CaptionView())
-                            }
-                        }
+                if captionGenType == .prompt {
+                    generateCaptionFromPrompt()
+                } else if captionGenType == .image {
+                    Task {
+                        await  generateCaptionFromImage()
                     }
                 }
             }
@@ -103,12 +145,14 @@ struct LoadingView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(FirestoreManager())
             .environmentObject(GenerateByPromptViewModel())
+            .environmentObject(PhotoSelectionViewModel())
 
         LoadingView()
             .environmentObject(OpenAIConnector())
             .environmentObject(NavigationStackCompat())
             .environmentObject(FirestoreManager())
             .environmentObject(GenerateByPromptViewModel())
+            .environmentObject(PhotoSelectionViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

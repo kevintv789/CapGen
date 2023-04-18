@@ -8,10 +8,12 @@
 import SwiftUI
 import PhotosUI
 import Heap
+import NavigationStack
 
 struct ImageRefinementView: View {
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
     @EnvironmentObject var firestoreMan: FirestoreManager
+    @EnvironmentObject var navStack: NavigationStackCompat
     
     @State private var imageHeight: CGFloat = 0
     @State private var isFullScreenImage: Bool = false
@@ -27,6 +29,7 @@ struct ImageRefinementView: View {
                         Heap.track("onClick ImageRefinementView - Next button tapped") // Add tag properties here
                         
                         // on click next, take to personalized options view
+                        self.navStack.push(PersonalizeOptionsView(captionGenType: .image))
                     }
                     
                     // Used for testing preview
@@ -95,29 +98,6 @@ struct ImageRefinementView: View {
                 }
             }
         )
-        .onAppear() {
-            // Call Google's Vision AI to detect aspects of image
-            if let imageData = photosSelectionVm.photosPickerData, let uiImage = UIImage(data: imageData), let apiKey = firestoreMan.googleApiKey {
-                photosSelectionVm.analyzeImage(image: uiImage, apiKey: apiKey) { result in
-                    switch result {
-                    case .success(let json):
-                        let jsonString = """
-                        {
-                          "labels": \(json["responses"][0]["labelAnnotations"]),
-                          "landmarks": \(json["responses"][0]["landmarkAnnotations"]),
-                          "faceAnnotations": \(json["responses"][0]["faceAnnotations"]),
-                          "textAnnotations": \(json["responses"][0]["textAnnotations"]),
-                          "safeSearchAnnotations": \(json["responses"][0]["safeSearchAnnotation"]),
-                        }
-                        """
-                        
-                        photosSelectionVm.decodeGoogleVisionData(from: jsonString)
-                    case .failure(let error):
-                        print("Error: \(error.localizedDescription)")
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -126,10 +106,12 @@ struct ImageRefinementView_Previews: PreviewProvider {
         ImageRefinementView()
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(FirestoreManager())
+            .environmentObject(NavigationStackCompat())
         
         ImageRefinementView()
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(FirestoreManager())
+            .environmentObject(NavigationStackCompat())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

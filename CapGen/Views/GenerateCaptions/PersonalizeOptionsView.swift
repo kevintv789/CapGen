@@ -9,9 +9,16 @@ import NavigationStack
 import SwiftUI
 import Heap
 
+enum CaptionGenerationType {
+    case prompt
+    case image
+}
+
 struct PersonalizeOptionsView: View {
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
+    
+    var captionGenType: CaptionGenerationType = .prompt
 
     @State var selectedSection: Int? = 0
     @State var isTonesSectionSelected: Bool = true
@@ -28,7 +35,7 @@ struct PersonalizeOptionsView: View {
                     Heap.track("onClick PersonalizedOptionsView - Next button tapped", withProperties: [ "Tone(s)": genPromptVm.selectdTones, "Include emojis?": genPromptVm.includeEmojis, "Include hashtags?": genPromptVm.includeHashtags, "Length": genPromptVm.captionLengthType ])
                     
                     // on click next
-                    self.navStack.push(LoadingView())
+                    self.navStack.push(LoadingView(captionGenType: captionGenType))
                 }
 
                 // Accordion
