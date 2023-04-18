@@ -22,45 +22,48 @@ struct LoadingView: View {
     @State var openAiResponse: String?
     @State var router: Router? = nil
     
-    private func generateCaptionFromPrompt() {
-        Heap.track("onAppear LoadingView - Currently loading captions from PROMPT")
-                   
-        self.router = Router(navStack: navStack)
+    private func callOpenAi(with openAiPrompt: String) async {
+        if !openAiPrompt.isEmpty {
+            let openAiResponse = await openAiRequest.processPrompt(apiKey: firestoreMan.openAiKey, prompt: openAiPrompt)
 
-        // Reset all previous responses
-        openAiRequest.resetResponse()
-
-        Task {
-            // Generate prompt
-            let openAiPrompt = openAiRequest.generatePrompt(userInputPrompt: genPromptVm.promptInput, tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType)
-
-            if !openAiPrompt.isEmpty {
-                let openAiResponse = await openAiRequest.processPrompt(apiKey: firestoreMan.openAiKey, prompt: openAiPrompt)
-
-                if let error = openAiRequest.appError?.error {
-                    switch error {
-                    case .capacityError:
-                        self.router?.toCapacityFallbackView()
-                    default:
-                        self.router?.toGenericFallbackView()
-                    }
+            if let error = openAiRequest.appError?.error {
+                switch error {
+                case .capacityError:
+                    self.router?.toCapacityFallbackView()
+                default:
+                    self.router?.toGenericFallbackView()
                 }
+            }
 
-                if openAiResponse != nil && !openAiResponse!.isEmpty {
-                    // Process the response into arrays
-                    let _ = await openAiRequest.processOutputIntoArray(openAiResponse: openAiResponse)
+            if openAiResponse != nil && !openAiResponse!.isEmpty {
+                // Process the response into arrays
+                let _ = await openAiRequest.processOutputIntoArray(openAiResponse: openAiResponse)
 
-                    // Conform all captions to the required minimum word count
-                    await openAiRequest.updateCaptionBasedOnWordCountIfNecessary(apiKey: firestoreMan.openAiKey) {
-                        // decrement credit on success
-                        firestoreMan.decrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
+                // Conform all captions to the required minimum word count
+                await openAiRequest.updateCaptionBasedOnWordCountIfNecessary(apiKey: firestoreMan.openAiKey) {
+                    // decrement credit on success
+                    firestoreMan.decrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
 
-                        // Navigate to Caption View
-                        self.navStack.push(CaptionView())
-                    }
+                    // Navigate to Caption View
+                    self.navStack.push(CaptionView())
                 }
             }
         }
+    }
+    
+    private func generateCaptionFromPrompt() async {
+        Heap.track("onAppear LoadingView - Currently loading captions from PROMPT")
+        
+        self.router = Router(navStack: navStack)
+        
+        // Reset all previous responses
+        openAiRequest.resetResponse()
+        
+        // Generate prompt
+        let openAiPrompt = openAiRequest.generatePrompt(userInputPrompt: genPromptVm.promptInput, tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType)
+        
+        await callOpenAi(with: openAiPrompt)
+        
     }
     
     private func generateCaptionFromImage() async {
@@ -85,11 +88,16 @@ struct LoadingView: View {
             }
         }
         
+        if let visionData = photosSelectionVm.visionData {
+            // Generate prompt
+            let openAiPrompt = openAiRequest.generatePromptForImage(userInputPrompt: genPromptVm.promptInput, tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: photosSelectionVm.imageAddress)
+            
+            await callOpenAi(with: openAiPrompt)
+        } else {
+            // if vision data is not available, then only use custom tags
+        }
         
-        print("Vision data", photosSelectionVm.visionData)
-        print("image address", photosSelectionVm.imageAddress)
-        
-        
+  
     }
     
     var body: some View {
@@ -126,13 +134,14 @@ struct LoadingView: View {
                 }
             })
             .onAppear {
-                if captionGenType == .prompt {
-                    generateCaptionFromPrompt()
-                } else if captionGenType == .image {
-                    Task {
+                Task {
+                    if captionGenType == .prompt {
+                        await generateCaptionFromPrompt()
+                    } else if captionGenType == .image {
                         await  generateCaptionFromImage()
                     }
                 }
+                
             }
         }
     }

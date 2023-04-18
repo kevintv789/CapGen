@@ -18,7 +18,7 @@ public class OpenAIConnector: ObservableObject {
     let openAIURL = URL(string: "https://api.openai.com/v1/chat/completions")
 
     /*
-     * Generates the prompt for the Open AI API
+     * Generates the TEXT prompt for the Open AI API
      */
     func generatePrompt(userInputPrompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String) -> String {
         self.captionLengthType = captionLengthType
@@ -46,8 +46,69 @@ public class OpenAIConnector: ObservableObject {
         Heap.track("onAppear OpenAIConnector - Complete prompt information", withProperties: [ "complete_prompt": completePrompt, "function_name": "generatePrompt()" ])
 
         return completePrompt
+    }
+    
+    /*
+     * Generates the IMAGE prompt for the Open AI API
+     */
+    func generatePromptForImage(userInputPrompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String, visionData: ParsedGoogleVisionImageData, imageAddress: ImageGeoLocationAddress?) -> String {
+        self.captionLengthType = captionLengthType
+
+        var generatedToneStr = ""
+        if !tones.isEmpty {
+            tones.forEach { tone in
+                generatedToneStr += "\(tone.title), \(tone.description) "
+            }
+        }
         
-       
+        // this variable generates a list of examples for the AI to generate, such as '1.', '2.', '3.', etc.
+        // this is to help the AI generate the exact amount of captions
+        var numberedList = ""
+        var index = 0
+
+        // this loop generates the numberedList variable
+        while index < Constants.TOTAL_CAPTIONS_GENERATED {
+            numberedList += "'\(index + 1).', "
+            index += 1
+        }
+        
+        // create a string for image address
+        var mappedImageAddress = ""
+        if let imageAddress = imageAddress {
+            mappedImageAddress = "Taken at: \(imageAddress.combinedAddress)."
+        }
+        
+        var mappedSafeSearchAnnotations = ""
+        if visionData.safeSearchAnnotations != "" {
+            mappedSafeSearchAnnotations = "The image has \(visionData.safeSearchAnnotations) content."
+        }
+        
+        var mappedKeywords = ""
+        if visionData.labelAnnotations != "" {
+            mappedKeywords = "Some keyword labels associated with the image include '\(visionData.labelAnnotations)'."
+        }
+        
+        var mappedText = ""
+        if visionData.textAnnotations != "" {
+            mappedText = "The text within the image include '\(visionData.textAnnotations)'."
+        }
+        
+        var mappedLandmark = ""
+        if visionData.landmarkAnnotations != "" {
+            mappedLandmark = "Taken at: \(visionData.landmarkAnnotations)."
+        }
+        
+        var mappedFaceAnnotations = ""
+        if visionData.faceAnnotations != "" {
+            mappedFaceAnnotations = "The facial expression within this picture depicts the emotion(s) of \(visionData.faceAnnotations)."
+        }
+
+        
+        let completePrompt = "[Ignore introduction and conclusion] [Please write me exactly \(Constants.TOTAL_CAPTIONS_GENERATED) captions and a title.]. It is important that the number of captions generated does NOT exceed \(Constants.TOTAL_CAPTIONS_GENERATED). The title should be catchy and less than 6 words. [It is mandatory to make the length of each caption have \(captionLength.isEmpty ? "a minimum of 1 word to a max of 5 words" : captionLength) excluding emojis and hashtags from the word count.] [The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual in nature")] [\(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis").] [\(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags").] Each caption should be displayed as a numbered list and a title at the very end, each number should be followed by a period such as \(numberedList) The caption title should be the \(Constants.TOTAL_CAPTIONS_GENERATED + 1)th item on the list, listed as \(Constants.TOTAL_CAPTIONS_GENERATED + 1) followed by a period and without the Title word. Based on the information provided, please ascertain the context of an image from the below information: \(mappedLandmark == "" ? mappedImageAddress : mappedLandmark) \(mappedSafeSearchAnnotations) \(mappedKeywords) \(mappedText) \(mappedFaceAnnotations) For the keywords and image texts, please only include responses that use real English words found in reputable dictionaries. Ignore any non-words, made-up words, or slang. If there are custom tags associated with this image, prioritize the custom tags over the keywords. Please try to understand the context surrounding this image using only the given information and generate me social media captions."
+        
+        Heap.track("onAppear OpenAIConnector - Complete prompt information", withProperties: [ "complete_prompt": completePrompt, "function_name": "generatePrompt()" ])
+
+        return completePrompt
     }
 
     /*

@@ -17,6 +17,36 @@ struct ImageGeoLocationAddress {
     let locality: String?
     let state: String?
     let country: String?
+    
+    /// A computed property that combines all available address components in a comma-delimited format.
+    ///
+    /// This property checks each optional string property (landmarkName, locality, state, and country) and
+    /// appends the non-nil ones to an array. Then, it joins the array elements into a single string,
+    /// separated by commas.
+    ///
+    /// Usage:
+    /// ```
+    /// let address = ImageGeoLocationAddress(landmarkName: "Eiffel Tower", locality: "Paris", state: nil, country: "France")
+    /// print(address.combinedAddress) // Output: "Eiffel Tower, Paris, France"
+    /// ```
+    var combinedAddress: String {
+        var components: [String] = []
+        
+        if let landmarkName = landmarkName {
+            components.append(landmarkName)
+        }
+        if let locality = locality {
+            components.append(locality)
+        }
+        if let state = state {
+            components.append(state)
+        }
+        if let country = country {
+            components.append(country)
+        }
+        
+        return components.joined(separator: ", ")
+    }
 }
 
 // MARK: Google Vision AI Data
@@ -26,6 +56,14 @@ struct GoogleVisionImageData: Codable {
     let faceAnnotations: [FaceAnnotations]?
     let textAnnotations: [TextAnnotations]?
     let safeSearchAnnotations: SafeSearchAnnotations? // Safe Search Annotations returns as an object, instead of array
+}
+
+struct ParsedGoogleVisionImageData: Codable {
+    let labelAnnotations: String
+    let landmarkAnnotations: String
+    let faceAnnotations: String
+    let textAnnotations: String
+    let safeSearchAnnotations: String
 }
 
 

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 enum DayType {
     case morning, afternoon, evening
@@ -93,6 +94,31 @@ func extractNumberedLines(text: String) -> [String] {
 
     // Return the array of correctly numbered lines.
     return results
+}
+
+/**
+ Filters a given text, extracting only real words and returning them as a comma-separated string.
+
+ - Parameters:
+    - text: A String containing the text to filter. The text should have words separated by newline characters.
+
+ - Returns: A String with real words separated by commas.
+
+ - Note: This function uses `UITextChecker` to check if a word is misspelled or not. It considers words that are not misspelled as real words. The language used for checking is English (language code "en").
+ **/
+func filterToRealWords(text: String) -> String {
+    let words = text.components(separatedBy: .newlines)
+    let textChecker = UITextChecker()
+
+    let filteredWords = words.filter { word in
+        let range = NSRange(location: 0, length: word.utf16.count)
+        let misspelledRange = textChecker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
+        let containsNumber = word.rangeOfCharacter(from: .decimalDigits) != nil
+        
+        return misspelledRange.location == NSNotFound && !containsNumber
+    }
+    
+    return filteredWords.joined(separator: ", ")
 }
 
 enum Utils {

@@ -17,7 +17,7 @@ import Heap
 class PhotoSelectionViewModel: ObservableObject {
     @Published var photosPickerData: Data? = nil
     @Published var imageAddress: ImageGeoLocationAddress? = nil
-    @Published var visionData: GoogleVisionImageData? = nil
+    @Published var visionData: ParsedGoogleVisionImageData? = nil
     
     func resetPhotoSelection() {
         self.photosPickerData = nil
@@ -89,10 +89,108 @@ class PhotoSelectionViewModel: ObservableObject {
             let textAnnotations = imageData.textAnnotations
             let safeSearchAnnotations = imageData.safeSearchAnnotations
             
-            self.visionData = GoogleVisionImageData(labels: labels, landmarks: landmarks, faceAnnotations: faceAnnotations, textAnnotations: textAnnotations, safeSearchAnnotations: safeSearchAnnotations)
+            Heap.track("onAppear - Decoding Image with FULL Google Vision Data", withProperties: ["full_vision_data": GoogleVisionImageData(labels: labels, landmarks: landmarks, faceAnnotations: faceAnnotations, textAnnotations: textAnnotations, safeSearchAnnotations: safeSearchAnnotations)])
+            
+            // Further filtering vision data
+            let filteredLabelAnnotations = filterLabelAnnotations(labelAnnotations: labels)
+            let filteredTextAnnotations = filterTextAnnotationsToRealWords(textAnnotations: textAnnotations)
+            let filteredLandmarkAnnotations = filterLandmarkAnnotations(landmarkAnnotations: landmarks)
+            let filteredFaceAnnotations = filterFaceAnnotations(faceAnnotations: faceAnnotations)
+            let filteredSafeSearchAnnotations = filterSafeSearchAnnotations(safeSearchAnnotations: safeSearchAnnotations)
+            
+            self.visionData = ParsedGoogleVisionImageData(labelAnnotations: filteredLabelAnnotations, landmarkAnnotations: filteredLandmarkAnnotations, faceAnnotations: filteredFaceAnnotations, textAnnotations: filteredTextAnnotations, safeSearchAnnotations: filteredSafeSearchAnnotations)
+            
+            Heap.track("onAppear - Decoding Image with PARSED Google Vision Data", withProperties: [ "parsed_vision_data": self.visionData ?? "NONE" ])
+            
         } else {
             print("Failed to decode JSON.")
         }
+    }
+    
+    // This function filters any text annotation to only real world words
+    private func filterTextAnnotationsToRealWords(textAnnotations: [TextAnnotations]?) -> String {
+        if let textAnnotations = textAnnotations, !textAnnotations.isEmpty, let textDescription = textAnnotations.first {
+            let filteredTextAnnotations = filterToRealWords(text: textDescription.description)
+            return filteredTextAnnotations
+        }
+        
+        return ""
+    }
+    
+    // This function filter any label annotation if the score is 0.9 or higher
+    private func filterLabelAnnotations(labelAnnotations: [LabelAnnotation]?) -> String {
+        if let labelAnnotations = labelAnnotations {
+            let filteredLabels = labelAnnotations.filter({ $0.score >= 0.9 })
+            let filteredLabelDescriptions = filteredLabels.map { $0.description }
+            return filteredLabelDescriptions.joined(separator: ", ")
+        }
+        
+        return ""
+    }
+    
+    // This function maps all landmarks description and returns it as a comma delimited string
+    private func filterLandmarkAnnotations(landmarkAnnotations: [LandmarkAnnotation]?) -> String {
+        if let landmarkAnnotations = landmarkAnnotations {
+            return landmarkAnnotations.map({ $0.description }).joined(separator: ", ")
+        }
+        
+        return ""
+    }
+    
+    // This function filters all facial annotations with a POSSIBLE likelihood and above
+    private func filterFaceAnnotations(faceAnnotations: [FaceAnnotations]?) -> String {
+        var filteredResults: Set<String> = []
+        
+        if let faceAnnotations = faceAnnotations {
+            faceAnnotations.forEach { face in
+                if face.angerLikelihood.value >= 3 {
+                    filteredResults.insert("anger")
+                }
+                
+                if face.joyLikelihood.value >= 3 {
+                    filteredResults.insert("joy")
+                }
+                
+                if face.sorrowLikelihood.value >= 3 {
+                    filteredResults.insert("sorrow")
+                }
+                
+                if face.surpriseLikelihood.value >= 3 {
+                    filteredResults.insert("surprise")
+                }
+            }
+        }
+        
+        return filteredResults.joined(separator: ", ")
+    }
+    
+    // This function filters all safe search annotations with a POSSIBLE likelihood and above
+    private func filterSafeSearchAnnotations(safeSearchAnnotations: SafeSearchAnnotations?) -> String {
+        var filteredResults = ""
+        
+        if let safeSearchAnnotations = safeSearchAnnotations {
+            if safeSearchAnnotations.adult.value >= 3 {
+                filteredResults += "adult-themed, "
+            }
+            
+            if safeSearchAnnotations.medical.value >= 3 {
+                filteredResults += "medical-themed, "
+            }
+            
+            if safeSearchAnnotations.racy.value >= 3 {
+                filteredResults += "racy-themed, "
+            }
+            
+            if safeSearchAnnotations.spoof.value >= 3 {
+                filteredResults += "spoof-themed, "
+            }
+            
+            if safeSearchAnnotations.violence.value >= 3 {
+                filteredResults += "violence-themed "
+            }
+        }
+        
+        return filteredResults
     }
     
     /// Fetches photo metadata from the selected image using CGImageSource.
