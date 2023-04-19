@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>CapGen needs access to your photo library to analyze your selected images and generate tailored captions that resonate with your audience.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>CapGen saves the images you capture to your photo library, allowing you to conveniently use and share them with AI-generated captions on your social media platforms.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -21,6 +21,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>CapGen needs camera access to analyze images and generate fitting captions for your posts.</string>
 	<key>GADApplicationIdentifier</key>
 	<string>${ADMOB_APP_ID}</string>
 	<key>APPODEAL_APP_ID</key>

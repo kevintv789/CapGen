@@ -14,9 +14,39 @@ struct ImageSelectorView: View {
     @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
     
-    @State var selectedPhotos: [PhotosPickerItem] = []
-    @State var isLoading: Bool = false
+    @State private var selectedPhotos: [PhotosPickerItem] = []
+    @State private var isLoading: Bool = false
     @State private var enabled = false
+    @State private var showCameraView: Bool = false
+    @State private var capturedImage: UIImage?
+    @State private var showCameraPermissionAlert: Bool = false
+    
+    // Check the camera authorization status and handle it accordingly.
+    private func checkCameraAuthorizationStatus() {
+        // is checking the authorization status for the camera device, which is used for capturing both images and videos. The authorization status for the camera is the same in both cases.
+        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
+        
+        switch cameraAuthorizationStatus {
+        case .authorized:
+            showCameraView = true
+        case .notDetermined:
+            // If the camera authorization status is not determined, request access to the camera.
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                DispatchQueue.main.async {
+                    if granted {
+                        // If access is granted, present the ImagePicker.
+                        showCameraView = true
+                    } else {
+                        // If access is denied, show an error alert.
+                        showCameraPermissionAlert = true
+                    }
+                }
+            }
+        default:
+            // If the status is anything other than authorized or notDetermined, show an error alert.
+            showCameraPermissionAlert = true
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -31,7 +61,21 @@ struct ImageSelectorView: View {
                     
                     // camera button
                     PhotoSelectionCardView(backgroundColor: Color.ui.middleBluePurple.opacity(0.4), title: "Snap & Caption 📸", subTitle: "Instantly create captions for your camera shots!", image: "camera_robot")
-                    .padding(.bottom)
+                        .onTapGesture {
+                            checkCameraAuthorizationStatus()
+                        }
+                        .fullScreenCover(isPresented: $showCameraView) {
+                            // Present the CameraViewController, binding the captured image to the capturedImage property.
+                            CameraViewController(capturedImage: $capturedImage)
+                        }
+                        .alert(isPresented: $showCameraPermissionAlert) {
+                            Alert(
+                                title: Text("Camera Permission Denied"),
+                                message: Text("Please allow the app to access your camera in Settings."),
+                                dismissButton: .default(Text("OK"))
+                            )
+                        }
+                        .padding(.bottom)
                     
                     // album button
                     PhotosPicker(
@@ -41,12 +85,6 @@ struct ImageSelectorView: View {
                     ) {
                         PhotoSelectionCardView(backgroundColor: Color.ui.frenchBlueSky.opacity(0.4), title: "Caption Your Memories 🌟", subTitle: "Let your favorite photos inspire the perfect captions!", image: "album_robot")
                     }
-                    // TODO: Edit this to make the request better. Don't simultaneously do it when album appears
-                    .simultaneousGesture(TapGesture().onEnded { _ in
-                        PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
-                            enabled = status == .authorized
-                        }
-                    })
                     .onChange(of: selectedPhotos) { image in
                         isLoading = true
                         Task {
