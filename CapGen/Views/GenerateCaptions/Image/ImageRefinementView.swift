@@ -10,11 +10,18 @@ import PhotosUI
 import Heap
 import NavigationStack
 
+enum ImageSelectionContext {
+    case camera, photosPicker
+}
+
 struct ImageRefinementView: View {
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var navStack: NavigationStackCompat
     
+    let imageSelectionContext: ImageSelectionContext
+    
+    @State private var imageData: Data? = nil
     @State private var imageHeight: CGFloat = 0
     @State private var isFullScreenImage: Bool = false
     
@@ -43,7 +50,7 @@ struct ImageRefinementView: View {
 //                        .frame(maxHeight: SCREEN_HEIGHT * 0.6)
 //                        .mask(RoundedRectangle(cornerRadius: 20))
                     
-                    if let imageData = photosSelectionVm.photosPickerData, let uiImage = UIImage(data: imageData) {
+                    if let imageData = imageData, let uiImage = UIImage(data: imageData) {
                         Button {
                             withAnimation {
                                 self.isFullScreenImage.toggle()
@@ -77,9 +84,17 @@ struct ImageRefinementView: View {
                     
                     Spacer()
                 }
-                
+            }
+        }
+        .onAppear() {
+            // determine which data to read from given the context
+            if imageSelectionContext == .camera {
+                self.imageData = photosSelectionVm.capturedImageData
+            } else {
+                self.imageData = photosSelectionVm.photosPickerData
             }
             
+            Heap.track("onAppear ImageRefinementView - With context: \(imageSelectionContext)")
         }
         .overlay(
             ZStack {
@@ -87,7 +102,7 @@ struct ImageRefinementView: View {
                     Color.black.opacity(0.9)
                         .edgesIgnoringSafeArea(.all)
                     
-                    if let uiImage = UIImage(data: photosSelectionVm.photosPickerData!) {
+                    if let imageData = imageData, let uiImage = UIImage(data: imageData) {
                         CapturedImageView(image: uiImage, imageHeight: $imageHeight, isFullScreen: true)
                     }
                     
@@ -103,12 +118,12 @@ struct ImageRefinementView: View {
 
 struct ImageRefinementView_Previews: PreviewProvider {
     static var previews: some View {
-        ImageRefinementView()
+        ImageRefinementView(imageSelectionContext: .camera)
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(FirestoreManager())
             .environmentObject(NavigationStackCompat())
         
-        ImageRefinementView()
+        ImageRefinementView(imageSelectionContext: .photosPicker)
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(FirestoreManager())
             .environmentObject(NavigationStackCompat())

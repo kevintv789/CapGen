@@ -16,12 +16,22 @@ import Heap
 
 class PhotoSelectionViewModel: ObservableObject {
     @Published var photosPickerData: Data? = nil
+    @Published var capturedImageData: Data? = nil
     @Published var imageAddress: ImageGeoLocationAddress? = nil
     @Published var visionData: ParsedGoogleVisionImageData? = nil
     
     func resetPhotoSelection() {
         self.photosPickerData = nil
         self.imageAddress = nil
+        self.visionData = nil
+        self.capturedImageData = nil
+    }
+    
+    func assignCapturedImage(imageData: Data) {
+        self.capturedImageData = imageData
+        
+        // Fetch image metadata and get geolocation
+        self.fetchImageMetadata(imageData: self.capturedImageData)
     }
     
     func assignPhotoPickerItem(image: PhotosPickerItem) async {
@@ -29,13 +39,8 @@ class PhotoSelectionViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self.photosPickerData = data
                 
-                // Fetch image metadata
-                let metadata = self.fetchPhotoMetadata()
-                
-                // Use metadata's geolocation to retrieve image location
-                if let metadata = metadata, let geoLoc: GeoLocation = self.fetchImageLatLong(from: metadata) {
-                    self.fetchLocation(from: geoLoc)
-                }
+                // Fetch image metadata and get geolocation
+                self.fetchImageMetadata(imageData: self.photosPickerData)
             }
         }
     }
@@ -104,6 +109,16 @@ class PhotoSelectionViewModel: ObservableObject {
             
         } else {
             print("Failed to decode JSON.")
+        }
+    }
+    
+    private func fetchImageMetadata(imageData: Data?) {
+        // Fetch image metadata
+        let metadata = self.fetchPhotoMetadata(imageData: imageData)
+        
+        // Use metadata's geolocation to retrieve image location
+        if let metadata = metadata, let geoLoc: GeoLocation = self.fetchImageLatLong(from: metadata) {
+            self.fetchLocation(from: geoLoc)
         }
     }
     
@@ -209,8 +224,8 @@ class PhotoSelectionViewModel: ObservableObject {
     /// Note:
     /// This function assumes that the image data is already available in `self.photosPickerData`.
     /// Make sure to populate this variable with the image data before calling this function.
-    private func fetchPhotoMetadata() -> [String: Any]? {
-        if let data = self.photosPickerData {
+    private func fetchPhotoMetadata(imageData: Data?) -> [String: Any]? {
+        if let data = imageData {
             if let imageSource = CGImageSourceCreateWithData(data as CFData, nil) {
                 if let metadata = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any] {
                     return metadata

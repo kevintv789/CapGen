@@ -75,6 +75,22 @@ struct ImageSelectorView: View {
                                 dismissButton: .default(Text("OK"))
                             )
                         }
+                        .onChange(of: capturedImage, perform: { capturedImage in
+                            if let image = capturedImage {
+                                // reset photo selection
+                                photoSelectionVm.resetPhotoSelection()
+                                
+                                // Convert UIImage to JPEG data with a compression quality of 0.8 (80%)
+                                if let jpegData = image.jpegData(compressionQuality: 0.8) {
+                                    photoSelectionVm.assignCapturedImage(imageData: jpegData)
+                                    
+                                    // push to refinement view once data is saved to published object
+                                    if photoSelectionVm.capturedImageData != nil {
+                                        self.navStack.push(ImageRefinementView(imageSelectionContext: .camera))
+                                    }
+                                }
+                            }
+                        })
                         .padding(.bottom)
                     
                     // album button
@@ -98,7 +114,7 @@ struct ImageSelectorView: View {
                             
                             // push to refinement view once data is saved to published object
                             if photoSelectionVm.photosPickerData != nil {
-                                self.navStack.push(ImageRefinementView())
+                                self.navStack.push(ImageRefinementView(imageSelectionContext: .photosPicker))
                             }
                             
                             isLoading = false

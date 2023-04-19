@@ -68,7 +68,15 @@ struct LoadingView: View {
     
     private func generateCaptionFromImage() async {
         // Call Google's Vision AI to detect aspects of image
-        if let imageData = photosSelectionVm.photosPickerData, let uiImage = UIImage(data: imageData), let apiKey = firestoreMan.googleApiKey {
+        var imageData: Data? = nil
+        // To determine which image data to use (camera or photo library), store the image data for the one that is not nil
+        if photosSelectionVm.photosPickerData != nil {
+            imageData = photosSelectionVm.photosPickerData
+        } else if photosSelectionVm.capturedImageData != nil {
+            imageData = photosSelectionVm.capturedImageData
+        }
+        
+        if let imageData = imageData, let uiImage = UIImage(data: imageData), let apiKey = firestoreMan.googleApiKey {
             
             do {
                 let json = try await photosSelectionVm.analyzeImage(image: uiImage, apiKey: apiKey)
