@@ -90,7 +90,7 @@ struct LoadingView: View {
         
         if let visionData = photosSelectionVm.visionData {
             // Generate prompt
-            let openAiPrompt = openAiRequest.generatePromptForImage(userInputPrompt: genPromptVm.promptInput, tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: photosSelectionVm.imageAddress)
+            let openAiPrompt = openAiRequest.generatePromptForImage(tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: photosSelectionVm.imageAddress)
             
             await callOpenAi(with: openAiPrompt)
         } else {
