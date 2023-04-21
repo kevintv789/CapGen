@@ -5,8 +5,8 @@
 //  Created by Kevin Vu on 1/14/23.
 //
 
-import SwiftUI
 import Heap
+import SwiftUI
 
 struct RewardedAdView: View {
     @ObservedObject var ad = AppodealProvider.shared

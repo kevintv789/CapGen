@@ -55,7 +55,7 @@ struct CreditsDepletedModalView: View {
             if isDone {
                 // Navigate to generate captions views
                 self.navStack.push(EnterPromptView())
-                
+
                 self.isViewPresented = false
             }
         })

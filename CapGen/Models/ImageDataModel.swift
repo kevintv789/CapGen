@@ -17,7 +17,7 @@ struct ImageGeoLocationAddress {
     let locality: String?
     let state: String?
     let country: String?
-    
+
     /// A computed property that combines all available address components in a comma-delimited format.
     ///
     /// This property checks each optional string property (landmarkName, locality, state, and country) and
@@ -31,7 +31,7 @@ struct ImageGeoLocationAddress {
     /// ```
     var combinedAddress: String {
         var components: [String] = []
-        
+
         if let landmarkName = landmarkName {
             components.append(landmarkName)
         }
@@ -44,12 +44,13 @@ struct ImageGeoLocationAddress {
         if let country = country {
             components.append(country)
         }
-        
+
         return components.joined(separator: ", ")
     }
 }
 
 // MARK: Google Vision AI Data
+
 struct GoogleVisionImageData: Codable {
     let labels: [LabelAnnotation]?
     let landmarks: [LandmarkAnnotation]?
@@ -65,7 +66,6 @@ struct ParsedGoogleVisionImageData: Codable {
     let textAnnotations: String
     let safeSearchAnnotations: String
 }
-
 
 /// `mid (String)`: A machine-generated identifier that represents the detected entity or concept. This ID can be used to look up more information about the entity in Google's Knowledge Graph or other databases.
 /// Example: "/m/019nj4"
@@ -100,10 +100,10 @@ struct LandmarkAnnotation: Codable {
     let description: String
     let locations: [Location]
     let mid: String
-    
+
     struct Location: Codable {
         let latLng: LatLng
-        
+
         struct LatLng: Codable {
             let longitude: Double
             let latitude: Double
@@ -121,7 +121,7 @@ enum Likelihood: String, Codable {
     case possible = "POSSIBLE"
     case likely = "LIKELY"
     case veryLikely = "VERY_LIKELY"
-    
+
     /// An integer value representing the likelihood.
     ///
     /// Can be used for easy comparison between likelihoods.
@@ -174,7 +174,7 @@ struct SafeSearchAnnotations: Codable {
     let racy: Likelihood
     let spoof: Likelihood
     let violence: Likelihood
-    
+
     /// The coding keys used when encoding and decoding the struct.
     enum CodingKeys: String, CodingKey {
         case adult

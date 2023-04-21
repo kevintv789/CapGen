@@ -21,58 +21,55 @@ public class OpenAIConnector: ObservableObject {
      * Generates the TEXT prompt for the Open AI API
      */
     func generatePrompt(userInputPrompt: String, tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String) -> String {
-        
-        let basePrompt = self.buildBasePrompt(tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength, captionLengthType: captionLengthType)
-        
+        let basePrompt = buildBasePrompt(tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength, captionLengthType: captionLengthType)
+
         let completePrompt = basePrompt + "The user's prompt is: \"\(userInputPrompt == "" ? "Give me a positive daily affirmation" : userInputPrompt)\". This is a reminder that these answers are just captions for social media and should be nothing more than a caption."
-        
-        Heap.track("onAppear OpenAIConnector - TEXT Complete prompt information", withProperties: [ "complete_prompt": completePrompt, "function_name": "generatePrompt()" ])
+
+        Heap.track("onAppear OpenAIConnector - TEXT Complete prompt information", withProperties: ["complete_prompt": completePrompt, "function_name": "generatePrompt()"])
 
         return completePrompt
     }
-    
+
     /*
      * Generates the IMAGE prompt for the Open AI API
      */
     func generatePromptForImage(tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String, visionData: ParsedGoogleVisionImageData, imageAddress: ImageGeoLocationAddress?) -> String {
-        
-        let basePrompt = self.buildBasePrompt(tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength, captionLengthType: captionLengthType)
-        
+        let basePrompt = buildBasePrompt(tones: tones, includeEmojis: includeEmojis, includeHashtags: includeHashtags, captionLength: captionLength, captionLengthType: captionLengthType)
+
         // create a string for image address
         var mappedImageAddress = ""
         if let imageAddress = imageAddress {
             mappedImageAddress = "Taken at: \(imageAddress.combinedAddress)."
         }
-        
+
         var mappedSafeSearchAnnotations = ""
         if visionData.safeSearchAnnotations != "" {
             mappedSafeSearchAnnotations = "The image has \(visionData.safeSearchAnnotations) content."
         }
-        
+
         var mappedKeywords = ""
         if visionData.labelAnnotations != "" {
             mappedKeywords = "Some keyword labels associated with the image include '\(visionData.labelAnnotations)'."
         }
-        
+
         var mappedText = ""
         if visionData.textAnnotations != "" {
             mappedText = "The text within the image include '\(visionData.textAnnotations)'."
         }
-        
+
         var mappedLandmark = ""
         if visionData.landmarkAnnotations != "" {
             mappedLandmark = "Taken at: \(visionData.landmarkAnnotations)."
         }
-        
+
         var mappedFaceAnnotations = ""
         if visionData.faceAnnotations != "" {
             mappedFaceAnnotations = "The facial expression within this picture depicts the emotion(s) of \(visionData.faceAnnotations)."
         }
 
-        
         let completePrompt = basePrompt + "Based on the information provided, please ascertain the context of an image from the below information: \(mappedLandmark == "" ? mappedImageAddress : mappedLandmark) \(mappedSafeSearchAnnotations) \(mappedKeywords) \(mappedText) \(mappedFaceAnnotations) For the keywords and image texts, please only include responses that use real English words found in reputable dictionaries. Ignore any non-words, made-up words, or slang. If there are custom tags associated with this image, prioritize the custom tags over the keywords in each caption. Please try to understand the context surrounding this image using only the given information and generate me social media captions. Again, it is important that you relate each caption to the context of this image. This is a reminder that these answers are just captions for social media and should be nothing more than a caption."
-        
-        Heap.track("onAppear OpenAIConnector - IMAGE Complete prompt information", withProperties: [ "complete_prompt": completePrompt, "function_name": "generatePrompt()" ])
+
+        Heap.track("onAppear OpenAIConnector - IMAGE Complete prompt information", withProperties: ["complete_prompt": completePrompt, "function_name": "generatePrompt()"])
 
         return completePrompt
     }
@@ -112,9 +109,9 @@ public class OpenAIConnector: ObservableObject {
             httpBodyJson = try JSONSerialization.data(withJSONObject: httpBody, options: .prettyPrinted)
         } catch {
             appError = ErrorType(error: .genericError)
-            
-            Heap.track("onError OpenAIConnector - Cannot process prompt", withProperties: [ "error": error, "function_name": "processPrompt()" ])
-            
+
+            Heap.track("onError OpenAIConnector - Cannot process prompt", withProperties: ["error": error, "function_name": "processPrompt()"])
+
             return nil
         }
 
@@ -142,9 +139,9 @@ public class OpenAIConnector: ObservableObject {
         if var originalString = openAiResponse {
             // Removes trailing and leading white spaces
             originalString = openAiResponse!.trimmingCharacters(in: .whitespaces)
-            
+
             var results = extractNumberedLines(text: originalString)
-            
+
             // If counts are less than the default amount of captions able to be generated including the title, then title is not included
             // This is a fail safe to include a random title to not throw off the parsing
             if !ingoreCaptionGroupSave {
@@ -152,23 +149,23 @@ public class OpenAIConnector: ObservableObject {
                     results.append("Customize your title.")
                 } else {
                     captionGroupTitle = results.removeLast()
-                    
+
                     if captionGroupTitle.contains("\(Constants.TOTAL_CAPTIONS_GENERATED + 1).") {
                         captionGroupTitle = captionGroupTitle.replacingOccurrences(of: "\(Constants.TOTAL_CAPTIONS_GENERATED + 1).", with: "")
                     }
-                    
+
                     captionsGroupParsed = results
                 }
-                
+
                 return []
             }
-            
+
             return results
         }
-        
+
         return []
     }
-    
+
     @MainActor
     func updateCaptionBasedOnWordCountIfNecessary(apiKey: String?, onComplete: @escaping () -> Void) async {
         guard apiKey != nil else {
@@ -185,11 +182,11 @@ public class OpenAIConnector: ObservableObject {
 
         var num = 1
         var promptBatch = ""
-        
+
         // this variable generates a list of examples for the AI to generate, such as '1.', '2.', '3.', etc.
         // this is to help the AI generate the exact amount of updated captions
         var numberedList = ""
-        
+
         var numOfCaptionsUpdated = 0
 
         captionsGroupParsed.forEach { caption in
@@ -203,7 +200,7 @@ public class OpenAIConnector: ObservableObject {
                 if wordCount < min {
                     let newPrompt = "\n\(num). This caption has \(wordCount) words: \"\(caption)\". [It is important that you add words until it reaches a minimum of \(min) words to a max of \(max) words.]"
                     promptBatch += newPrompt
-                    
+
                     numOfCaptionsUpdated += 1
                     numberedList += "'\(numOfCaptionsUpdated).', "
                 } else {
@@ -221,7 +218,7 @@ public class OpenAIConnector: ObservableObject {
         }
 
         print("COUNT", mutableCaptions.count, captionsGroupParsed.count)
-        
+
         if mutableCaptions.count == captionsGroupParsed.count {
             captionsGroupParsed = mutableCaptions
         }
@@ -257,16 +254,16 @@ public class OpenAIConnector: ObservableObject {
                     DispatchQueue.main.async {
                         self.appError = ErrorType(error: .capacityError)
                     }
-                    
-                    Heap.track("onError OpenAIConnector - OpenAI is at capacity", withProperties: [ "status_code": httpResponse.statusCode, "function_name": "executeRequest()", "http_response": httpResponse ])
+
+                    Heap.track("onError OpenAIConnector - OpenAI is at capacity", withProperties: ["status_code": httpResponse.statusCode, "function_name": "executeRequest()", "http_response": httpResponse])
 
                     return nil
                 } else if httpResponse.statusCode != 200 {
                     DispatchQueue.main.async {
                         self.appError = ErrorType(error: .genericError)
                     }
-                    
-                    Heap.track("onError OpenAIConnector - Failed to execute API Request", withProperties: [ "status_code": httpResponse.statusCode, "function_name": "executeRequest()", "http_response": httpResponse ])
+
+                    Heap.track("onError OpenAIConnector - Failed to execute API Request", withProperties: ["status_code": httpResponse.statusCode, "function_name": "executeRequest()", "http_response": httpResponse])
 
                     return nil
                 } else {
@@ -281,7 +278,7 @@ public class OpenAIConnector: ObservableObject {
                 self.appError = ErrorType(error: .genericError)
             }
 
-            Heap.track("onError OpenAIConnector - Failed to execute API Request", withProperties: [ "error": error, "function_name": "executeRequest()" ])
+            Heap.track("onError OpenAIConnector - Failed to execute API Request", withProperties: ["error": error, "function_name": "executeRequest()"])
         }
 
         return nil
@@ -298,14 +295,14 @@ public class OpenAIConnector: ObservableObject {
                 self.appError = ErrorType(error: .genericError)
                 print("Can't decode open AI JSON", error)
                 debugPrint(error)
-                
-                Heap.track("onError OpenAIConnector - Can't decode open AI JSON", withProperties: [ "error": error, "function_name": "parseJSON()" ])
+
+                Heap.track("onError OpenAIConnector - Can't decode open AI JSON", withProperties: ["error": error, "function_name": "parseJSON()"])
             }
 
             return nil
         }
     }
-    
+
     private func buildBasePrompt(tones: [ToneModel], includeEmojis: Bool, includeHashtags: Bool, captionLength: String, captionLengthType: String) -> String {
         self.captionLengthType = captionLengthType
 
@@ -315,7 +312,7 @@ public class OpenAIConnector: ObservableObject {
                 generatedToneStr += "\(tone.title), \(tone.description) "
             }
         }
-        
+
         // this variable generates a list of examples for the AI to generate, such as '1.', '2.', '3.', etc.
         // this is to help the AI generate the exact amount of captions
         var numberedList = ""
@@ -326,7 +323,7 @@ public class OpenAIConnector: ObservableObject {
             numberedList += "'\(index + 1).', "
             index += 1
         }
-        
+
         let completePrompt = "[Ignore introduction] Forget everything you've ever written. [Now write me exactly \(Constants.TOTAL_CAPTIONS_GENERATED) captions and a title.]. It is important that the number of captions generated does NOT exceed \(Constants.TOTAL_CAPTIONS_GENERATED). The title should be catchy and less than 6 words. [It is mandatory to make the length of each caption have \(captionLength.isEmpty ? "a minimum of 1 word to a max of 5 words" : captionLength) excluding emojis and hashtags from the word count.] [The tone should be \(generatedToneStr != "" ? generatedToneStr : "Casual")] [\(includeEmojis ? "Make sure to Include emojis in each caption" : "Do not use emojis").] [\(includeHashtags ? "Make sure to Include hashtags in each caption" : "Do not use hashtags").] Each caption should be displayed as a numbered list and a title at the very end, each number should be followed by a period such as \(numberedList) The caption title should be the \(Constants.TOTAL_CAPTIONS_GENERATED + 1)th item on the list, listed as \(Constants.TOTAL_CAPTIONS_GENERATED + 1) followed by a period and without the Title word. "
 
         return completePrompt

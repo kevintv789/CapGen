@@ -19,7 +19,7 @@ enum CaptionListContext {
       This is the default context that generates a list of captions based on all available folders
      */
     case list
-    
+
     /**
       Called directly from the SearchView()
      */
@@ -47,7 +47,7 @@ struct CaptionListView: View {
         captionVm.selectedCaption = caption
         navStack.push(EditCaptionView(context: .captionList))
     }
-    
+
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             if captions.isEmpty {
@@ -69,7 +69,7 @@ struct CaptionListView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .ignoresSafeArea(.all)
-        
+
         .onReceive(folderVm.$updatedFolder.first()) { updatedFolder in
             if context == .folder, let updatedFolder = updatedFolder {
                 self.folderId = updatedFolder.id
@@ -78,7 +78,7 @@ struct CaptionListView: View {
         .onReceive(AuthManager.shared.userManager.$user, perform: { user in
             if let user = user, context != .search {
                 self.captions.removeAll()
-                
+
                 var captionsPerFolder: [[CaptionModel]] = []
 
                 if context == .folder, !folderId.isEmpty {
@@ -102,7 +102,7 @@ struct CaptionListView: View {
         .onReceive(searchVm.$searchedCaptions) { searchedCaptions in
             if context == .search {
                 self.captions = searchedCaptions
-                
+
                 // Sort by most recent created
                 let df = DateFormatter()
                 df.dateFormat = "MMM d, h:mm a"

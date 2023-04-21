@@ -6,9 +6,9 @@
 //
 
 import FirebaseAuth
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 extension Text {
     func customProfileHeadline() -> some View {
@@ -321,7 +321,7 @@ struct OptionButtonView: View {
                                 .lineSpacing(5)
                                 .padding(.leading, 25)
                         }
-                        
+
                     }.offset(x: 3, y: subTitle != nil ? 0 : 5)
                 )
                 .frame(height: subTitle != nil ? 100 * scaledSize : 50 * scaledSize)
@@ -426,7 +426,7 @@ struct ConnectSectionView: View {
                 supportEmailModel.send(openURL: openURL)
                 Haptics.shared.play(.soft)
             }
-            
+
             if let appStore = firestoreMan.appStoreModel {
                 ZStack {
                     Color.ui.cultured
@@ -434,12 +434,11 @@ struct ConnectSectionView: View {
                     Divider()
                         .frame(width: SCREEN_WIDTH / 1.1)
                 }
-                
+
                 OptionButtonView(title: "🌟 Review & Inspire", subTitle: "Share your insights now to help us create a better experience for all. Your support means the world to us!") {
                     let url = URL(string: "https://apps.apple.com/us/app/capgen-ai-powered/id\(appStore.storeId)?action=write-review")
                     openURL(url!)
                     Haptics.shared.play(.soft)
-                    
                 }
             }
         }

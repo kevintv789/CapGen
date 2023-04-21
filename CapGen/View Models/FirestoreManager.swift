@@ -34,7 +34,7 @@ class FirestoreManager: ObservableObject {
                 self.appStoreModel = AppStoreModel(storeId: appStoreId ?? "", website: website ?? "")
             }
         }
-        
+
         fetch(from: "Secrets", documentId: "GOOGLE_CLOUD") { data in
             if let data = data {
                 self.googleApiKey = data["Key"] as? String ?? nil
@@ -92,10 +92,10 @@ class FirestoreManager: ObservableObject {
 
     func getCaptionsCount() -> Int {
         var count = 0
-        
+
         if let user = AuthManager.shared.userManager.user {
             let totalCaptions = user.folders.map { $0.captions }
-            
+
             totalCaptions.forEach { captions in
                 count += captions.count
             }
@@ -259,7 +259,7 @@ class FirestoreManager: ObservableObject {
                 var captionToSave = folder.caption as CaptionModel
                 captionToSave.folderId = newFolderId
                 captionToSave.id = UUID().uuidString // generate a new ID for all new captions being saved
-                
+
                 if captionToSave.captionLength.isEmpty {
                     captionToSave.captionLength = captionLengths.first!.type
                 }

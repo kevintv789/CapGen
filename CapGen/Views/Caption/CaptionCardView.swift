@@ -99,7 +99,6 @@ struct CaptionCardView: View {
                         } label: {
                             CircularIndicatorView(caption: caption)
                         }
-                        
 
                         Spacer()
 

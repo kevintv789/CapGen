@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 2/24/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 struct EnterPromptView: View {
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
@@ -39,8 +39,8 @@ struct EnterPromptView: View {
                 VStack {
                     // header
                     GenerateCaptionsHeaderView(title: "Write your prompt") {
-                        Heap.track("onClick EnterPromptView - Next button tapped", withProperties: [ "prompt": genPromptVm.promptInput ])
-                        
+                        Heap.track("onClick EnterPromptView - Next button tapped", withProperties: ["prompt": genPromptVm.promptInput])
+
                         // on click next
                         self.navStack.push(PersonalizeOptionsView())
                     }
@@ -84,7 +84,7 @@ struct EnterPromptView: View {
                 genPromptVm.resetInput()
             }
         }
-        .onAppear() {
+        .onAppear {
             Heap.track("onAppear EnterPromptView")
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)

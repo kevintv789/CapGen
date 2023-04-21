@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 2/24/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 enum CaptionGenerationType {
     case prompt
@@ -17,7 +17,7 @@ enum CaptionGenerationType {
 struct PersonalizeOptionsView: View {
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
-    
+
     var captionGenType: CaptionGenerationType = .prompt
 
     @State var selectedSection: Int? = 0
@@ -32,8 +32,8 @@ struct PersonalizeOptionsView: View {
             VStack(alignment: .center) {
                 // header
                 GenerateCaptionsHeaderView(title: "Tailor your captions", isOptional: true, isNextSubmit: true) {
-                    Heap.track("onClick PersonalizedOptionsView - Next button tapped", withProperties: [ "Tone(s)": genPromptVm.selectdTones, "Include emojis?": genPromptVm.includeEmojis, "Include hashtags?": genPromptVm.includeHashtags, "Length": genPromptVm.captionLengthType ])
-                    
+                    Heap.track("onClick PersonalizedOptionsView - Next button tapped", withProperties: ["Tone(s)": genPromptVm.selectdTones, "Include emojis?": genPromptVm.includeEmojis, "Include hashtags?": genPromptVm.includeHashtags, "Length": genPromptVm.captionLengthType])
+
                     // on click next
                     self.navStack.push(LoadingView(captionGenType: captionGenType))
                 }
@@ -52,7 +52,7 @@ struct PersonalizeOptionsView: View {
                         .padding()
                     }
                     .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.8)
-                    
+
                     // automatically scroll to the selected option
                     .onChange(of: isTonesSectionSelected) { _ in
                         withAnimation {
@@ -75,7 +75,7 @@ struct PersonalizeOptionsView: View {
                 Spacer()
             }
         }
-        .onAppear() {
+        .onAppear {
             Heap.track("onAppear PersonalizedOptionsView")
         }
     }

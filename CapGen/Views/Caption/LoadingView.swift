@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 1/2/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 struct LoadingView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
@@ -15,13 +15,13 @@ struct LoadingView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
-    
+
     var captionGenType: CaptionGenerationType = .prompt
 
     @State var showCaptionView: Bool = false
     @State var openAiResponse: String?
     @State var router: Router? = nil
-    
+
     private func callOpenAi(with openAiPrompt: String) async {
         if !openAiPrompt.isEmpty {
             let openAiResponse = await openAiRequest.processPrompt(apiKey: firestoreMan.openAiKey, prompt: openAiPrompt)
@@ -29,9 +29,9 @@ struct LoadingView: View {
             if let error = openAiRequest.appError?.error {
                 switch error {
                 case .capacityError:
-                    self.router?.toCapacityFallbackView()
+                    router?.toCapacityFallbackView()
                 default:
-                    self.router?.toGenericFallbackView()
+                    router?.toGenericFallbackView()
                 }
             }
 
@@ -50,64 +50,60 @@ struct LoadingView: View {
             }
         }
     }
-    
+
     private func generateCaptionFromPrompt() async {
         Heap.track("onAppear LoadingView - Currently loading captions from PROMPT")
-        
-        self.router = Router(navStack: navStack)
-        
+
+        router = Router(navStack: navStack)
+
         // Reset all previous responses
         openAiRequest.resetResponse()
-        
+
         // Generate prompt
         let openAiPrompt = openAiRequest.generatePrompt(userInputPrompt: genPromptVm.promptInput, tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType)
-        
+
         await callOpenAi(with: openAiPrompt)
-        
     }
-    
+
     private func generateCaptionFromImage() async {
         // Call Google's Vision AI to detect aspects of image
-        var imageData: Data? = nil
+        var imageData: Data?
         // To determine which image data to use (camera or photo library), store the image data for the one that is not nil
         if photosSelectionVm.photosPickerData != nil {
             imageData = photosSelectionVm.photosPickerData
         } else if photosSelectionVm.capturedImageData != nil {
             imageData = photosSelectionVm.capturedImageData
         }
-        
+
         if let imageData = imageData, let uiImage = UIImage(data: imageData), let apiKey = firestoreMan.googleApiKey {
-            
             do {
                 let json = try await photosSelectionVm.analyzeImage(image: uiImage, apiKey: apiKey)
-                
+
                 let jsonString = """
-                                {
-                                  "labels": \(json["responses"][0]["labelAnnotations"]),
-                                  "landmarks": \(json["responses"][0]["landmarkAnnotations"]),
-                                  "faceAnnotations": \(json["responses"][0]["faceAnnotations"]),
-                                  "textAnnotations": \(json["responses"][0]["textAnnotations"]),
-                                  "safeSearchAnnotations": \(json["responses"][0]["safeSearchAnnotation"]),
-                                }
-                                """
+                {
+                  "labels": \(json["responses"][0]["labelAnnotations"]),
+                  "landmarks": \(json["responses"][0]["landmarkAnnotations"]),
+                  "faceAnnotations": \(json["responses"][0]["faceAnnotations"]),
+                  "textAnnotations": \(json["responses"][0]["textAnnotations"]),
+                  "safeSearchAnnotations": \(json["responses"][0]["safeSearchAnnotation"]),
+                }
+                """
                 photosSelectionVm.decodeGoogleVisionData(from: jsonString)
             } catch {
                 print("Error: \(error.localizedDescription)")
             }
         }
-        
+
         if let visionData = photosSelectionVm.visionData {
             // Generate prompt
             let openAiPrompt = openAiRequest.generatePromptForImage(tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: photosSelectionVm.imageAddress)
-            
+
             await callOpenAi(with: openAiPrompt)
         } else {
             // if vision data is not available, then only use custom tags
         }
-        
-  
     }
-    
+
     var body: some View {
         GeometryReader { _ in
             ZStack(alignment: .topLeading) {
@@ -146,10 +142,9 @@ struct LoadingView: View {
                     if captionGenType == .prompt {
                         await generateCaptionFromPrompt()
                     } else if captionGenType == .image {
-                        await  generateCaptionFromImage()
+                        await generateCaptionFromImage()
                     }
                 }
-                
             }
         }
     }

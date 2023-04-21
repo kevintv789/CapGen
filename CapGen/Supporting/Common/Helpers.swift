@@ -66,10 +66,10 @@ func extractNumberedLines(text: String) -> [String] {
     do {
         // Create a regular expression object with the defined pattern.
         let regex = try NSRegularExpression(pattern: regexPattern, options: [])
-        
+
         // Define the range for the entire input text.
-        let nsRange = NSRange(text.startIndex..<text.endIndex, in: text)
-        
+        let nsRange = NSRange(text.startIndex ..< text.endIndex, in: text)
+
         // Search for matches using the regular expression object.
         let matches = regex.matches(in: text, options: [], range: nsRange)
 
@@ -78,12 +78,12 @@ func extractNumberedLines(text: String) -> [String] {
             // Extract the content of the line, without the number and the period.
             if let range = Range(match.range(at: 1), in: text) {
                 var lineContent = String(text[range]).trimmingCharacters(in: .whitespacesAndNewlines)
-                
+
                 // Remove any existing numbering and extra newline characters, if present.
                 if let existingNumberRange = lineContent.range(of: "^\\d+\\.\\s*\\n?", options: .regularExpression) {
                     lineContent.removeSubrange(existingNumberRange)
                 }
-                
+
                 // Append the corrected line to the results array.
                 results.append(lineContent)
             }
@@ -114,10 +114,10 @@ func filterToRealWords(text: String) -> String {
         let range = NSRange(location: 0, length: word.utf16.count)
         let misspelledRange = textChecker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
         let containsNumber = word.rangeOfCharacter(from: .decimalDigits) != nil
-        
+
         return misspelledRange.location == NSNotFound && !containsNumber
     }
-    
+
     return filteredWords.joined(separator: ", ")
 }
 

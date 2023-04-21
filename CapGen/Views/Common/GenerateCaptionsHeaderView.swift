@@ -36,11 +36,11 @@ struct GenerateCaptionsHeaderView: View {
             .padding(.top, isOptional ?? false ? 15 : 0)
             .if(nextAction == nil) { View in
                 // offset the width of the next button to center align the title
-                return View.padding(.trailing, 40)
+                View.padding(.trailing, 40)
             }
 
             Spacer()
-            
+
             // next/submit button
             if let nextAction = nextAction {
                 Button {
@@ -51,7 +51,6 @@ struct GenerateCaptionsHeaderView: View {
                         .frame(width: 40, height: 40)
                 }
             }
-          
         }
         .padding(.bottom, 20)
         .padding(.horizontal)
