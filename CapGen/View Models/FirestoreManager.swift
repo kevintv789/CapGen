@@ -54,7 +54,7 @@ class FirestoreManager: ObservableObject {
         ])
     }
 
-    func decrementCredit(for uid: String?) {
+    func decrementCredit(for uid: String?, value: Int64) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             return
@@ -62,7 +62,7 @@ class FirestoreManager: ObservableObject {
 
         let docRef = db.collection("Users").document("\(userId)")
         docRef.updateData([
-            "credits": FieldValue.increment(Int64(-1)),
+            "credits": FieldValue.increment(value),
         ])
     }
 

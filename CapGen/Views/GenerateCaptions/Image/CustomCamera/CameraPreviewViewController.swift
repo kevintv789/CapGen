@@ -32,5 +32,13 @@ struct CameraPreviewViewController: UIViewRepresentable {
     }
     
     // we want to ensure that the preview layer's frame is always equal to the UIView's bounds.
-    func updateUIView(_ uiView: UIView, context: Context) {}
+    func updateUIView(_ uiView: UIView, context: Context) {
+        // Mirror the photo if the front camera is used
+//        print("HELLO")
+//        if let preview = cameraModel.preview, let connection = preview.connection, cameraModel.cameraPosition == .front, connection.isVideoOrientationSupported {
+//            print("ASODKAD")
+//            connection.automaticallyAdjustsVideoMirroring = false
+//            connection.isVideoMirrored = true
+//        }
+    }
 }

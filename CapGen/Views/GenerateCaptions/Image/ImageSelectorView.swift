@@ -19,7 +19,6 @@ struct ImageSelectorView: View {
     @State private var isLoading: Bool = false
     @State private var enabled = false
     @State private var showCameraView: Bool = false
-    @State private var capturedImage: UIImage?
 
     var body: some View {
         ZStack {
@@ -48,25 +47,8 @@ struct ImageSelectorView: View {
                         }
                         .fullScreenCover(isPresented: $showCameraView) {
                             // Present the CameraViewController, binding the captured image to the capturedImage property.
-//                            CameraViewController(capturedImage: $capturedImage)
                             CustomCameraView()
                         }
-                        .onChange(of: capturedImage, perform: { capturedImage in
-                            if let image = capturedImage {
-                                // reset photo selection
-                                photoSelectionVm.resetPhotoSelection()
-
-                                // Convert UIImage to JPEG data with a compression quality of 0.8 (80%)
-                                if let jpegData = image.jpegData(compressionQuality: 0.8) {
-                                    photoSelectionVm.assignCapturedImage(imageData: jpegData)
-
-                                    // push to refinement view once data is saved to published object
-                                    if photoSelectionVm.capturedImageData != nil {
-                                        self.navStack.push(ImageRefinementView(imageSelectionContext: .camera))
-                                    }
-                                }
-                            }
-                        })
                         .padding(.bottom)
 
                     // album button
@@ -82,6 +64,7 @@ struct ImageSelectorView: View {
                         Task {
                             // reset photo selection
                             photoSelectionVm.resetPhotoSelection()
+                            cameraModel.resetData()
 
                             if !image.isEmpty {
                                 // save image data to picker item

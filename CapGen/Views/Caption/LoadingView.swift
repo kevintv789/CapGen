@@ -15,6 +15,7 @@ struct LoadingView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
+    @EnvironmentObject var cameraViewModel: CameraViewModel
 
     var captionGenType: CaptionGenerationType = .prompt
 
@@ -22,7 +23,7 @@ struct LoadingView: View {
     @State var openAiResponse: String?
     @State var router: Router? = nil
 
-    private func callOpenAi(with openAiPrompt: String) async {
+    private func callOpenAi(with openAiPrompt: String, decrementCreditBy: Int64) async {
         if !openAiPrompt.isEmpty {
             let openAiResponse = await openAiRequest.processPrompt(apiKey: firestoreMan.openAiKey, prompt: openAiPrompt)
 
@@ -42,7 +43,7 @@ struct LoadingView: View {
                 // Conform all captions to the required minimum word count
                 await openAiRequest.updateCaptionBasedOnWordCountIfNecessary(apiKey: firestoreMan.openAiKey) {
                     // decrement credit on success
-                    firestoreMan.decrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil)
+                    firestoreMan.decrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil, value: decrementCreditBy)
 
                     // Navigate to Caption View
                     self.navStack.push(CaptionView())
@@ -62,7 +63,7 @@ struct LoadingView: View {
         // Generate prompt
         let openAiPrompt = openAiRequest.generatePrompt(userInputPrompt: genPromptVm.promptInput, tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType)
 
-        await callOpenAi(with: openAiPrompt)
+        await callOpenAi(with: openAiPrompt, decrementCreditBy: -1)
     }
 
     private func generateCaptionFromImage() async {
@@ -71,8 +72,8 @@ struct LoadingView: View {
         // To determine which image data to use (camera or photo library), store the image data for the one that is not nil
         if photosSelectionVm.photosPickerData != nil {
             imageData = photosSelectionVm.photosPickerData
-        } else if photosSelectionVm.capturedImageData != nil {
-            imageData = photosSelectionVm.capturedImageData
+        } else if !cameraViewModel.imageData.isEmpty {
+            imageData = cameraViewModel.imageData
         }
 
         if let imageData = imageData, let uiImage = UIImage(data: imageData), let apiKey = firestoreMan.googleApiKey {
@@ -96,9 +97,16 @@ struct LoadingView: View {
 
         if let visionData = photosSelectionVm.visionData {
             // Generate prompt
-            let openAiPrompt = openAiRequest.generatePromptForImage(tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: photosSelectionVm.imageAddress)
+            var imageAddress: ImageGeoLocationAddress? = nil
+            if photosSelectionVm.imageAddress != nil {
+                imageAddress = photosSelectionVm.imageAddress!
+            } else if cameraViewModel.imageAddress != nil {
+                imageAddress = cameraViewModel.imageAddress!
+            }
+            
+            let openAiPrompt = openAiRequest.generatePromptForImage(tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: imageAddress)
 
-            await callOpenAi(with: openAiPrompt)
+            await callOpenAi(with: openAiPrompt, decrementCreditBy: -2)
         } else {
             // if vision data is not available, then only use custom tags
         }
@@ -158,6 +166,7 @@ struct LoadingView_Previews: PreviewProvider {
             .environmentObject(FirestoreManager())
             .environmentObject(GenerateByPromptViewModel())
             .environmentObject(PhotoSelectionViewModel())
+            .environmentObject(CameraViewModel())
 
         LoadingView()
             .environmentObject(OpenAIConnector())
@@ -165,6 +174,7 @@ struct LoadingView_Previews: PreviewProvider {
             .environmentObject(FirestoreManager())
             .environmentObject(GenerateByPromptViewModel())
             .environmentObject(PhotoSelectionViewModel())
+            .environmentObject(CameraViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

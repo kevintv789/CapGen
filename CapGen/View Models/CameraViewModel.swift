@@ -8,14 +8,31 @@
 import Foundation
 import AVFoundation
 import SwiftUI
+import CoreLocation
 
-class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
+class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, CLLocationManagerDelegate {
+    @Published var locationManager = CLLocationManager()
     @Published var captureSession = AVCaptureSession()
     @Published var preview: AVCaptureVideoPreviewLayer!
     @Published var output = AVCapturePhotoOutput()
     @Published var showAlert: Bool = false
     @Published var isTaken: Bool = false
     @Published var imageData: Data = Data(count: 0)
+    @Published var imageAddress: ImageGeoLocationAddress? = nil
+    @Published var cameraPosition: AVCaptureDevice.Position = .back
+    
+    func resetData() {
+        self.imageData.removeAll()
+        self.imageAddress = nil
+    }
+    
+    func initializeLocation() {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = kCLDistanceFilterNone
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
+    }
     
     func checkPermissions() {
         let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
@@ -48,24 +65,58 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
         do {
             captureSession.beginConfiguration()
             
+            // Remove current inputs
+            // By removing the current inputs before configuring the session with the new camera position, we ensure that only one camera input is active at a time. This way, when you toggle the camera, the capture session will cleanly switch between the front and back cameras without any issues.
+            for input in captureSession.inputs {
+                captureSession.removeInput(input)
+            }
+            
+            for output in captureSession.outputs {
+                captureSession.removeOutput(output)
+            }
+            
             // Add camera input
-            let camera = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back)
-            
-            let deviceInput = try AVCaptureDeviceInput(device: camera!)
-            
-            if captureSession.canAddInput(deviceInput) {
-                captureSession.addInput(deviceInput)
+            if let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: cameraPosition) {
+                let deviceInput = try AVCaptureDeviceInput(device: camera)
+                
+                if captureSession.canAddInput(deviceInput) {
+                    captureSession.addInput(deviceInput)
+                }
+                
+                if captureSession.canAddOutput(output) {
+                    captureSession.addOutput(output)
+                }
+                
+                captureSession.sessionPreset = .photo
             }
             
-            if captureSession.canAddOutput(output) {
-                captureSession.addOutput(output)
-            }
-            
-            captureSession.sessionPreset = .photo
             captureSession.commitConfiguration()
             
         } catch {
             print("Error in starting camera", error.localizedDescription)
+        }
+    }
+    
+    // Toggle the camera position
+    func toggleCamera() {
+        // Make sure capture session is running
+        print("IS RUNNING", captureSession.isRunning)
+        guard captureSession.isRunning else {
+            return
+        }
+        
+        cameraPosition = (cameraPosition == .back) ? .front : .back
+        
+        // Stop session after a timer because stopRunning() should be called before the
+        // picture can be outputted sometimes
+        self.captureSession.stopRunning()
+        
+        // Configure the session with the new camera position
+        configureSession()
+        
+        // Start the session
+        DispatchQueue.global(qos: .background).async {
+            self.captureSession.startRunning()
         }
     }
     
@@ -78,9 +129,9 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
             DispatchQueue.main.async {
                 Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (timer) in
                     self.captureSession.stopRunning()
+                    self.locationManager.stopUpdatingLocation()
                 }
             }
-            
             
             DispatchQueue.main.async {
                 withAnimation {
@@ -102,7 +153,6 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
         }
     }
     
-    // BUG -- this sometimes doesn't work?
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if error != nil {
             print("Error when analyzing photo output", error!.localizedDescription)
@@ -114,7 +164,28 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
             return
         }
         
-        self.imageData = data
+        if let userLocation = locationManager.location?.coordinate {
+            let latitude = userLocation.latitude
+            let longitude = userLocation.longitude
+            // Use the latitude and longitude values as needed
+            
+            let geoLoc = GeoLocation(longitude: longitude, latitude: latitude)
+            fetchLocation(from: geoLoc) { result in
+                self.imageAddress = result
+            }
+        }
+        
+        
+        if let image = UIImage(data: data) {
+            // Mirror the image if the front camera is used
+            if self.cameraPosition == .front {
+                if let mirroredImage = image.mirrored {
+                    self.imageData = mirroredImage.jpegData(compressionQuality: 0.8) ?? data
+                }
+            } else {
+                self.imageData = data
+            }
+        }
     }
     
     // This function saves the captured image to photo album
@@ -128,6 +199,7 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
     func stopSession() {
         DispatchQueue.global(qos: .userInitiated).async {
             self.captureSession.stopRunning()
+            self.locationManager.stopUpdatingLocation()
         }
     }
 }

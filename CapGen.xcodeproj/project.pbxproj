@@ -197,10 +197,11 @@
 		D48460D329EA814900CC1D8C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D48460D229EA814900CC1D8C /* Alamofire */; };
 		D48460D629EA816A00CC1D8C /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = D48460D529EA816A00CC1D8C /* SwiftyJSON */; };
 		D48460DC29EDF19700CC1D8C /* ImageDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460DB29EDF19700CC1D8C /* ImageDataModel.swift */; };
-		D48460DF29F091C300CC1D8C /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460DE29F091C300CC1D8C /* CameraViewController.swift */; };
 		D48460E229F1D55F00CC1D8C /* CustomCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460E129F1D55F00CC1D8C /* CustomCameraView.swift */; };
 		D48460E429F1E40F00CC1D8C /* CameraPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460E329F1E40F00CC1D8C /* CameraPreviewViewController.swift */; };
 		D48460E629F1E51D00CC1D8C /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460E529F1E51D00CC1D8C /* CameraViewModel.swift */; };
+		D48460E829F3089300CC1D8C /* ImageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460E729F3089300CC1D8C /* ImageMetadata.swift */; };
+		D48460EA29F32A3A00CC1D8C /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460E929F32A3A00CC1D8C /* UIImage.swift */; };
 		D490991429BA9189002CBA4F /* SavedCaptionHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */; };
 		D490991629BC5B2E002CBA4F /* SimpleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991529BC5B2E002CBA4F /* SimpleLoadingView.swift */; };
 		D490991929C2697A002CBA4F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991829C2697A002CBA4F /* SearchView.swift */; };
@@ -1018,10 +1019,11 @@
 		D48460CD29E9D95300CC1D8C /* PhotoSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionViewModel.swift; sourceTree = "<group>"; };
 		D48460CF29E9F17300CC1D8C /* ImageRefinementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRefinementView.swift; sourceTree = "<group>"; };
 		D48460DB29EDF19700CC1D8C /* ImageDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataModel.swift; sourceTree = "<group>"; };
-		D48460DE29F091C300CC1D8C /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		D48460E129F1D55F00CC1D8C /* CustomCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCameraView.swift; sourceTree = "<group>"; };
 		D48460E329F1E40F00CC1D8C /* CameraPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewViewController.swift; sourceTree = "<group>"; };
 		D48460E529F1E51D00CC1D8C /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		D48460E729F3089300CC1D8C /* ImageMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMetadata.swift; sourceTree = "<group>"; };
+		D48460E929F32A3A00CC1D8C /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionHomeViewModel.swift; sourceTree = "<group>"; };
 		D490991529BC5B2E002CBA4F /* SimpleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleLoadingView.swift; sourceTree = "<group>"; };
 		D490991829C2697A002CBA4F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -1942,6 +1944,7 @@
 				D4056E27295F659B00D3894D /* View.swift */,
 				D4056E78296E2C1700D3894D /* String.swift */,
 				D4C3E4912982105300C2847A /* Notifications.swift */,
+				D48460E929F32A3A00CC1D8C /* UIImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2170,6 +2173,7 @@
 			children = (
 				D47306CE29993D5E00179FEB /* Helpers.swift */,
 				D490991E29CF6ABB002CBA4F /* Constants.swift */,
+				D48460E729F3089300CC1D8C /* ImageMetadata.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2180,7 +2184,6 @@
 				D48460E029F1D55200CC1D8C /* CustomCamera */,
 				D48460C929E8C75A00CC1D8C /* ImageSelectorView.swift */,
 				D48460CF29E9F17300CC1D8C /* ImageRefinementView.swift */,
-				D48460DE29F091C300CC1D8C /* CameraViewController.swift */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -2661,6 +2664,7 @@
 				D4C3E49829844F7400C2847A /* SupportEmailModel.swift in Sources */,
 				D4056E83296F867D00D3894D /* LaunchView.swift in Sources */,
 				D4373F7B29B5279C00C186B3 /* CaptionViewModel.swift in Sources */,
+				D48460E829F3089300CC1D8C /* ImageMetadata.swift in Sources */,
 				D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */,
 				D4373F8C29B5295F00C186B3 /* BlankCaptionsView.swift in Sources */,
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
@@ -2694,10 +2698,10 @@
 				D4373F9B29B52D0A00C186B3 /* PersonalizeOptionsView.swift in Sources */,
 				D4C3E4902981C4BB00C2847A /* EditCaptionView.swift in Sources */,
 				D4056E2C295F8F0100D3894D /* ToneModel.swift in Sources */,
+				D48460EA29F32A3A00CC1D8C /* UIImage.swift in Sources */,
 				D48460DC29EDF19700CC1D8C /* ImageDataModel.swift in Sources */,
 				D4056ECA29778FB700D3894D /* RefillModalView.swift in Sources */,
 				D4373F7929B18B5900C186B3 /* AppodealProvider.swift in Sources */,
-				D48460DF29F091C300CC1D8C /* CameraViewController.swift in Sources */,
 				D4373FA329B5307A00C186B3 /* PrimaryButtonView.swift in Sources */,
 				D4005DB7295BE0E0004D695D /* ContentView.swift in Sources */,
 				D48460D029E9F17300CC1D8C /* ImageRefinementView.swift in Sources */,

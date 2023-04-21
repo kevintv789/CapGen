@@ -15,6 +15,7 @@ enum ImageSelectionContext {
 }
 
 struct ImageRefinementView: View {
+    @EnvironmentObject var cameraViewModel: CameraViewModel
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var navStack: NavigationStackCompat
@@ -87,7 +88,7 @@ struct ImageRefinementView: View {
         .onAppear {
             // determine which data to read from given the context
             if imageSelectionContext == .camera {
-                self.imageData = photosSelectionVm.capturedImageData
+                self.imageData = cameraViewModel.imageData
             } else {
                 self.imageData = photosSelectionVm.photosPickerData
             }
@@ -119,11 +120,13 @@ struct ImageRefinementView_Previews: PreviewProvider {
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(FirestoreManager())
             .environmentObject(NavigationStackCompat())
+            .environmentObject(CameraViewModel())
 
         ImageRefinementView(imageSelectionContext: .photosPicker)
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(FirestoreManager())
             .environmentObject(NavigationStackCompat())
+            .environmentObject(CameraViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

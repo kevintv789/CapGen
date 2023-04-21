@@ -9,8 +9,9 @@ import SwiftUI
 import NavigationStack
 
 struct CustomCameraView: View {
-    @StateObject private var cameraViewModel = CameraViewModel()
+    @EnvironmentObject var cameraViewModel: CameraViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -23,6 +24,7 @@ struct CustomCameraView: View {
                     // Top right side buttons
                     CameraOptionButtons(onSwitchCameraClick: {
                         // on switch camera click
+                        cameraViewModel.toggleCamera()
                     }, onFlashClick: {
                         // on flash click
                     })
@@ -39,9 +41,9 @@ struct CustomCameraView: View {
                         HStack {
                             Spacer()
                             
-                            // Capture button
+                            // Camera retake
                             CameraRetakeButton() {
-                                // on capture press
+                                // on retake press
                                 cameraViewModel.retakePicture()
                             }
                         }
@@ -69,11 +71,19 @@ struct CustomCameraView: View {
                         CameraNavButton(isTaken: $cameraViewModel.isTaken) {
                             // On save
                             if cameraViewModel.isTaken {
+                                // Reset objects
+                                photoSelectionVm.resetPhotoSelection()
+                                
                                 cameraViewModel.savePicture()
+                                
+                                // fetching image metadata
+                                photoSelectionVm.fetchImageMetadata(imageData: cameraViewModel.imageData)
+                                
+                                // navigate to refinement view
+                                navStack.push(ImageRefinementView(imageSelectionContext: .camera))
+                            } else {
+                                dismiss()
                             }
-                            
-                            dismiss()
-                            
                         }
                         .padding(.bottom)
                         .padding(.leading)
@@ -85,8 +95,13 @@ struct CustomCameraView: View {
                 }
             }
         }
+        .onTapGesture(count: 2) {
+            cameraViewModel.toggleCamera()
+        }
         .onAppear() {
             cameraViewModel.checkPermissions()
+            cameraViewModel.initializeLocation()
+            cameraViewModel.resetData()
         }
         .alert(isPresented: $cameraViewModel.showAlert) {
             Alert(
@@ -104,9 +119,13 @@ struct CustomCameraView_Previews: PreviewProvider {
     static var previews: some View {
         CustomCameraView()
             .environmentObject(NavigationStackCompat())
+            .environmentObject(PhotoSelectionViewModel())
+            .environmentObject(CameraViewModel())
 
         CustomCameraView()
             .environmentObject(NavigationStackCompat())
+            .environmentObject(PhotoSelectionViewModel())
+            .environmentObject(CameraViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
