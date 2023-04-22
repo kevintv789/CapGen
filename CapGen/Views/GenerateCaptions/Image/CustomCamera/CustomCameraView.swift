@@ -123,9 +123,9 @@ struct CustomCameraView: View {
         .onDisappear() {
             DispatchQueue.main.async {
                 Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (timer) in
-                    self.cameraViewModel.captureSession.stopRunning()
                     self.cameraViewModel.locationManager.stopUpdatingLocation()
                     self.cameraViewModel.cameraPosition = .back
+                    self.cameraViewModel.captureSession.stopRunning()
                 }
             }
         }

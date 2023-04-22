@@ -16,16 +16,13 @@ struct CameraPreviewViewController: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let view = UIView(frame: UIScreen.main.bounds)
         DispatchQueue.main.async {
-            DispatchQueue.global(qos: .background).async {
-                // start session before view can load so camera has time to finish loading first
-                cameraModel.captureSession.startRunning()
-            }
-            
             cameraModel.preview = AVCaptureVideoPreviewLayer(session: cameraModel.captureSession)
             cameraModel.preview.frame = view.frame
             
             cameraModel.preview.videoGravity = .resizeAspectFill
             view.layer.addSublayer(cameraModel.preview)
+            
+            cameraModel.startSession()
         }
         
         return view
