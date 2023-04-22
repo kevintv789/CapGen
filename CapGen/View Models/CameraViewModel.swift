@@ -20,6 +20,7 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
     @Published var imageData: Data = Data(count: 0)
     @Published var imageAddress: ImageGeoLocationAddress? = nil
     @Published var cameraPosition: AVCaptureDevice.Position = .back
+    @Published var flashMode: AVCaptureDevice.FlashMode = .off
     
     func resetData() {
         self.imageData.removeAll()
@@ -122,7 +123,14 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
     
     func takePicture() {
         DispatchQueue.global(qos: .background).async {
-            self.output.capturePhoto(with: AVCapturePhotoSettings(), delegate: self)
+            let photoSettings = AVCapturePhotoSettings()
+                   
+            // Set the flash mode
+            if self.output.supportedFlashModes.contains(self.flashMode) {
+                photoSettings.flashMode = self.flashMode
+            }
+            
+            self.output.capturePhoto(with: photoSettings, delegate: self)
             
             // Stop session after a timer because stopRunning() should be called before the
             // picture can be outputted sometimes
@@ -138,6 +146,25 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
                     self.isTaken.toggle()
                 }
             }
+        }
+    }
+    
+    func setZoom(scale: CGFloat) {
+        guard let input = captureSession.inputs.first as? AVCaptureDeviceInput else { return }
+        let device = input.device
+
+        do {
+            try device.lockForConfiguration()
+
+            let minimumZoomFactor: CGFloat = 1.0
+            let maximumZoomFactor = device.activeFormat.videoMaxZoomFactor
+            let currentZoomFactor = device.videoZoomFactor
+            let newZoomFactor = max(minimumZoomFactor, min(currentZoomFactor * scale, maximumZoomFactor))
+
+            device.videoZoomFactor = newZoomFactor
+            device.unlockForConfiguration()
+        } catch {
+            print("Error while setting zoom: \(error.localizedDescription)")
         }
     }
     

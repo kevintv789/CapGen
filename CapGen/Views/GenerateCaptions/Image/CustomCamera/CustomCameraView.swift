@@ -14,6 +14,8 @@ struct CustomCameraView: View {
     @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
     @Environment(\.dismiss) var dismiss
     
+    @State private var lastScaleValue: CGFloat = 1.0
+    
     var body: some View {
         ZStack {
             CameraPreviewViewController(cameraModel: cameraViewModel)
@@ -27,10 +29,15 @@ struct CustomCameraView: View {
                         cameraViewModel.toggleCamera()
                     }, onFlashClick: {
                         // on flash click
+                        if cameraViewModel.flashMode == .on {
+                            cameraViewModel.flashMode = .off
+                        } else {
+                            cameraViewModel.flashMode = .on
+                        }
                     })
                     .padding(.top)
                 }
-               
+                
                 
                 // This spacer forces the below elements to be at the bottom
                 Spacer()
@@ -98,6 +105,16 @@ struct CustomCameraView: View {
         .onTapGesture(count: 2) {
             cameraViewModel.toggleCamera()
         }
+        .gesture(MagnificationGesture()
+            .onChanged { value in
+                let delta = value / lastScaleValue
+                lastScaleValue = value
+                cameraViewModel.setZoom(scale: delta)
+            }
+            .onEnded { value in
+                lastScaleValue = 1.0
+            }
+        )
         .onAppear() {
             cameraViewModel.checkPermissions()
             cameraViewModel.initializeLocation()
@@ -186,6 +203,7 @@ struct CameraCaptureButton: View {
 }
 
 struct CameraOptionButtons: View {
+    @EnvironmentObject var cameraViewModel: CameraViewModel
     let onSwitchCameraClick: () -> Void
     let onFlashClick: () -> Void
     
@@ -201,12 +219,13 @@ struct CameraOptionButtons: View {
                     .resizable()
                     .frame(width: size, height: size)
             }
+            .padding(.bottom, 10)
            
             Button {
                 // on flash
                 onFlashClick()
             } label: {
-                Image("no-flash")
+                Image(cameraViewModel.flashMode == .off ? "no-flash" : "flash")
                     .resizable()
                     .frame(width: size, height: size)
             }
