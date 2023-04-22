@@ -120,6 +120,9 @@ struct CustomCameraView: View {
             cameraViewModel.initializeLocation()
             cameraViewModel.resetData()
         }
+        .onDisappear() {
+            cameraViewModel.stopSession()
+        }
         .alert(isPresented: $cameraViewModel.showAlert) {
             Alert(
                 title: Text("Camera Permission Denied"),

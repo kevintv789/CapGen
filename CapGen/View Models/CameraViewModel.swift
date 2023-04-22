@@ -25,6 +25,8 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
     func resetData() {
         self.imageData.removeAll()
         self.imageAddress = nil
+        self.isTaken = false
+        self.showAlert = false
     }
     
     func initializeLocation() {
