@@ -23,7 +23,7 @@ extension View {
     func dropInAndOutAnimation(value: Bool) -> some View {
         animation(.easeInOut(duration: 0.35), value: value)
     }
-    
+
     func placeholder<Content: View>(
         when shouldShow: Bool,
         alignment: Alignment = .leading,

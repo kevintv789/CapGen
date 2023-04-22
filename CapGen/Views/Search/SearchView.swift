@@ -5,24 +5,24 @@
 //  Created by Kevin Vu on 3/15/23.
 //
 
-import SwiftUI
-import NavigationStack
 import Heap
+import NavigationStack
+import SwiftUI
 
 struct SearchView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var searchVm: SearchViewModel
     @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var firestoreManager: FirestoreManager
-    
+
     @State var totalCaptions: [CaptionModel] = []
     @State var totalFolders: [FolderModel] = []
     @State var showCaptionDeleteModal: Bool = false
-    
+
     var body: some View {
         ZStack(alignment: .top) {
             Color.ui.cultured.ignoresSafeArea(.all)
-            
+
             VStack {
                 // top header area with search bar
                 Rectangle()
@@ -30,14 +30,14 @@ struct SearchView: View {
                     .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT / 7)
                     .ignoresSafeArea()
                     .overlay(alignment: .top) {
-                        SearchInputView() {
+                        SearchInputView {
                             // on cancel take user back to the previous screen
                             self.navStack.pop(to: .previous)
                         }
-                            .padding(.horizontal)
-                            .padding(.top)
+                        .padding(.horizontal)
+                        .padding(.top)
                     }
-                
+
                 if searchVm.searchedText.isEmpty {
                     // empty view
                     EmptySearchResultsView(title: "Looking for something specific?", subtitle: "Type your search term above and we'll scour our content for any captions that match your keyword.")
@@ -51,20 +51,19 @@ struct SearchView: View {
                         .padding(.top, -40)
                         .ignoresSafeArea(.all)
                 }
-                
             }
         }
         .onReceive(AuthManager.shared.userManager.$user, perform: { user in
             if let user = user {
                 self.totalCaptions.removeAll()
-                
+
                 self.totalFolders = user.folders
                 let captionsPerFolder = user.folders.compactMap { $0.captions }
-                
+
                 captionsPerFolder.forEach { captions in
                     self.totalCaptions.append(contentsOf: captions)
                 }
-                
+
                 // Sort by most recent created
                 let df = DateFormatter()
                 df.dateFormat = "MMM d, h:mm a"
@@ -73,7 +72,7 @@ struct SearchView: View {
         })
         .onReceive(searchVm.$searchedText) { searchText in
             let searchUndercase = searchText.lowercased()
-            
+
             /**
              Filer based on
              - Title
@@ -82,34 +81,33 @@ struct SearchView: View {
              - Folder name
              - Folder type
              */
-            searchVm.searchedCaptions = totalCaptions.filter({ caption in
+            searchVm.searchedCaptions = totalCaptions.filter { caption in
                 let doesTitleMatch = caption.title.lowercased().contains(searchUndercase)
                 let doesCaptionMatch = caption.captionDescription.lowercased().contains(searchUndercase)
-                
+
                 // Get a one dimensional map of tone's descriptions and title
-                let tonesDescription = caption.tones.compactMap({ $0.description.lowercased() })
-                let tonesTitle = caption.tones.compactMap({ $0.title.lowercased() })
-                
+                let tonesDescription = caption.tones.compactMap { $0.description.lowercased() }
+                let tonesTitle = caption.tones.compactMap { $0.title.lowercased() }
+
                 // combine both into one call
                 let doesTonesMatch = tonesDescription.contains(where: { $0.contains(searchUndercase) }) || tonesTitle.contains(where: { $0.contains(searchUndercase) })
-                
+
                 // get folder information so we can match on folder name and type
                 let captionFolderId = caption.folderId
-                
+
                 // get the folder from a filtered caption
                 let filteredFolder = totalFolders.first(where: { $0.id == captionFolderId })
-                
+
                 var doesFolderNameMatch = false
                 var doesFolderTypeMatch = false
-                
+
                 if let filteredFolder = filteredFolder {
                     doesFolderNameMatch = filteredFolder.name.lowercased().contains(searchUndercase)
                     doesFolderTypeMatch = filteredFolder.folderType.rawValue.lowercased().contains(searchUndercase)
                 }
-                
+
                 return doesTitleMatch || doesCaptionMatch || doesTonesMatch || doesFolderNameMatch || doesFolderTypeMatch
-            })
-        
+            }
         }
         // Show caption delete modal
         .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
@@ -122,7 +120,7 @@ struct SearchView: View {
                             if let captionToBeRemovedIndex = searchVm.searchedCaptions.firstIndex(where: { $0.id == captionToBeRemoved.id }) {
                                 self.searchVm.searchedCaptions.remove(at: captionToBeRemovedIndex)
                             }
-                           
+
                             folderVm.resetCaptionToBeDeleted()
                             self.showCaptionDeleteModal = false
                         }
@@ -134,10 +132,9 @@ struct SearchView: View {
                 self.showCaptionDeleteModal = false
             }
         }
-        .onAppear() {
+        .onAppear {
             Heap.track("onAppear SearchView")
         }
-       
     }
 }
 
@@ -148,7 +145,7 @@ struct SearchView_Previews: PreviewProvider {
             .environmentObject(SearchViewModel())
             .environmentObject(FolderViewModel())
             .environmentObject(FirestoreManager())
-        
+
         SearchView()
             .environmentObject(NavigationStackCompat())
             .environmentObject(SearchViewModel())
@@ -161,10 +158,10 @@ struct SearchView_Previews: PreviewProvider {
 
 struct SearchInputView: View {
     @EnvironmentObject var searchVm: SearchViewModel
-    
+
     var onCancelSearch: () -> Void
     @FocusState var isFocused: Bool
-    
+
     var body: some View {
         HStack {
             RoundedRectangle(cornerRadius: 12)
@@ -200,13 +197,13 @@ struct SearchInputView: View {
                     }
                     .padding()
                 )
-            
+
             Button(action: {
                 Haptics.shared.play(.soft)
                 onCancelSearch()
                 hideKeyboard()
                 searchVm.resetSearchConfigs()
-                
+
                 Heap.track("onClick SearchView - Cancel button clicked")
             }, label: {
                 Text("Cancel")
@@ -216,7 +213,7 @@ struct SearchInputView: View {
             })
             .padding(.leading, 15)
         }
-        .onAppear() {
+        .onAppear {
             // only set focus automatically if user isn't already searching for something
             if searchVm.searchedText.isEmpty {
                 self.isFocused = true

@@ -6,9 +6,9 @@
 //
 
 import FirebaseAuth
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 struct HomeView: View {
     @EnvironmentObject var authManager: AuthManager
@@ -59,10 +59,12 @@ struct HomeView: View {
                             Haptics.shared.play(.soft)
                         })
                     }
+                    .padding(.horizontal)
 
                     // Greetings view
                     GreetingsHomeView(userName: self.userFirstName ?? "user")
                         .padding()
+                        .padding(.horizontal)
 
                     // Credits view
                     Button {
@@ -71,21 +73,40 @@ struct HomeView: View {
                     } label: {
                         CreditsView(creditAmount: self.creditAmount ?? 0)
                     }
+                    .padding(.horizontal)
 
-                    // Generate captions button
-                    GenerateCaptionsButtonView(title: "Create captions with a prompt", imgName: "gen_captions_robot") {
-                        self.generateByPromptVm.resetAll()
-                        
-                        if let creditAmount = self.creditAmount, creditAmount < 1 {
-                            self.showCreditsDepletedBottomSheet = true
-                        } else {
-                            // Navigate to generate captions views
-                            self.navStack.push(EnterPromptView())
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            // Generate catpions via Prompt button
+                            GenerateCaptionsButtonView(title: "Create captions with a prompt", imgName: "gen_captions_robot", requiredCredits: 1) {
+                                self.generateByPromptVm.resetAll()
+
+                                if let creditAmount = self.creditAmount, creditAmount < 1 {
+                                    self.showCreditsDepletedBottomSheet = true
+                                } else {
+                                    // Navigate to generate captions views
+                                    self.navStack.push(EnterPromptView())
+                                }
+                            }
+                            .padding(.trailing)
+
+                            // Generate captions via Images button
+                            GenerateCaptionsButtonView(title: "Create captions using your images", imgName: "camera_robot", requiredCredits: 2) {
+                                self.generateByPromptVm.resetAll()
+
+                                if let creditAmount = self.creditAmount, creditAmount < 2 {
+                                    self.showCreditsDepletedBottomSheet = true
+                                } else {
+                                    // Navigate to generate captions views
+                                    self.navStack.push(ImageSelectorView())
+                                }
+                            }
                         }
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
-                    .padding()
+                    .ignoresSafeArea(.all)
                 }
-                .padding(.horizontal)
 
                 Spacer()
             }
@@ -110,7 +131,7 @@ struct HomeView: View {
             if authManager.isSignedIn ?? false {
                 firestoreManager.fetchKey()
             }
-            
+
             Heap.track("onAppear HomeView")
         }
         .onReceive(firestoreManager.$appError, perform: { value in
@@ -128,10 +149,10 @@ struct HomeView: View {
 
                 // Retrieves user's credit amount
                 self.creditAmount = user.credits
-                
+
                 // Map Firebase User ID to Heap
                 Heap.identify(user.id)
-                Heap.addUserProperties([ "email": user.email, "name": user.fullName ])
+                Heap.addUserProperties(["email": user.email, "name": user.fullName])
             }
         }
         // show the depleted credit amount modal
@@ -161,15 +182,15 @@ struct HomeView: View {
                 if !folderVm.currentFolder.id.isEmpty {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = authManager.userManager.user?.folders ?? []
-                    
+
                     firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {
                         withAnimation {
                             self.showFolderDeleteModal = false
-                            Heap.track("onClick HomeView - Successfully deleted folder", withProperties: [ "folder_to_delete": folderVm.currentFolder ])
+                            Heap.track("onClick HomeView - Successfully deleted folder", withProperties: ["folder_to_delete": folderVm.currentFolder])
                         }
                     }
                 }
-                
+
             })
         } onClickExit: {
             withAnimation {
@@ -185,8 +206,8 @@ struct HomeView: View {
                         withAnimation {
                             folderVm.resetCaptionToBeDeleted()
                             self.showCaptionDeleteModal = false
-                            
-                            Heap.track("onClick HomeView - Successfully deleted caption", withProperties: [ "caption_to_delete": captionToBeRemoved ])
+
+                            Heap.track("onClick HomeView - Successfully deleted caption", withProperties: ["caption_to_delete": captionToBeRemoved])
                         }
                     }
                 }
@@ -343,6 +364,7 @@ struct CreditsTextView: View {
 struct GenerateCaptionsButtonView: View {
     let title: String
     let imgName: String
+    let requiredCredits: Int
     let action: () -> Void
 
     var body: some View {
@@ -350,49 +372,50 @@ struct GenerateCaptionsButtonView: View {
             Haptics.shared.play(.soft)
             action()
         } label: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(Color.ui.middleBluePurple)
-                    .frame(width: 220, height: 220)
-                    .shadow(color: Color.ui.richBlack.opacity(0.45), radius: 4, x: 2, y: 4)
-                    .overlay(
-                        VStack(spacing: 0) {
-                            HStack {
-                                Text(title)
-                                    .font(.ui.headline)
-                                    .foregroundColor(.ui.cultured)
-                                    .multilineTextAlignment(.leading)
-
-                                Spacer()
-                                    .frame(width: 20)
-
-                                Image(systemName: "plus")
-                                    .resizable()
-                                    .frame(width: 15, height: 15)
-                                    .foregroundColor(.ui.cultured)
-                                    .background(
-                                        Circle()
-                                            .fill(Color.ui.lavenderBlue)
-                                            .frame(width: 30, height: 30)
-                                    )
-                            }
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color.ui.middleBluePurple)
+                .frame(width: 220, height: 220)
+                .shadow(color: Color.ui.richBlack.opacity(0.45), radius: 4, x: 2, y: 4)
+                .overlay(
+                    VStack(spacing: 0) {
+                        Text(title)
+                            .font(.ui.headline)
+                            .foregroundColor(.ui.cultured)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
                             .padding()
 
-                            Spacer()
-                        }
-                    )
+                        ZStack {
+                            Circle()
+                                .fill(Color.ui.lavenderBlue)
+                                .frame(width: 135, height: 135)
+                                .blur(radius: 35)
 
-                Image(imgName)
-                    .resizable()
-                    .frame(width: 170, height: 170)
-                    .background(
-                        Circle()
-                            .fill(Color.ui.lavenderBlue)
-                            .frame(width: 150, height: 150)
-                            .blur(radius: 35)
-                    )
-                    .padding(.top, 45)
-            }
+                            Image(imgName)
+                                .resizable()
+                                .frame(width: 135, height: 135)
+                        }
+                        .padding(-20)
+
+                        // Coin image
+                        if requiredCredits > 0 {
+                            VStack {
+                                Spacer()
+
+                                HStack(spacing: -10) {
+                                    Spacer()
+
+                                    ForEach(0 ..< requiredCredits, id: \.self) { _ in
+                                        Image("coin-icon")
+                                            .resizable()
+                                            .frame(width: 50, height: 45)
+                                            .padding(.bottom, 10)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                )
         }
     }
 }

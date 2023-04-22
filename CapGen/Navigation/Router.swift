@@ -6,9 +6,9 @@
 //
 
 import Foundation
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 let HOME_SCREEN = "homeScreen"
 

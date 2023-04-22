@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 2/28/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 struct CaptionOptimizationBottomSheetView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
@@ -56,8 +56,8 @@ struct CaptionOptimizationBottomSheetView: View {
                         Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
                             self.isSuccessfullySaved = false
                         }
-                        
-                        Heap.track("onClick CaptionOptimizationBottomSheet - Apply button clicked, save caption to folder success", withProperties: [ "folders": captionsToSaveWithFolderId, "caption": captionVm.selectedCaption.captionDescription ])
+
+                        Heap.track("onClick CaptionOptimizationBottomSheet - Apply button clicked, save caption to folder success", withProperties: ["folders": captionsToSaveWithFolderId, "caption": captionVm.selectedCaption.captionDescription])
                     }
                 }
             }
@@ -79,8 +79,8 @@ struct CaptionOptimizationBottomSheetView: View {
                         {
                             // on click, take user to edit caption screen
                             self.navStack.push(EditCaptionView(context: .optimization))
-                            
-                            Heap.track("onClick CaptionOptimizationBottomSheet - Caption card clicked, pushing to Edit screen", withProperties: [ "caption": captionVm.selectedCaption.captionDescription ])
+
+                            Heap.track("onClick CaptionOptimizationBottomSheet - Caption card clicked, pushing to Edit screen", withProperties: ["caption": captionVm.selectedCaption.captionDescription])
                         }
                         .frame(maxHeight: 250)
                         .padding(.horizontal, 25)
@@ -107,7 +107,7 @@ struct CaptionOptimizationBottomSheetView: View {
                 folderVm.resetFolderStorage()
                 self.isSavingToFolder = false
                 self.isSuccessfullySaved = true
-                
+
                 Heap.track("onDisappear CaptionOptimizationBottomSheet")
             }
             // Create drag gesture to rotate between views
@@ -127,8 +127,8 @@ struct CaptionOptimizationBottomSheetView: View {
             )
             .padding(.top)
         }
-        .onAppear() {
-            Heap.track("onAppear CaptionOptimizationBottomSheet", withProperties: [ "caption": captionVm.selectedCaption.captionDescription ])
+        .onAppear {
+            Heap.track("onAppear CaptionOptimizationBottomSheet", withProperties: ["caption": captionVm.selectedCaption.captionDescription])
         }
     }
 }
@@ -278,8 +278,8 @@ struct SocialMediaGridView: View {
                         UIPasteboard.general.string = String(captionVm.selectedCaption.captionDescription)
                         openSocialMediaLink(for: sp.title)
                         Haptics.shared.play(.soft)
-                        
-                        Heap.track("onClick CaptionOptimizationBottomSheet - Copy & Go clicked", withProperties: [ "social_media_platform": sp.title, "caption": captionVm.selectedCaption.captionDescription ])
+
+                        Heap.track("onClick CaptionOptimizationBottomSheet - Copy & Go clicked", withProperties: ["social_media_platform": sp.title, "caption": captionVm.selectedCaption.captionDescription])
                     } label: {
                         ZStack {
                             Circle()
@@ -306,7 +306,7 @@ struct ApplyButtonView: View {
         Button {
             Haptics.shared.play(.soft)
             onApplyClick()
-            
+
         } label: {
             Text("\(isLoading ? "" : "Apply")")
                 .font(.ui.headline)

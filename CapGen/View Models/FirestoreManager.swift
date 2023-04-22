@@ -14,6 +14,7 @@ class FirestoreManager: ObservableObject {
     @Published var appodealAppId: String?
     @Published var appStoreModel: AppStoreModel?
     @Published var appError: ErrorType? = nil
+    @Published var googleApiKey: String?
 
     var snapshotListener: ListenerRegistration?
 
@@ -33,6 +34,12 @@ class FirestoreManager: ObservableObject {
                 self.appStoreModel = AppStoreModel(storeId: appStoreId ?? "", website: website ?? "")
             }
         }
+
+        fetch(from: "Secrets", documentId: "GOOGLE_CLOUD") { data in
+            if let data = data {
+                self.googleApiKey = data["Key"] as? String ?? nil
+            }
+        }
     }
 
     func incrementCredit(for uid: String?) {
@@ -47,7 +54,7 @@ class FirestoreManager: ObservableObject {
         ])
     }
 
-    func decrementCredit(for uid: String?) {
+    func decrementCredit(for uid: String?, value: Int64) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             return
@@ -55,7 +62,7 @@ class FirestoreManager: ObservableObject {
 
         let docRef = db.collection("Users").document("\(userId)")
         docRef.updateData([
-            "credits": FieldValue.increment(Int64(-1)),
+            "credits": FieldValue.increment(value),
         ])
     }
 
@@ -85,10 +92,10 @@ class FirestoreManager: ObservableObject {
 
     func getCaptionsCount() -> Int {
         var count = 0
-        
+
         if let user = AuthManager.shared.userManager.user {
             let totalCaptions = user.folders.map { $0.captions }
-            
+
             totalCaptions.forEach { captions in
                 count += captions.count
             }
@@ -252,7 +259,7 @@ class FirestoreManager: ObservableObject {
                 var captionToSave = folder.caption as CaptionModel
                 captionToSave.folderId = newFolderId
                 captionToSave.id = UUID().uuidString // generate a new ID for all new captions being saved
-                
+
                 if captionToSave.captionLength.isEmpty {
                     captionToSave.captionLength = captionLengths.first!.type
                 }

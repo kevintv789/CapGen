@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 2/21/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 enum FolderViewContext {
     case saveToFolder, view
@@ -75,8 +75,8 @@ struct FolderGridView: View {
                                     self.folderVm.captionFolderStorage.remove(at: indexOfSavedCaption)
                                 }
                             }
-                            
-                            Heap.track("onClick FolderGridView - Folder clicked", withProperties: [ "context": context, "folder": [ "name": folders[index].name, "folder_type": folders[index].folderType, "captions_count": folders[index].captions.count, "id": folders[index].id ] ])
+
+                            Heap.track("onClick FolderGridView - Folder clicked", withProperties: ["context": context, "folder": ["name": folders[index].name, "folder_type": folders[index].folderType, "captions_count": folders[index].captions.count, "id": folders[index].id]])
                         }
                         .disabled(disableTap)
 
@@ -84,8 +84,8 @@ struct FolderGridView: View {
                             folderVm.currentFolder = folder
                             self.isEditing = true
                             self.showFolderBottomSheet = true
-                            
-                            Heap.track("onClick FolderGridView Custom Menu - Edit button clicked", withProperties: [ "folder": folderVm.currentFolder ])
+
+                            Heap.track("onClick FolderGridView Custom Menu - Edit button clicked", withProperties: ["folder": folderVm.currentFolder])
 
                         } onMenuOpen: {
                             shareableData = mapShareableDataFromCaptionList(captions: folder.captions)
@@ -93,8 +93,8 @@ struct FolderGridView: View {
                             // on delete, remove from firebase
                             folderVm.currentFolder = folder
                             folderVm.isDeleting.toggle()
-                            
-                            Heap.track("onClick FolderGridView Custom Menu - Delete button clicked, show pop-up", withProperties: [ "folder": folderVm.currentFolder ])
+
+                            Heap.track("onClick FolderGridView Custom Menu - Delete button clicked, show pop-up", withProperties: ["folder": folderVm.currentFolder])
                         }
                         .disabled(disableTap)
                     }
@@ -258,30 +258,30 @@ struct FolderCustomMenu: View {
     var onEdit: () -> Void
     var onMenuOpen: () -> Void
     var onDelete: () -> Void
-    
+
     var body: some View {
         if shouldShowDelete {
             CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: $shareableData, socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
                             edit: {
-                onEdit()
-                
-            }, delete: {
-                onDelete()
-            }, onMenuOpen: {
-                onMenuOpen()
-            })
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding(.leading, -33)
-            .padding(.top)
+                                onEdit()
+
+                            }, delete: {
+                                onDelete()
+                            }, onMenuOpen: {
+                                onMenuOpen()
+                            })
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            .padding(.leading, -33)
+                            .padding(.top)
         } else {
             CustomMenuPopup(menuTheme: .dark, orientation: .vertical, shareableData: .constant(nil), socialMediaPlatform: .constant(nil), size: .medium, opacity: 0.25,
                             edit: {
-                onEdit()
-                
-            })
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding(.leading, -33)
-            .padding(.top)
+                                onEdit()
+
+                            })
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            .padding(.leading, -33)
+                            .padding(.top)
         }
     }
 }

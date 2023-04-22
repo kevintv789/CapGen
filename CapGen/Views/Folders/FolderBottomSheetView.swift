@@ -5,8 +5,8 @@
 //  Created by Kevin Vu on 2/22/23.
 //  Used for creation and editing a folder
 
-import SwiftUI
 import Heap
+import SwiftUI
 
 struct FolderBottomSheetView: View {
     @Environment(\.dismiss) var dismiss
@@ -79,7 +79,7 @@ struct FolderBottomSheetView: View {
                             .font(.ui.largeTitleSm)
                             .foregroundColor(.ui.richBlack)
                             .padding(.bottom, 40)
-                        
+
                         // Folder name input
                         FolderNameInput(folderName: $folderName, isError: $isFolderNameError)
                             .padding(.bottom, 20)
@@ -88,10 +88,10 @@ struct FolderBottomSheetView: View {
                                     scrollProxy.scrollTo("submit-btn", anchor: .bottom)
                                 }
                             }
-                        
+
                         // Choose a platform 3x3 grid
                         PlatformGridView(selectedPlatform: $selectedPlatform)
-                        
+
                         // Submit button
                         PrimaryButtonView(title: "Create", isLoading: $isLoading) {
                             // Run API to create the specified folder
@@ -100,7 +100,7 @@ struct FolderBottomSheetView: View {
                         .id("submit-btn")
                         .frame(width: SCREEN_WIDTH * 0.8, height: 55)
                         .padding(.top)
-                        
+
                         Spacer()
                     }
                     .padding()

@@ -5,8 +5,8 @@
 //  Created by Kevin Vu on 1/24/23.
 //
 
-import SwiftUI
 import Heap
+import SwiftUI
 
 enum MenuTheme {
     case light, dark
@@ -51,13 +51,13 @@ struct CustomMenuPopup: View {
                     Label("Copy", systemImage: "doc.on.doc")
                 }
             }
-            
+
             if shareableData != nil {
                 ShareLink(item: shareableData!.item, subject: Text(shareableData!.subject)) {
                     Label("Share", systemImage: "arrowshape.turn.up.right")
                 }
             }
-            
+
             if socialMediaPlatform != nil && onCopyAndGo != nil {
                 Button {
                     Haptics.shared.play(.soft)
