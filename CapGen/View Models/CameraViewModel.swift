@@ -103,7 +103,6 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
     // Toggle the camera position
     func toggleCamera() {
         // Make sure capture session is running
-        print("IS RUNNING", captureSession.isRunning)
         guard captureSession.isRunning else {
             return
         }
@@ -112,14 +111,8 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
         
         // Stop session after a timer because stopRunning() should be called before the
         // picture can be outputted sometimes
-        self.captureSession.stopRunning()
-        
-        // Configure the session with the new camera position
-        configureSession()
-        
-        // Start the session
-        DispatchQueue.global(qos: .background).async {
-            self.captureSession.startRunning()
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.configureSession()
         }
     }
     

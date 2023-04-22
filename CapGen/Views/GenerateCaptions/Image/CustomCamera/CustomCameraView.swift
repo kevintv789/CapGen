@@ -121,7 +121,13 @@ struct CustomCameraView: View {
             cameraViewModel.resetData()
         }
         .onDisappear() {
-            cameraViewModel.stopSession()
+            DispatchQueue.main.async {
+                Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (timer) in
+                    self.cameraViewModel.captureSession.stopRunning()
+                    self.cameraViewModel.locationManager.stopUpdatingLocation()
+                    self.cameraViewModel.cameraPosition = .back
+                }
+            }
         }
         .alert(isPresented: $cameraViewModel.showAlert) {
             Alert(
