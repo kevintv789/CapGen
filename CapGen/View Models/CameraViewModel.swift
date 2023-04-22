@@ -65,6 +65,11 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
     }
     
     func configureSession() {
+        // Stop the session before making any changes
+        if captureSession.isRunning {
+            captureSession.stopRunning()
+        }
+        
         do {
             captureSession.beginConfiguration()
             
@@ -111,9 +116,9 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
         
         // Stop session after a timer because stopRunning() should be called before the
         // picture can be outputted sometimes
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.configureSession()
-        }
+        self.configureSession()
+        
+        self.startSession()
     }
     
     func takePicture() {
@@ -221,7 +226,14 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
     func stopSession() {
         DispatchQueue.global(qos: .userInitiated).async {
             self.captureSession.stopRunning()
-            self.locationManager.stopUpdatingLocation()
+        }
+    }
+    
+    func startSession() {
+        DispatchQueue.global(qos: .background).async {
+            if !self.captureSession.isRunning {
+                self.captureSession.startRunning()
+            }
         }
     }
 }
