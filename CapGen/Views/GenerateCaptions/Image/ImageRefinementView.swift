@@ -25,6 +25,7 @@ struct ImageRefinementView: View {
     @State private var imageData: Data? = nil
     @State private var imageHeight: CGFloat = 0
     @State private var isFullScreenImage: Bool = false
+    @State private var showTagsModal: Bool = false
 
     var body: some View {
         ZStack {
@@ -65,6 +66,7 @@ struct ImageRefinementView: View {
                         // Add tags button
                         Button {
                             // on add tag click, show bottom sheet
+                            showTagsModal.toggle()
                         } label: {
                             Text("+ Add tags")
                                 .foregroundColor(.ui.middleBluePurple)
@@ -84,6 +86,9 @@ struct ImageRefinementView: View {
                     Spacer()
                 }
             }
+        }
+        .fullScreenCover(isPresented: $showTagsModal) {
+            TagsBottomSheetModal()
         }
         .onAppear {
             // determine which data to read from given the context
