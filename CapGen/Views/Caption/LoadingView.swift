@@ -16,6 +16,7 @@ struct LoadingView: View {
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
     @EnvironmentObject var cameraViewModel: CameraViewModel
+    @EnvironmentObject var taglistVM: TaglistViewModel
 
     var captionGenType: CaptionGenerationType = .prompt
 
@@ -104,7 +105,7 @@ struct LoadingView: View {
                 imageAddress = cameraViewModel.imageAddress!
             }
             
-            let openAiPrompt = openAiRequest.generatePromptForImage(tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: imageAddress)
+            let openAiPrompt = openAiRequest.generatePromptForImage(tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: imageAddress, customTags: taglistVM.selectedTags)
 
             await callOpenAi(with: openAiPrompt, decrementCreditBy: -2)
         } else {
@@ -167,6 +168,7 @@ struct LoadingView_Previews: PreviewProvider {
             .environmentObject(GenerateByPromptViewModel())
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(CameraViewModel())
+            .environmentObject(TaglistViewModel())
 
         LoadingView()
             .environmentObject(OpenAIConnector())
@@ -175,6 +177,7 @@ struct LoadingView_Previews: PreviewProvider {
             .environmentObject(GenerateByPromptViewModel())
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(CameraViewModel())
+            .environmentObject(TaglistViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
