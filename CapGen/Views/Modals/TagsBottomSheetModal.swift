@@ -8,10 +8,14 @@
 import SwiftUI
 
 struct TagsBottomSheetModal: View {
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var taglistVM: TaglistViewModel
 
     @State private var tagInput: String = ""
     @State private var filterToSelectedTag: Bool = false
+    
+    // Temp selected tags is used to create a mutable selected list that can be removed and changed at will
+    @State private var tempSelectedTags: [TagsModel] = []
     
     var body: some View {
         ZStack {
@@ -21,8 +25,11 @@ struct TagsBottomSheetModal: View {
                 TagsBottomSheetHeader(title: "Tag & Refine") {
                     // on reset
                     taglistVM.resetSelectedTags()
+                    tempSelectedTags.removeAll()
                 } onSaveClick: {
-                    // on save
+                    // on save, copy temp selected tags list to official selected tags
+                    taglistVM.selectedTags = tempSelectedTags
+                    dismiss()
                 }
                 
                 // Search input
@@ -32,13 +39,13 @@ struct TagsBottomSheetModal: View {
                         
                         if filterToSelectedTag {
                             // further filter the list of selected tags
-                            filteredTags = taglistVM.selectedTags.filter { tag in
-                                return tag.title.lowercased().contains(tagInput.lowercased()) || tagInput.isEmpty
+                            filteredTags = tempSelectedTags.filter { tag in
+                                return tag.title.lowercased().contains(text.lowercased()) || text.isEmpty
                             }
                         } else {
                             // filters the list of default tags on search
                             filteredTags = defaultTags.filter({ tag in
-                                return tag.title.lowercased().contains(tagInput.lowercased()) || tagInput.isEmpty
+                                return tag.title.lowercased().contains(text.lowercased()) || text.isEmpty
                             })
                         }
                         
@@ -47,7 +54,7 @@ struct TagsBottomSheetModal: View {
                     }
                 
                 // Divider with tags information
-                TagsInfoView(filterToSelectedTag: $filterToSelectedTag)
+                TagsInfoView(filterToSelectedTag: $filterToSelectedTag, selectedTagsCount: tempSelectedTags.count)
                     .frame(width: SCREEN_WIDTH * 0.85)
                     .padding(.vertical)
                 
@@ -61,7 +68,13 @@ struct TagsBottomSheetModal: View {
                                     ForEach(rows) { tag in
                                         Button {
                                             withAnimation {
-                                                taglistVM.addTagToList(tag: tag)
+                                                // Remove tag from list if user taps on the tag again
+                                                // otherwise add it to the list as a new tag
+                                                if let index = tempSelectedTags.firstIndex(where: { $0.id == tag.id }) {
+                                                    self.tempSelectedTags.remove(at: index)
+                                                } else {
+                                                    self.tempSelectedTags.append(tag)
+                                                }
                                             }
                                         } label: {
                                             HStack(spacing: 10) {
@@ -69,7 +82,7 @@ struct TagsBottomSheetModal: View {
                                                     .foregroundColor(.ui.cultured)
                                                     .font(.ui.headlineMediumSm)
                                                 
-                                                if taglistVM.selectedTags.contains(tag) {
+                                                if tempSelectedTags.contains(tag) {
                                                     Image("x-white")
                                                         .resizable()
                                                         .frame(width: 10, height: 10)
@@ -77,7 +90,7 @@ struct TagsBottomSheetModal: View {
                                             }
                                         }
                                         .padding(10)
-                                        .if(taglistVM.selectedTags.contains(tag), transform: { view in
+                                        .if(tempSelectedTags.contains(tag), transform: { view in
                                             return view
                                                 .background(
                                                     ZStack {
@@ -90,7 +103,7 @@ struct TagsBottomSheetModal: View {
                                                         .shadow(color: Color.ui.shadowGray.opacity(0.4), radius: 4, x: 0, y: 4)
                                                 )
                                         })
-                                        .if(!taglistVM.selectedTags.contains(tag), transform: { view in
+                                        .if(!tempSelectedTags.contains(tag), transform: { view in
                                             return view
                                                 .background(
                                                     RoundedRectangle(cornerRadius: 10)
@@ -112,7 +125,11 @@ struct TagsBottomSheetModal: View {
             }
         }
         .onAppear() {
+            taglistVM.updateMutableTags(tags: defaultTags)
             self.taglistVM.getTags()
+            
+            // copy selected tags to temp selected tags so users will get the current list of tags
+            self.tempSelectedTags = taglistVM.selectedTags
         }
         .onDisappear() {
             self.taglistVM.resetToDefault()
@@ -121,7 +138,7 @@ struct TagsBottomSheetModal: View {
             // Filter list to selected tags
             withAnimation {
                 if isFilter {
-                    taglistVM.updateMutableTags(tags: taglistVM.selectedTags)
+                    taglistVM.updateMutableTags(tags: tempSelectedTags)
                 } else {
                     taglistVM.updateMutableTags(tags: defaultTags)
                 }
@@ -222,6 +239,7 @@ struct TagInputField: View {
                         .padding(.leading, 8)
                         .font(.ui.headline)
                         .foregroundColor(.ui.richBlack)
+                        .autocorrectionDisabled(true)
 
                     if !tagInput.isEmpty {
                         Button {
@@ -242,6 +260,7 @@ struct TagInputField: View {
 struct TagsInfoView: View {
     @EnvironmentObject var taglistVM: TaglistViewModel
     @Binding var filterToSelectedTag: Bool
+    var selectedTagsCount: Int = 0
     
     var body: some View {
         VStack {
@@ -264,9 +283,10 @@ struct TagsInfoView: View {
                             .resizable()
                             .frame(width: 20, height: 20)
                         
-                        Text("Selected tags")
+                        Text("Selected tags (\(selectedTagsCount))")
                             .foregroundColor(filterToSelectedTag ? Color.ui.darkerPurple : Color.ui.cadetBlueCrayola)
                             .font(.ui.headline)
+                            .animation(nil)
                     }
                 }
             }

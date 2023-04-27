@@ -14,6 +14,7 @@ struct ImageSelectorView: View {
     @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var cameraModel: CameraViewModel
+    @EnvironmentObject var taglistVM: TaglistViewModel
 
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var isLoading: Bool = false
@@ -84,6 +85,11 @@ struct ImageSelectorView: View {
                 }
             }
         }
+        .onAppear() {
+            // resets selected tags
+            taglistVM.resetToDefault()
+            taglistVM.resetSelectedTags()
+        }
         .overlay(
             ZStack {
                 if isLoading {
@@ -105,11 +111,13 @@ struct ImageSelectorView_Previews: PreviewProvider {
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
+            .environmentObject(TaglistViewModel())
 
         ImageSelectorView()
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
+            .environmentObject(TaglistViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

@@ -16,16 +16,6 @@ class TaglistViewModel: ObservableObject {
         self.selectedTags.removeAll()
     }
     
-    func addTagToList(tag: TagsModel) {
-        // Remove tag from list if user taps on the tag again
-        // otherwise add it to the list as a new tag
-        if let index = selectedTags.firstIndex(where: { $0.id == tag.id }) {
-            self.selectedTags.remove(at: index)
-        } else {
-            self.selectedTags.append(tag)
-        }
-    }
-    
     func updateMutableTags(tags: [TagsModel]) {
         self.mutableTags = tags
     }

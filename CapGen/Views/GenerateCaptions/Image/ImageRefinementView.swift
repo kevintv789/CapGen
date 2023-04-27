@@ -19,6 +19,7 @@ struct ImageRefinementView: View {
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var navStack: NavigationStackCompat
+    @EnvironmentObject var taglistVM: TaglistViewModel
 
     let imageSelectionContext: ImageSelectionContext
 
@@ -31,7 +32,7 @@ struct ImageRefinementView: View {
         ZStack {
             Color.ui.lightOldPaper.ignoresSafeArea()
 
-            ScrollView(.vertical, showsIndicators: false) {
+            
                 VStack {
                     // header
                     GenerateCaptionsHeaderView(title: "Refine your captions", isOptional: true, isNextSubmit: false) {
@@ -40,6 +41,8 @@ struct ImageRefinementView: View {
                         // on click next, take to personalized options view
                         self.navStack.push(PersonalizeOptionsView(captionGenType: .image))
                     }
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
 
                     // Used for testing preview
 //                    Image("test_pic_3")
@@ -63,22 +66,39 @@ struct ImageRefinementView: View {
                     }
 
                     VStack {
-                        // Add tags button
-                        Button {
-                            // on add tag click, show bottom sheet
-                            showTagsModal.toggle()
-                        } label: {
-                            Text("+ Add tags")
-                                .foregroundColor(.ui.middleBluePurple)
-                                .font(.ui.title2)
+                        HStack {
+                            if !taglistVM.selectedTags.isEmpty {
+                                Text("\(taglistVM.selectedTags.count) tags")
+                                    .foregroundColor(Color.ui.cadetBlueCrayola)
+                                    .font(.ui.headline)
+                            }
+                           
+                            Spacer()
+                            
+                            // Add tags button
+                            Button {
+                                // on add tag click, show bottom sheet
+                                showTagsModal.toggle()
+                            } label: {
+                                Text("+ Add tags")
+                                    .foregroundColor(.ui.middleBluePurple)
+                                    .font(.ui.title2)
+                            }
                         }
-                        .frame(width: SCREEN_WIDTH * 0.8, alignment: .trailing)
+                        .frame(width: SCREEN_WIDTH * 0.8)
+                        .padding(.bottom, 8)
+                        
 
                         Divider()
-                            .padding()
+                            .padding([.horizontal, .bottom])
 
                         // display instructional text if there are no tags
-                        InstructionalTagView()
+                        if taglistVM.selectedTags.isEmpty {
+                            InstructionalTagView()
+                        } else {
+                            ScrollableTagsView()
+                        }
+                        
                     }
                     .padding()
                     .padding(.top, imageHeight > 0 ? 0 : .infinity) // Adjust the padding based on the actual image height
@@ -100,6 +120,7 @@ struct ImageRefinementView: View {
 
             Heap.track("onAppear ImageRefinementView - With context: \(imageSelectionContext)")
         }
+        
         .overlay(
             ZStack {
                 if self.isFullScreenImage {
@@ -126,14 +147,80 @@ struct ImageRefinementView_Previews: PreviewProvider {
             .environmentObject(FirestoreManager())
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
+            .environmentObject(TaglistViewModel())
 
         ImageRefinementView(imageSelectionContext: .photosPicker)
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(FirestoreManager())
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
+            .environmentObject(TaglistViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
+    }
+}
+
+struct ScrollableTagsView: View {
+    @EnvironmentObject var taglistVM: TaglistViewModel
+    
+    var body: some View {
+        // Tag cloud view
+        ScrollView(.horizontal, showsIndicators: false) {
+            // Tags
+            LazyVStack(alignment: .leading, spacing: 15) {
+                ForEach(taglistVM.rows, id: \.self) { rows in
+                    LazyHStack(spacing: 10) {
+                        ForEach(rows) { tag in
+                            if taglistVM.selectedTags.contains(tag) {
+                                Button {
+                                    withAnimation {
+                                        // Remove tag from list if user taps on the tag
+                                        if let index = taglistVM.selectedTags.firstIndex(where: { $0.id == tag.id }) {
+                                            taglistVM.selectedTags.remove(at: index)
+                                        }
+                                    }
+                                } label: {
+                                    HStack(spacing: 10) {
+                                        Text(tag.title)
+                                            .foregroundColor(.ui.cultured)
+                                            .font(.ui.headlineMediumSm)
+                                        
+                                        if taglistVM.selectedTags.contains(tag) {
+                                            Image("x-white")
+                                                .resizable()
+                                                .frame(width: 10, height: 10)
+                                        }
+                                    }
+                                }
+                                .padding(10)
+                                .if(taglistVM.selectedTags.contains(tag), transform: { view in
+                                    return view
+                                        .background(
+                                            ZStack {
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .fill(Color.ui.middleBluePurple)
+                                                
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .strokeBorder(Color.ui.cultured, lineWidth: 2)
+                                            }
+                                                .shadow(color: Color.ui.shadowGray.opacity(0.4), radius: 4, x: 0, y: 4)
+                                        )
+                                })
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.leading, 10)
+            .padding(.bottom)
+            .frame(minWidth: 0, maxWidth: .infinity)
+        }
+        .onReceive(taglistVM.$selectedTags) { changedTag in
+            if !taglistVM.selectedTags.isEmpty {
+                taglistVM.updateMutableTags(tags: taglistVM.selectedTags)
+                taglistVM.getTags()
+            }
+        }
     }
 }
 
