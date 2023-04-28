@@ -5,10 +5,10 @@
 //  Created by Kevin Vu on 4/21/23.
 //
 
-import Foundation
 import CoreLocation
-import Photos
+import Foundation
 import Heap
+import Photos
 
 // This file has helper methods to parse and extract image metadata
 
@@ -94,9 +94,9 @@ func fetchLocation(from geoLoc: GeoLocation, completion: @escaping (_ address: I
             let imageAddress = ImageGeoLocationAddress(landmarkName: placemark.name, locality: placemark.locality, state: placemark.administrativeArea, country: placemark.country)
 
             Heap.track("onAppear PhotoSelectionViewModel - fetch image location", withProperties: ["location": imageAddress])
-            
+
             completion(imageAddress)
-            
+
         } else {
             print("No location found")
             Heap.track("onAppear PhotoSelectionViewModel - fetching image location shows NO results")

@@ -9,19 +9,40 @@ import Foundation
 
 class TaglistViewModel: ObservableObject {
     @Published var rows: [[TagsModel]] = []
-    @Published var mutableTags: [TagsModel] = defaultTags.map { $0 }
+    @Published var mutableTags: [TagsModel] = []
     @Published var selectedTags: [TagsModel] = []
-    
+    @Published var customSelectedTags: [TagsModel] = [] // this is to store custom tags that have been selected
+    @Published var combinedTagTypes: [TagsModel] = []
+    @Published var allTags: [TagsModel] // this is used to keep an immutable storage for firestore tags plus default tags
+
+    init() {
+        allTags = defaultTags
+    }
+
+    func updateAllTags() {
+        var totalTags = defaultTags
+        if let customImageTags = AuthManager.shared.userManager.user?.customImageTags, !customImageTags.isEmpty {
+            totalTags.append(contentsOf: customImageTags)
+        }
+
+        allTags = totalTags
+    }
+
     func resetSelectedTags() {
-        self.selectedTags.removeAll()
+        selectedTags.removeAll()
+        customSelectedTags.removeAll()
     }
-    
+
     func updateMutableTags(tags: [TagsModel]) {
-        self.mutableTags = tags
+        mutableTags = tags
     }
-    
+
+    func combineTagTypes() {
+        combinedTagTypes = selectedTags + customSelectedTags
+    }
+
     func resetToDefault() {
-        self.mutableTags = defaultTags.map { $0 }
+        mutableTags = allTags.map { $0 }
     }
 
     func getTags() {

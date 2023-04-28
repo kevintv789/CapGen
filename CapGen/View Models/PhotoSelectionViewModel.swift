@@ -106,7 +106,7 @@ class PhotoSelectionViewModel: ObservableObject {
     func fetchImageMetadata(imageData: Data?) {
         // Fetch image metadata
         let metadata = fetchPhotoMetadata(imageData: imageData)
-        
+
         // Use metadata's geolocation to retrieve image location
         if let metadata = metadata, let geoLoc: GeoLocation = fetchImageLatLong(from: metadata) {
             fetchLocation(from: geoLoc) { result in

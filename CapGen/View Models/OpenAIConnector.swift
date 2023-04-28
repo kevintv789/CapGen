@@ -66,14 +66,14 @@ public class OpenAIConnector: ObservableObject {
         if visionData.faceAnnotations != "" {
             mappedFaceAnnotations = "The facial expression within this picture depicts the emotion(s) of \(visionData.faceAnnotations)."
         }
-        
+
         var customTagsString = ""
         if !customTags.isEmpty {
             // Removes the '#' from the beginning of the tags
-            customTagsString = customTags.map({ $0.title.replacingOccurrences(of: "#", with: "") }).joined(separator: ", ")
+            customTagsString = customTags.map { $0.title.replacingOccurrences(of: "#", with: "") }.joined(separator: ", ")
         }
 
-        let completePrompt = basePrompt + "Based on the information provided, please ascertain the context of an image from the below information: \(mappedLandmark == "" ? mappedImageAddress : mappedLandmark) \(mappedSafeSearchAnnotations) \(mappedKeywords) \(mappedText) \(mappedFaceAnnotations) For the keywords and image texts, please only include responses that use real English words found in reputable dictionaries. Ignore any non-words, made-up words, or slang. If there are custom tags associated with this image, prioritize the custom tags over the keywords in each caption. \(customTagsString.isEmpty ? "" : "The user's custom tags associated with this image are: \(customTagsString). Again, please try to prioritize these tags in conjunction with the overall context of the image.") Please try to write me a social media caption given the context surrounding this image using only the given information. This is a reminder that these answers are just captions for social media and should be nothing more than a caption."
+        let completePrompt = basePrompt + "Based on the information provided, please ascertain the context of an image from the below information: \(mappedLandmark == "" ? mappedImageAddress : mappedLandmark) \(mappedSafeSearchAnnotations) \(mappedKeywords) \(mappedText) \(mappedFaceAnnotations) For the keywords and image texts, please only include responses that use real English words found in reputable dictionaries. Ignore any non-words, made-up words, or slang. If there are custom tags associated with this image, prioritize the custom tags over the keywords in each caption. \(customTagsString.isEmpty ? "" : "The user's custom tags associated with this image are: \(customTagsString). Again, please try to prioritize these custom tags in conjunction with the overall context of the image.") Please try to write me a social media caption given the context surrounding this image using only the given information. This is a reminder that these answers are just captions for social media and should be nothing more than a caption."
 
         Heap.track("onAppear OpenAIConnector - IMAGE Complete prompt information", withProperties: ["complete_prompt": completePrompt, "function_name": "generatePrompt()"])
 

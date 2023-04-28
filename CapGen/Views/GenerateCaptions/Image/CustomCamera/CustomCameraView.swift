@@ -5,22 +5,22 @@
 //  Created by Kevin Vu on 4/20/23.
 //
 
-import SwiftUI
 import NavigationStack
+import SwiftUI
 
 struct CustomCameraView: View {
     @EnvironmentObject var cameraViewModel: CameraViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
     @Environment(\.dismiss) var dismiss
-    
+
     @State private var lastScaleValue: CGFloat = 1.0
-    
+
     var body: some View {
         ZStack {
             CameraPreviewViewController(cameraModel: cameraViewModel)
                 .ignoresSafeArea(.all)
-            
+
             VStack {
                 if !cameraViewModel.isTaken {
                     // Top right side buttons
@@ -37,8 +37,7 @@ struct CustomCameraView: View {
                     })
                     .padding(.top)
                 }
-                
-                
+
                 // This spacer forces the below elements to be at the bottom
                 Spacer()
 
@@ -47,9 +46,9 @@ struct CustomCameraView: View {
                     if cameraViewModel.isTaken {
                         HStack {
                             Spacer()
-                            
+
                             // Camera retake
-                            CameraRetakeButton() {
+                            CameraRetakeButton {
                                 // on retake press
                                 cameraViewModel.retakePicture()
                             }
@@ -57,13 +56,13 @@ struct CustomCameraView: View {
                         .padding(.bottom)
                         .padding(.trailing)
                     }
-                   
+
                     if !cameraViewModel.isTaken {
                         HStack {
                             Spacer()
-                            
+
                             // Capture button
-                            CameraCaptureButton() {
+                            CameraCaptureButton {
                                 // on capture press
                                 cameraViewModel.takePicture()
                             }
@@ -71,8 +70,7 @@ struct CustomCameraView: View {
                             Spacer()
                         }
                     }
-                    
-                    
+
                     HStack {
                         // Cancel button
                         CameraNavButton(isTaken: $cameraViewModel.isTaken) {
@@ -80,12 +78,12 @@ struct CustomCameraView: View {
                             if cameraViewModel.isTaken {
                                 // Reset objects
                                 photoSelectionVm.resetPhotoSelection()
-                                
+
                                 cameraViewModel.savePicture()
-                                
+
                                 // fetching image metadata
                                 photoSelectionVm.fetchImageMetadata(imageData: cameraViewModel.imageData)
-                                
+
                                 // navigate to refinement view
                                 navStack.push(ImageRefinementView(imageSelectionContext: .camera))
                             } else {
@@ -97,8 +95,6 @@ struct CustomCameraView: View {
 
                         Spacer()
                     }
-
-                  
                 }
             }
         }
@@ -111,18 +107,18 @@ struct CustomCameraView: View {
                 lastScaleValue = value
                 cameraViewModel.setZoom(scale: delta)
             }
-            .onEnded { value in
+            .onEnded { _ in
                 lastScaleValue = 1.0
             }
         )
-        .onAppear() {
+        .onAppear {
             cameraViewModel.checkPermissions()
             cameraViewModel.initializeLocation()
             cameraViewModel.resetData()
         }
-        .onDisappear() {
+        .onDisappear {
             DispatchQueue.main.async {
-                Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (timer) in
+                Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
                     self.cameraViewModel.locationManager.stopUpdatingLocation()
                     self.cameraViewModel.cameraPosition = .back
                     self.cameraViewModel.captureSession.stopRunning()
@@ -160,7 +156,7 @@ struct CustomCameraView_Previews: PreviewProvider {
 struct CameraNavButton: View {
     @Binding var isTaken: Bool
     let action: () -> Void
-    
+
     var body: some View {
         Button {
             action()
@@ -179,7 +175,7 @@ struct CameraNavButton: View {
 
 struct CameraRetakeButton: View {
     let action: () -> Void
-    
+
     var body: some View {
         Button {
             action()
@@ -198,7 +194,7 @@ struct CameraRetakeButton: View {
 
 struct CameraCaptureButton: View {
     let action: () -> Void
-    
+
     var body: some View {
         Button {
             action()
@@ -215,11 +211,11 @@ struct CameraOptionButtons: View {
     @EnvironmentObject var cameraViewModel: CameraViewModel
     let onSwitchCameraClick: () -> Void
     let onFlashClick: () -> Void
-    
+
     @State private var size: CGFloat = 30
-    
+
     var body: some View {
-        VStack( alignment: .trailing, spacing: 10) {
+        VStack(alignment: .trailing, spacing: 10) {
             Button {
                 // on switch camera
                 onSwitchCameraClick()
@@ -229,7 +225,7 @@ struct CameraOptionButtons: View {
                     .frame(width: size, height: size)
             }
             .padding(.bottom, 10)
-           
+
             Button {
                 // on flash
                 onFlashClick()

@@ -98,14 +98,14 @@ struct LoadingView: View {
 
         if let visionData = photosSelectionVm.visionData {
             // Generate prompt
-            var imageAddress: ImageGeoLocationAddress? = nil
+            var imageAddress: ImageGeoLocationAddress?
             if photosSelectionVm.imageAddress != nil {
                 imageAddress = photosSelectionVm.imageAddress!
             } else if cameraViewModel.imageAddress != nil {
                 imageAddress = cameraViewModel.imageAddress!
             }
-            
-            let openAiPrompt = openAiRequest.generatePromptForImage(tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: imageAddress, customTags: taglistVM.selectedTags)
+
+            let openAiPrompt = openAiRequest.generatePromptForImage(tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: imageAddress, customTags: taglistVM.combinedTagTypes)
 
             await callOpenAi(with: openAiPrompt, decrementCreditBy: -2)
         } else {
