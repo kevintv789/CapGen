@@ -78,7 +78,7 @@ struct EnterPromptView: View {
         }
         // Show erase text modal
         .modalView(horizontalPadding: 50, show: $showEraseModal) {
-            SimpleDeleteModal(showView: $showEraseModal) {
+            SimpleDeleteModal(showView: $showEraseModal, title: "This will erase all of your work. \n\nAre you sure?", buttonTitle: "Yes! Erase it all") {
                 // on delete
                 genPromptVm.resetInput()
             }
