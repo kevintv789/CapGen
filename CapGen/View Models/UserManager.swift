@@ -66,6 +66,7 @@ class UserManager: ObservableObject {
             let userPrefsDict = snapshot?.get("userPrefs") as? [String: Any]
             let dateCreatedTimestamp = snapshot?.get("dateCreated") as? Timestamp ?? nil
             let folders = self.convertFolderModel(for: snapshot?.get("folders") as? [[String: AnyObject]] ?? nil)
+            let customImageTags = self.mapTagsModel(for: snapshot?.get("customImageTags") as? [[String: AnyObject]] ?? nil)
 
             guard let dateCreated = dateCreatedTimestamp?.dateValue() else { return }
 
@@ -75,7 +76,7 @@ class UserManager: ObservableObject {
                 let userPref = try? decoder.decode(UserPreferences.self, from: userPrefsDict)
 
                 if userPref != nil {
-                    self.user = UserModel(id: uid, fullName: fullName, credits: credits, email: email, userPrefs: userPref!, dateCreated: dateCreated, folders: folders)
+                    self.user = UserModel(id: uid, fullName: fullName, credits: credits, email: email, userPrefs: userPref!, dateCreated: dateCreated, folders: folders, customImageTags: customImageTags)
                 }
             }
         }
@@ -142,6 +143,23 @@ class UserManager: ObservableObject {
         return result.sorted { f1, f2 in
             f1.captions.count > f2.captions.count
         }
+    }
+
+    private func mapTagsModel(for tags: [[String: AnyObject]]?) -> [TagsModel] {
+        guard let tags = tags else { return [] }
+
+        var result: [TagsModel] = []
+
+        tags.forEach { tag in
+            let id = tag["id"] as! String
+            let title = tag["title"] as! String
+            let size = tag["size"] as! CGFloat
+
+            let mappedTag = TagsModel(id: id, title: title, size: size, isCustom: true)
+            result.append(mappedTag)
+        }
+
+        return result
     }
 
     private func createGoogleUser(uid: String, credit: Int, usersPref: UserPreferences, dateCreated: Date) {

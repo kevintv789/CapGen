@@ -413,6 +413,30 @@ class FirestoreManager: ObservableObject {
         }
     }
 
+    func saveCustomTags(for uid: String?, customImageTags: [TagsModel]) {
+        guard let userId = uid else {
+            appError = ErrorType(error: .genericError)
+            return
+        }
+        
+        let docRef: DocumentReference = db.collection("Users").document("\(userId)")
+        
+        // Get current folders from the user document
+        var currentTags = AuthManager.shared.userManager.user?.customImageTags ?? []
+        
+        if !customImageTags.isEmpty {
+            // Append new tags to the currentTags array, ensuring no duplicates
+            for newTag in customImageTags {
+                if !currentTags.contains(where: { $0.title == newTag.title }) {
+                    currentTags.append(newTag)
+                }
+            }
+        }
+        
+        // Set the updated currentTags array for the user's document
+        docRef.setData(["customImageTags": currentTags.map { $0.dictionary }], merge: true)
+    }
+
     private func fetch(from collection: String, documentId: String, completion: @escaping (_ data: [String: Any]?) -> Void) {
         let docRef = db.collection(collection).document(documentId)
 

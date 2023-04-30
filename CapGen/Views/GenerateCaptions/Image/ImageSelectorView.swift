@@ -85,7 +85,7 @@ struct ImageSelectorView: View {
                 }
             }
         }
-        .onAppear() {
+        .onAppear {
             // resets selected tags
             taglistVM.resetToDefault()
             taglistVM.resetSelectedTags()

@@ -32,28 +32,26 @@ struct ImageRefinementView: View {
         ZStack {
             Color.ui.lightOldPaper.ignoresSafeArea()
 
-            
-                VStack {
-                    // header
-                    GenerateCaptionsHeaderView(title: "Refine your captions", isOptional: true, isNextSubmit: false) {
-                        Heap.track("onClick ImageRefinementView - Next button tapped") // Add tag properties here
+            VStack {
+                // header
+                GenerateCaptionsHeaderView(title: "Refine your captions", isOptional: true, isNextSubmit: false) {
+                    Heap.track("onClick ImageRefinementView - Next button tapped") // Add tag properties here
 
-                        // on click next, take to personalized options view
-                        self.navStack.push(PersonalizeOptionsView(captionGenType: .image))
-                    }
-                    
-                    ScrollView(.vertical, showsIndicators: false) {
+                    // on click next, take to personalized options view
+                    self.navStack.push(PersonalizeOptionsView(captionGenType: .image))
+                }
 
+                ScrollView(.vertical, showsIndicators: false) {
                     // Used for testing preview
-//                    Image("test_pic_3")
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .cornerRadius(20)
-//                        .frame(width: SCREEN_WIDTH * 0.7)
-//                        .shadow(color: .ui.shadowGray, radius: 4, x: 2, y: 4)
-//                        .background(GeometryGetter(rect: $imageHeight)) // Get the height of the image
-//                        .frame(maxHeight: SCREEN_HEIGHT * 0.6)
-//                        .mask(RoundedRectangle(cornerRadius: 20))
+                    //                    Image("test_pic_3")
+                    //                        .resizable()
+                    //                        .aspectRatio(contentMode: .fit)
+                    //                        .cornerRadius(20)
+                    //                        .frame(width: SCREEN_WIDTH * 0.7)
+                    //                        .shadow(color: .ui.shadowGray, radius: 4, x: 2, y: 4)
+                    //                        .background(GeometryGetter(rect: $imageHeight)) // Get the height of the image
+                    //                        .frame(maxHeight: SCREEN_HEIGHT * 0.6)
+                    //                        .mask(RoundedRectangle(cornerRadius: 20))
 
                     if let imageData = imageData, let uiImage = UIImage(data: imageData) {
                         Button {
@@ -67,14 +65,14 @@ struct ImageRefinementView: View {
 
                     VStack {
                         HStack {
-                            if !taglistVM.selectedTags.isEmpty {
-                                Text("\(taglistVM.selectedTags.count) tags")
+                            if !taglistVM.combinedTagTypes.isEmpty {
+                                Text("\(taglistVM.combinedTagTypes.count) tags")
                                     .foregroundColor(Color.ui.cadetBlueCrayola)
                                     .font(.ui.headline)
                             }
-                           
+
                             Spacer()
-                            
+
                             // Add tags button
                             Button {
                                 // on add tag click, show bottom sheet
@@ -87,18 +85,16 @@ struct ImageRefinementView: View {
                         }
                         .frame(width: SCREEN_WIDTH * 0.8)
                         .padding(.bottom, 8)
-                        
 
                         Divider()
                             .padding([.horizontal, .bottom])
 
                         // display instructional text if there are no tags
-                        if taglistVM.selectedTags.isEmpty {
+                        if taglistVM.combinedTagTypes.isEmpty {
                             InstructionalTagView()
                         } else {
                             ScrollableTagsView()
                         }
-                        
                     }
                     .padding()
                     .padding(.top, imageHeight > 0 ? 0 : .infinity) // Adjust the padding based on the actual image height
@@ -120,7 +116,6 @@ struct ImageRefinementView: View {
 
             Heap.track("onAppear ImageRefinementView - With context: \(imageSelectionContext)")
         }
-        
         .overlay(
             ZStack {
                 if self.isFullScreenImage {
@@ -162,50 +157,33 @@ struct ImageRefinementView_Previews: PreviewProvider {
 
 struct ScrollableTagsView: View {
     @EnvironmentObject var taglistVM: TaglistViewModel
-    
+
     var body: some View {
         // Tag cloud view
         ScrollView(.horizontal, showsIndicators: false) {
             // Tags
-            LazyVStack(alignment: .leading, spacing: 15) {
+            VStack(alignment: .leading, spacing: 15) {
                 ForEach(taglistVM.rows, id: \.self) { rows in
                     LazyHStack(spacing: 10) {
                         ForEach(rows) { tag in
-                            if taglistVM.selectedTags.contains(tag) {
-                                Button {
-                                    withAnimation {
-                                        // Remove tag from list if user taps on the tag
-                                        if let index = taglistVM.selectedTags.firstIndex(where: { $0.id == tag.id }) {
-                                            taglistVM.selectedTags.remove(at: index)
-                                        }
+                            if taglistVM.combinedTagTypes.contains(where: { $0.id == tag.id }) {
+                                TagButtonView(title: tag.title, doesContainTag: taglistVM.combinedTagTypes.contains(where: { $0.id == tag.id })) {
+                                    // Remove tag from list if user taps on the tag
+                                    if let index = taglistVM.combinedTagTypes.firstIndex(where: { $0.id == tag.id }) {
+                                        taglistVM.combinedTagTypes.remove(at: index)
                                     }
-                                } label: {
-                                    HStack(spacing: 10) {
-                                        Text(tag.title)
-                                            .foregroundColor(.ui.cultured)
-                                            .font(.ui.headlineMediumSm)
-                                        
-                                        if taglistVM.selectedTags.contains(tag) {
-                                            Image("x-white")
-                                                .resizable()
-                                                .frame(width: 10, height: 10)
-                                        }
+
+                                    // remove it from the default selectd tags list
+                                    if !tag.isCustom, let index = taglistVM.selectedTags.firstIndex(where: { $0.id == tag.id }) {
+                                        taglistVM.selectedTags.remove(at: index)
+                                    }
+
+                                    // remove it from the custom selectd tags list
+                                    if tag.isCustom, let index = taglistVM.customSelectedTags.firstIndex(where: { $0.id == tag.id }) {
+                                        taglistVM.customSelectedTags.remove(at: index)
                                     }
                                 }
-                                .padding(10)
-                                .if(taglistVM.selectedTags.contains(tag), transform: { view in
-                                    return view
-                                        .background(
-                                            ZStack {
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .fill(Color.ui.middleBluePurple)
-                                                
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .strokeBorder(Color.ui.cultured, lineWidth: 2)
-                                            }
-                                                .shadow(color: Color.ui.shadowGray.opacity(0.4), radius: 4, x: 0, y: 4)
-                                        )
-                                })
+                                .frame(maxWidth: SCREEN_WIDTH * 0.9, alignment: .leading)
                             }
                         }
                     }
@@ -215,9 +193,10 @@ struct ScrollableTagsView: View {
             .padding(.bottom)
             .frame(minWidth: 0, maxWidth: .infinity)
         }
-        .onReceive(taglistVM.$selectedTags) { changedTag in
-            if !taglistVM.selectedTags.isEmpty {
-                taglistVM.updateMutableTags(tags: taglistVM.selectedTags)
+        .onReceive(taglistVM.$combinedTagTypes) { changedTag in
+            if !changedTag.isEmpty {
+                // combine list together
+                taglistVM.updateMutableTags(tags: changedTag)
                 taglistVM.getTags()
             }
         }
