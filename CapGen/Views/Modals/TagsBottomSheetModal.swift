@@ -41,6 +41,14 @@ struct TagsBottomSheetModal: View {
                     }
 
                     dismiss()
+                } onBackButtonClick: {
+                    // If no tags were updated, then set to previous tag list
+                    if !taglistVM.combinedTagTypes.isEmpty {
+                        taglistVM.updateMutableTags(tags: taglistVM.combinedTagTypes)
+                        taglistVM.getTags()
+                    }
+                   
+                    dismiss()
                 }
 
                 // Search input
@@ -181,18 +189,18 @@ struct TagsBottomSheetModal_Previews: PreviewProvider {
 }
 
 struct TagsBottomSheetHeader: View {
-    @Environment(\.dismiss) var dismiss
     @ScaledMetric var scaledSize: CGFloat = 1
     let title: String
     var isNextSubmit: Bool? = false
     let onResetClick: () -> Void
     let onSaveClick: () -> Void
+    let onBackButtonClick: () -> Void
 
     var body: some View {
         // Header
         HStack {
             Button {
-                dismiss()
+                onBackButtonClick()
             } label: {
                 Image("close")
                     .resizable()

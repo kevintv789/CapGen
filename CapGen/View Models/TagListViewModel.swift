@@ -78,7 +78,7 @@ class TaglistViewModel: ObservableObject {
                 rows.append(currentRow)
                 currentRow.removeAll()
             }
-
+            
             self.rows = rows
         } else {
             self.rows = []
