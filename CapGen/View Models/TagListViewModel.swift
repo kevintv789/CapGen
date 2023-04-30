@@ -32,6 +32,12 @@ class TaglistViewModel: ObservableObject {
         selectedTags.removeAll()
         customSelectedTags.removeAll()
     }
+    
+    func resetAll() {
+        selectedTags.removeAll()
+        customSelectedTags.removeAll()
+        combinedTagTypes.removeAll()
+    }
 
     func updateMutableTags(tags: [TagsModel]) {
         mutableTags = tags
