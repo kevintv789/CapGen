@@ -42,17 +42,6 @@ struct ImageRefinementView: View {
                 }
 
                 ScrollView(.vertical, showsIndicators: false) {
-                    // Used for testing preview
-                    //                    Image("test_pic_3")
-                    //                        .resizable()
-                    //                        .aspectRatio(contentMode: .fit)
-                    //                        .cornerRadius(20)
-                    //                        .frame(width: SCREEN_WIDTH * 0.7)
-                    //                        .shadow(color: .ui.shadowGray, radius: 4, x: 2, y: 4)
-                    //                        .background(GeometryGetter(rect: $imageHeight)) // Get the height of the image
-                    //                        .frame(maxHeight: SCREEN_HEIGHT * 0.6)
-                    //                        .mask(RoundedRectangle(cornerRadius: 20))
-
                     if let imageData = imageData, let uiImage = UIImage(data: imageData) {
                         Button {
                             withAnimation {
@@ -163,42 +152,12 @@ struct ScrollableTagsView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             // Tags
             VStack(alignment: .leading, spacing: 15) {
-                ForEach(taglistVM.rows, id: \.self) { rows in
-                    LazyHStack(spacing: 10) {
-                        ForEach(rows) { tag in
-                            if taglistVM.combinedTagTypes.contains(where: { $0.id == tag.id }) {
-                                TagButtonView(title: tag.title, doesContainTag: taglistVM.combinedTagTypes.contains(where: { $0.id == tag.id })) {
-                                    // Remove tag from list if user taps on the tag
-                                    if let index = taglistVM.combinedTagTypes.firstIndex(where: { $0.id == tag.id }) {
-                                        taglistVM.combinedTagTypes.remove(at: index)
-                                    }
-
-                                    // remove it from the default selectd tags list
-                                    if !tag.isCustom, let index = taglistVM.selectedTags.firstIndex(where: { $0.id == tag.id }) {
-                                        taglistVM.selectedTags.remove(at: index)
-                                    }
-
-                                    // remove it from the custom selectd tags list
-                                    if tag.isCustom, let index = taglistVM.customSelectedTags.firstIndex(where: { $0.id == tag.id }) {
-                                        taglistVM.customSelectedTags.remove(at: index)
-                                    }
-                                }
-                                .frame(maxWidth: SCREEN_WIDTH * 0.9, alignment: .leading)
-                            }
-                        }
-                    }
-                }
+                TagRows(tags: taglistVM.combinedTagTypes)
             }
             .padding(.leading, 10)
             .padding(.bottom)
             .frame(minWidth: 0, maxWidth: .infinity)
-        }
-        .onReceive(taglistVM.$combinedTagTypes) { changedTag in
-            if !changedTag.isEmpty {
-                // combine list together
-                taglistVM.updateMutableTags(tags: changedTag)
-                taglistVM.getTags()
-            }
+            .id(UUID())
         }
     }
 }

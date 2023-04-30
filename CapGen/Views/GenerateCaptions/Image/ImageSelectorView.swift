@@ -35,6 +35,9 @@ struct ImageSelectorView: View {
                     // camera button
                     PhotoSelectionCardView(backgroundColor: Color.ui.middleBluePurple.opacity(0.4), title: "Snap & Caption 📸", subTitle: "Instantly create captions for your camera shots!", image: "camera_robot")
                         .onTapGesture {
+                            // reset all tags associated with the pic
+                            taglistVM.resetAll()
+                            
                             if !cameraModel.showAlert {
                                 showCameraView = true
                             }
@@ -66,6 +69,9 @@ struct ImageSelectorView: View {
                             // reset photo selection
                             photoSelectionVm.resetPhotoSelection()
                             cameraModel.resetData()
+                            
+                            // reset all tags associated with the pic
+                            taglistVM.resetAll()
 
                             if !image.isEmpty {
                                 // save image data to picker item

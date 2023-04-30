@@ -76,7 +76,6 @@ struct EnterPromptView: View {
                 }
             }
         }
-
         // Show erase text modal
         .modalView(horizontalPadding: 50, show: $showEraseModal) {
             SimpleDeleteModal(showView: $showEraseModal) {
