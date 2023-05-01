@@ -9,10 +9,6 @@ import Heap
 import NavigationStack
 import SwiftUI
 
-enum FolderViewContext {
-    case saveToFolder, view
-}
-
 struct FolderGridView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var folderVm: FolderViewModel
@@ -31,7 +27,7 @@ struct FolderGridView: View {
     // Context to determine determine logic
     // View context - Original context for HomeView. On click of folder will navigate user to the folder view
     // saveToFolder context - On click of folder will add a caption to the folder
-    var context: FolderViewContext = .view
+    var context: NavigationContext = .view
 
     // Disable all tap actions, important if the system is currently processing something
     @Binding var disableTap: Bool
@@ -153,7 +149,7 @@ struct FolderButtonView: View {
     @State var filteredFolder: [DestinationFolder] = []
 
     @Binding var folder: FolderModel
-    var context: FolderViewContext
+    var context: NavigationContext
     var action: () -> Void
 
     // Update caption count UI if there are items still within the temp storage

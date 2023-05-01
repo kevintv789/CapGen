@@ -8,24 +8,6 @@
 import NavigationStack
 import SwiftUI
 
-enum CaptionListContext {
-    /**
-      Called directly from the FolderView(), this context allows the list to filter out to specific folder IDs versus
-      generating a list of captions from all available folders
-     */
-    case folder
-
-    /**
-      This is the default context that generates a list of captions based on all available folders
-     */
-    case list
-
-    /**
-      Called directly from the SearchView()
-     */
-    case search
-}
-
 struct CaptionListView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
@@ -39,7 +21,7 @@ struct CaptionListView: View {
     // private variables
     @State var folderId: String = ""
 
-    var context: CaptionListContext = .list
+    var context: NavigationContext = .list
     @Binding var showCaptionDeleteModal: Bool
 
     private func onEdit(caption: CaptionModel) {

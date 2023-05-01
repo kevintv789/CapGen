@@ -18,13 +18,13 @@ struct LoadingView: View {
     @EnvironmentObject var cameraViewModel: CameraViewModel
     @EnvironmentObject var taglistVM: TaglistViewModel
 
-    var captionGenType: CaptionGenerationType = .prompt
+    var captionGenType: NavigationContext = .prompt
 
     @State var showCaptionView: Bool = false
     @State var openAiResponse: String?
     @State var router: Router? = nil
 
-    private func callOpenAi(with openAiPrompt: String, decrementCreditBy: Int64) async {
+    private func callOpenAi(with openAiPrompt: String, decrementCreditBy: Int64, context: NavigationContext) async {
         if !openAiPrompt.isEmpty {
             let openAiResponse = await openAiRequest.processPrompt(apiKey: firestoreMan.openAiKey, prompt: openAiPrompt)
 
@@ -47,7 +47,7 @@ struct LoadingView: View {
                     firestoreMan.decrementCredit(for: AuthManager.shared.userManager.user?.id as? String ?? nil, value: decrementCreditBy)
 
                     // Navigate to Caption View
-                    self.navStack.push(CaptionView())
+                    self.navStack.push(CaptionView(navContext: context))
                 }
             }
         }
@@ -64,7 +64,7 @@ struct LoadingView: View {
         // Generate prompt
         let openAiPrompt = openAiRequest.generatePrompt(userInputPrompt: genPromptVm.promptInput, tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType)
 
-        await callOpenAi(with: openAiPrompt, decrementCreditBy: -1)
+        await callOpenAi(with: openAiPrompt, decrementCreditBy: -1, context: .prompt)
     }
 
     private func generateCaptionFromImage() async {
@@ -107,7 +107,7 @@ struct LoadingView: View {
 
             let openAiPrompt = openAiRequest.generatePromptForImage(tones: genPromptVm.selectdTones, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, captionLength: genPromptVm.captionLengthValue, captionLengthType: genPromptVm.captionLengthType, visionData: visionData, imageAddress: imageAddress, customTags: taglistVM.combinedTagTypes)
 
-            await callOpenAi(with: openAiPrompt, decrementCreditBy: -2)
+            await callOpenAi(with: openAiPrompt, decrementCreditBy: -2, context: .image)
         } else {
             // if vision data is not available, then only use custom tags
         }

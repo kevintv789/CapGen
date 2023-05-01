@@ -52,6 +52,9 @@ class PhotoSelectionViewModel: ObservableObject {
     @Published var imageAddress: ImageGeoLocationAddress? = nil
     @Published var visionData: ParsedGoogleVisionImageData? = nil
     @Published var googleCloudVisionError: GoogleCloudVisionError?
+    
+    // Combined published event to store UIImage for BOTH camera and photo picker
+    @Published var uiImage: UIImage? = nil
 
     func resetPhotoSelection() {
         photosPickerData = nil

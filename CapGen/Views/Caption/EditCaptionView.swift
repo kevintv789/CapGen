@@ -11,10 +11,6 @@ import NavigationStack
 import SwiftUI
 import UIKit
 
-enum EditCaptionContext {
-    case optimization, regular, captionList
-}
-
 struct EditCaptionView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var openAiConnector: OpenAIConnector
@@ -45,7 +41,7 @@ struct EditCaptionView: View {
     @State var shouldShowSocialMediaPlatform: Bool = false
 
     // Context
-    var context: EditCaptionContext = .regular
+    var context: NavigationContext = .regular
 
     private func countHashtags(text: String) -> Int {
         let hashtagRegex = "#[a-zA-Z0-9_]+"
