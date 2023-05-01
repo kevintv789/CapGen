@@ -43,55 +43,48 @@ struct CustomCameraView: View {
 
                 // Render the initial bottom buttons with a capture and a cancel button
                 ZStack(alignment: .bottom) {
-                    if cameraViewModel.isTaken {
-                        HStack {
-                            Spacer()
-
-                            // Camera retake
-                            CameraRetakeButton {
-                                // on retake press
-                                cameraViewModel.retakePicture()
-                            }
-                        }
-                        .padding(.bottom)
-                        .padding(.trailing)
-                    }
-
-                    if !cameraViewModel.isTaken {
-                        HStack {
-                            Spacer()
-
-                            // Capture button
-                            CameraCaptureButton {
-                                // on capture press
-                                cameraViewModel.takePicture()
-                            }
-
-                            Spacer()
-                        }
-                    }
-
                     HStack {
-                        // Cancel button
-                        CameraNavButton(isTaken: $cameraViewModel.isTaken) {
-                            // On save
-                            if cameraViewModel.isTaken {
+                        Spacer()
+                        
+                        // Capture button
+                        CameraCaptureButton(isTaken: cameraViewModel.isTaken) {
+                            if !cameraViewModel.isTaken {
+                                // capture image if it's not already taken
+                                cameraViewModel.takePicture()
+                            } else {
+                                // if already taken, on press will take the user to the next screen
+                                
                                 // Reset objects
                                 photoSelectionVm.resetPhotoSelection()
-
+                                
                                 cameraViewModel.savePicture()
-
+                                
                                 // fetching image metadata
                                 photoSelectionVm.fetchImageMetadata(imageData: cameraViewModel.imageData)
-
+                                
                                 // navigate to refinement view
                                 navStack.push(ImageRefinementView(imageSelectionContext: .camera))
+                            }
+                            
+                        }
+                        
+                        Spacer()
+                    }
+                    
+
+                    HStack {
+                        // Switches between 'back' and 'retake'
+                        CameraNavButton(isTaken: $cameraViewModel.isTaken) {
+                            // On retake once photo has been taken
+                            if cameraViewModel.isTaken {
+                                cameraViewModel.retakePicture()
                             } else {
+                                // on back press
                                 dismiss()
                             }
                         }
                         .padding(.bottom)
-                        .padding(.leading)
+                        .padding(.leading, 40)
 
                         Spacer()
                     }
@@ -161,38 +154,22 @@ struct CameraNavButton: View {
         Button {
             action()
         } label: {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.ui.richBlack.opacity(0.2))
-                .frame(width: 100, height: 40)
-                .overlay(
-                    Text(isTaken ? "Save" : "Cancel")
-                        .foregroundColor(.ui.cultured)
-                        .font(.ui.headline)
-                )
-        }
-    }
-}
-
-struct CameraRetakeButton: View {
-    let action: () -> Void
-
-    var body: some View {
-        Button {
-            action()
-        } label: {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.ui.richBlack.opacity(0.2))
-                .frame(width: 100, height: 40)
-                .overlay(
-                    Text("Retake")
-                        .foregroundColor(.ui.cultured)
-                        .font(.ui.headline)
-                )
+            VStack {
+                Image("back-arrow-180")
+                    .resizable()
+                    .frame(width: 35, height: 35)
+                
+                Text(isTaken ? "Retake" : "Back")
+                    .font(.ui.headlineMd)
+                    .foregroundColor(.ui.cultured)
+            }
+            .shadow(color: .ui.shadowGray.opacity(0.7), radius: 2, x: 0, y: 2)
         }
     }
 }
 
 struct CameraCaptureButton: View {
+    let isTaken: Bool
     let action: () -> Void
 
     var body: some View {
@@ -200,9 +177,21 @@ struct CameraCaptureButton: View {
             action()
             Haptics.shared.play(.soft)
         } label: {
-            Circle()
-                .strokeBorder(Color.ui.cultured, lineWidth: 6)
-                .frame(width: 80, height: 80)
+            if isTaken {
+                Circle()
+                    .fill(Color.ui.cultured)
+                    .frame(width: 80, height: 80)
+                    .overlay(
+                        Image("arrow-right-filled")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                    )
+            } else {
+                Circle()
+                    .strokeBorder(Color.ui.cultured, lineWidth: 6)
+                    .frame(width: 80, height: 80)
+            }
+           
         }
     }
 }
