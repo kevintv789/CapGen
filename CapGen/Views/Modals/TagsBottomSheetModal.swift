@@ -196,11 +196,11 @@ struct TagsBottomSheetModal_Previews: PreviewProvider {
     static var previews: some View {
         TagsBottomSheetModal()
             .environmentObject(TaglistViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
 
         TagsBottomSheetModal()
             .environmentObject(TaglistViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

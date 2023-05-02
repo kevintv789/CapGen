@@ -10,10 +10,10 @@ import NavigationStack
 import SwiftUI
 
 struct CaptionOptimizationBottomSheetView: View {
-    @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var captionVm: CaptionViewModel
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
+    
+    @StateObject var firestoreMan = FirestoreManager(folderViewModel: FolderViewModel.shared)
 
     // Private variables
     @State var selectedIndex: Int = 0
@@ -38,7 +38,7 @@ struct CaptionOptimizationBottomSheetView: View {
     private func saveCaptionsToFolder() {
         isSavingToFolder = true
 
-        let captionsToSaveWithFolderId = folderVm.captionFolderStorage
+        let captionsToSaveWithFolderId = FolderViewModel.shared.captionFolderStorage
 
         if let user = AuthManager.shared.userManager.user {
             let userId = user.id
@@ -48,7 +48,7 @@ struct CaptionOptimizationBottomSheetView: View {
                 let currentFolders = user.folders
                 if !currentFolders.isEmpty {
                     withAnimation {
-                        folderVm.resetFolderStorage()
+                        FolderViewModel.shared.resetFolderStorage()
                         self.isSavingToFolder = false
                         self.isSuccessfullySaved = true
 
@@ -104,7 +104,7 @@ struct CaptionOptimizationBottomSheetView: View {
                 Spacer()
             }
             .onDisappear {
-                folderVm.resetFolderStorage()
+                FolderViewModel.shared.resetFolderStorage()
                 self.isSavingToFolder = false
                 self.isSuccessfullySaved = true
 
@@ -217,8 +217,8 @@ struct TopTabView: View {
 }
 
 struct SaveToFolderView: View {
-    @EnvironmentObject var folderVm: FolderViewModel
-
+    @State private var showApplyButton: Bool = false
+    
     @Binding var isLoading: Bool
     @Binding var isSaved: Bool
     var onApplyClick: () -> Void
@@ -231,15 +231,22 @@ struct SaveToFolderView: View {
                 .lineSpacing(5)
                 .frame(height: 50)
 
-            if !folderVm.captionFolderStorage.isEmpty {
+            if showApplyButton {
                 ApplyButtonView(isLoading: $isLoading, onApplyClick: onApplyClick)
-            } else if folderVm.captionFolderStorage.isEmpty && !isLoading && isSaved {
+            } else if !isLoading && isSaved {
                 SavedTagView()
             }
 
             FolderGridView(context: .saveToFolder, disableTap: $isLoading)
 
             Spacer()
+        }
+        .onReceive(FolderViewModel.shared.$captionFolderStorage) { captionFolderStorage in
+            if !captionFolderStorage.isEmpty {
+                showApplyButton = true
+            } else {
+                showApplyButton = false
+            }
         }
     }
 }

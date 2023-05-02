@@ -12,7 +12,6 @@ import SwiftUI
 struct SearchView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var searchVm: SearchViewModel
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var firestoreManager: FirestoreManager
 
     @State var totalCaptions: [CaptionModel] = []
@@ -112,7 +111,7 @@ struct SearchView: View {
         // Show caption delete modal
         .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
             DeleteModalView(title: "Delete caption", subTitle: "Are you sure you want to delete this caption? 🫢 This action cannot be undone.", lottieFile: "crane_hand_lottie", showView: $showCaptionDeleteModal, onDelete: {
-                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = folderVm.captionToBeDeleted {
+                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = FolderViewModel.shared.captionToBeDeleted {
                     let uid = user.id
                     firestoreManager.deleteSingleCaption(for: uid, captionToBeRemoved: captionToBeRemoved) {
                         withAnimation {
@@ -121,7 +120,7 @@ struct SearchView: View {
                                 self.searchVm.searchedCaptions.remove(at: captionToBeRemovedIndex)
                             }
 
-                            folderVm.resetCaptionToBeDeleted()
+                            FolderViewModel.shared.resetCaptionToBeDeleted()
                             self.showCaptionDeleteModal = false
                         }
                     }
@@ -144,13 +143,13 @@ struct SearchView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(SearchViewModel())
             .environmentObject(FolderViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
 
         SearchView()
             .environmentObject(NavigationStackCompat())
             .environmentObject(SearchViewModel())
             .environmentObject(FolderViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

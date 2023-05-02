@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct CaptionCardView: View {
-    @EnvironmentObject var folderVm: FolderViewModel
-
     // Scaled size
     @ScaledMetric var scaledSize: CGFloat = 1
 
@@ -69,7 +67,7 @@ struct CaptionCardView: View {
                                         delete: {
                                             // on delete of single caption
                                             self.showCaptionDeleteModal = true
-                                            self.folderVm.captionToBeDeleted = caption
+                                            FolderViewModel.shared.captionToBeDeleted = caption
                                         }, onMenuOpen: {
                                             self.shareableData = mapShareableData(caption: caption.captionDescription, platform: shouldShowSocialMediaPlatform ? folderType : nil)
                                         },
@@ -145,7 +143,7 @@ struct CaptionCardView: View {
                 }
             }
         }
-        .onReceive(folderVm.$editedFolder) { editedFolder in
+        .onReceive(FolderViewModel.shared.$editedFolder) { editedFolder in
             self.updateFolderInfo(folderInfo: editedFolder)
         }
         .sheet(isPresented: $showCaptionsGuideModal) {

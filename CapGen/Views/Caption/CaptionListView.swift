@@ -12,7 +12,6 @@ struct CaptionListView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var searchVm: SearchViewModel
 
     @State var captions: [CaptionModel] = []
@@ -52,7 +51,7 @@ struct CaptionListView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .ignoresSafeArea(.all)
 
-        .onReceive(folderVm.$updatedFolder.first()) { updatedFolder in
+        .onReceive(FolderViewModel.shared.$updatedFolder.first()) { updatedFolder in
             if context == .folder, let updatedFolder = updatedFolder {
                 self.folderId = updatedFolder.id
             }

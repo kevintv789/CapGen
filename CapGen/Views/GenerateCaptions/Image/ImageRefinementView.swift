@@ -116,14 +116,14 @@ struct ImageRefinementView_Previews: PreviewProvider {
     static var previews: some View {
         ImageRefinementView(imageSelectionContext: .camera)
             .environmentObject(PhotoSelectionViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
             .environmentObject(TaglistViewModel())
 
         ImageRefinementView(imageSelectionContext: .photosPicker)
             .environmentObject(PhotoSelectionViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
             .environmentObject(TaglistViewModel())

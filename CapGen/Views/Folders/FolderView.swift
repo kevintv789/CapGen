@@ -25,18 +25,15 @@ func mapShareableDataFromCaptionList(captions: [CaptionModel]) -> ShareableData 
 
 struct FolderView: View {
     @ScaledMetric var scaledSize: CGFloat = 1
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var firestoreManager: FirestoreManager
     @EnvironmentObject var navStack: NavigationStackCompat
+    @StateObject var folderVm: FolderViewModel
 
     // private variables
     @State var showFolderBottomSheet: Bool = false
     @State var showFolderDeleteModal: Bool = false
     @State var showCaptionDeleteModal: Bool = false
-
-    // dependencies
-    @State var folder: FolderModel
-
+    
     // Necessary to share data from the custom menu
     @State var shareableData: ShareableData? = nil
 
@@ -46,25 +43,25 @@ struct FolderView: View {
 
             VStack {
                 // Header
-                FolderHeaderView(platform: $folder.folderType, shareableData: self.$shareableData) {
+                FolderHeaderView(platform: $folderVm.editedFolder.folderType, shareableData: self.$shareableData) {
                     // on edit
                     self.showFolderBottomSheet.toggle()
-                    folderVm.currentFolder = folder
+                    FolderViewModel.shared.currentFolder = folderVm.editedFolder
                 } onMenuOpen: {
-                    self.shareableData = mapShareableDataFromCaptionList(captions: folder.captions)
+                    self.shareableData = mapShareableDataFromCaptionList(captions: folderVm.editedFolder.captions)
                 } onDelete: {
                     // on delete
                     self.showFolderDeleteModal = true
                 } onBack: {
                     // reset updated folder
-                    folderVm.updatedFolder = nil
+                    FolderViewModel.shared.updatedFolder = nil
                     self.navStack.pop(to: .previous)
                 }
 
                 // Folder title
                 Button {
                     // on edit
-                    folderVm.currentFolder = folder
+                    FolderViewModel.shared.currentFolder = folderVm.editedFolder
 
                     // Set a delay to show bottom sheet
                     // This is a direct result of having the custom menu opened right before pressing this button
@@ -79,7 +76,7 @@ struct FolderView: View {
                             .resizable()
                             .frame(width: 38 * scaledSize, height: 38 * scaledSize, alignment: .topLeading)
 
-                        Text(folder.name)
+                        Text(folderVm.editedFolder.name)
                             .font(.ui.title4Medium)
                             .foregroundColor(.ui.cultured)
                             .multilineTextAlignment(.leading)
@@ -90,7 +87,7 @@ struct FolderView: View {
                 }
                 .padding(.leading)
 
-                CaptionListView(emptyTitle: "Oops, it looks like you haven't saved any captions to this folder yet.", folderId: folder.id, context: .folder, showCaptionDeleteModal: $showCaptionDeleteModal)
+                CaptionListView(emptyTitle: "Oops, it looks like you haven't saved any captions to this folder yet.", folderId: folderVm.editedFolder.id, context: .folder, showCaptionDeleteModal: $showCaptionDeleteModal)
                     .padding()
 
                 Spacer()
@@ -100,20 +97,14 @@ struct FolderView: View {
             FolderBottomSheetView(isEditing: .constant(true))
                 .presentationDetents([.fraction(0.8)])
         }
-        .onReceive(folderVm.$editedFolder) { editedFolder in
-            if !editedFolder.name.isEmpty {
-                // Update folder in view so that this view will receive any incoming changes on edit of folder
-                self.folder = editedFolder
-            }
-        }
         // Show folder delete modal
         .modalView(horizontalPadding: 40, show: $showFolderDeleteModal) {
             DeleteModalView(title: "Remove folder", subTitle: "Deleting this folder will permanently erase all of its contents. Are you sure you want to proceed? 🫢", lottieFile: "crane_hand_lottie", showView: $showFolderDeleteModal, onDelete: {
-                if !self.folder.name.isEmpty {
+                if !self.folderVm.editedFolder.name.isEmpty {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = AuthManager.shared.userManager.user?.folders ?? []
 
-                    firestoreManager.onFolderDelete(for: uid, curFolder: self.folder, currentFolders: currentFolders) {
+                    firestoreManager.onFolderDelete(for: uid, curFolder: self.folderVm.editedFolder, currentFolders: currentFolders) {
                         // Once deleted, dismiss view or pop back to previous view
                         self.navStack.pop(to: .previous)
                     }
@@ -128,11 +119,11 @@ struct FolderView: View {
         // Show caption delete modal
         .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
             DeleteModalView(title: "Delete caption", subTitle: "Are you sure you want to delete this caption? 🫢 This action cannot be undone.", lottieFile: "crane_hand_lottie", showView: $showCaptionDeleteModal, onDelete: {
-                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = folderVm.captionToBeDeleted {
+                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = FolderViewModel.shared.captionToBeDeleted {
                     let uid = user.id
                     firestoreManager.deleteSingleCaption(for: uid, captionToBeRemoved: captionToBeRemoved) {
                         withAnimation {
-                            folderVm.resetCaptionToBeDeleted()
+                            FolderViewModel.shared.resetCaptionToBeDeleted()
                             self.showCaptionDeleteModal = false
                         }
                     }
@@ -148,14 +139,14 @@ struct FolderView: View {
 
 struct FolderView_Previews: PreviewProvider {
     static var previews: some View {
-        FolderView(folder: foldersMock[0])
+        FolderView(folderVm: FolderViewModel.shared)
             .environmentObject(FolderViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
 
-        FolderView(folder: foldersMock[0])
+        FolderView(folderVm: FolderViewModel.shared)
             .environmentObject(FolderViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")

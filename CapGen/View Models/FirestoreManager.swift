@@ -8,6 +8,7 @@
 import Firebase
 import FirebaseFirestoreSwift
 import Foundation
+import SwiftUI
 
 class FirestoreManager: ObservableObject {
     @Published var openAiKey: String?
@@ -19,6 +20,12 @@ class FirestoreManager: ObservableObject {
     var snapshotListener: ListenerRegistration?
 
     let db = Firestore.firestore()
+    
+    var folderViewModel: FolderViewModel
+    
+    init(folderViewModel: FolderViewModel) {
+        self.folderViewModel = folderViewModel
+    }
 
     func fetchKey() {
         fetch(from: "Secrets", documentId: "OpenAI") { data in
@@ -146,54 +153,51 @@ class FirestoreManager: ObservableObject {
     }
 
     /**
-     This function update an existing folder by
-     - Retrieving it from the current array
-     - Removing that item
-     - Adding in a new item with a different ID and same date created
-     */
-    func updateFolder(for uid: String?, newFolder: FolderModel, currentFolders: [FolderModel], onComplete: @escaping (_ updatedFolder: FolderModel?) -> Void) {
+      This function updates an existing folder in the user's folders array by modifying the folder object directly, without relying on its index. It ensures that the folder is updated in memory and in Firebase.
+
+      - Parameters:
+        - uid: The user ID for which the folder needs to be updated.
+        - newFolder: The new `FolderModel` object containing the updated information for the folder.
+        - currentFolders: An `inout` array of the user's current folders. The function will modify this array directly to update the folder.
+        - onComplete: A closure that gets called after the function has completed its task. The closure will be passed an optional `FolderModel` object. If the update is successful, it will be the updated folder; otherwise, it will be `nil`.
+
+      - Important:
+        The `currentFolders` parameter is marked as `inout`. This means that the function can modify the original array passed to it, and any changes made inside the function will be reflected outside the function as well. When passing an array to an `inout` parameter, you need to use the `&` symbol to pass a reference to the array. For example, when calling this function: `updateFolder(for: userId, newFolder: updatedFolder, currentFolders: &currFolders)`
+    */
+    func updateFolder(for uid: String?, newFolder: FolderModel, currentFolders: inout [FolderModel], onComplete: @escaping (_ updatedFolder: FolderModel?) -> Void) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             onComplete(nil)
             return
         }
-
+        
         if !currentFolders.isEmpty {
-            let newFolderId: String = UUID().uuidString
             let docRef = db.collection("Users").document("\(userId)")
 
-            // Update array with new item
-            if let indexOfFolder = currentFolders.firstIndex(where: { $0.id == newFolder.id }) {
-                // Create a new folder with a different ID and date created
-                // The ID needs to be different to avoid intermittent issues with ForEach reading from the same ID
-
-                var updatedCaptions: [CaptionModel] = []
-                newFolder.captions.forEach { caption in
-                    let updatedCaption = CaptionModel(id: caption.id, captionLength: caption.captionLength, dateCreated: caption.dateCreated, captionDescription: caption.captionDescription, includeEmojis: caption.includeEmojis, includeHashtags: caption.includeHashtags, folderId: newFolderId, prompt: caption.prompt, title: caption.title, tones: caption.tones, color: caption.color, index: caption.index)
-
-                    updatedCaptions.append(updatedCaption)
+            // Update the folder in memory
+            currentFolders = currentFolders.map { folder -> FolderModel in
+                if folder.id == newFolder.id {
+                    return FolderModel(id: folder.id, name: newFolder.name, dateCreated: folder.dateCreated, folderType: newFolder.folderType, captions: folder.captions, index: newFolder.index)
+                } else {
+                    return folder
                 }
+            }
 
-                let updatedFolder = FolderModel(id: newFolderId, name: newFolder.name, dateCreated: currentFolders[indexOfFolder].dateCreated, folderType: newFolder.folderType, captions: updatedCaptions, index: newFolder.index)
-
-                // Remove at current folder
-                var mutableFolders = currentFolders
-                mutableFolders.remove(at: indexOfFolder)
-
-                // Add in updated folder
-                mutableFolders.append(updatedFolder)
-
-                // Remove all current folders
-                deleteAllFolders(for: docRef) {
-                    // Adding updated folder onto the existing data field
-                    self.addNewFolders(for: docRef, updatedFolders: mutableFolders) {
-                        onComplete(updatedFolder)
-                    }
+            // Update the folder in Firestore
+            docRef.updateData([
+                "folders": currentFolders.map { $0.dictionary }
+            ]) { error in
+                if let error = error {
+                    print("Error updating folder: \(error)")
+                    onComplete(nil)
+                } else {
+                    self.folderViewModel.editedFolder = newFolder
+                    onComplete(newFolder)
                 }
             }
         }
     }
-
+    
     /**
      This function deletes a folder by
      - Removing entire folders array from the DB
@@ -226,85 +230,63 @@ class FirestoreManager: ObservableObject {
             }
         }
     }
-
-    /**
-     This function saves the captions to the folders within the CaptionOptimizationBottomSheetView
-     1. Retrieve the current folders
-     2. Find the folder to be updated
-     3. Remove all folders that were selected from the current folders list
-     4. Update all removed folders in memory with updated caption
-     5. Delete all folder from DB and add in the new updated array list
-     */
+    
+    // This function saves captions to specified folders
     func saveCaptionsToFolders(for uid: String?, destinationFolders: [DestinationFolder], onComplete: @escaping () -> Void) {
+        // Ensure the user ID is not nil, otherwise return an error and call onComplete()
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             onComplete()
             return
         }
 
-        let docRef: DocumentReference = db.collection("Users").document("\(userId)")
-
-        // Get current folders from the user document
+        // Get the user document reference from the Firestore database
+        let userDocRef: DocumentReference = db.collection("Users").document("\(userId)")
+        // Retrieve the current folders from the user model
         var currentFolders = AuthManager.shared.userManager.user?.folders ?? []
 
-        // destinationFolders -- are the folders that will have new captions saved to it
+        // Check if there are any destination folders to save captions to
         if !destinationFolders.isEmpty {
-            // do a loop on each folder to retrieve necessities
+            // Iterate through each destination folder
             destinationFolders.forEach { folder in
-
-                // sets a new folder ID to associate updated folders and captions with
-                let newFolderId: String = UUID().uuidString
-
-                // retrieve the caption to be saved to be updated within the updated folder
+                // Generate a new caption ID
+                let newCaptionId: String = UUID().uuidString
+                // Create a copy of the caption to be saved and assign the new ID
                 var captionToSave = folder.caption as CaptionModel
-                captionToSave.folderId = newFolderId
-                captionToSave.id = UUID().uuidString // generate a new ID for all new captions being saved
+                captionToSave.id = newCaptionId
+                // Add the folderId to the caption
+                captionToSave.folderId = folder.id
 
+                // Check if the caption length is empty and set it to the default value if needed
                 if captionToSave.captionLength.isEmpty {
                     captionToSave.captionLength = captionLengths.first!.type
                 }
 
-                // Delete original folder from the current folders
-                if let indexOfOriginalFolder = currentFolders.firstIndex(where: { $0.id == folder.id }) {
-                    let designatedFolder = currentFolders.remove(at: indexOfOriginalFolder)
+                // Find the index of the folder in the currentFolders array
+                if let folderIndex = currentFolders.firstIndex(where: { $0.id == folder.id }) {
+                    // Add the new caption to the existing folder
+                    currentFolders[folderIndex].captions.append(captionToSave)
 
-                    var updatedCaptions: [CaptionModel] = []
+                    // Convert the updated folders to dictionaries
+                    let updatedFoldersDictionaries = currentFolders.map { $0.dictionary }
 
-                    // Update all current captions to the new folder Id and caption ID
-                    designatedFolder.captions.forEach { caption in
-                        let updatedCaption = CaptionModel(id: UUID().uuidString, captionLength: caption.captionLength, dateCreated: caption.dateCreated, captionDescription: caption.captionDescription, includeEmojis: caption.includeEmojis, includeHashtags: caption.includeHashtags, folderId: newFolderId, prompt: caption.prompt, title: caption.title, tones: caption.tones, color: caption.color, index: caption.index)
-
-                        updatedCaptions.append(updatedCaption)
+                    // Update the folders in the user document with the updated folders
+                    userDocRef.updateData(["folders": updatedFoldersDictionaries]) { error in
+                        if let error = error {
+                            // Print an error message if the update failed
+                            print("Error updating folders: \(error)")
+                        } else {
+                            // Print a success message if the update succeeded
+                            print("Folders successfully updated")
+                            self.folderViewModel.folders = currentFolders
+                        }
                     }
-
-                    // append the caption that needs to be saved
-                    updatedCaptions.append(captionToSave)
-
-                    // create a new folder object with the updated caption and ID
-                    let updatedFolder = FolderModel(id: newFolderId, name: designatedFolder.name, dateCreated: designatedFolder.dateCreated, folderType: designatedFolder.folderType, captions: updatedCaptions, index: designatedFolder.index)
-
-                    // append new updated folder
-                    currentFolders.append(updatedFolder)
                 }
             }
         }
 
-        // Create a dispatch group to keep everything synchronous
-        // FB must delete all folders and then add new folders before the view gets updated
-        // otherwise we run into duplicate keys issues
-        let dispatchGroup = DispatchGroup()
-
-        dispatchGroup.enter()
-
-        deleteAllFolders(for: docRef) {
-            self.addNewFolders(for: docRef, updatedFolders: currentFolders) {
-                dispatchGroup.leave()
-            }
-        }
-
-        dispatchGroup.notify(queue: .main) {
-            onComplete()
-        }
+        // Call onComplete() after the operation is done
+        onComplete()
     }
 
     /**

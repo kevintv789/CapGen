@@ -16,7 +16,6 @@ struct EditCaptionView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var searchVm: SearchViewModel
 
     @Environment(\.colorScheme) var colorScheme
@@ -96,7 +95,7 @@ struct EditCaptionView: View {
                                 captionVm.selectedCaption.captionDescription = captionVm.editedCaption.text
                                 Task {
                                     await firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) { updatedFolder in
-                                        self.folderVm.updatedFolder = updatedFolder ?? nil
+                                        FolderViewModel.shared.updatedFolder = updatedFolder ?? nil
 
                                         // also update the search object with the most recent updated captions
                                         // for when a user wants to update the caption while searching
@@ -315,14 +314,14 @@ struct EditCaptionView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(FolderViewModel())
 
         EditCaptionView()
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(FolderViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
