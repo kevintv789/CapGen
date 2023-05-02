@@ -9,6 +9,7 @@ import Firebase
 import FirebaseFirestoreSwift
 import Foundation
 import SwiftUI
+import FirebaseStorage
 
 class FirestoreManager: ObservableObject {
     @Published var openAiKey: String?
@@ -16,6 +17,8 @@ class FirestoreManager: ObservableObject {
     @Published var appStoreModel: AppStoreModel?
     @Published var appError: ErrorType? = nil
     @Published var googleApiKey: String?
+    
+    private let storage = Storage.storage()
 
     var snapshotListener: ListenerRegistration?
 
@@ -232,11 +235,11 @@ class FirestoreManager: ObservableObject {
     }
     
     // This function saves captions to specified folders
-    func saveCaptionsToFolders(for uid: String?, destinationFolders: [DestinationFolder], onComplete: @escaping () -> Void) {
+    func saveCaptionsToFolders(for uid: String?, destinationFolders: [DestinationFolder], onComplete: @escaping (_ caption: CaptionModel?, _ folder: FolderModel?) -> Void) {
         // Ensure the user ID is not nil, otherwise return an error and call onComplete()
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
-            onComplete()
+            onComplete(nil, nil)
             return
         }
 
@@ -247,13 +250,17 @@ class FirestoreManager: ObservableObject {
 
         // Check if there are any destination folders to save captions to
         if !destinationFolders.isEmpty {
+            
             // Iterate through each destination folder
             destinationFolders.forEach { folder in
+                
                 // Generate a new caption ID
                 let newCaptionId: String = UUID().uuidString
+                
                 // Create a copy of the caption to be saved and assign the new ID
                 var captionToSave = folder.caption as CaptionModel
                 captionToSave.id = newCaptionId
+                
                 // Add the folderId to the caption
                 captionToSave.folderId = folder.id
 
@@ -264,6 +271,7 @@ class FirestoreManager: ObservableObject {
 
                 // Find the index of the folder in the currentFolders array
                 if let folderIndex = currentFolders.firstIndex(where: { $0.id == folder.id }) {
+                    
                     // Add the new caption to the existing folder
                     currentFolders[folderIndex].captions.append(captionToSave)
 
@@ -279,6 +287,7 @@ class FirestoreManager: ObservableObject {
                             // Print a success message if the update succeeded
                             print("Folders successfully updated")
                             self.folderViewModel.folders = currentFolders
+                            onComplete(captionToSave, currentFolders[folderIndex])
                         }
                     }
                 }
@@ -286,7 +295,7 @@ class FirestoreManager: ObservableObject {
         }
 
         // Call onComplete() after the operation is done
-        onComplete()
+        onComplete(nil, nil)
     }
     
     /**
@@ -416,6 +425,65 @@ class FirestoreManager: ObservableObject {
         
         // Set the updated currentTags array for the user's document
         docRef.setData(["customImageTags": currentTags.map { $0.dictionary }], merge: true)
+    }
+    
+    /**
+     Stores an image to Firebase Storage in the specified path and returns the download URL.
+
+     - Parameters:
+        - userId: The user ID of the authenticated user.
+        - folderId: The folder ID where the image should be stored.
+        - captionId: The caption ID associated with the image.
+        - image: The UIImage instance to be stored.
+        - completion: The completion handler to call when the image upload is complete.
+                      This closure takes a Result<URL, Error> as its argument, where the URL represents the download URL of the stored image.
+
+     - Discussion:
+        This function first converts the UIImage instance to Data (JPEG representation with 0.8 compression quality).
+        It then constructs the storage reference path using the user ID, folder ID, and caption ID.
+        The image is then uploaded to Firebase Storage using the putData() method, which takes imageData and metadata.
+        Upon successful upload, the download URL is obtained using the getDownloadURL() method and returned in the completion handler.
+        If any error occurs during the process, it is returned in the completion handler.
+    */
+    func storeImage(userId: String?, folderId: String?, captionId: String?, image: UIImage?, completion: @escaping (Result<URL, Error>) -> Void) {
+        // Ensure the user ID, folderId, and captionId are valid
+        guard let userId = userId, let folderId = folderId, let captionId = captionId else {
+            completion(.failure(StorageError.internalError("Cannot load bucket")))
+            return
+        }
+
+        // Ensure either a UIImage or imageData is provided
+        guard let imageData = image?.jpegData(compressionQuality: 0.8) else {
+            completion(.failure(StorageError.internalError("ERROR Cannot encode image data")))
+            return
+        }
+        
+        // Construct the storage reference path
+        let imagePath = "saved_images/users/\(userId)/folders/\(folderId)/caption_images/\(captionId).jpg"
+        let imageRef = storage.reference(withPath: imagePath)
+        
+        // Create metadata for the image
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        
+        // Upload the image data to Firebase Storage
+        imageRef.putData(imageData, metadata: metadata) { _, error in
+            if let error = error {
+                // If an error occurs, pass it to the completion handler
+                completion(.failure(error))
+            } else {
+                // On successful upload, get the download URL
+                imageRef.downloadURL { url, error in
+                    if let error = error {
+                        // If an error occurs while getting the download URL, pass it to the completion handler
+                        completion(.failure(error))
+                    } else if let url = url {
+                        // If the download URL is successfully obtained, pass it to the completion handler
+                        completion(.success(url))
+                    }
+                }
+            }
+        }
     }
 
     private func fetch(from collection: String, documentId: String, completion: @escaping (_ data: [String: Any]?) -> Void) {

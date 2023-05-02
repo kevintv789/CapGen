@@ -12,13 +12,17 @@ import SwiftUI
 struct CaptionOptimizationBottomSheetView: View {
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
+    @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
     
     @StateObject var firestoreMan = FirestoreManager(folderViewModel: FolderViewModel.shared)
+    
+    var context: NavigationContext = .prompt
 
     // Private variables
     @State var selectedIndex: Int = 0
     @State var isSavingToFolder: Bool = false
     @State var isSuccessfullySaved: Bool = false
+    
 
     // Used in dragGesture to rotate tab between views
     private func changeView(left: Bool) {
@@ -43,7 +47,7 @@ struct CaptionOptimizationBottomSheetView: View {
         if let user = AuthManager.shared.userManager.user {
             let userId = user.id
 
-            firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) {
+            firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) { savedCaption, savedFolder in
                 // get current folders
                 let currentFolders = user.folders
                 if !currentFolders.isEmpty {
@@ -51,7 +55,19 @@ struct CaptionOptimizationBottomSheetView: View {
                         FolderViewModel.shared.resetFolderStorage()
                         self.isSavingToFolder = false
                         self.isSuccessfullySaved = true
-
+                        
+                        // Store image to storage
+                        if context == .image {
+                            self.firestoreMan.storeImage(userId: userId, folderId: savedFolder?.id, captionId: savedCaption?.id, image: photosSelectionVm.uiImage) { result in
+                                switch result {
+                                case .success(let url):
+                                    print("SUCCESS!", url)
+                                case .failure(let error):
+                                    print("Error:", error)
+                                }
+                            }
+                        }
+                        
                         // Resets Saved! tag after 1 second
                         Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
                             self.isSuccessfullySaved = false

@@ -170,7 +170,7 @@ struct CaptionView: View {
             FullScreenImageOverlay(isFullScreenImage: $isFullScreenImage, image: photosSelectionVm.uiImage, imageHeight: .constant(nil))
         )
         .sheet(isPresented: $captionVm.isCaptionSelected) {
-            CaptionOptimizationBottomSheetView()
+            CaptionOptimizationBottomSheetView(context: navContext)
                 .presentationDetents([.large])
         }
         .onAppear {
