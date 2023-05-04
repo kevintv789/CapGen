@@ -81,7 +81,7 @@ struct CaptionView: View {
      */
     private func mapCaptionToBeEdited(index: Int, caption: String) {
         // Create caption model object with required elements
-        captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "")
+        captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "", completePrompt: openAiConnector.prompt)
 
         // On click, store a reference to the caption that will potentially be edited
         captionVm.editedCaption = EditedCaption(index: index, text: caption)
