@@ -11,7 +11,7 @@ import Foundation
 import SwiftUI
 
 class AppodealProvider: NSObject, ObservableObject {
-    @Published var firestoreMan: FirestoreManager = .init()
+    @Published var firestoreMan: FirestoreManager = .init(folderViewModel: FolderViewModel.shared)
     @Published var appError: ErrorType?
     @Published var isAdInitialised = false
     @Published var isRewardedReady = false

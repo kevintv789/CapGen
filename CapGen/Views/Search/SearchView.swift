@@ -12,8 +12,8 @@ import SwiftUI
 struct SearchView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var searchVm: SearchViewModel
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var firestoreManager: FirestoreManager
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
 
     @State var totalCaptions: [CaptionModel] = []
     @State var totalFolders: [FolderModel] = []
@@ -112,7 +112,7 @@ struct SearchView: View {
         // Show caption delete modal
         .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
             DeleteModalView(title: "Delete caption", subTitle: "Are you sure you want to delete this caption? 🫢 This action cannot be undone.", lottieFile: "crane_hand_lottie", showView: $showCaptionDeleteModal, onDelete: {
-                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = folderVm.captionToBeDeleted {
+                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = FolderViewModel.shared.captionToBeDeleted {
                     let uid = user.id
                     firestoreManager.deleteSingleCaption(for: uid, captionToBeRemoved: captionToBeRemoved) {
                         withAnimation {
@@ -121,7 +121,7 @@ struct SearchView: View {
                                 self.searchVm.searchedCaptions.remove(at: captionToBeRemovedIndex)
                             }
 
-                            folderVm.resetCaptionToBeDeleted()
+                            FolderViewModel.shared.resetCaptionToBeDeleted()
                             self.showCaptionDeleteModal = false
                         }
                     }
@@ -135,6 +135,10 @@ struct SearchView: View {
         .onAppear {
             Heap.track("onAppear SearchView")
         }
+        // show full image on click
+        .overlay(
+            FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
+        )
     }
 }
 
@@ -144,13 +148,15 @@ struct SearchView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(SearchViewModel())
             .environmentObject(FolderViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
+            .environmentObject(PhotoSelectionViewModel())
 
         SearchView()
             .environmentObject(NavigationStackCompat())
             .environmentObject(SearchViewModel())
             .environmentObject(FolderViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
+            .environmentObject(PhotoSelectionViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

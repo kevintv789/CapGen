@@ -207,6 +207,9 @@
 		D48460F029F9977A00CC1D8C /* TagsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460EF29F9977A00CC1D8C /* TagsModel.swift */; };
 		D48460F229F99E0600CC1D8C /* TagListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460F129F99E0600CC1D8C /* TagListViewModel.swift */; };
 		D48460F429FE414D00CC1D8C /* TagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460F329FE414D00CC1D8C /* TagListView.swift */; };
+		D48460F62A004D3800CC1D8C /* NavigationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460F52A004D3800CC1D8C /* NavigationContext.swift */; };
+		D48460F82A00577200CC1D8C /* ImageThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460F72A00577200CC1D8C /* ImageThumbnailView.swift */; };
+		D48460FA2A05779000CC1D8C /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48460F92A05779000CC1D8C /* ImageCache.swift */; };
 		D490991429BA9189002CBA4F /* SavedCaptionHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */; };
 		D490991629BC5B2E002CBA4F /* SimpleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991529BC5B2E002CBA4F /* SimpleLoadingView.swift */; };
 		D490991929C2697A002CBA4F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991829C2697A002CBA4F /* SearchView.swift */; };
@@ -1034,6 +1037,9 @@
 		D48460EF29F9977A00CC1D8C /* TagsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsModel.swift; sourceTree = "<group>"; };
 		D48460F129F99E0600CC1D8C /* TagListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListViewModel.swift; sourceTree = "<group>"; };
 		D48460F329FE414D00CC1D8C /* TagListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListView.swift; sourceTree = "<group>"; };
+		D48460F52A004D3800CC1D8C /* NavigationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationContext.swift; sourceTree = "<group>"; };
+		D48460F72A00577200CC1D8C /* ImageThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageThumbnailView.swift; sourceTree = "<group>"; };
+		D48460F92A05779000CC1D8C /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		D490991329BA9189002CBA4F /* SavedCaptionHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCaptionHomeViewModel.swift; sourceTree = "<group>"; };
 		D490991529BC5B2E002CBA4F /* SimpleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleLoadingView.swift; sourceTree = "<group>"; };
 		D490991829C2697A002CBA4F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -1890,6 +1896,7 @@
 				D4373F8529B5288300C186B3 /* CaptionModel.swift */,
 				D48460DB29EDF19700CC1D8C /* ImageDataModel.swift */,
 				D48460EF29F9977A00CC1D8C /* TagsModel.swift */,
+				D48460F52A004D3800CC1D8C /* NavigationContext.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2059,6 +2066,7 @@
 				D490991C29C520A5002CBA4F /* CircularConfigViews.swift */,
 				D48460CB29E9C59700CC1D8C /* GenerateCaptionsHeaderView.swift */,
 				D48460F329FE414D00CC1D8C /* TagListView.swift */,
+				D48460F72A00577200CC1D8C /* ImageThumbnailView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2189,6 +2197,7 @@
 				D47306CE29993D5E00179FEB /* Helpers.swift */,
 				D490991E29CF6ABB002CBA4F /* Constants.swift */,
 				D48460E729F3089300CC1D8C /* ImageMetadata.swift */,
+				D48460F92A05779000CC1D8C /* ImageCache.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2683,6 +2692,7 @@
 				D4373F7B29B5279C00C186B3 /* CaptionViewModel.swift in Sources */,
 				D48460E829F3089300CC1D8C /* ImageMetadata.swift in Sources */,
 				D4C3E48E2981C24500C2847A /* SocialMediaPlatformsModel.swift in Sources */,
+				D48460F82A00577200CC1D8C /* ImageThumbnailView.swift in Sources */,
 				D4373F8C29B5295F00C186B3 /* BlankCaptionsView.swift in Sources */,
 				D48460F229F99E0600CC1D8C /* TagListViewModel.swift in Sources */,
 				D4056E28295F659B00D3894D /* View.swift in Sources */,
@@ -2705,6 +2715,7 @@
 				D4373F9A29B52D0A00C186B3 /* EnterPromptView.swift in Sources */,
 				D4056E81296F0CB900D3894D /* LottieView.swift in Sources */,
 				D4C3E4922982105300C2847A /* Notifications.swift in Sources */,
+				D48460F62A004D3800CC1D8C /* NavigationContext.swift in Sources */,
 				D4C3E49E2984C02D00C2847A /* AppStoreModel.swift in Sources */,
 				D4056E3E2963487500D3894D /* OpenAIModel.swift in Sources */,
 				D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */,
@@ -2728,6 +2739,7 @@
 				D48460CE29E9D95300CC1D8C /* PhotoSelectionViewModel.swift in Sources */,
 				D48460E429F1E40F00CC1D8C /* CameraPreviewViewController.swift in Sources */,
 				D4056E79296E2C1700D3894D /* String.swift in Sources */,
+				D48460FA2A05779000CC1D8C /* ImageCache.swift in Sources */,
 				D4373F8A29B5291000C186B3 /* FoldersArrayMock.swift in Sources */,
 				D490991929C2697A002CBA4F /* SearchView.swift in Sources */,
 				D47306CF29993D5E00179FEB /* Helpers.swift in Sources */,
@@ -3086,7 +3098,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
 				PRODUCT_MODULE_NAME = CapGen;
 				PRODUCT_NAME = "CapGen Beta";
@@ -3132,7 +3144,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen.dev;
 				PRODUCT_NAME = "CapGen Beta";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3319,7 +3331,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3461,7 +3473,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevu.CapGen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

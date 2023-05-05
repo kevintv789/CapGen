@@ -10,15 +10,19 @@ import NavigationStack
 import SwiftUI
 
 struct CaptionOptimizationBottomSheetView: View {
-    @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var captionVm: CaptionViewModel
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
+    @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
+    
+    @StateObject var firestoreMan = FirestoreManager(folderViewModel: FolderViewModel.shared)
+    
+    var context: NavigationContext = .prompt
 
     // Private variables
     @State var selectedIndex: Int = 0
     @State var isSavingToFolder: Bool = false
     @State var isSuccessfullySaved: Bool = false
+    
 
     // Used in dragGesture to rotate tab between views
     private func changeView(left: Bool) {
@@ -38,20 +42,32 @@ struct CaptionOptimizationBottomSheetView: View {
     private func saveCaptionsToFolder() {
         isSavingToFolder = true
 
-        let captionsToSaveWithFolderId = folderVm.captionFolderStorage
+        let captionsToSaveWithFolderId = FolderViewModel.shared.captionFolderStorage
 
         if let user = AuthManager.shared.userManager.user {
             let userId = user.id
 
-            firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) {
+            firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) { savedCaption, savedFolder in
                 // get current folders
                 let currentFolders = user.folders
                 if !currentFolders.isEmpty {
                     withAnimation {
-                        folderVm.resetFolderStorage()
+                        FolderViewModel.shared.resetFolderStorage()
                         self.isSavingToFolder = false
                         self.isSuccessfullySaved = true
-
+                        
+                        // Store image to storage
+                        if context == .image {
+                            self.firestoreMan.storeImage(userId: userId, folderId: savedFolder?.id, captionId: savedCaption?.id, image: photosSelectionVm.uiImage) { result in
+                                switch result {
+                                case .success(let url):
+                                    print("SUCCESS!", url)
+                                case .failure(let error):
+                                    print("Error:", error)
+                                }
+                            }
+                        }
+                        
                         // Resets Saved! tag after 1 second
                         Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
                             self.isSuccessfullySaved = false
@@ -104,7 +120,7 @@ struct CaptionOptimizationBottomSheetView: View {
                 Spacer()
             }
             .onDisappear {
-                folderVm.resetFolderStorage()
+                FolderViewModel.shared.resetFolderStorage()
                 self.isSavingToFolder = false
                 self.isSuccessfullySaved = true
 
@@ -217,8 +233,8 @@ struct TopTabView: View {
 }
 
 struct SaveToFolderView: View {
-    @EnvironmentObject var folderVm: FolderViewModel
-
+    @State private var showApplyButton: Bool = false
+    
     @Binding var isLoading: Bool
     @Binding var isSaved: Bool
     var onApplyClick: () -> Void
@@ -231,15 +247,22 @@ struct SaveToFolderView: View {
                 .lineSpacing(5)
                 .frame(height: 50)
 
-            if !folderVm.captionFolderStorage.isEmpty {
+            if showApplyButton {
                 ApplyButtonView(isLoading: $isLoading, onApplyClick: onApplyClick)
-            } else if folderVm.captionFolderStorage.isEmpty && !isLoading && isSaved {
+            } else if !isLoading && isSaved {
                 SavedTagView()
             }
 
             FolderGridView(context: .saveToFolder, disableTap: $isLoading)
 
             Spacer()
+        }
+        .onReceive(FolderViewModel.shared.$captionFolderStorage) { captionFolderStorage in
+            if !captionFolderStorage.isEmpty {
+                showApplyButton = true
+            } else {
+                showApplyButton = false
+            }
         }
     }
 }

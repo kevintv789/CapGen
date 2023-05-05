@@ -20,7 +20,7 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
     @Published var imageData: Data = .init(count: 0)
     @Published var imageAddress: ImageGeoLocationAddress? = nil
     @Published var cameraPosition: AVCaptureDevice.Position = .back
-    @Published var flashMode: AVCaptureDevice.FlashMode = .off
+    @Published var flashMode: AVCaptureDevice.TorchMode = .off
 
     func resetData() {
         imageData.removeAll()
@@ -124,27 +124,58 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
     func takePicture() {
         DispatchQueue.global(qos: .background).async {
             let photoSettings = AVCapturePhotoSettings()
-
-            // Set the flash mode
-            if self.output.supportedFlashModes.contains(self.flashMode) {
-                photoSettings.flashMode = self.flashMode
-            }
-
+            
+            // Set the torch mode
+            self.setTorchModeForDeviceInput()
+            
+            // Set screen brightness to max if using the front camera and flash mode is on
+            let originalBrightness = self.setScreenBrightnessForFrontCameraAndFlash()
+            
+            // Capture the photo
             self.output.capturePhoto(with: photoSettings, delegate: self)
-
-            // Stop session after a timer because stopRunning() should be called before the
-            // picture can be outputted sometimes
-            DispatchQueue.main.async {
-                Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
-                    self.captureSession.stopRunning()
-                    self.locationManager.stopUpdatingLocation()
-                }
-            }
+            
+            // Stop the session and restore screen brightness after a timer
+            self.stopSessionAndRestoreBrightnessAfterTimer(originalBrightness: originalBrightness)
 
             DispatchQueue.main.async {
                 withAnimation {
                     self.isTaken.toggle()
                 }
+            }
+        }
+    }
+
+    private func setTorchModeForDeviceInput() {
+        if let deviceInput = self.captureSession.inputs.first as? AVCaptureDeviceInput,
+           deviceInput.device.isTorchAvailable {
+            do {
+                try deviceInput.device.lockForConfiguration()
+                deviceInput.device.torchMode = self.flashMode
+                deviceInput.device.unlockForConfiguration()
+            } catch {
+                print("Error setting torch mode: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func setScreenBrightnessForFrontCameraAndFlash() -> CGFloat {
+        let currentBrightness = UIScreen.main.brightness
+        if self.cameraPosition == .front && self.flashMode == .on {
+            DispatchQueue.main.async {
+                UIScreen.main.brightness = 1.0
+            }
+        }
+        return currentBrightness
+    }
+
+    private func stopSessionAndRestoreBrightnessAfterTimer(originalBrightness: CGFloat) {
+        DispatchQueue.main.async {
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                self.captureSession.stopRunning()
+                self.locationManager.stopUpdatingLocation()
+                
+                // Restore screen brightness to its original value
+                UIScreen.main.brightness = originalBrightness
             }
         }
     }

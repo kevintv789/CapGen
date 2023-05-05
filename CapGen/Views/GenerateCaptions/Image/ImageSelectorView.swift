@@ -20,6 +20,8 @@ struct ImageSelectorView: View {
     @State private var isLoading: Bool = false
     @State private var enabled = false
     @State private var showCameraView: Bool = false
+    @State private var showErrorAlert: Bool = false
+    @State private var googleCloudVisionError: GoogleCloudVisionError? = nil
 
     var body: some View {
         ZStack {
@@ -72,15 +74,19 @@ struct ImageSelectorView: View {
                             
                             // reset all tags associated with the pic
                             taglistVM.resetAll()
-
+                            
                             if !image.isEmpty {
                                 // save image data to picker item
                                 await photoSelectionVm.assignPhotoPickerItem(image: image[0])
-                            }
-
-                            // push to refinement view once data is saved to published object
-                            if photoSelectionVm.photosPickerData != nil {
-                                self.navStack.push(ImageRefinementView(imageSelectionContext: .photosPicker))
+                                
+                                if photoSelectionVm.googleCloudVisionError != nil {
+                                    showErrorAlert = true
+                                } else {
+                                    // push to refinement view once data is saved to published object
+                                    if photoSelectionVm.photosPickerData != nil {
+                                        self.navStack.push(ImageRefinementView(imageSelectionContext: .photosPicker))
+                                    }
+                                }
                             }
 
                             isLoading = false
@@ -90,6 +96,16 @@ struct ImageSelectorView: View {
                     Spacer()
                 }
             }
+        }
+        .alert(isPresented: $showErrorAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(photoSelectionVm.googleCloudVisionError?.localizedDescription ?? "An unknown error occurred."),
+                dismissButton: .default(Text("OK")) {
+                    // Reset the error state after the alert is dismissed
+                    photoSelectionVm.googleCloudVisionError = nil
+                }
+            )
         }
         .onAppear {
             // resets selected tags

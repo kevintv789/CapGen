@@ -27,6 +27,7 @@ public class OpenAIConnector: ObservableObject {
 
         Heap.track("onAppear OpenAIConnector - TEXT Complete prompt information", withProperties: ["complete_prompt": completePrompt, "function_name": "generatePrompt()"])
 
+        self.prompt = completePrompt
         return completePrompt
     }
 
@@ -77,6 +78,7 @@ public class OpenAIConnector: ObservableObject {
 
         Heap.track("onAppear OpenAIConnector - IMAGE Complete prompt information", withProperties: ["complete_prompt": completePrompt, "function_name": "generatePrompt()"])
 
+        self.prompt = completePrompt
         return completePrompt
     }
 

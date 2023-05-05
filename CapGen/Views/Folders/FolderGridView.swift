@@ -9,19 +9,13 @@ import Heap
 import NavigationStack
 import SwiftUI
 
-enum FolderViewContext {
-    case saveToFolder, view
-}
-
 struct FolderGridView: View {
-    @EnvironmentObject var firestoreMan: FirestoreManager
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
-
+    @ObservedObject var folderVm = FolderViewModel.shared
+    
     // private vars
     @State var showFolderBottomSheet: Bool = false
-    @State var folders: [FolderModel] = []
     @State var isEditing: Bool = false
     @State var shareableData: ShareableData?
 
@@ -31,7 +25,7 @@ struct FolderGridView: View {
     // Context to determine determine logic
     // View context - Original context for HomeView. On click of folder will navigate user to the folder view
     // saveToFolder context - On click of folder will add a caption to the folder
-    var context: FolderViewContext = .view
+    var context: NavigationContext = .view
 
     // Disable all tap actions, important if the system is currently processing something
     @Binding var disableTap: Bool
@@ -56,45 +50,45 @@ struct FolderGridView: View {
                 .padding(.top, 20)
 
                 .padding(.top, 20)
-                ForEach(Array(folders.enumerated()), id: \.element) { index, folder in
+                ForEach(folderVm.folders) { folder in
                     HStack(spacing: 0) {
-                        FolderButtonView(folder: self.$folders[index], context: context) {
+                        FolderButtonView(folder: .constant(folder), context: context) {
                             // Depending on context, do different things on click
                             if context == .view {
-                                self.folderVm.editedFolder = self.folders[index]
-                                self.navStack.push(FolderView(folder: self.folders[index]))
+                                folderVm.editedFolder = folder
+                                self.navStack.push(FolderView(folderVm: folderVm))
                             } else if context == .saveToFolder {
                                 // The index of the already saved caption
-                                let indexOfSavedCaption = self.folderVm.captionFolderStorage.firstIndex(where: { $0.id == folder.id && $0.caption.captionDescription == self.captionVm.selectedCaption.captionDescription }) ?? -1
+                                let indexOfSavedCaption = FolderViewModel.shared.captionFolderStorage.firstIndex(where: { $0.id == folder.id && $0.caption.captionDescription == self.captionVm.selectedCaption.captionDescription }) ?? -1
 
                                 if indexOfSavedCaption < 0 {
                                     // On click, append the saved caption to a temp storage array
-                                    self.folderVm.captionFolderStorage.append(DestinationFolder(id: folder.id, caption: self.captionVm.selectedCaption))
+                                    FolderViewModel.shared.captionFolderStorage.append(DestinationFolder(id: folder.id, caption: self.captionVm.selectedCaption))
                                 } else {
                                     // On click again, remove that caption from the folder
-                                    self.folderVm.captionFolderStorage.remove(at: indexOfSavedCaption)
+                                    FolderViewModel.shared.captionFolderStorage.remove(at: indexOfSavedCaption)
                                 }
                             }
 
-                            Heap.track("onClick FolderGridView - Folder clicked", withProperties: ["context": context, "folder": ["name": folders[index].name, "folder_type": folders[index].folderType, "captions_count": folders[index].captions.count, "id": folders[index].id]])
+                            Heap.track("onClick FolderGridView - Folder clicked", withProperties: ["context": context, "folder": ["name": folder.name, "folder_type": folder.folderType, "captions_count": folder.captions.count, "id": folder.id] as [String : Any]])
                         }
                         .disabled(disableTap)
 
                         FolderCustomMenu(shareableData: self.$shareableData, shouldShowDelete: context == .view) {
-                            folderVm.currentFolder = folder
+                            FolderViewModel.shared.currentFolder = folder
                             self.isEditing = true
                             self.showFolderBottomSheet = true
 
-                            Heap.track("onClick FolderGridView Custom Menu - Edit button clicked", withProperties: ["folder": folderVm.currentFolder])
+                            Heap.track("onClick FolderGridView Custom Menu - Edit button clicked", withProperties: ["folder": FolderViewModel.shared.currentFolder])
 
                         } onMenuOpen: {
                             shareableData = mapShareableDataFromCaptionList(captions: folder.captions)
                         } onDelete: {
                             // on delete, remove from firebase
-                            folderVm.currentFolder = folder
-                            folderVm.isDeleting.toggle()
+                            FolderViewModel.shared.currentFolder = folder
+                            FolderViewModel.shared.isDeleting.toggle()
 
-                            Heap.track("onClick FolderGridView Custom Menu - Delete button clicked, show pop-up", withProperties: ["folder": folderVm.currentFolder])
+                            Heap.track("onClick FolderGridView Custom Menu - Delete button clicked, show pop-up", withProperties: ["folder": FolderViewModel.shared.currentFolder])
                         }
                         .disabled(disableTap)
                     }
@@ -106,13 +100,9 @@ struct FolderGridView: View {
             FolderBottomSheetView(isEditing: $isEditing)
                 .presentationDetents([.fraction(0.8)])
         }
-        .onReceive(AuthManager.shared.userManager.$user) { user in
-            if let user = user {
-                self.folders = user.folders
-
-                // Resets selected folder back to nil so that the bottom sheet wil only retain most updated data
-                folderVm.resetFolder()
-            }
+        .onReceive(folderVm.$folders) { updatedFolders in
+            // Resets selected folder back to nil so that the bottom sheet wil only retain most updated data
+            folderVm.resetFolder()
         }
         .onAppear {
             self.router = Router(navStack: navStack)
@@ -149,11 +139,10 @@ struct AddFolderButtonView: View {
 }
 
 struct FolderButtonView: View {
-    @EnvironmentObject var folderVm: FolderViewModel
     @State var filteredFolder: [DestinationFolder] = []
 
     @Binding var folder: FolderModel
-    var context: FolderViewContext
+    var context: NavigationContext
     var action: () -> Void
 
     // Update caption count UI if there are items still within the temp storage
@@ -243,7 +232,7 @@ struct FolderButtonView: View {
                 Spacer()
             }
         }
-        .onReceive(folderVm.$captionFolderStorage) { list in
+        .onReceive(FolderViewModel.shared.$captionFolderStorage) { list in
             if context == .saveToFolder {
                 // filter out to the correct folder
                 self.filteredFolder = list.filter { $0.id == folder.id }

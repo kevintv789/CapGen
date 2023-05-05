@@ -9,16 +9,11 @@ import Heap
 import NavigationStack
 import SwiftUI
 
-enum CaptionGenerationType {
-    case prompt
-    case image
-}
-
 struct PersonalizeOptionsView: View {
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
 
-    var captionGenType: CaptionGenerationType = .prompt
+    var captionGenType: NavigationContext = .prompt
 
     @State var selectedSection: Int? = 0
     @State var isTonesSectionSelected: Bool = true

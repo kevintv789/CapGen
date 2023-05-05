@@ -15,9 +15,9 @@ struct HomeView: View {
     @EnvironmentObject var firestoreManager: FirestoreManager
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
     @EnvironmentObject var generateByPromptVm: GenerateByPromptViewModel
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
 
     // user data
     @State var userFirstName: String?
@@ -149,6 +149,9 @@ struct HomeView: View {
 
                 // Retrieves user's credit amount
                 self.creditAmount = user.credits
+                
+                // Initialize folders
+                FolderViewModel.shared.folders = user.folders
 
                 // Map Firebase User ID to Heap
                 Heap.identify(user.id)
@@ -179,14 +182,14 @@ struct HomeView: View {
         // Show folder delete modal
         .modalView(horizontalPadding: 40, show: $showFolderDeleteModal) {
             DeleteModalView(title: "Remove folder", subTitle: "Deleting this folder will permanently erase all of its contents. Are you sure you want to proceed? 🫢", lottieFile: "crane_hand_lottie", showView: $showFolderDeleteModal, onDelete: {
-                if !folderVm.currentFolder.id.isEmpty {
+                if !FolderViewModel.shared.currentFolder.id.isEmpty {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = authManager.userManager.user?.folders ?? []
 
-                    firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {
+                    firestoreManager.onFolderDelete(for: uid, curFolder: FolderViewModel.shared.currentFolder, currentFolders: currentFolders) {
                         withAnimation {
                             self.showFolderDeleteModal = false
-                            Heap.track("onClick HomeView - Successfully deleted folder", withProperties: ["folder_to_delete": folderVm.currentFolder])
+                            Heap.track("onClick HomeView - Successfully deleted folder", withProperties: ["folder_to_delete": FolderViewModel.shared.currentFolder])
                         }
                     }
                 }
@@ -200,11 +203,11 @@ struct HomeView: View {
         // Show caption delete modal
         .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
             DeleteModalView(title: "Delete caption", subTitle: "Are you sure you want to delete this caption? 🫢 This action cannot be undone.", lottieFile: "crane_hand_lottie", showView: $showCaptionDeleteModal, onDelete: {
-                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = folderVm.captionToBeDeleted {
+                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = FolderViewModel.shared.captionToBeDeleted {
                     let uid = user.id
                     firestoreManager.deleteSingleCaption(for: uid, captionToBeRemoved: captionToBeRemoved) {
                         withAnimation {
-                            folderVm.resetCaptionToBeDeleted()
+                            FolderViewModel.shared.resetCaptionToBeDeleted()
                             self.showCaptionDeleteModal = false
 
                             Heap.track("onClick HomeView - Successfully deleted caption", withProperties: ["caption_to_delete": captionToBeRemoved])
@@ -217,15 +220,19 @@ struct HomeView: View {
                 self.showCaptionDeleteModal = false
             }
         }
-        .onReceive(folderVm.$isDeleting) { value in
+        .onReceive(FolderViewModel.shared.$isDeleting) { value in
             // Assign published value to a State to use in the onClickExit() function from modalView
             // This is a necessary work around for modifying published state during a view update
             self.showFolderDeleteModal = value
         }
         .onChange(of: self.showFolderDeleteModal) { newValue in
             // Resets the published value back to original state when the delete modal disappears
-            folderVm.isDeleting = newValue
+            FolderViewModel.shared.isDeleting = newValue
         }
+        // show full image on click
+        .overlay(
+            FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
+        )
     }
 }
 
@@ -263,20 +270,22 @@ struct Wave: Shape {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
             .environmentObject(GenerateByPromptViewModel())
-
+            .environmentObject(PhotoSelectionViewModel())
+        
         HomeView()
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
             .environmentObject(GenerateByPromptViewModel())
+            .environmentObject(PhotoSelectionViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

@@ -136,13 +136,13 @@ struct ProfileView_Previews: PreviewProvider {
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
             .environmentObject(NavigationStackCompat())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
 
         ProfileView()
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
             .environmentObject(NavigationStackCompat())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

@@ -10,10 +10,6 @@ import NavigationStack
 import PhotosUI
 import SwiftUI
 
-enum ImageSelectionContext {
-    case camera, photosPicker
-}
-
 struct ImageRefinementView: View {
     @EnvironmentObject var cameraViewModel: CameraViewModel
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
@@ -21,10 +17,10 @@ struct ImageRefinementView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var taglistVM: TaglistViewModel
 
-    let imageSelectionContext: ImageSelectionContext
+    let imageSelectionContext: NavigationContext
 
     @State private var imageData: Data? = nil
-    @State private var imageHeight: CGFloat = 0
+    @State private var imageHeight: CGFloat? = nil
     @State private var isFullScreenImage: Bool = false
     @State private var showTagsModal: Bool = false
 
@@ -86,7 +82,7 @@ struct ImageRefinementView: View {
                         }
                     }
                     .padding()
-                    .padding(.top, imageHeight > 0 ? 0 : .infinity) // Adjust the padding based on the actual image height
+                    .padding(.top, imageHeight != nil && imageHeight! > 0  ? 0 : .infinity) // Adjust the padding based on the actual image height
 
                     Spacer()
                 }
@@ -103,23 +99,15 @@ struct ImageRefinementView: View {
                 self.imageData = photosSelectionVm.photosPickerData
             }
 
+            // Assigns a UIImage to Published event so that the next few screens have access
+            if let imageData = imageData, let uiImage = UIImage(data: imageData) {
+                photosSelectionVm.uiImage = uiImage
+            }
+            
             Heap.track("onAppear ImageRefinementView - With context: \(imageSelectionContext)")
         }
         .overlay(
-            ZStack {
-                if self.isFullScreenImage {
-                    Color.black.opacity(0.9)
-                        .edgesIgnoringSafeArea(.all)
-
-                    if let imageData = imageData, let uiImage = UIImage(data: imageData) {
-                        CapturedImageView(image: uiImage, imageHeight: $imageHeight, isFullScreen: true)
-                    }
-                }
-            }.onTapGesture {
-                withAnimation {
-                    isFullScreenImage.toggle()
-                }
-            }
+            FullScreenImageOverlay(isFullScreenImage: $isFullScreenImage, image: photosSelectionVm.uiImage, imageHeight: $imageHeight)
         )
     }
 }
@@ -128,14 +116,14 @@ struct ImageRefinementView_Previews: PreviewProvider {
     static var previews: some View {
         ImageRefinementView(imageSelectionContext: .camera)
             .environmentObject(PhotoSelectionViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
             .environmentObject(TaglistViewModel())
 
         ImageRefinementView(imageSelectionContext: .photosPicker)
             .environmentObject(PhotoSelectionViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
             .environmentObject(TaglistViewModel())
@@ -188,7 +176,7 @@ struct InstructionalTagView: View {
 
 // Custom view to get the size of the view it's applied to
 struct GeometryGetter: View {
-    @Binding var rect: CGFloat
+    @Binding var rect: CGFloat?
 
     var body: some View {
         GeometryReader { geo in
@@ -201,7 +189,7 @@ struct GeometryGetter: View {
 
 struct CapturedImageView: View {
     let image: UIImage
-    @Binding var imageHeight: CGFloat
+    @Binding var imageHeight: CGFloat?
     let isFullScreen: Bool
 
     var body: some View {
@@ -220,6 +208,30 @@ struct CapturedImageView: View {
                 .frame(maxHeight: SCREEN_HEIGHT * 0.65)
                 .mask(RoundedRectangle(cornerRadius: 20))
                 .shadow(color: .ui.shadowGray, radius: 4, x: 2, y: 4)
+        }
+    }
+}
+
+struct FullScreenImageOverlay: View {
+    @Binding var isFullScreenImage: Bool
+    let image: UIImage?
+    @Binding var imageHeight: CGFloat?
+
+    var body: some View {
+        ZStack {
+            if isFullScreenImage {
+                Color.black.opacity(0.9)
+                    .edgesIgnoringSafeArea(.all)
+
+                if let uiImage = image {
+                    CapturedImageView(image: uiImage, imageHeight: $imageHeight, isFullScreen: true)
+                }
+            }
+        }
+        .onTapGesture {
+            withAnimation {
+                isFullScreenImage.toggle()
+            }
         }
     }
 }

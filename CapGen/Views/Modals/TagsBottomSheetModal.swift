@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Heap
 
 struct TagsBottomSheetModal: View {
     @Environment(\.dismiss) var dismiss
@@ -14,6 +15,7 @@ struct TagsBottomSheetModal: View {
 
     @State private var tagInput: String = ""
     @State private var filterToSelectedTag: Bool = false
+    @State private var showDeleteModal: Bool = false
 
     // Temp selected tags is used to create a mutable selected list that can be removed and changed at will
     @State private var tempSelectedTags: [TagsModel] = []
@@ -26,9 +28,10 @@ struct TagsBottomSheetModal: View {
             VStack {
                 TagsBottomSheetHeader(title: "Tag & Refine") {
                     // on reset
-                    taglistVM.resetSelectedTags()
-                    tempSelectedTags.removeAll()
-                    tempCustomSelectedTags.removeAll()
+                    if !tempSelectedTags.isEmpty || !tempCustomSelectedTags.isEmpty {
+                        showDeleteModal = true
+                    }
+                   
                 } onSaveClick: {
                     // on save, copy temp selected tags list to official selected tags
                     taglistVM.selectedTags = tempSelectedTags
@@ -39,6 +42,8 @@ struct TagsBottomSheetModal: View {
                     if !tempCustomSelectedTags.isEmpty, let userId = AuthManager.shared.userManager.user?.id {
                         firestoreMan.saveCustomTags(for: userId, customImageTags: taglistVM.customSelectedTags)
                     }
+                    
+                    Heap.track("TagBottomSheetModal - onSaveClick", withProperties: ["Selected Tags": tempSelectedTags, "Custom Selected Tags": tempCustomSelectedTags])
 
                     dismiss()
                 } onBackButtonClick: {
@@ -47,6 +52,8 @@ struct TagsBottomSheetModal: View {
                         taglistVM.updateMutableTags(tags: taglistVM.combinedTagTypes)
                         taglistVM.getTags()
                     }
+                    
+                    Heap.track("TagBottomSheetModal - onBackButtonClick", withProperties: ["Selected Tags": tempSelectedTags, "Custom Selected Tags": tempCustomSelectedTags])
                    
                     dismiss()
                 }
@@ -171,6 +178,17 @@ struct TagsBottomSheetModal: View {
                 taglistVM.getTags() // update list
             }
         }
+        // Show erase text modal
+        .modalView(horizontalPadding: 50, show: $showDeleteModal) {
+            SimpleDeleteModal(showView: $showDeleteModal, title: "This will delete all of your selected tags. \nAre you sure?", buttonTitle: "Yes! Delete.") {
+                // on delete
+                Heap.track("TagBottomSheetModal - onReset", withProperties: ["Selected Tags": tempSelectedTags, "Custom Selected Tags": tempCustomSelectedTags])
+                
+                taglistVM.resetSelectedTags()
+                tempSelectedTags.removeAll()
+                tempCustomSelectedTags.removeAll()
+            }
+        }
     }
 }
 
@@ -178,11 +196,11 @@ struct TagsBottomSheetModal_Previews: PreviewProvider {
     static var previews: some View {
         TagsBottomSheetModal()
             .environmentObject(TaglistViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
 
         TagsBottomSheetModal()
             .environmentObject(TaglistViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
