@@ -10,6 +10,7 @@ import FirebaseFirestoreSwift
 import Foundation
 import SwiftUI
 import FirebaseStorage
+import Heap
 
 class FirestoreManager: ObservableObject {
     @Published var openAiKey: String?
@@ -221,6 +222,11 @@ class FirestoreManager: ObservableObject {
             if let indexOfFolder = currentFolders.firstIndex(where: { $0.id == curFolder.id }) {
                 // Remove current folder
                 var mutableCurrentFolders = currentFolders
+                
+                // also find the image path (if it exists) and then deletes it from the storage
+                let folderPath = "saved_images/users/\(userId)/folders/\(mutableCurrentFolders[indexOfFolder].id)/caption_images/"
+                deleteAllImagesInFolder(folderPath: folderPath)
+                
                 mutableCurrentFolders.remove(at: indexOfFolder)
 
                 // delete entire folders array
@@ -378,6 +384,11 @@ class FirestoreManager: ObservableObject {
 
             if folder.id == captionToBeRemoved.folderId {
                 if let indexOfCaption = folder.captions.firstIndex(where: { $0.id == captionToBeRemoved.id }) {
+                    
+                    // also find the image path (if it exists) and then deletes it from the storage
+                    let imagePath = "saved_images/users/\(userId)/folders/\(folder.id)/caption_images/\(mutableFolder.captions[indexOfCaption].id).jpg"
+                    deleteImage(imagePath: imagePath)
+                    
                     mutableFolder.captions.remove(at: indexOfCaption)
                 }
             }
@@ -482,6 +493,68 @@ class FirestoreManager: ObservableObject {
                         completion(.success(url))
                     }
                 }
+            }
+        }
+    }
+    
+    /// Deletes an image from Firebase Storage.
+    ///
+    /// - Parameters:
+    ///   - imagePath: The path of the image to be deleted in Firebase Storage.
+    ///   - completion: A closure to be executed once the deletion is complete.
+    ///                 The closure takes a single argument:
+    ///                 - Result<Void, Error>: A Result that represents the success or failure of the deletion.
+    ///                 On success, the result contains Void.
+    ///                 On failure, the result contains an Error describing what went wrong.
+    func deleteImage(imagePath: String) {
+        // Get the reference of the image using the provided path
+        let imageRef = storage.reference(withPath: imagePath)
+
+        // Delete the image from Firebase Storage
+        imageRef.delete { error in
+            if let error = error {
+                // If an error occurs, pass it to the completion handler
+                print("Delete image error - \(error.localizedDescription)")
+                Heap.track("onDeleteImage - Failed", withProperties: ["error": error, "image_path": imagePath])
+                return
+            } else {
+                // If the deletion is successful, pass a success result to the completion handler
+                print("Delete image successful from path \(imagePath)")
+                Heap.track("onDeleteImage - Success!", withProperties: ["image_path": imagePath])
+                return
+            }
+        }
+    }
+    
+    func deleteAllImagesInFolder(folderPath: String) {
+        let folderRef = storage.reference(withPath: folderPath)
+        
+        folderRef.listAll { result, error in
+            if let error = error {
+                print("Delete image error - \(error.localizedDescription)")
+                Heap.track("deleteAllImagesInFolder - Entire folder failed", withProperties: ["error": error, "folder_path": folderPath])
+            } else {
+                guard let items = result?.items else {
+                    print("No items found in the folder.")
+                    return
+                }
+                
+                // For each item (file) in the folder, delete the file
+                for item in items {
+                    item.delete { error in
+                        if let error = error {
+                            print("Delete image error - \(error.localizedDescription)")
+                            Heap.track("deleteAllImagesInFolder - Single item failed", withProperties: ["error": error, "folder_path": folderPath])
+                            return
+                        } else {
+                            print("Delete image success from path \(item.fullPath)")
+                        }
+                    }
+                }
+                
+                // If all files were deleted successfully, call the completion handler
+                print("Delete folder from storage successful from path \(folderPath)")
+                Heap.track("deleteAllImagesInFolder - Success!", withProperties: ["folder_path": folderPath])
             }
         }
     }

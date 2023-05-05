@@ -59,6 +59,7 @@ struct CaptionCardView: View {
                             .padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 15))
                             .font(.ui.title2)
                             .foregroundColor(.ui.cultured)
+                            .lineLimit(2)
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
 

@@ -44,6 +44,7 @@ struct FolderBottomSheetView: View {
                 // Creating a new folder
                 firestoreMan.saveFolder(for: userId, folder: newFolder) {
                     self.isLoading = false
+                    FolderViewModel.shared.folders.append(newFolder)
                     Heap.track("Successfully created folder", withProperties: ["folderId": newFolder.id, "folderName": newFolder.name, "folderType": newFolder.folderType.rawValue])
                     dismiss()
                 }
