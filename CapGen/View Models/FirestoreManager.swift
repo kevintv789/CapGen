@@ -497,6 +497,42 @@ class FirestoreManager: ObservableObject {
         }
     }
     
+    /// Fetches an image from Firebase Storage and returns it as a UIImage, if found.
+    ///
+    /// - Parameters:
+    ///   - imagePath: The storage path where the image is stored in Firebase Storage.
+    ///   - completion: A closure that is called with the result of the image fetch operation.
+    ///                 Returns a UIImage if the image is successfully fetched, or an Error if the operation fails.
+    func retrieveImage(imagePath: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
+        // Check if the image is already in the cache
+        if let cachedImage = ImageCache.shared.image(forKey: imagePath) {
+            // If the image is in the cache, return it immediately
+            print("Retrieved image from cache success with path: \(imagePath)")
+            completion(.success(cachedImage))
+            return
+        }
+        
+        let storageRef = Storage.storage().reference(withPath: imagePath)
+        
+        storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+            if let error = error {
+                // If an error occurs, pass it to the completion handler
+                print("Retrieved image from storage FAILED with path: \(imagePath)", error.localizedDescription)
+                completion(.failure(error))
+            } else if let data = data {
+                // If the data is successfully obtained, create a UIImage and pass it to the completion handler
+                if let image = UIImage(data: data) {
+                    // Save the image to the cache
+                    ImageCache.shared.setImage(image, forKey: imagePath)
+                    print("Retrieved image from storage success with path: \(imagePath)")
+                    completion(.success(image))
+                } else {
+                    completion(.failure(StorageError.internalError("Unable to create UIImage from data")))
+                }
+            }
+        }
+    }
+    
     /// Deletes an image from Firebase Storage.
     ///
     /// - Parameters:

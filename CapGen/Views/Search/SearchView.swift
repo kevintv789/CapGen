@@ -13,6 +13,7 @@ struct SearchView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var searchVm: SearchViewModel
     @EnvironmentObject var firestoreManager: FirestoreManager
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
 
     @State var totalCaptions: [CaptionModel] = []
     @State var totalFolders: [FolderModel] = []
@@ -134,6 +135,10 @@ struct SearchView: View {
         .onAppear {
             Heap.track("onAppear SearchView")
         }
+        // show full image on click
+        .overlay(
+            FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
+        )
     }
 }
 
@@ -144,12 +149,14 @@ struct SearchView_Previews: PreviewProvider {
             .environmentObject(SearchViewModel())
             .environmentObject(FolderViewModel())
             .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
+            .environmentObject(PhotoSelectionViewModel())
 
         SearchView()
             .environmentObject(NavigationStackCompat())
             .environmentObject(SearchViewModel())
             .environmentObject(FolderViewModel())
             .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
+            .environmentObject(PhotoSelectionViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

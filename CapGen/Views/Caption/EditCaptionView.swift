@@ -17,6 +17,7 @@ struct EditCaptionView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var searchVm: SearchViewModel
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
 
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
@@ -34,6 +35,7 @@ struct EditCaptionView: View {
     @State var isSelectingPlatform: Bool = false
     @State var selectedPlatform: String? = nil
     @State var isLoading: Bool = false
+    @State var uiImage: UIImage? = nil
 
     // Used to determine if platform icons should display for Dropdown menu
     // Used to determine if CopyAndGo should be available - no if selected platform is General
@@ -161,13 +163,25 @@ struct EditCaptionView: View {
 
                     // Body
                     VStack(alignment: .leading, spacing: 15) {
-                        Text(captionVm.selectedCaption.title)
-                            .foregroundColor(.ui.richBlack)
-                            .font(.ui.title)
-                            .scaledToFit()
-                            .minimumScaleFactor(0.5)
-                            .frame(width: SCREEN_WIDTH * 0.8, alignment: .leading)
-                            .lineLimit(2)
+                        HStack {
+                            if let uiImage = uiImage {
+                                ImageThumbnailView(uiImage: uiImage, showShadow: false) {
+                                    // on thumbnail press, show full image
+                                    withAnimation {
+                                        photoSelectionVm.assignImageClickedFullscreen(uiImage: uiImage)
+                                    }
+                                }
+                            }
+                            
+                            Text(captionVm.selectedCaption.title)
+                                .foregroundColor(.ui.richBlack)
+                                .font(.ui.title)
+                                .scaledToFit()
+                                .minimumScaleFactor(0.5)
+                                .frame(width: SCREEN_WIDTH * 0.8, alignment: .leading)
+                                .lineLimit(2)
+                        }
+                       
 
                         PlatformLimitsView(textCount: $textCount, hashtagCount: $hashtagCount, textLimit: textLimit, hashtagLimit: hashtagLimit)
 
@@ -277,6 +291,17 @@ struct EditCaptionView: View {
 
                     // Set text to be edited
                     captionVm.editedCaption.text = captionVm.selectedCaption.captionDescription
+                    
+                    // retrieve image if any
+                    let imagePath = "saved_images/users/\(user.id)/folders/\(folder.id)/caption_images/\(captionVm.selectedCaption.id).jpg"
+                    firestoreMan.retrieveImage(imagePath: imagePath) { result in
+                        switch result {
+                        case .success(let image):
+                            self.uiImage = image
+                        case .failure:
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -305,6 +330,10 @@ struct EditCaptionView: View {
                 self.keyboardHeight = keyboardHeight
             }
         }
+        // show full image on click
+        .overlay(
+            FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
+        )
     }
 }
 

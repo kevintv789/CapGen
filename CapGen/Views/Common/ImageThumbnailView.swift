@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ImageThumbnailView: View {
     let uiImage: UIImage
+    var showShadow: Bool = true
     let action: () -> Void
     
     var body: some View {
@@ -19,7 +20,9 @@ struct ImageThumbnailView: View {
             Image(uiImage: uiImage)
                 .resizable()
                 .cornerRadius(100)
-                .customShadow()
+                .if(showShadow, transform: { view in
+                    return view.customShadow()
+                })
                 .frame(width: 60, height: 60)
                 .aspectRatio(contentMode: .fill)
                 .padding(.bottom)

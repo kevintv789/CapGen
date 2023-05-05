@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CaptionCardView: View {
+    @EnvironmentObject var firestoreMan: FirestoreManager
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
+    
     // Scaled size
     @ScaledMetric var scaledSize: CGFloat = 1
 
@@ -17,6 +20,7 @@ struct CaptionCardView: View {
     @State var folderType: String? = ""
     @State var shareableData: ShareableData? = nil
     @State var showCaptionsGuideModal: Bool = false
+    @State var uiImage: UIImage? = nil
 
     // dependencies
     var caption: CaptionModel
@@ -55,13 +59,27 @@ struct CaptionCardView: View {
             VStack(alignment: .trailing, spacing: 0) {
                 VStack(alignment: .leading) {
                     HStack {
-                        Text(caption.title.trimmingCharacters(in: .whitespaces))
-                            .padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 15))
-                            .font(.ui.title2)
-                            .foregroundColor(.ui.cultured)
-                            .lineLimit(2)
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        HStack {
+                            if let uiImage = uiImage {
+                                ImageThumbnailView(uiImage: uiImage) {
+                                    // on thumbnail press, show full image
+                                    withAnimation {
+                                        photoSelectionVm.assignImageClickedFullscreen(uiImage: uiImage)
+                                    }
+                                }
+                                .padding([.top, .leading])
+                                .padding(.trailing, -5)
+                            }
+                            
+                            Text(caption.title.trimmingCharacters(in: .whitespaces))
+                                .padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 15))
+                                .font(.ui.title2)
+                                .foregroundColor(.ui.cultured)
+                                .lineLimit(2)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                       
 
                         CustomMenuPopup(menuTheme: .light, shareableData: self.$shareableData, socialMediaPlatform: showSocialmediaPresence(),
                                         edit: onEdit,
@@ -136,11 +154,24 @@ struct CaptionCardView: View {
             }
         }
         .onAppear {
+            self.uiImage = nil
+            
             if let user = AuthManager.shared.userManager.user {
                 // filter to a folder for a specific caption
                 if let folderInfo = user.folders.first(where: { $0.id == caption.folderId }) {
                     self.folderInfo = folderInfo
                     self.updateFolderInfo(folderInfo: folderInfo)
+                    
+                    // retrieve image if any
+                    let imagePath = "saved_images/users/\(user.id)/folders/\(folderInfo.id)/caption_images/\(caption.id).jpg"
+                    firestoreMan.retrieveImage(imagePath: imagePath) { result in
+                        switch result {
+                        case .success(let image):
+                            self.uiImage = image
+                        case .failure:
+                            break;
+                        }
+                    }
                 }
             }
         }

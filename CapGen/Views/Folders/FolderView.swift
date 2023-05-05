@@ -28,6 +28,7 @@ struct FolderView: View {
     @EnvironmentObject var firestoreManager: FirestoreManager
     @EnvironmentObject var navStack: NavigationStackCompat
     @StateObject var folderVm: FolderViewModel
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
 
     // private variables
     @State var showFolderBottomSheet: Bool = false
@@ -134,6 +135,10 @@ struct FolderView: View {
                 self.showCaptionDeleteModal = false
             }
         }
+        // show full image on click
+        .overlay(
+            FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
+        )
     }
 }
 
@@ -143,11 +148,13 @@ struct FolderView_Previews: PreviewProvider {
             .environmentObject(FolderViewModel())
             .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
+            .environmentObject(PhotoSelectionViewModel())
 
         FolderView(folderVm: FolderViewModel.shared)
             .environmentObject(FolderViewModel())
             .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
+            .environmentObject(PhotoSelectionViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

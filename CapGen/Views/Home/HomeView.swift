@@ -17,6 +17,7 @@ struct HomeView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
     @EnvironmentObject var generateByPromptVm: GenerateByPromptViewModel
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
 
     // user data
     @State var userFirstName: String?
@@ -228,6 +229,10 @@ struct HomeView: View {
             // Resets the published value back to original state when the delete modal disappears
             FolderViewModel.shared.isDeleting = newValue
         }
+        // show full image on click
+        .overlay(
+            FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
+        )
     }
 }
 
@@ -271,7 +276,8 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(FolderViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
             .environmentObject(GenerateByPromptViewModel())
-
+            .environmentObject(PhotoSelectionViewModel())
+        
         HomeView()
             .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
@@ -279,6 +285,7 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(FolderViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
             .environmentObject(GenerateByPromptViewModel())
+            .environmentObject(PhotoSelectionViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }

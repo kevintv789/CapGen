@@ -55,11 +55,19 @@ class PhotoSelectionViewModel: ObservableObject {
     
     // Combined published event to store UIImage for BOTH camera and photo picker
     @Published var uiImage: UIImage? = nil
+    @Published var fullscreenImageClicked: UIImage? = nil
+    @Published var showImageInFullScreen: Bool = false
 
     func resetPhotoSelection() {
         photosPickerData = nil
         imageAddress = nil
         visionData = nil
+    }
+    
+    func assignImageClickedFullscreen(uiImage: UIImage) {
+        self.fullscreenImageClicked = nil // resets previous selection
+        self.showImageInFullScreen = true
+        self.fullscreenImageClicked = uiImage
     }
     
     func assignPhotoPickerItem(image: PhotosPickerItem) async {
