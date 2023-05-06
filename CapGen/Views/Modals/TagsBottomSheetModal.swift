@@ -16,10 +16,46 @@ struct TagsBottomSheetModal: View {
     @State private var tagInput: String = ""
     @State private var filterToSelectedTag: Bool = false
     @State private var showDeleteModal: Bool = false
-
+    @State private var customTagTitle: String = ""
+    
     // Temp selected tags is used to create a mutable selected list that can be removed and changed at will
     @State private var tempSelectedTags: [TagsModel] = []
     @State private var tempCustomSelectedTags: [TagsModel] = []
+    
+    private func appendCommaToSearch() {
+        if !self.tagInput.isEmpty && !self.tagInput.hasSuffix(", ") {
+            self.tagInput.append(", ")
+        }
+    }
+    
+    /**
+        Example:
+         tagInput = "apple, banana, cherry"
+         Result: customTagTitle = "cherry"
+     
+         tagInput = "apple, banana, "
+         Result: customTagTitle = "banana"
+     
+         tagInput = "apple, "
+         Result: customTagTitle = "apple"
+     
+         tagInput = "apple"
+         Result: customTagTitle = "apple"
+     
+         tagInput = ""
+         Result: customTagTitle = ""
+     */
+    private func determineCustomTagTitle() {
+        let tagInputComponents = tagInput.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+
+        if let lastComponent = tagInputComponents.last, !lastComponent.isEmpty {
+            customTagTitle = lastComponent
+        } else if tagInputComponents.count > 1, let secondLastComponent = tagInputComponents.dropLast().last {
+            customTagTitle = secondLastComponent
+        } else {
+            customTagTitle = tagInput
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -61,25 +97,39 @@ struct TagsBottomSheetModal: View {
                 // Search input
                 TagInputField(tagInput: $tagInput)
                     .onChange(of: tagInput) { text in
-                        var filteredTags: [TagsModel] = []
-
-                        if filterToSelectedTag {
-                            // further filter the list of selected tags
-                            // combine custom tags and default tags into one list
-                            let combinedTagsList: [TagsModel] = tempSelectedTags + tempCustomSelectedTags
-
-                            filteredTags = combinedTagsList.filter { tag in
-                                tag.title.lowercased().contains(text.lowercased()) || text.isEmpty
+                        determineCustomTagTitle()
+                        
+                        // Check if the searchText has some content after the comma and space
+                        let lastChar = text.last
+                        let delimiterSet = CharacterSet(charactersIn: ", ")
+                        
+                        if let lastChar = lastChar, !delimiterSet.contains(UnicodeScalar(String(lastChar))!) {
+                            var filteredTags: [TagsModel] = []
+                            
+                            // Split the input by comma and use the last part for filtering
+                            let searchText = text.split(separator: ",").last?.trimmingCharacters(in: .whitespaces) ?? ""
+                            
+                            if filterToSelectedTag {
+                                // further filter the list of selected tags
+                                // combine custom tags and default tags into one list
+                                let combinedTagsList: [TagsModel] = tempSelectedTags + tempCustomSelectedTags
+                                
+                                filteredTags = combinedTagsList.filter { tag in
+                                    tag.title.lowercased().contains(searchText.lowercased()) || searchText.isEmpty
+                                }
+                            } else {
+                                // filters the list of default tags on search
+                                filteredTags = taglistVM.allTags.filter { tag in
+                                    tag.title.lowercased().contains(searchText.lowercased()) || searchText.isEmpty
+                                }
                             }
-                        } else {
-                            // filters the list of default tags on search
-                            filteredTags = taglistVM.allTags.filter { tag in
-                                tag.title.lowercased().contains(text.lowercased()) || text.isEmpty
-                            }
+                            
+                            taglistVM.updateMutableTags(tags: filteredTags)
+                            taglistVM.getTags() // update list
+                        } else if text.isEmpty {
+                            taglistVM.updateMutableTags(tags: taglistVM.allTags)
+                            taglistVM.getTags() // update list
                         }
-
-                        taglistVM.updateMutableTags(tags: filteredTags)
-                        taglistVM.getTags() // update list
                     }
 
                 // Divider with tags information
@@ -106,6 +156,7 @@ struct TagsBottomSheetModal: View {
                                                         self.tempSelectedTags.remove(at: index)
                                                     } else {
                                                         self.tempSelectedTags.append(tag)
+                                                        appendCommaToSearch()
                                                     }
                                                 }
 
@@ -115,6 +166,7 @@ struct TagsBottomSheetModal: View {
                                                         self.tempCustomSelectedTags.remove(at: index)
                                                     } else {
                                                         self.tempCustomSelectedTags.append(tag)
+                                                        appendCommaToSearch()
                                                     }
                                                 }
                                             }
@@ -132,19 +184,26 @@ struct TagsBottomSheetModal: View {
                 } else if taglistVM.mutableTags.isEmpty && !tagInput.isEmpty {
                     // if no default tags are present, AND if the user is searching for a tag
                     // then create a new tag object
-                    TagButtonView(title: "#\(tagInput)", doesContainTag: tempCustomSelectedTags.contains(where: { $0.title == "#\(tagInput)" })) {
+//                    let searchText = tagInput.split(separator: ",").last?.trimmingCharacters(in: .whitespaces) ?? ""
+//                    let customTagTitle = searchText.isEmpty ? tagInput : searchText
+                   
+                    
+                    TagButtonView(title: "#\(customTagTitle)", doesContainTag: tempCustomSelectedTags.contains(where: { $0.title == "#\(customTagTitle)" })) {
                         // on click remove tag from list if user taps on the tag again
                         // otherwise add it to the list as a new tag
-                        if let index = tempCustomSelectedTags.firstIndex(where: { $0.title == "#\(tagInput)" }) {
+                        if let index = tempCustomSelectedTags.firstIndex(where: { $0.title == "#\(customTagTitle)" }) {
                             self.tempCustomSelectedTags.remove(at: index)
                         } else {
                             // Create new tag here
-                            let newTag = TagsModel(id: UUID().uuidString, title: "#\(tagInput)", size: 0, isCustom: true)
+                            let newTag = TagsModel(id: UUID().uuidString, title: "#\(customTagTitle)", size: 0, isCustom: true)
                             self.tempCustomSelectedTags.append(newTag)
+                            self.appendCommaToSearch()
                         }
+                            
                     }
                     .frame(width: SCREEN_WIDTH * 0.85, alignment: .leading)
                     .multilineTextAlignment(.leading)
+                    
                 }
 
                 Spacer()
