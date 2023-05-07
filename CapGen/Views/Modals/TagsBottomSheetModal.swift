@@ -44,15 +44,30 @@ struct TagsBottomSheetModal: View {
      
          tagInput = ""
          Result: customTagTitle = ""
+     
+     First, we split the tagInput string by the separator "," and trim any leading or trailing whitespaces for each component. This will give us an array of individual components (tagInputComponents).
+
+     We then declare a variable customTagTitle to store the value of the most recent word separated by the most recent comma.
+
+     We check if there is a non-empty last component in the tagInputComponents array. If there is, we set customTagTitle to the last component, as it is the most recent word after the comma.
+
+     If the last component is empty, which happens when there's a comma followed by space, we check if there are at least two components in the tagInputComponents array. If there are, we set customTagTitle to the second last component, as it is the most recent word before the comma.
+
+     If none of the conditions above are met, we set customTagTitle to the original tagInput. This happens when there's no comma in the input or the input is empty.
      */
     private func determineCustomTagTitle() {
+        // Split 'tagInput' using ',' as a separator, and trim any leading or trailing whitespaces
         let tagInputComponents = tagInput.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
 
+        // Check if there is a non-empty last component in 'tagInputComponents'
         if let lastComponent = tagInputComponents.last, !lastComponent.isEmpty {
+            // If the last component is not empty, set 'customTagTitle' to the last component
             customTagTitle = lastComponent
         } else if tagInputComponents.count > 1, let secondLastComponent = tagInputComponents.dropLast().last {
+            // If there are at least two components in 'tagInputComponents', set 'customTagTitle' to the second last component
             customTagTitle = secondLastComponent
         } else {
+            // If there are no valid components found, set 'customTagTitle' to the original 'tagInput'
             customTagTitle = tagInput
         }
     }

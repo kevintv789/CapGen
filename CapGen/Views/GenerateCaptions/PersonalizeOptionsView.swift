@@ -19,6 +19,7 @@ struct PersonalizeOptionsView: View {
     @State var isTonesSectionSelected: Bool = true
     @State var isEmojisAndHashtagsViewSelected: Bool = false
     @State var isChooseLengthViewSelected: Bool = false
+    @State var scrollToBottom: Bool = false
 
     var body: some View {
         ZStack {
@@ -64,6 +65,11 @@ struct PersonalizeOptionsView: View {
                             scrollProxy.scrollTo("length", anchor: .top)
                         }
                     }
+                    .onChange(of: scrollToBottom) { _ in
+                        withAnimation {
+                            scrollProxy.scrollTo("length", anchor: .top)
+                        }
+                    }
                 }
                 .padding(.top)
 
@@ -73,6 +79,39 @@ struct PersonalizeOptionsView: View {
         .onAppear {
             Heap.track("onAppear PersonalizedOptionsView")
         }
+        // create a bottom overlay for automatic scrolling
+        .overlay(
+            Button {
+                withAnimation {
+                    scrollToBottom.toggle()
+                    
+                    if !isEmojisAndHashtagsViewSelected {
+                        isEmojisAndHashtagsViewSelected = true
+                    }
+                    
+                    Heap.track("onClick - Scroll to bottom button")
+                }
+               
+            } label: {
+                ZStack {
+                    Circle()
+                        .fill(Color.ui.darkerPurple)
+                        .frame(width: 58, height: 58)
+                        .shadow(color: .ui.shadowGray, radius: 4, x: 0, y: 4)
+                    
+                    Circle()
+                        .strokeBorder(Color.ui.cultured, lineWidth: 3)
+                        .frame(width: 58, height: 58)
+                    
+                    Image("double-arrow-down")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                }
+                
+            }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                .padding([.bottom, .trailing])
+        )
     }
 }
 
