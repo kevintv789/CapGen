@@ -217,13 +217,16 @@ struct EditableTitleView: View {
     var body: some View {
         HStack {
             if !isEditing && !isError {
-                Text("\(self.openAiConnector.captionGroupTitle)")
+                Text(openAiConnector.captionGroupTitle)
                     .font(.ui.title)
                     .foregroundColor(.ui.richBlack)
                     .frame(maxWidth: context == .prompt ? SCREEN_WIDTH * 0.8 : SCREEN_WIDTH * 0.7, alignment: .leading)
-                    .lineLimit(1)
-                    .scaledToFit()
-                    .minimumScaleFactor(0.5)
+                    .lineLimit(context == .prompt ? 1 : 2)
+                    .if(context == .prompt) { view in
+                        return view
+                            .scaledToFit()
+                            .minimumScaleFactor(0.5)
+                    }
             } else {
                 RoundedRectangle(cornerRadius: 4)
                     .strokeBorder(style: StrokeStyle(lineWidth: 1))
