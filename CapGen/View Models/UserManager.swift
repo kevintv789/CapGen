@@ -9,6 +9,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import Foundation
 import GoogleSignIn
+import Heap
 
 class UserManager: ObservableObject {
     @Published var user: UserModel?
@@ -89,34 +90,41 @@ class UserManager: ObservableObject {
             completion(ErrorType(error: .genericError))
             return
         }
-
-        // Delete firestore data
-        let docRef = collection.document("\(user.uid)")
-        docRef.delete { error in
-            if let error = error {
-                completion(ErrorType(error: .genericError))
-                print("Error in deleting user from firestore", error.localizedDescription)
-            } else {
-                if AuthManager.shared.googleAuthMan.googleSignInState == .signedIn {
-                    AuthManager.shared.googleAuthMan.signOut()
-                }
-
-                if AuthManager.shared.fbAuthManager.fbSignedInStatus == .signedIn {
-                    AuthManager.shared.fbAuthManager.signOut()
-                }
-
-                if AuthManager.shared.appleAuthManager.appleSignedInStatus == .signedIn {
-                    AuthManager.shared.appleAuthManager.signOut()
-                }
-
-                user.delete { error in
-                    if let error = error {
-                        completion(ErrorType(error: .genericError))
-                        print("Error in deleting user", error.localizedDescription)
+        
+        // also find the image path (if it exists) and then deletes it from the storage
+        let folderPath = "saved_images/users/\(user.uid)/folders/"
+        deleteAllImagesInFolder(folderPath: folderPath) {
+            // Delete firestore data
+            let docRef = self.collection.document("\(user.uid)")
+            docRef.delete { error in
+                if let error = error {
+                    completion(ErrorType(error: .genericError))
+                    print("Error in deleting user from firestore", error.localizedDescription)
+                } else {
+                    user.delete { error in
+                        if let error = error {
+                            completion(ErrorType(error: .genericError))
+                            print("Error in deleting user", error.localizedDescription)
+                        } else {
+                            if AuthManager.shared.googleAuthMan.googleSignInState == .signedIn {
+                                AuthManager.shared.googleAuthMan.signOut()
+                            }
+                            
+                            if AuthManager.shared.fbAuthManager.fbSignedInStatus == .signedIn {
+                                AuthManager.shared.fbAuthManager.signOut()
+                            }
+                            
+                            if AuthManager.shared.appleAuthManager.appleSignedInStatus == .signedIn {
+                                AuthManager.shared.appleAuthManager.signOut()
+                            }
+                            
+                            Heap.track("onClick - ProfileView Account Deletion Successful")
+                            
+                            // Account has been deleted
+                            AuthManager.shared.setSignOut()
+                            completion(nil)
+                        }
                     }
-                    // Account has been deleted
-                    AuthManager.shared.setSignOut()
-                    completion(nil)
                 }
             }
         }
