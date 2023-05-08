@@ -225,7 +225,7 @@ class FirestoreManager: ObservableObject {
                 
                 // also find the image path (if it exists) and then deletes it from the storage
                 let folderPath = "saved_images/users/\(userId)/folders/\(mutableCurrentFolders[indexOfFolder].id)/caption_images/"
-                deleteAllImagesInFolder(folderPath: folderPath)
+                deleteAllImagesInFolder(folderPath: folderPath) {}
                 
                 mutableCurrentFolders.remove(at: indexOfFolder)
 
@@ -561,39 +561,6 @@ class FirestoreManager: ObservableObject {
             }
         }
     }
-    
-    func deleteAllImagesInFolder(folderPath: String) {
-        let folderRef = storage.reference(withPath: folderPath)
-        
-        folderRef.listAll { result, error in
-            if let error = error {
-                print("Delete image error - \(error.localizedDescription)")
-                Heap.track("deleteAllImagesInFolder - Entire folder failed", withProperties: ["error": error, "folder_path": folderPath])
-            } else {
-                guard let items = result?.items else {
-                    print("No items found in the folder.")
-                    return
-                }
-                
-                // For each item (file) in the folder, delete the file
-                for item in items {
-                    item.delete { error in
-                        if let error = error {
-                            print("Delete image error - \(error.localizedDescription)")
-                            Heap.track("deleteAllImagesInFolder - Single item failed", withProperties: ["error": error, "folder_path": folderPath])
-                            return
-                        } else {
-                            print("Delete image success from path \(item.fullPath)")
-                        }
-                    }
-                }
-                
-                // If all files were deleted successfully, call the completion handler
-                print("Delete folder from storage successful from path \(folderPath)")
-                Heap.track("deleteAllImagesInFolder - Success!", withProperties: ["folder_path": folderPath])
-            }
-        }
-    }
 
     private func fetch(from collection: String, documentId: String, completion: @escaping (_ data: [String: Any]?) -> Void) {
         let docRef = db.collection(collection).document(documentId)
@@ -620,14 +587,61 @@ class FirestoreManager: ObservableObject {
         docRef.updateData(["folders": FieldValue.delete()])
         onComplete()
     }
-
+    
     private func addNewFolders(for docRef: DocumentReference, updatedFolders: [FolderModel], onComplete: @escaping () -> Void) {
         // Write back to Firebase the modified folders array with the specific folder removed
         docRef.setData(["folders": updatedFolders.map { $0.dictionary }], merge: true)
         onComplete()
     }
-
+    
     func unbindListener() async {
         snapshotListener?.remove()
+    }
+}
+
+func deleteAllImagesInFolder(folderPath: String, completion: @escaping () -> Void) {
+    let storage = Storage.storage()
+    let folderRef = storage.reference(withPath: folderPath)
+    
+    folderRef.listAll { result, error in
+        if let error = error {
+            print("Delete folder error - \(error.localizedDescription)")
+            completion()
+        } else {
+            guard let items = result?.items else {
+                print("No items found in the folder.")
+                completion()
+                return
+            }
+            
+            let dispatchGroup = DispatchGroup()
+            // For each item (file) in the folder, delete the file
+            for item in items {
+                dispatchGroup.enter()
+                item.delete { error in
+                    if let error = error {
+                        print("Delete image error - \(error.localizedDescription)")
+                    } else {
+                        print("Delete image success from path \(item.fullPath)")
+                    }
+                    
+                    dispatchGroup.leave()
+                }
+            }
+            
+            // For each prefix (subfolder) in the folder, call the function recursively
+            for prefix in result?.prefixes ?? [] {
+                dispatchGroup.enter()
+                deleteAllImagesInFolder(folderPath: prefix.fullPath) {
+                    dispatchGroup.leave()
+                }
+            }
+            
+            // If all files and subfolders were deleted successfully, print the success message
+            dispatchGroup.notify(queue: .main) {
+                print("All deletions in folder '\(folderPath)' complete.")
+                completion()
+            }
+        }
     }
 }

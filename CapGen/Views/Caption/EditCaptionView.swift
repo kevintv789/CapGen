@@ -176,10 +176,13 @@ struct EditCaptionView: View {
                             Text(captionVm.selectedCaption.title)
                                 .foregroundColor(.ui.richBlack)
                                 .font(.ui.title)
-                                .scaledToFit()
-                                .minimumScaleFactor(0.5)
-                                .frame(width: SCREEN_WIDTH * 0.8, alignment: .leading)
-                                .lineLimit(2)
+                                .frame(width: uiImage == nil ? SCREEN_WIDTH * 0.8 : SCREEN_WIDTH * 0.7, alignment: .leading)
+                                .lineLimit(3)
+                                .if(uiImage == nil) { view in
+                                    return view
+                                        .scaledToFit()
+                                        .minimumScaleFactor(0.5)
+                                }
                         }
                        
 

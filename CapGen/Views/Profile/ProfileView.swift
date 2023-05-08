@@ -115,10 +115,11 @@ struct ProfileView: View {
                 authManager.userManager.deleteUser { error in
                     if let error = error {
                         self.router?.toGenericFallbackView()
+                        Heap.track("onClick - ProfileView Account Deletion Failed", withProperties: ["error": error.error.errorDescription ?? "N/A"])
                         print("ERROR in deleting account", error.error.errorDescription ?? "")
                         return
                     }
-
+                    
                     self.router?.toLaunchView()
                 }
             }
@@ -476,6 +477,8 @@ struct AccountManagementSectionView: View {
             OptionButtonView(title: "🔨 Delete profile", subTitle: "Deleting your profile will permanently remove all credits and captions. This action is irreversible, please proceed with caution.", dangerField: true) {
                 showDeleteProfileModal = true
                 Haptics.shared.play(.soft)
+                
+                Heap.track("onClick - ProfileView Account Deletion Initiate")
             }
         }
     }
