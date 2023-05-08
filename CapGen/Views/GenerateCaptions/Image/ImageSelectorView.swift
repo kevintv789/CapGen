@@ -94,6 +94,14 @@ struct ImageSelectorView: View {
                     }
 
                     Spacer()
+                    
+                    Text("By selecting an image and generating a caption, you agree to our [End User License Agreement](https://capgen.app/eula), [Terms of Service](https://capgen.app/terms-conditions), and [Privacy Policy](https://capgen.app/privacy-policy).")
+                        .font(.ui.headlineLightSm)
+                        .multilineTextAlignment(.center)
+                        .frame(width: SCREEN_WIDTH * 0.85)
+                        .lineSpacing(10)
+                        .padding(.vertical)
+                        .foregroundColor(.ui.richBlack)
                 }
             }
         }
@@ -155,7 +163,7 @@ struct PhotoSelectionCardView: View {
 
     var body: some View {
         RoundedRectangle(cornerRadius: 16)
-            .frame(width: SCREEN_WIDTH * 0.9, height: SCREEN_HEIGHT / 2.5)
+            .frame(width: SCREEN_WIDTH * 0.85, height: SCREEN_HEIGHT / 2.6)
             .foregroundColor(backgroundColor)
             .shadow(color: .ui.shadowGray, radius: 3, x: 2, y: 4)
             .overlay(
