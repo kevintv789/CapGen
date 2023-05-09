@@ -56,6 +56,8 @@ struct CaptionView: View {
     @State var isEditingTitle: Bool = false
     
     @State var isFullScreenImage: Bool = false
+    
+    @State var showImagePrefModal: Bool = false
 
     // Variables below are specifically for going through saved captions screen
     var isEditing: Bool?
@@ -89,8 +91,7 @@ struct CaptionView: View {
 
     var body: some View {
         ZStack(alignment: .leading) {
-            Color.ui.cultured.ignoresSafeArea()
-            Color.ui.lighterLavBlue.ignoresSafeArea().opacity(0.5)
+            Color.ui.cultured.ignoresSafeArea(.all)
 
             VStack(alignment: .leading) {
                 BackArrowView {
@@ -120,6 +121,27 @@ struct CaptionView: View {
                         VStack(alignment: .leading, spacing: 5) {
                             // Animatable instructional text
                             AnimatableInstructionView()
+                            
+                            // Preferences button
+                            if navContext == .image {
+                                Button {
+                                    showImagePrefModal.toggle()
+                                } label: {
+                                    HStack(spacing: 5) {
+                                        Text("Image Preferences")
+                                            .foregroundColor(.ui.middleBluePurple)
+                                            .font(.ui.title4)
+                                        
+                                        Image("cogwheel-purple")
+                                            .resizable()
+                                            .frame(width: 24, height: 24)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top)
+                                .padding(.leading, 5)
+                            }
+                          
 
                             Spacer()
 
@@ -171,6 +193,10 @@ struct CaptionView: View {
         )
         .sheet(isPresented: $captionVm.isCaptionSelected) {
             CaptionOptimizationBottomSheetView(context: navContext)
+                .presentationDetents([.large])
+        }
+        .sheet(isPresented: $showImagePrefModal) {
+            ImagePreferenceModalView()
                 .presentationDetents([.large])
         }
         .onAppear {

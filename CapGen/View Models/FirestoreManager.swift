@@ -100,6 +100,18 @@ class FirestoreManager: ObservableObject {
             "userPrefs.showCreditDepletedModal": boolValue,
         ])
     }
+    
+    func setPersistImagePreference(for uid: String?, to boolValue: Bool) {
+        guard let userId = uid else {
+            appError = ErrorType(error: .genericError)
+            return
+        }
+
+        let docRef = db.collection("Users").document("\(userId)")
+        docRef.updateData([
+            "userPrefs.persistImagesOnSave": boolValue,
+        ])
+    }
 
     func getCaptionsCount() -> Int {
         var count = 0

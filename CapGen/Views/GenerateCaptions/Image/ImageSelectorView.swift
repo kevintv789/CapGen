@@ -15,6 +15,9 @@ struct ImageSelectorView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var cameraModel: CameraViewModel
     @EnvironmentObject var taglistVM: TaglistViewModel
+    @EnvironmentObject var userPrefsVm: UserPreferencesViewModel
+    
+    let userManager = AuthManager.shared.userManager
 
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var isLoading: Bool = false
@@ -119,6 +122,16 @@ struct ImageSelectorView: View {
             // resets selected tags
             taglistVM.resetToDefault()
             taglistVM.resetSelectedTags()
+            
+            // Sets the default setting with user settings on Firebase
+            if let user = userManager.user {
+                if let persistImageFlag = user.userPrefs.persistImagesOnSave {
+                    userPrefsVm.persistImage = persistImageFlag
+                } else {
+                    // default to true if the persist images flag is nil
+                    userPrefsVm.persistImage = true
+                }
+            }
         }
         .overlay(
             ZStack {
@@ -142,12 +155,14 @@ struct ImageSelectorView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
             .environmentObject(TaglistViewModel())
+            .environmentObject(UserPreferencesViewModel())
 
         ImageSelectorView()
             .environmentObject(PhotoSelectionViewModel())
             .environmentObject(NavigationStackCompat())
             .environmentObject(CameraViewModel())
             .environmentObject(TaglistViewModel())
+            .environmentObject(UserPreferencesViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
