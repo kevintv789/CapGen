@@ -66,6 +66,7 @@ struct CapGenApp: App {
                 .environmentObject(PhotoSelectionViewModel())
                 .environmentObject(CameraViewModel())
                 .environmentObject(TaglistViewModel())
+                .environmentObject(UserPreferencesViewModel())
         }
     }
 }

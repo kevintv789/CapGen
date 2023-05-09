@@ -13,6 +13,7 @@ struct CaptionOptimizationBottomSheetView: View {
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
+    @EnvironmentObject var userPrefsVm: UserPreferencesViewModel
     
     @StateObject var firestoreMan = FirestoreManager(folderViewModel: FolderViewModel.shared)
     
@@ -56,8 +57,8 @@ struct CaptionOptimizationBottomSheetView: View {
                         self.isSavingToFolder = false
                         self.isSuccessfullySaved = true
                         
-                        // Store image to storage
-                        if context == .image {
+                        // Store image to storage only for the relevant context and if persist images is toggled on
+                        if context == .image && userPrefsVm.persistImage {
                             self.firestoreMan.storeImage(userId: userId, folderId: savedFolder?.id, captionId: savedCaption?.id, image: photosSelectionVm.uiImage) { result in
                                 switch result {
                                 case .success(let url):
