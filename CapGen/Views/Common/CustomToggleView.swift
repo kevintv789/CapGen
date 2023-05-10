@@ -77,7 +77,6 @@ struct CustomToggleView: View {
 
 struct CustomToggleView_Previews: PreviewProvider {
     static var previews: some View {
-        @State var isEnabled: Bool = false
-        CustomToggleView(isEnabled: $isEnabled)
+        CustomToggleView(isEnabled: .constant(true))
     }
 }
