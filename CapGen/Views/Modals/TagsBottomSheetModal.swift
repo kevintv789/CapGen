@@ -141,8 +141,13 @@ struct TagsBottomSheetModal: View {
                             
                             taglistVM.updateMutableTags(tags: filteredTags)
                             taglistVM.getTags() // update list
-                        } else if text.isEmpty {
+                        } else if text.isEmpty && !filterToSelectedTag {
+                            // only resets to all tags if user isn't in the filter
                             taglistVM.updateMutableTags(tags: taglistVM.allTags)
+                            taglistVM.getTags() // update list
+                        } else if text.isEmpty && filterToSelectedTag {
+                            // only resets to all tags if user isn't in the filter
+                            taglistVM.updateMutableTags(tags: taglistVM.selectedTags)
                             taglistVM.getTags() // update list
                         }
                     }
@@ -151,12 +156,11 @@ struct TagsBottomSheetModal: View {
                 TagsInfoView(filterToSelectedTag: $filterToSelectedTag, selectedTagsCount: tempSelectedTags.count + tempCustomSelectedTags.count)
                     .frame(width: SCREEN_WIDTH * 0.85)
                     .padding(.vertical)
-
-                // Tag cloud view
-                if !taglistVM.mutableTags.isEmpty {
-                    // shows the entirety of the tag list
-                    ScrollView(.vertical, showsIndicators: false) {
-                        ScrollView(.horizontal, showsIndicators: false) {
+                
+                ScrollView(.vertical, showsIndicators: false) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        // Tag cloud view
+                        if !taglistVM.mutableTags.isEmpty {
                             // Tags
                             LazyVStack(alignment: .leading, spacing: 15) {
                                 ForEach(taglistVM.rows, id: \.self) { rows in
@@ -174,7 +178,7 @@ struct TagsBottomSheetModal: View {
                                                         appendCommaToSearch()
                                                     }
                                                 }
-
+                                                
                                                 if tag.isCustom {
                                                     // For custom tags
                                                     if let index = tempCustomSelectedTags.firstIndex(where: { $0.id == tag.id }) {
@@ -195,32 +199,31 @@ struct TagsBottomSheetModal: View {
                             .frame(width: SCREEN_WIDTH * 0.85)
                             .frame(minWidth: 0, maxWidth: .infinity)
                         }
-                    }
-                } else if taglistVM.mutableTags.isEmpty && !tagInput.isEmpty {
-                    // if no default tags are present, AND if the user is searching for a tag
-                    // then create a new tag object
-//                    let searchText = tagInput.split(separator: ",").last?.trimmingCharacters(in: .whitespaces) ?? ""
-//                    let customTagTitle = searchText.isEmpty ? tagInput : searchText
-                   
-                    
-                    TagButtonView(title: "#\(customTagTitle)", doesContainTag: tempCustomSelectedTags.contains(where: { $0.title == "#\(customTagTitle)" })) {
-                        // on click remove tag from list if user taps on the tag again
-                        // otherwise add it to the list as a new tag
-                        if let index = tempCustomSelectedTags.firstIndex(where: { $0.title == "#\(customTagTitle)" }) {
-                            self.tempCustomSelectedTags.remove(at: index)
-                        } else {
-                            // Create new tag here
-                            let newTag = TagsModel(id: UUID().uuidString, title: "#\(customTagTitle)", size: 0, isCustom: true)
-                            self.tempCustomSelectedTags.append(newTag)
-                            self.appendCommaToSearch()
-                        }
+                        
+                        if !tagInput.isEmpty && (taglistVM.mutableTags.first(where: { $0.title.lowercased().replacingOccurrences(of: "#", with: "") == customTagTitle.lowercased() }) == nil) {
+                            // if no default tags are present, AND if the user is searching for a tag
+                            // then create a new tag object
+                            TagButtonView(title: "#\(customTagTitle)", doesContainTag: tempCustomSelectedTags.contains(where: { $0.title == "#\(customTagTitle)" })) {
+                                // on click remove tag from list if user taps on the tag again
+                                // otherwise add it to the list as a new tag
+                                if let index = tempCustomSelectedTags.firstIndex(where: { $0.title == "#\(customTagTitle)" }) {
+                                    self.tempCustomSelectedTags.remove(at: index)
+                                } else {
+                                    // Create new tag here
+                                    let newTag = TagsModel(id: UUID().uuidString, title: "#\(customTagTitle)", size: 0, isCustom: true)
+                                    self.tempCustomSelectedTags.append(newTag)
+                                    self.appendCommaToSearch()
+                                }
+                            }
+                            .frame(maxWidth: SCREEN_WIDTH * 0.85, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                            .padding(.leading, 30)
+                            .padding(.bottom)
                             
+                        }
                     }
-                    .frame(width: SCREEN_WIDTH * 0.85, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                    
                 }
-
+                
                 Spacer()
             }
         }

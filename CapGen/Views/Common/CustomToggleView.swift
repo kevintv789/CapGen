@@ -24,7 +24,7 @@ struct CustomToggleStyle: ToggleStyle {
                     .padding(.trailing, 10)
                 
                 VStack(alignment: .leading, spacing: 15) {
-                    Text("Persist your images")
+                    Text(configuration.isOn ? "Persisting your images" : "Images not persisted")
                         .foregroundColor(.ui.cultured)
                         .font(.ui.headline)
                         .fixedSize(horizontal: true, vertical: false)
