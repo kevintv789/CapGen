@@ -197,7 +197,7 @@ struct CaptionView: View {
         }
         .sheet(isPresented: $showImagePrefModal) {
             ImagePreferenceModalView()
-                .presentationDetents([.large])
+                .presentationDetents([.fraction(0.7)])
         }
         .onAppear {
             Heap.track("onAppear CaptionView - Captions generated", withProperties: ["captions": openAiConnector.captionsGroupParsed, "total_captions": openAiConnector.captionsGroupParsed.count])

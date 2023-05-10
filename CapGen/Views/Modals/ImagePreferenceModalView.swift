@@ -36,7 +36,7 @@ struct ImagePreferenceModalView: View {
                             firestoreMan.setPersistImagePreference(for: userManager.user?.id ?? nil, to: value)
                         }
                     
-                    Text("Turn on 'Persist your images', and every snap you pair with a caption becomes more than just a fleeting moment - it's safely stored for your eyes only 👀.\n\nSo the next time you want to relive the memory or inspiration behind a saved caption, the original image will be right there with it.\n\nThese images aren't just securely stored, they're yours to command 💪. Delete them whenever you want, right within the app - no strings attached 🎈.\n\nAnd the best part? You're always in control. This feature is totally optional. Want to keep your images private? Just flip the toggle. It's your images, your app, your control 👑.")
+                    Text("Activate this feature to safely archive your images with their corresponding captions. Each paired image and caption becomes a preserved memory, accessible solely by you.\n\nThe original image stands ready for you to revisit the inspiration behind each saved caption.These securely stored images are under your control, delete them at will within the app, no obligations attached.")
                         .multilineTextAlignment(.leading)
                         .font(.ui.title5)
                         .foregroundColor(.ui.richBlack.opacity(0.5))
