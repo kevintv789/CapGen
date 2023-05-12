@@ -34,6 +34,7 @@ struct HomeView: View {
     // private instances
     @State var showCaptionDeleteModal: Bool = false
     @State var showCreditsDepletedBottomSheet: Bool = false
+    @State var showPaymentView: Bool = false
 
     var body: some View {
         ZStack {
@@ -69,7 +70,7 @@ struct HomeView: View {
                     // Credits view
                     Button {
                         Haptics.shared.play(.soft)
-                        self.showRefillModal = true
+                        self.showPaymentView = true
                     } label: {
                         CreditsView(creditAmount: self.creditAmount ?? 0)
                     }
@@ -233,6 +234,12 @@ struct HomeView: View {
         .overlay(
             FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
         )
+        // show payment view
+        .fullScreenCover(isPresented: $showPaymentView) {
+            // Present the CameraViewController, binding the captured image to the capturedImage property.
+            PaymentView()
+        }
+        
     }
 }
 

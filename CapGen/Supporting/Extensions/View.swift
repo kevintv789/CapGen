@@ -5,7 +5,6 @@
 //  Created by Kevin Vu on 12/30/22.
 //
 
-import Firebase
 import Foundation
 import SwiftUI
 
