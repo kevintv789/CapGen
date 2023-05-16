@@ -6,11 +6,20 @@
 //
 
 import SwiftUI
+import Heap
+import NavigationStack
 
 struct PaymentView: View {
+    @ObservedObject var ad = AppodealProvider.shared
+    @EnvironmentObject var firestoreMan: FirestoreManager
+    @EnvironmentObject var navStack: NavigationStackCompat
+    @EnvironmentObject var authManager: AuthManager
+
+    @State var router: Router? = nil
+    
     @Environment(\.dismiss) var dismiss
     
-    @State var currentCredits: Int = 100
+    @State var currentCredits: Int = 0
     @State var isAnimating: Bool = true
     @State var is10CreditsSelected: Bool = true
     @State var is50CreditsSelected: Bool = false
@@ -26,6 +35,11 @@ struct PaymentView: View {
                             .foregroundColor(.ui.richBlack.opacity(0.6))
                         
                         CreditCounterView(credits: $currentCredits)
+                            .onReceive(authManager.userManager.$user) { user in
+                                if let user = user {
+                                    self.currentCredits = user.credits
+                                }
+                            }
                     }
                 
                     // title & subtitle
@@ -88,8 +102,23 @@ struct PaymentView: View {
                                 .padding(.bottom)
                             
                             // Play ad button
-                            AdButton() {
-                                // on ad button click
+                            AdFullScreenView(
+                                ad: self.ad,
+                                keyPath: \.isRewardedReady
+                            ) {
+                                Heap.track("onClick DisplayAdBtnView - Show Ad in Payment View")
+                                Haptics.shared.play(.soft)
+                                self.ad.presentRewarded()
+                            }
+                            .onAppear {
+                                self.router = Router(navStack: navStack)
+                            }
+                            .onReceive(self.ad.$appError) { value in
+                                if let error = value?.error {
+                                    if error == .genericError {
+                                        self.router?.toGenericFallbackView()
+                                    }
+                                }
                             }
                             
                             // legal documents
@@ -129,16 +158,6 @@ struct PaymentView: View {
             }
           
         }
-    }
-}
-
-struct PaymentView_Previews: PreviewProvider {
-    static var previews: some View {
-        PaymentView()
-        
-        PaymentView()
-            .previewDevice("iPhone SE (3rd generation)")
-            .previewDisplayName("iPhone SE (3rd generation)")
     }
 }
 
@@ -186,36 +205,50 @@ struct LegalDocView: View {
 }
 
 struct AdButton: View {
-    let action: () -> Void
-    
     var body: some View {
-        Button {
-            action()
-        } label: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 16)
-                    .strokeBorder(Color.ui.cultured, lineWidth: 2)
-                    
+        ZStack {
+            RoundedRectangle(cornerRadius: 16)
+                .strokeBorder(Color.ui.cultured, lineWidth: 2)
+            
+            HStack {
+                Text("🎁")
+                    .font(.system(size: 40))
                 
-                HStack {
-                    Text("🎁")
-                        .font(.system(size: 40))
+                // header
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Fancy a Free Credit?")
+                        .foregroundColor(.ui.cultured)
+                        .font(.ui.title4Medium)
                     
-                    // header
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Fancy a Free Credit?")
-                            .foregroundColor(.ui.cultured)
-                            .font(.ui.title4Medium)
-                        
-                        Text("Simply watch an ad and claim it!")
-                            .multilineTextAlignment(.leading)
-                            .foregroundColor(.ui.cultured)
-                            .font(.ui.bodyLarge)
-                    }
+                    Text("Simply watch an ad and claim it!")
+                        .multilineTextAlignment(.leading)
+                        .foregroundColor(.ui.cultured)
+                        .font(.ui.bodyLarge)
                 }
             }
-            .frame(width: SCREEN_WIDTH * 0.75, height: 90)
         }
+        .frame(width: SCREEN_WIDTH * 0.75, height: 90)
+        
+    }
+}
+
+struct AdFullScreenView<T>: View where T: ObservableObject {
+    typealias Action = () -> Void
+    @ObservedObject var ad: T
+    var keyPath: ReferenceWritableKeyPath<T, Bool>
+    var action: Action
+    
+    var body: some View {
+        // if ad is ready to load, then display view
+        if ad[keyPath: keyPath] {
+            Button {
+                action()
+            } label: {
+                AdButton()
+            }
+            .transition(.opacity)
+        }
+       
     }
 }
 
