@@ -14,14 +14,19 @@ struct PaymentView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var authManager: AuthManager
-
+    @EnvironmentObject var paymentVm: PaymentViewModel
+    
     @State var router: Router? = nil
     
     @Environment(\.dismiss) var dismiss
     
+    // dependencies
+    var title: String = "Power up your posts"
+    var subtitle: String = "Unlock more with CapGen credits!"
+    
     @State var currentCredits: Int = 0
     @State var isAnimating: Bool = true
-    @State var is10CreditsSelected: Bool = true
+    @State var is10CreditsSelected: Bool = false
     @State var is50CreditsSelected: Bool = false
     
     var body: some View {
@@ -29,7 +34,11 @@ struct PaymentView: View {
             Color.ui.cultured.ignoresSafeArea(.all)
             
             ScrollView(.vertical, showsIndicators: false) {
+                ZStack(alignment: .top) {
                     HStack {
+                        Spacer()
+                        
+                        // Credit counter
                         Text("Current credits:")
                             .font(.ui.headline)
                             .foregroundColor(.ui.richBlack.opacity(0.6))
@@ -40,148 +49,134 @@ struct PaymentView: View {
                                     self.currentCredits = user.credits
                                 }
                             }
-                    }
-                
-                    // title & subtitle
-                    VStack(spacing: 15) {
-                        Text("Power Up Your Posts")
-                            .font(.ui.title4Bold)
-                            .foregroundColor(.ui.richBlack.opacity(0.6))
                         
-                        Text("Unlock more with CapGen credits!")
-                            .font(.ui.headlineRegular)
-                            .foregroundColor(.ui.richBlack.opacity(0.6))
+                        Spacer()
                     }
-                    .padding(.top, 30)
                     
-                    ZStack {
-                        Rectangle()
-                            .fill(Color.ui.lavenderBlue)
-                            .cornerRadius(32, corners: [.topLeft, .topRight])
+                    // Close button
+                    HStack {
+                        Button {
+                            Haptics.shared.play(.soft)
+                            dismiss()
+                        } label: {
+                            Image("close")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                        }
+                        .padding(.leading, 30)
+                        .padding(.top, 7)
                         
-                        // Piggy bank lottie file
-                        LottieView(name: "piggy_bank_lottie", loopMode: .playOnce, isAnimating: isAnimating)
-                            .frame(width: 250, height: 250)
-                            .frame(maxHeight: .infinity, alignment: .top)
-                            .offset(y: -150)
-                            .onTapGesture {
-                                self.isAnimating = false
-                                self.isAnimating = true
-                            }
-                        
-                        VStack {
-                            // Payment cards
-                            VStack {
-                                PaymentCard(imageName: "10_credits_robot", pricePoint: 0.99, creditAmount: 10, subtitle: "Enough credits to curate a week's worth of daily posts.", isSelected: $is10CreditsSelected) {
+                        Spacer()
+                    }
+                }
+                
+                // title & subtitle
+                VStack(spacing: 15) {
+                    Text(title)
+                        .font(.ui.title4Bold)
+                        .foregroundColor(.ui.richBlack.opacity(0.6))
+                    
+                    Text(subtitle)
+                        .font(.ui.headlineRegular)
+                        .foregroundColor(.ui.richBlack.opacity(0.6))
+                }
+                .padding(.top, 30)
+                
+                ZStack {
+                    Rectangle()
+                        .fill(Color.ui.lavenderBlue)
+                        .cornerRadius(32, corners: [.topLeft, .topRight])
+                    
+                    // Piggy bank lottie file
+                    LottieView(name: "piggy_bank_lottie", loopMode: .playOnce, isAnimating: isAnimating)
+                        .frame(width: 250, height: 250)
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        .offset(y: -150)
+                        .onTapGesture {
+                            self.isAnimating = false
+                            self.isAnimating = true
+                        }
+                    
+                    VStack {
+                        // Payment cards
+                        if !paymentVm.products.isEmpty {
+                            VStack(spacing: 0) {
+                                PaymentCard(imageName: "10_credits_robot", pricePoint: paymentVm.products[0].displayPrice, creditAmount: 10, subtitle: "Enough credits to curate a week's worth of daily posts.", isSelected: $is10CreditsSelected) {
                                     // on press 10 credits
+                                    Haptics.shared.play(.soft)
                                     if is50CreditsSelected {
                                         is50CreditsSelected = false
                                     }
                                     
                                     is10CreditsSelected = true
+                                    
+                                    paymentVm.purchase(paymentVm.products[0]) {
+                                        is10CreditsSelected = false
+                                    }
                                 }
                                 
-                                PaymentCard(imageName: "50_credits_robot", pricePoint: 3.99, creditAmount: 50, subtitle: "Perfect for those ready to evolve their social media game!", isSelected: $is50CreditsSelected) {
+                                PaymentCard(imageName: "50_credits_robot", pricePoint: paymentVm.products[1].displayPrice, creditAmount: 50, subtitle: "Perfect for those ready to evolve their social media game!", isSelected: $is50CreditsSelected) {
                                     // on press 50 credits
+                                    Haptics.shared.play(.soft)
                                     if is10CreditsSelected {
                                         is10CreditsSelected = false
                                     }
                                     
                                     is50CreditsSelected = true
-                                }
-                                   
-                            }
-                            .padding(.top, 90)
-                            
-                            
-                            
-                            // Divider
-                            Rectangle()
-                                .fill(Color.ui.cultured)
-                                .frame(width: SCREEN_WIDTH * 0.9, height: 1)
-                                .padding(.bottom)
-                            
-                            // Play ad button
-                            AdFullScreenView(
-                                ad: self.ad,
-                                keyPath: \.isRewardedReady
-                            ) {
-                                Heap.track("onClick DisplayAdBtnView - Show Ad in Payment View")
-                                Haptics.shared.play(.soft)
-                                self.ad.presentRewarded()
-                            }
-                            .onAppear {
-                                self.router = Router(navStack: navStack)
-                            }
-                            .onReceive(self.ad.$appError) { value in
-                                if let error = value?.error {
-                                    if error == .genericError {
-                                        self.router?.toGenericFallbackView()
+                                    
+                                    paymentVm.purchase(paymentVm.products[1]) {
+                                        is50CreditsSelected = false
                                     }
                                 }
+                                
                             }
-                            
-                            // legal documents
-                            LegalDocView()
-                                .padding(.vertical, 30)
-                            
-                            Spacer()
-                        }
-                        .frame(minHeight: SCREEN_HEIGHT > 700 ? SCREEN_HEIGHT * 0.9 : SCREEN_HEIGHT * 1.2, alignment: .top)
-                        
-                    }
-                    .padding(.top, 150)
-            }
-            .edgesIgnoringSafeArea(.bottom)
-            .safeAreaInset(edge: .bottom) {
-                // CTA Buttons here
-                ZStack {
-                    Color.ui.lavenderBlue.opacity(0.75).ignoresSafeArea(.all)
-                    
-                    VStack {
-                        ContinueButton() {
-                            // continue button clicked
+                            .padding(.top, 90)
                         }
                         
-                        Text("Not now")
-                            .foregroundColor(.ui.richBlack.opacity(0.5))
-                            .font(.ui.title4Medium)
-                            .padding(.vertical)
+                        // Divider
+                        Rectangle()
+                            .fill(Color.ui.cultured)
+                            .frame(width: SCREEN_WIDTH * 0.9, height: 1)
                             .padding(.bottom)
-                            .onTapGesture {
-                                // on dismiss press
-                                dismiss()
+                        
+                        // Play ad button
+                        AdFullScreenView(
+                            ad: self.ad,
+                            keyPath: \.isRewardedReady
+                        ) {
+                            Heap.track("onClick DisplayAdBtnView - Show Ad in Payment View")
+                            Haptics.shared.play(.soft)
+                            self.ad.presentRewarded()
+                        }
+                        .onAppear {
+                            self.router = Router(navStack: navStack)
+                        }
+                        .onReceive(self.ad.$appError) { value in
+                            if let error = value?.error {
+                                if error == .genericError {
+                                    self.router?.toGenericFallbackView()
+                                }
                             }
+                        }
+                        
+                        // legal documents
+                        LegalDocView()
+                            .padding(.vertical, 30)
+                        
+                        Spacer()
                     }
+                    .frame(minHeight: SCREEN_HEIGHT > 700 ? SCREEN_HEIGHT * 0.75 : SCREEN_HEIGHT * 1.05, alignment: .top)
+                    
                 }
-                .frame(width: SCREEN_WIDTH, height: 100)
-            }
-          
-        }
-    }
-}
-
-struct ContinueButton: View {
-    let action: () -> Void
-    
-    var body: some View {
-        Button   {
-            action()
-        } label: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.ui.darkerPurple)
-                    .frame(width: SCREEN_WIDTH * 0.8, height: 60)
-                
-                RoundedRectangle(cornerRadius: 16)
-                    .strokeBorder(Color.ui.cultured, lineWidth: 3)
-                    .frame(width: SCREEN_WIDTH * 0.8, height: 60)
-                
-                Text("Continue")
-                    .font(.ui.title4)
-                    .foregroundColor(.ui.cultured)
+                .padding(.top, 150)
             }
         }
+        .edgesIgnoringSafeArea(.bottom)
+        .onAppear() {
+            // Get products from storekit
+            paymentVm.getProducts()
+        }
+        
     }
 }
 
@@ -248,13 +243,13 @@ struct AdFullScreenView<T>: View where T: ObservableObject {
             }
             .transition(.opacity)
         }
-       
+        
     }
 }
 
 struct PaymentCard: View {
     var imageName: String
-    var pricePoint: Float
+    var pricePoint: String
     var creditAmount: Int
     var subtitle: String
     @Binding var isSelected: Bool
@@ -306,19 +301,19 @@ struct PaymentCard: View {
                             .padding(.trailing)
                         
                         // Price point
-                        Text("$\(pricePoint, specifier: "%.2f")")
+                        Text(pricePoint)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .font(.ui.title4Bold)
                             .foregroundColor(isSelected ? .ui.cultured : .ui.richBlack.opacity(0.6))
                             .padding(.trailing, 30)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                   
+                    
                     Spacer()
                 }
             }
         }
-       
+        
     }
 }
 
@@ -331,7 +326,7 @@ struct CreditCounterView: View {
                 .font(.ui.headline)
                 .foregroundColor(.ui.orangeWeb)
                 .padding(.leading, 15)
-                
+            
             
             Image("coin-icon")
                 .resizable()

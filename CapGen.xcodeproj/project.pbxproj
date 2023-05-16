@@ -220,6 +220,9 @@
 		D490991D29C520A5002CBA4F /* CircularConfigViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991C29C520A5002CBA4F /* CircularConfigViews.swift */; };
 		D490991F29CF6ABB002CBA4F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490991E29CF6ABB002CBA4F /* Constants.swift */; };
 		D490C0D92A0EE185003947F4 /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490C0D82A0EE185003947F4 /* PaymentView.swift */; };
+		D490C0DC2A142842003947F4 /* CapGenSKConfig-Beta.storekit in Resources */ = {isa = PBXBuildFile; fileRef = D490C0DB2A142842003947F4 /* CapGenSKConfig-Beta.storekit */; };
+		D490C0DE2A142F1B003947F4 /* PaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D490C0DD2A142F1B003947F4 /* PaymentViewModel.swift */; };
+		D490C0E02A1445F1003947F4 /* CapGenSKConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = D490C0DF2A1445F1003947F4 /* CapGenSKConfig.storekit */; };
 		D4C3E48129803C0D00C2847A /* CaptionGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */; };
 		D4C3E483298059C800C2847A /* CustomMenuPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C3E482298059C800C2847A /* CustomMenuPopup.swift */; };
 		D4C3E485298087CE00C2847A /* crane_hand_lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3E484298087CE00C2847A /* crane_hand_lottie.json */; };
@@ -1054,6 +1057,9 @@
 		D490991C29C520A5002CBA4F /* CircularConfigViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularConfigViews.swift; sourceTree = "<group>"; };
 		D490991E29CF6ABB002CBA4F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D490C0D82A0EE185003947F4 /* PaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
+		D490C0DB2A142842003947F4 /* CapGenSKConfig-Beta.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "CapGenSKConfig-Beta.storekit"; sourceTree = "<group>"; };
+		D490C0DD2A142F1B003947F4 /* PaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewModel.swift; sourceTree = "<group>"; };
+		D490C0DF2A1445F1003947F4 /* CapGenSKConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = CapGenSKConfig.storekit; sourceTree = "<group>"; };
 		D4C3E48029803C0D00C2847A /* CaptionGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionGuidesView.swift; sourceTree = "<group>"; };
 		D4C3E482298059C800C2847A /* CustomMenuPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuPopup.swift; sourceTree = "<group>"; };
 		D4C3E484298087CE00C2847A /* crane_hand_lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = crane_hand_lottie.json; sourceTree = "<group>"; };
@@ -1947,6 +1953,7 @@
 				D48460E529F1E51D00CC1D8C /* CameraViewModel.swift */,
 				D48460F129F99E0600CC1D8C /* TagListViewModel.swift */,
 				D48461372A0AF59300CC1D8C /* UserPreferencesViewModel.swift */,
+				D490C0DD2A142F1B003947F4 /* PaymentViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -1960,6 +1967,8 @@
 				D4005DE2295C041C004D695D /* Extensions */,
 				D4056E412967283D00D3894D /* Config-dev.xcconfig */,
 				D4056E4E2968D72F00D3894D /* Config-prod.xcconfig */,
+				D490C0DB2A142842003947F4 /* CapGenSKConfig-Beta.storekit */,
+				D490C0DF2A1445F1003947F4 /* CapGenSKConfig.storekit */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -2456,6 +2465,7 @@
 				D4056DDB295C0DFB00D3894D /* Blacker-Display-Medium-Italic-trial.ttf in Resources */,
 				D4056E16295C0E2A00D3894D /* GraphikLightItalic.otf in Resources */,
 				D4056E12295C0E2A00D3894D /* GraphikBoldItalic.otf in Resources */,
+				D490C0E02A1445F1003947F4 /* CapGenSKConfig.storekit in Resources */,
 				D4056E15295C0E2A00D3894D /* GraphikExtralight.otf in Resources */,
 				D4056E09295C0E2A00D3894D /* GraphikSemibold.otf in Resources */,
 				D4056DEE295C0DFB00D3894D /* Blacker-Text-Bold-trial.ttf in Resources */,
@@ -2513,6 +2523,7 @@
 				D4056DE4295C0DFB00D3894D /* Blacker-Display-Medium-trial.ttf in Resources */,
 				D4056DDE295C0DFB00D3894D /* Blacker-Display-Regular-Italic-trial.ttf in Resources */,
 				D4056DEC295C0DFB00D3894D /* Blacker-Text-Medium-trial.ttf in Resources */,
+				D490C0DC2A142842003947F4 /* CapGenSKConfig-Beta.storekit in Resources */,
 				D4056E11295C0E2A00D3894D /* GraphikSemiboldItalic.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2771,6 +2782,7 @@
 				D490C0D92A0EE185003947F4 /* PaymentView.swift in Sources */,
 				D490991B29C391D5002CBA4F /* SearchViewModel.swift in Sources */,
 				D4373F9629B52CE800C186B3 /* SavedCaptionsHomeView.swift in Sources */,
+				D490C0DE2A142F1B003947F4 /* PaymentViewModel.swift in Sources */,
 				D4F1D30A298AD45500599F05 /* Haptics.swift in Sources */,
 				D4373F8429B5285900C186B3 /* FolderView.swift in Sources */,
 				D4056ED12978750D00D3894D /* DisplayAdBtnView.swift in Sources */,

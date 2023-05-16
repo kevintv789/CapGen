@@ -82,6 +82,8 @@ struct TagsBottomSheetModal: View {
                     if !tempSelectedTags.isEmpty || !tempCustomSelectedTags.isEmpty {
                         showDeleteModal = true
                     }
+                    
+                    Haptics.shared.play(.soft)
                    
                 } onSaveClick: {
                     // on save, copy temp selected tags list to official selected tags
@@ -94,6 +96,8 @@ struct TagsBottomSheetModal: View {
                         firestoreMan.saveCustomTags(for: userId, customImageTags: taglistVM.customSelectedTags)
                     }
                     
+                    Haptics.shared.play(.soft)
+                    
                     Heap.track("TagBottomSheetModal - onSaveClick", withProperties: ["Selected Tags": tempSelectedTags, "Custom Selected Tags": tempCustomSelectedTags])
 
                     dismiss()
@@ -103,6 +107,8 @@ struct TagsBottomSheetModal: View {
                         taglistVM.updateMutableTags(tags: taglistVM.combinedTagTypes)
                         taglistVM.getTags()
                     }
+                    
+                    Haptics.shared.play(.soft)
                     
                     Heap.track("TagBottomSheetModal - onBackButtonClick", withProperties: ["Selected Tags": tempSelectedTags, "Custom Selected Tags": tempCustomSelectedTags])
                    
@@ -395,6 +401,7 @@ struct TagsInfoView: View {
 
                 // filter to selected tags button
                 Button {
+                    Haptics.shared.play(.soft)
                     withAnimation {
                         filterToSelectedTag.toggle()
                     }
@@ -425,6 +432,7 @@ struct TagButtonView: View {
     var body: some View {
         Button {
             withAnimation {
+                Haptics.shared.play(.soft)
                 action()
             }
         } label: {

@@ -61,6 +61,7 @@ struct ImageRefinementView: View {
                             // Add tags button
                             Button {
                                 // on add tag click, show bottom sheet
+                                Haptics.shared.play(.soft)
                                 showTagsModal.toggle()
                             } label: {
                                 Text("+ Add tags")

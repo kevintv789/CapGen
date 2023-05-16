@@ -159,10 +159,9 @@ struct HomeView: View {
                 Heap.addUserProperties(["email": user.email, "name": user.fullName])
             }
         }
-        // show the depleted credit amount modal
-        .sheet(isPresented: $showCreditsDepletedBottomSheet) {
-            CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet)
-                .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
+        // show the payment view if not enough credits
+        .fullScreenCover(isPresented: $showCreditsDepletedBottomSheet) {
+            PaymentView(title: "Oops! You don't have enough credits", subtitle: "Get more to keep creating amazing captions")
         }
         // Show credits refill modal
         .modalView(horizontalPadding: 40, show: $showRefillModal) {

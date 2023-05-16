@@ -53,7 +53,7 @@ class FirestoreManager: ObservableObject {
         }
     }
 
-    func incrementCredit(for uid: String?) {
+    func incrementCredit(for uid: String?, value: Int64 = 1) {
         guard let userId = uid else {
             appError = ErrorType(error: .genericError)
             return
@@ -61,7 +61,7 @@ class FirestoreManager: ObservableObject {
 
         let docRef = db.collection("Users").document("\(userId)")
         docRef.updateData([
-            "credits": FieldValue.increment(Int64(1)),
+            "credits": FieldValue.increment(value),
         ])
     }
 

@@ -41,6 +41,7 @@ struct ImageSelectorView: View {
                     PhotoSelectionCardView(backgroundColor: Color.ui.middleBluePurple.opacity(0.4), title: "Snap & Caption 📸", subTitle: "Instantly create captions for your camera shots!", image: "camera_robot")
                         .onTapGesture {
                             // reset all tags associated with the pic
+                            Haptics.shared.play(.soft)
                             taglistVM.resetAll()
                             
                             if !cameraModel.showAlert {
@@ -95,6 +96,9 @@ struct ImageSelectorView: View {
                             isLoading = false
                         }
                     }
+                    .simultaneousGesture(TapGesture().onEnded { _ in
+                        Haptics.shared.play(.soft)
+                    })
 
                     Spacer()
                     

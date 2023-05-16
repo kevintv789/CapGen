@@ -363,9 +363,8 @@ struct ContentSectionView: View {
                 showBottomSheet = true
                 Haptics.shared.play(.soft)
             }
-            .sheet(isPresented: $showBottomSheet) {
-                RewardedAdView(isViewPresented: $showBottomSheet, showCongratsModal: $showCongratsModal)
-                    .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
+            .fullScreenCover(isPresented: $showBottomSheet) {
+               PaymentView()
             }
         }
     }

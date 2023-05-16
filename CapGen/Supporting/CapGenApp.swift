@@ -67,6 +67,7 @@ struct CapGenApp: App {
                 .environmentObject(CameraViewModel())
                 .environmentObject(TaglistViewModel())
                 .environmentObject(UserPreferencesViewModel())
+                .environmentObject(PaymentViewModel())
         }
     }
 }
