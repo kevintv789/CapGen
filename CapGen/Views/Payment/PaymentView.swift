@@ -9,6 +9,11 @@ import SwiftUI
 import Heap
 import NavigationStack
 
+struct AlertItem: Identifiable {
+    let id = UUID()
+    let message: String
+}
+
 struct PaymentView: View {
     @ObservedObject var ad = AppodealProvider.shared
     @EnvironmentObject var firestoreMan: FirestoreManager
@@ -28,6 +33,7 @@ struct PaymentView: View {
     @State var isAnimating: Bool = true
     @State var is10CreditsSelected: Bool = false
     @State var is50CreditsSelected: Bool = false
+    @State private var alertItem: AlertItem? = nil
     
     var body: some View {
         ZStack {
@@ -110,8 +116,12 @@ struct PaymentView: View {
                                     
                                     is10CreditsSelected = true
                                     
-                                    paymentVm.purchase(paymentVm.products[0]) {
+                                    paymentVm.purchase(paymentVm.products[0]) { errorMessage in
                                         is10CreditsSelected = false
+                                        
+                                        if let error = errorMessage {
+                                            alertItem = AlertItem(message: error)
+                                        }
                                     }
                                 }
                                 
@@ -124,8 +134,12 @@ struct PaymentView: View {
                                     
                                     is50CreditsSelected = true
                                     
-                                    paymentVm.purchase(paymentVm.products[1]) {
+                                    paymentVm.purchase(paymentVm.products[1]) { errorMessage in
                                         is50CreditsSelected = false
+                                        
+                                        if let error = errorMessage {
+                                            alertItem = AlertItem(message: error)
+                                        }
                                     }
                                 }
                                 
@@ -170,6 +184,10 @@ struct PaymentView: View {
                 }
                 .padding(.top, 150)
             }
+        }
+        // alerts the user of any errors
+        .alert(item: $alertItem) { item in
+            Alert(title: Text("Purchase Error"), message: Text(item.message), dismissButton: .default(Text("OK")))
         }
         .edgesIgnoringSafeArea(.bottom)
         .onAppear() {
