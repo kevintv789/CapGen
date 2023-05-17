@@ -1,0 +1,50 @@
+{
+  "identifier" : "3690E978",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "6449236398",
+      "localizations" : [
+        {
+          "description" : "10 CapGen Credits for in-app use.",
+          "displayName" : "10 CapGen Credits",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "CapGen_10_Credits",
+      "referenceName" : "CapGen 10 Credits",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "3.99",
+      "familyShareable" : false,
+      "internalID" : "6449236453",
+      "localizations" : [
+        {
+          "description" : "50 CapGen Credits for in-app use.",
+          "displayName" : "50 CapGen Credits",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "CapGen_50_Credits",
+      "referenceName" : "CapGen 50 Credits",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1663555969",
+    "_developerTeamID" : "Y5N6F2G6M7",
+    "_lastSynchronizedDate" : 705971702.46920204
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

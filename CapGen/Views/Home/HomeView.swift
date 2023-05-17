@@ -34,6 +34,7 @@ struct HomeView: View {
     // private instances
     @State var showCaptionDeleteModal: Bool = false
     @State var showCreditsDepletedBottomSheet: Bool = false
+    @State var showPaymentView: Bool = false
 
     var body: some View {
         ZStack {
@@ -69,7 +70,7 @@ struct HomeView: View {
                     // Credits view
                     Button {
                         Haptics.shared.play(.soft)
-                        self.showRefillModal = true
+                        self.showPaymentView = true
                     } label: {
                         CreditsView(creditAmount: self.creditAmount ?? 0)
                     }
@@ -158,10 +159,9 @@ struct HomeView: View {
                 Heap.addUserProperties(["email": user.email, "name": user.fullName])
             }
         }
-        // show the depleted credit amount modal
-        .sheet(isPresented: $showCreditsDepletedBottomSheet) {
-            CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet)
-                .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
+        // show the payment view if not enough credits
+        .fullScreenCover(isPresented: $showCreditsDepletedBottomSheet) {
+            PaymentView(title: "Oops! You don't have enough credits", subtitle: "Get more to keep creating amazing captions")
         }
         // Show credits refill modal
         .modalView(horizontalPadding: 40, show: $showRefillModal) {
@@ -233,6 +233,12 @@ struct HomeView: View {
         .overlay(
             FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
         )
+        // show payment view
+        .fullScreenCover(isPresented: $showPaymentView) {
+            // Present the CameraViewController, binding the captured image to the capturedImage property.
+            PaymentView()
+        }
+        
     }
 }
 
