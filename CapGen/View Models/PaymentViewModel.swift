@@ -37,6 +37,19 @@ class PaymentViewModel: ObservableObject {
         _ = listenForTransactions()
     }
     
+    func restorePurchases(onComplete: @escaping (String?) -> Void) {
+        Task {
+            do {
+                try await AppStore.sync()
+                onComplete(nil)
+            } catch {
+                Heap.track("restorePurchases - There was an error restoring purchases \(error)")
+                print("restorePurchases - There was an error restoring purchases \(error)")
+                onComplete(error.localizedDescription)
+            }
+        }
+    }
+    
     func getProducts() {
         Task {
             do {
@@ -49,7 +62,6 @@ class PaymentViewModel: ObservableObject {
             }
         }
     }
-    
     
     func purchase(_ product: Product, onComplete: @escaping (String?) -> Void) {
         Task {

@@ -199,12 +199,11 @@ struct PaymentView: View {
 }
 
 struct LegalDocView: View {
+    @EnvironmentObject var paymentVm: PaymentViewModel
+    @State private var alertItem: AlertItem? = nil
+    
     var body: some View {
         HStack(spacing: 40) {
-            Text("[EULA](https://capgen.app/eula)")
-                .underline()
-                .font(.ui.bodyLarge)
-            
             Text("[Terms](https://capgen.app/terms-conditions)")
                 .underline()
                 .font(.ui.bodyLarge)
@@ -212,6 +211,22 @@ struct LegalDocView: View {
             Text("[Privacy Policy](https://capgen.app/privacy-policy)")
                 .underline()
                 .font(.ui.bodyLarge)
+            
+            Text("Restore Purchases")
+                .underline()
+                .font(.ui.bodyLarge)
+                .foregroundColor(Color.blue)
+                .onTapGesture {
+                    paymentVm.restorePurchases() { error in
+                        if let error = error {
+                            alertItem = AlertItem(message: error)
+                        }
+                    }
+                }
+                // alerts the user of any errors
+                .alert(item: $alertItem) { item in
+                    Alert(title: Text("Restore Purchase"), message: Text(item.message), dismissButton: .default(Text("OK")))
+                }
         }
         
     }
