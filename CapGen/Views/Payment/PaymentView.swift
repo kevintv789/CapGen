@@ -115,6 +115,7 @@ struct PaymentView: View {
                                     }
                                     
                                     is10CreditsSelected = true
+                                    paymentVm.isLoading = false // resets when pressed
                                     
                                     paymentVm.purchase(paymentVm.products[0]) { errorMessage in
                                         is10CreditsSelected = false
@@ -133,6 +134,7 @@ struct PaymentView: View {
                                     }
                                     
                                     is50CreditsSelected = true
+                                    paymentVm.isLoading = false // resets when pressed
                                     
                                     paymentVm.purchase(paymentVm.products[1]) { errorMessage in
                                         is50CreditsSelected = false
@@ -183,6 +185,13 @@ struct PaymentView: View {
                     
                 }
                 .padding(.top, 150)
+            }
+            .blur(radius: paymentVm.isLoading ? 3 : 0)
+            .disabled(paymentVm.isLoading)
+            
+            // Calls activity indicator here
+            if paymentVm.isLoading {
+                SimpleLoadingView(scaledSize: 2, title: "", loadTheme: .white)
             }
         }
         // alerts the user of any errors

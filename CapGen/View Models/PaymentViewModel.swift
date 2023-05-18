@@ -32,6 +32,7 @@ class PaymentViewModel: ObservableObject {
     
     @Published var firestoreMan: FirestoreManager = .init(folderViewModel: FolderViewModel.shared)
     @Published var products: [Product] = []
+    @Published var isLoading: Bool = false
     
     init() {
         _ = listenForTransactions()
@@ -54,6 +55,7 @@ class PaymentViewModel: ObservableObject {
         Task {
             do {
                 let productIds = [ten_credits_product_id, fifty_credits_product_id]
+                Heap.track("getProducts - Retrieving product IDs", withProperties: ["product_ids": productIds])
                 let newProducts = try await Product.products(for: productIds)
                 self.products = newProducts
             } catch {
@@ -64,14 +66,17 @@ class PaymentViewModel: ObservableObject {
     }
     
     func purchase(_ product: Product, onComplete: @escaping (String?) -> Void) {
+        isLoading = true
         Task {
             do {
                 let result = try await product.purchase()
                 let errorMessage = await handlePurchaseResult(result, for: product)
                 
                 if let error = errorMessage {
+                    isLoading = false
                     onComplete(error)
                 } else {
+                    isLoading = false
                     onComplete(nil)
                 }
             } catch {
@@ -86,6 +91,8 @@ class PaymentViewModel: ObservableObject {
                 }
                 Heap.track("purchase - PaymentView error in purchasing products \(error)")
                 print("PaymentView error in purchasing products \(error)")
+                
+                isLoading = false
                 onComplete(errorMessage)
                 
             }
