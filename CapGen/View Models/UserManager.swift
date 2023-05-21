@@ -9,6 +9,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import Foundation
 import GoogleSignIn
+import Heap
 
 class UserManager: ObservableObject {
     @Published var user: UserModel?
@@ -20,7 +21,7 @@ class UserManager: ObservableObject {
         checkIfUserExist(uid: uid) { doesExist in
             // Only create new user document if they don't already exist in the 'Users' collection
             if !doesExist {
-                let usersPref = UserPreferences(showCongratsModal: true, showCreditDepletedModal: true)
+                let usersPref = UserPreferences(showCongratsModal: true, showCreditDepletedModal: true, persistImagesOnSave: true)
                 let dateCreated = Date.now
                 let credit = 1
 
@@ -66,6 +67,7 @@ class UserManager: ObservableObject {
             let userPrefsDict = snapshot?.get("userPrefs") as? [String: Any]
             let dateCreatedTimestamp = snapshot?.get("dateCreated") as? Timestamp ?? nil
             let folders = self.convertFolderModel(for: snapshot?.get("folders") as? [[String: AnyObject]] ?? nil)
+            let customImageTags = self.mapTagsModel(for: snapshot?.get("customImageTags") as? [[String: AnyObject]] ?? nil)
 
             guard let dateCreated = dateCreatedTimestamp?.dateValue() else { return }
 
@@ -75,7 +77,7 @@ class UserManager: ObservableObject {
                 let userPref = try? decoder.decode(UserPreferences.self, from: userPrefsDict)
 
                 if userPref != nil {
-                    self.user = UserModel(id: uid, fullName: fullName, credits: credits, email: email, userPrefs: userPref!, dateCreated: dateCreated, folders: folders)
+                    self.user = UserModel(id: uid, fullName: fullName, credits: credits, email: email, userPrefs: userPref!, dateCreated: dateCreated, folders: folders, customImageTags: customImageTags)
                 }
             }
         }
@@ -88,34 +90,41 @@ class UserManager: ObservableObject {
             completion(ErrorType(error: .genericError))
             return
         }
-
-        // Delete firestore data
-        let docRef = collection.document("\(user.uid)")
-        docRef.delete { error in
-            if let error = error {
-                completion(ErrorType(error: .genericError))
-                print("Error in deleting user from firestore", error.localizedDescription)
-            } else {
-                if AuthManager.shared.googleAuthMan.googleSignInState == .signedIn {
-                    AuthManager.shared.googleAuthMan.signOut()
-                }
-
-                if AuthManager.shared.fbAuthManager.fbSignedInStatus == .signedIn {
-                    AuthManager.shared.fbAuthManager.signOut()
-                }
-
-                if AuthManager.shared.appleAuthManager.appleSignedInStatus == .signedIn {
-                    AuthManager.shared.appleAuthManager.signOut()
-                }
-
-                user.delete { error in
-                    if let error = error {
-                        completion(ErrorType(error: .genericError))
-                        print("Error in deleting user", error.localizedDescription)
+        
+        // also find the image path (if it exists) and then deletes it from the storage
+        let folderPath = "saved_images/users/\(user.uid)/folders/"
+        deleteAllImagesInFolder(folderPath: folderPath) {
+            // Delete firestore data
+            let docRef = self.collection.document("\(user.uid)")
+            docRef.delete { error in
+                if let error = error {
+                    completion(ErrorType(error: .genericError))
+                    print("Error in deleting user from firestore", error.localizedDescription)
+                } else {
+                    user.delete { error in
+                        if let error = error {
+                            completion(ErrorType(error: .genericError))
+                            print("Error in deleting user", error.localizedDescription)
+                        } else {
+                            if AuthManager.shared.googleAuthMan.googleSignInState == .signedIn {
+                                AuthManager.shared.googleAuthMan.signOut()
+                            }
+                            
+                            if AuthManager.shared.fbAuthManager.fbSignedInStatus == .signedIn {
+                                AuthManager.shared.fbAuthManager.signOut()
+                            }
+                            
+                            if AuthManager.shared.appleAuthManager.appleSignedInStatus == .signedIn {
+                                AuthManager.shared.appleAuthManager.signOut()
+                            }
+                            
+                            Heap.track("onClick - ProfileView Account Deletion Successful")
+                            
+                            // Account has been deleted
+                            AuthManager.shared.setSignOut()
+                            completion(nil)
+                        }
                     }
-                    // Account has been deleted
-                    AuthManager.shared.setSignOut()
-                    completion(nil)
                 }
             }
         }
@@ -142,6 +151,23 @@ class UserManager: ObservableObject {
         return result.sorted { f1, f2 in
             f1.captions.count > f2.captions.count
         }
+    }
+
+    private func mapTagsModel(for tags: [[String: AnyObject]]?) -> [TagsModel] {
+        guard let tags = tags else { return [] }
+
+        var result: [TagsModel] = []
+
+        tags.forEach { tag in
+            let id = tag["id"] as! String
+            let title = tag["title"] as! String
+            let size = tag["size"] as! CGFloat
+
+            let mappedTag = TagsModel(id: id, title: title, size: size, isCustom: true)
+            result.append(mappedTag)
+        }
+
+        return result
     }
 
     private func createGoogleUser(uid: String, credit: Int, usersPref: UserPreferences, dateCreated: Date) {

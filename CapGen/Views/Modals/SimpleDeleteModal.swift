@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SimpleDeleteModal: View {
     @Binding var showView: Bool
+    let title: String
+    let buttonTitle: String
     var onDelete: () -> Void
 
     var body: some View {
@@ -16,7 +18,7 @@ struct SimpleDeleteModal: View {
             Color.ui.cultured.ignoresSafeArea()
 
             VStack(alignment: .center, spacing: 20) {
-                Text("This will erase all of your work. \nAre you sure?")
+                Text(title)
                     .foregroundColor(.ui.richBlack)
                     .font(.ui.title4)
                     .lineSpacing(5)
@@ -47,7 +49,7 @@ struct SimpleDeleteModal: View {
                             .stroke(Color.ui.dangerRed, lineWidth: 2)
                             .frame(width: SCREEN_WIDTH / 1.4, height: 55)
                             .overlay(
-                                Text("Yes! Erase it all")
+                                Text(buttonTitle)
                                     .foregroundColor(.ui.dangerRed)
                                     .font(.ui.title2)
                             )

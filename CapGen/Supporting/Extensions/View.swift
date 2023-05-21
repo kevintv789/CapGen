@@ -5,7 +5,6 @@
 //  Created by Kevin Vu on 12/30/22.
 //
 
-import Firebase
 import Foundation
 import SwiftUI
 
@@ -23,7 +22,7 @@ extension View {
     func dropInAndOutAnimation(value: Bool) -> some View {
         animation(.easeInOut(duration: 0.35), value: value)
     }
-    
+
     func placeholder<Content: View>(
         when shouldShow: Bool,
         alignment: Alignment = .leading,

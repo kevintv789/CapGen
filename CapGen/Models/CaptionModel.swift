@@ -20,6 +20,7 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
     var tones: [ToneModel] = []
     var color: String = ""
     var index: Int = 0
+    var completePrompt: String?
 
     static func < (lhs: CaptionModel, rhs: CaptionModel) -> Bool {
         let leftDate = Utils.convertStringToDate(date: lhs.dateCreated) ?? Date()
@@ -41,7 +42,7 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
 
     // Used within CaptionView mapCaptionToBeEdited()
     // for creating new captions inside a designated folder
-    init(captionLength: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, prompt: String, title: String, tones: [ToneModel], color: String) {
+    init(captionLength: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, prompt: String, title: String, tones: [ToneModel], color: String, completePrompt: String) {
         self.captionLength = captionLength
         self.captionDescription = captionDescription
         self.includeEmojis = includeEmojis
@@ -50,9 +51,11 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
         self.title = title
         self.tones = tones
         self.color = color
+        self.completePrompt = completePrompt
     }
 
-    init(id: String, captionLength: String, dateCreated: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, folderId: String, prompt: String, title: String, tones: [ToneModel], color: String, index: Int) {
+    // This is used within convertGeneratedCaptions() for mapping User model 
+    init(id: String, captionLength: String, dateCreated: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, folderId: String, prompt: String, title: String, tones: [ToneModel], color: String, index: Int, completePrompt: String?) {
         self.id = id
         self.captionLength = captionLength
         self.dateCreated = dateCreated
@@ -65,6 +68,7 @@ struct CaptionModel: Identifiable, Codable, Hashable, Comparable {
         self.tones = tones
         self.color = color
         self.index = index
+        self.completePrompt = completePrompt
     }
 
     init(captionLength: String, captionDescription: String, includeEmojis: Bool, includeHashtags: Bool, folderId: String, prompt: String, title: String, tones: [ToneModel], color: String, index: Int) {

@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 1/18/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 enum ButtonLength {
     case short, full

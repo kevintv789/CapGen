@@ -17,9 +17,11 @@ struct UserModel: Codable {
     var userPrefs: UserPreferences
     var dateCreated: Date
     var folders: [FolderModel] = []
+    var customImageTags: [TagsModel] = []
 }
 
 struct UserPreferences: Codable {
     var showCongratsModal: Bool
     var showCreditDepletedModal: Bool
+    var persistImagesOnSave: Bool?
 }

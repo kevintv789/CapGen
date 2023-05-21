@@ -6,9 +6,9 @@
 //
 
 import FirebaseAuth
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 extension Text {
     func customProfileHeadline() -> some View {
@@ -115,10 +115,11 @@ struct ProfileView: View {
                 authManager.userManager.deleteUser { error in
                     if let error = error {
                         self.router?.toGenericFallbackView()
+                        Heap.track("onClick - ProfileView Account Deletion Failed", withProperties: ["error": error.error.errorDescription ?? "N/A"])
                         print("ERROR in deleting account", error.error.errorDescription ?? "")
                         return
                     }
-
+                    
                     self.router?.toLaunchView()
                 }
             }
@@ -136,13 +137,13 @@ struct ProfileView_Previews: PreviewProvider {
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
             .environmentObject(NavigationStackCompat())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
 
         ProfileView()
             .environmentObject(GoogleAuthManager())
             .environmentObject(AuthManager.shared)
             .environmentObject(NavigationStackCompat())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
@@ -321,7 +322,7 @@ struct OptionButtonView: View {
                                 .lineSpacing(5)
                                 .padding(.leading, 25)
                         }
-                        
+
                     }.offset(x: 3, y: subTitle != nil ? 0 : 5)
                 )
                 .frame(height: subTitle != nil ? 100 * scaledSize : 50 * scaledSize)
@@ -362,9 +363,8 @@ struct ContentSectionView: View {
                 showBottomSheet = true
                 Haptics.shared.play(.soft)
             }
-            .sheet(isPresented: $showBottomSheet) {
-                RewardedAdView(isViewPresented: $showBottomSheet, showCongratsModal: $showCongratsModal)
-                    .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
+            .fullScreenCover(isPresented: $showBottomSheet) {
+               PaymentView()
             }
         }
     }
@@ -426,6 +426,21 @@ struct ConnectSectionView: View {
                 supportEmailModel.send(openURL: openURL)
                 Haptics.shared.play(.soft)
             }
+
+            if let appStore = firestoreMan.appStoreModel {
+                ZStack {
+                    Color.ui.cultured
+
+                    Divider()
+                        .frame(width: SCREEN_WIDTH / 1.1)
+                }
+
+                OptionButtonView(title: "🌟 Review & Inspire", subTitle: "Share your insights now to help us create a better experience for all. Your support means the world to us!") {
+                    let url = URL(string: "https://apps.apple.com/us/app/capgen-ai-powered/id\(appStore.storeId)?action=write-review")
+                    openURL(url!)
+                    Haptics.shared.play(.soft)
+                }
+            }
         }
     }
 }
@@ -461,6 +476,8 @@ struct AccountManagementSectionView: View {
             OptionButtonView(title: "🔨 Delete profile", subTitle: "Deleting your profile will permanently remove all credits and captions. This action is irreversible, please proceed with caution.", dangerField: true) {
                 showDeleteProfileModal = true
                 Haptics.shared.play(.soft)
+                
+                Heap.track("onClick - ProfileView Account Deletion Initiate")
             }
         }
     }

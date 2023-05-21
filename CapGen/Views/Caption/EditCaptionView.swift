@@ -6,22 +6,18 @@
 //
 
 import Combine
+import Heap
 import NavigationStack
 import SwiftUI
 import UIKit
-import Heap
-
-enum EditCaptionContext {
-    case optimization, regular, captionList
-}
 
 struct EditCaptionView: View {
     @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var searchVm: SearchViewModel
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
 
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
@@ -39,13 +35,14 @@ struct EditCaptionView: View {
     @State var isSelectingPlatform: Bool = false
     @State var selectedPlatform: String? = nil
     @State var isLoading: Bool = false
+    @State var uiImage: UIImage? = nil
 
     // Used to determine if platform icons should display for Dropdown menu
     // Used to determine if CopyAndGo should be available - no if selected platform is General
     @State var shouldShowSocialMediaPlatform: Bool = false
 
     // Context
-    var context: EditCaptionContext = .regular
+    var context: NavigationContext = .regular
 
     private func countHashtags(text: String) -> Int {
         let hashtagRegex = "#[a-zA-Z0-9_]+"
@@ -100,8 +97,8 @@ struct EditCaptionView: View {
                                 captionVm.selectedCaption.captionDescription = captionVm.editedCaption.text
                                 Task {
                                     await firestoreMan.updateSingleCaptionInFolder(for: userId, currentCaption: captionVm.selectedCaption) { updatedFolder in
-                                        self.folderVm.updatedFolder = updatedFolder ?? nil
-                                        
+                                        FolderViewModel.shared.updatedFolder = updatedFolder ?? nil
+
                                         // also update the search object with the most recent updated captions
                                         // for when a user wants to update the caption while searching
                                         self.searchVm.searchedCaptions = updatedFolder?.captions ?? []
@@ -113,8 +110,8 @@ struct EditCaptionView: View {
                                 // difference is that this pops outside of the asynchronous context
                                 self.navStack.pop(to: .previous)
                             }
-                            
-                            Heap.track("onClick EditCaptionView - Back button", withProperties: [ "context": context, "caption": captionVm.editedCaption.text ])
+
+                            Heap.track("onClick EditCaptionView - Back button", withProperties: ["context": context, "caption": captionVm.editedCaption.text])
                         }
                         .disabled(isSelectingPlatform)
                         .padding(.leading, 8)
@@ -144,19 +141,19 @@ struct EditCaptionView: View {
                             // Copy selected
                             self.isTextCopied = true
                             UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
-                            Heap.track("onClick EditCaptionView Custom Menu - Copy caption", withProperties: [ "caption": captionVm.editedCaption.text ])
+                            Heap.track("onClick EditCaptionView Custom Menu - Copy caption", withProperties: ["caption": captionVm.editedCaption.text])
 
                         }, reset: {
                             // Reset to original text
                             self.captionVm.editedCaption.text = self.captionVm.selectedCaption.captionDescription
-                            Heap.track("onClick EditCaptionView Custom Menu - Reset caption", withProperties: [ "caption": captionVm.editedCaption.text ])
+                            Heap.track("onClick EditCaptionView Custom Menu - Reset caption", withProperties: ["caption": captionVm.editedCaption.text])
                         }, onMenuOpen: {
                             self.shareableData = mapShareableData(caption: captionVm.editedCaption.text, platform: shouldShowSocialMediaPlatform ? selectedPlatform : nil)
                         }, onCopyAndGo: {
                             // Copy and go run openSocialMediaLink(for: platform)
                             UIPasteboard.general.string = String(self.captionVm.editedCaption.text)
                             openSocialMediaLink(for: self.selectedPlatform ?? "")
-                            Heap.track("onClick EditCaptionView Custom Menu - Copy & Go caption", withProperties: [ "caption": captionVm.editedCaption.text ])
+                            Heap.track("onClick EditCaptionView Custom Menu - Copy & Go caption", withProperties: ["caption": captionVm.editedCaption.text])
                         })
                         .disabled(isSelectingPlatform)
                         .padding(.horizontal)
@@ -166,13 +163,28 @@ struct EditCaptionView: View {
 
                     // Body
                     VStack(alignment: .leading, spacing: 15) {
-                        Text(captionVm.selectedCaption.title)
-                            .foregroundColor(.ui.richBlack)
-                            .font(.ui.title)
-                            .scaledToFit()
-                            .minimumScaleFactor(0.5)
-                            .frame(width: SCREEN_WIDTH * 0.8, alignment: .leading)
-                            .lineLimit(2)
+                        HStack {
+                            if let uiImage = uiImage {
+                                ImageThumbnailView(uiImage: uiImage, showShadow: false) {
+                                    // on thumbnail press, show full image
+                                    withAnimation {
+                                        photoSelectionVm.assignImageClickedFullscreen(uiImage: uiImage)
+                                    }
+                                }
+                            }
+                            
+                            Text(captionVm.selectedCaption.title)
+                                .foregroundColor(.ui.richBlack)
+                                .font(.ui.title)
+                                .frame(width: uiImage == nil ? SCREEN_WIDTH * 0.8 : SCREEN_WIDTH * 0.7, alignment: .leading)
+                                .lineLimit(3)
+                                .if(uiImage == nil) { view in
+                                    return view
+                                        .scaledToFit()
+                                        .minimumScaleFactor(0.5)
+                                }
+                        }
+                       
 
                         PlatformLimitsView(textCount: $textCount, hashtagCount: $hashtagCount, textLimit: textLimit, hashtagLimit: hashtagLimit)
 
@@ -282,10 +294,21 @@ struct EditCaptionView: View {
 
                     // Set text to be edited
                     captionVm.editedCaption.text = captionVm.selectedCaption.captionDescription
+                    
+                    // retrieve image if any
+                    let imagePath = "saved_images/users/\(user.id)/folders/\(folder.id)/caption_images/\(captionVm.selectedCaption.id).jpg"
+                    firestoreMan.retrieveImage(imagePath: imagePath) { result in
+                        switch result {
+                        case .success(let image):
+                            self.uiImage = image
+                        case .failure:
+                            break;
+                        }
+                    }
                 }
             }
-            
-            Heap.track("onAppear EditCaptionView", withProperties: [ "context": context, "caption": captionVm.selectedCaption.captionDescription, "type": selectedPlatform == nil ? "General" : selectedPlatform! ])
+
+            Heap.track("onAppear EditCaptionView", withProperties: ["context": context, "caption": captionVm.selectedCaption.captionDescription, "type": selectedPlatform == nil ? "General" : selectedPlatform!])
         }
         .onChange(of: self.selectedPlatform, perform: { sp in
             if let sp = sp {
@@ -310,6 +333,10 @@ struct EditCaptionView: View {
                 self.keyboardHeight = keyboardHeight
             }
         }
+        // show full image on click
+        .overlay(
+            FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
+        )
     }
 }
 
@@ -319,14 +346,14 @@ struct EditCaptionView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(FolderViewModel())
 
         EditCaptionView()
             .environmentObject(NavigationStackCompat())
             .environmentObject(OpenAIConnector())
             .environmentObject(CaptionViewModel())
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(FolderViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")

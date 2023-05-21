@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 1/14/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 struct BackArrowView: View {
     var action: (() -> Void)?

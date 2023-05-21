@@ -8,29 +8,10 @@
 import NavigationStack
 import SwiftUI
 
-enum CaptionListContext {
-    /**
-      Called directly from the FolderView(), this context allows the list to filter out to specific folder IDs versus
-      generating a list of captions from all available folders
-     */
-    case folder
-
-    /**
-      This is the default context that generates a list of captions based on all available folders
-     */
-    case list
-    
-    /**
-      Called directly from the SearchView()
-     */
-    case search
-}
-
 struct CaptionListView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var searchVm: SearchViewModel
 
     @State var captions: [CaptionModel] = []
@@ -39,7 +20,7 @@ struct CaptionListView: View {
     // private variables
     @State var folderId: String = ""
 
-    var context: CaptionListContext = .list
+    var context: NavigationContext = .list
     @Binding var showCaptionDeleteModal: Bool
 
     private func onEdit(caption: CaptionModel) {
@@ -47,7 +28,7 @@ struct CaptionListView: View {
         captionVm.selectedCaption = caption
         navStack.push(EditCaptionView(context: .captionList))
     }
-    
+
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             if captions.isEmpty {
@@ -69,8 +50,8 @@ struct CaptionListView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .ignoresSafeArea(.all)
-        
-        .onReceive(folderVm.$updatedFolder.first()) { updatedFolder in
+
+        .onReceive(FolderViewModel.shared.$updatedFolder.first()) { updatedFolder in
             if context == .folder, let updatedFolder = updatedFolder {
                 self.folderId = updatedFolder.id
             }
@@ -78,7 +59,7 @@ struct CaptionListView: View {
         .onReceive(AuthManager.shared.userManager.$user, perform: { user in
             if let user = user, context != .search {
                 self.captions.removeAll()
-                
+
                 var captionsPerFolder: [[CaptionModel]] = []
 
                 if context == .folder, !folderId.isEmpty {
@@ -102,7 +83,7 @@ struct CaptionListView: View {
         .onReceive(searchVm.$searchedCaptions) { searchedCaptions in
             if context == .search {
                 self.captions = searchedCaptions
-                
+
                 // Sort by most recent created
                 let df = DateFormatter()
                 df.dateFormat = "MMM d, h:mm a"

@@ -5,20 +5,25 @@
 //  Created by Kevin Vu on 2/28/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 struct CaptionOptimizationBottomSheetView: View {
-    @EnvironmentObject var firestoreMan: FirestoreManager
     @EnvironmentObject var captionVm: CaptionViewModel
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
+    @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
+    @EnvironmentObject var userPrefsVm: UserPreferencesViewModel
+    
+    @StateObject var firestoreMan = FirestoreManager(folderViewModel: FolderViewModel.shared)
+    
+    var context: NavigationContext = .prompt
 
     // Private variables
     @State var selectedIndex: Int = 0
     @State var isSavingToFolder: Bool = false
     @State var isSuccessfullySaved: Bool = false
+    
 
     // Used in dragGesture to rotate tab between views
     private func changeView(left: Bool) {
@@ -38,26 +43,38 @@ struct CaptionOptimizationBottomSheetView: View {
     private func saveCaptionsToFolder() {
         isSavingToFolder = true
 
-        let captionsToSaveWithFolderId = folderVm.captionFolderStorage
+        let captionsToSaveWithFolderId = FolderViewModel.shared.captionFolderStorage
 
         if let user = AuthManager.shared.userManager.user {
             let userId = user.id
 
-            firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) {
+            firestoreMan.saveCaptionsToFolders(for: userId, destinationFolders: captionsToSaveWithFolderId) { savedCaption, savedFolder in
                 // get current folders
                 let currentFolders = user.folders
                 if !currentFolders.isEmpty {
                     withAnimation {
-                        folderVm.resetFolderStorage()
+                        FolderViewModel.shared.resetFolderStorage()
                         self.isSavingToFolder = false
                         self.isSuccessfullySaved = true
-
+                        
+                        // Store image to storage only for the relevant context and if persist images is toggled on
+                        if context == .image && userPrefsVm.persistImage {
+                            self.firestoreMan.storeImage(userId: userId, folderId: savedFolder?.id, captionId: savedCaption?.id, image: photosSelectionVm.uiImage) { result in
+                                switch result {
+                                case .success(let url):
+                                    print("SUCCESS!", url)
+                                case .failure(let error):
+                                    print("Error:", error)
+                                }
+                            }
+                        }
+                        
                         // Resets Saved! tag after 1 second
                         Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
                             self.isSuccessfullySaved = false
                         }
-                        
-                        Heap.track("onClick CaptionOptimizationBottomSheet - Apply button clicked, save caption to folder success", withProperties: [ "folders": captionsToSaveWithFolderId, "caption": captionVm.selectedCaption.captionDescription ])
+
+                        Heap.track("onClick CaptionOptimizationBottomSheet - Apply button clicked, save caption to folder success", withProperties: ["folders": captionsToSaveWithFolderId, "caption": captionVm.selectedCaption.captionDescription])
                     }
                 }
             }
@@ -79,8 +96,8 @@ struct CaptionOptimizationBottomSheetView: View {
                         {
                             // on click, take user to edit caption screen
                             self.navStack.push(EditCaptionView(context: .optimization))
-                            
-                            Heap.track("onClick CaptionOptimizationBottomSheet - Caption card clicked, pushing to Edit screen", withProperties: [ "caption": captionVm.selectedCaption.captionDescription ])
+
+                            Heap.track("onClick CaptionOptimizationBottomSheet - Caption card clicked, pushing to Edit screen", withProperties: ["caption": captionVm.selectedCaption.captionDescription])
                         }
                         .frame(maxHeight: 250)
                         .padding(.horizontal, 25)
@@ -104,10 +121,10 @@ struct CaptionOptimizationBottomSheetView: View {
                 Spacer()
             }
             .onDisappear {
-                folderVm.resetFolderStorage()
+                FolderViewModel.shared.resetFolderStorage()
                 self.isSavingToFolder = false
                 self.isSuccessfullySaved = true
-                
+
                 Heap.track("onDisappear CaptionOptimizationBottomSheet")
             }
             // Create drag gesture to rotate between views
@@ -127,8 +144,8 @@ struct CaptionOptimizationBottomSheetView: View {
             )
             .padding(.top)
         }
-        .onAppear() {
-            Heap.track("onAppear CaptionOptimizationBottomSheet", withProperties: [ "caption": captionVm.selectedCaption.captionDescription ])
+        .onAppear {
+            Heap.track("onAppear CaptionOptimizationBottomSheet", withProperties: ["caption": captionVm.selectedCaption.captionDescription])
         }
     }
 }
@@ -217,8 +234,8 @@ struct TopTabView: View {
 }
 
 struct SaveToFolderView: View {
-    @EnvironmentObject var folderVm: FolderViewModel
-
+    @State private var showApplyButton: Bool = false
+    
     @Binding var isLoading: Bool
     @Binding var isSaved: Bool
     var onApplyClick: () -> Void
@@ -231,15 +248,22 @@ struct SaveToFolderView: View {
                 .lineSpacing(5)
                 .frame(height: 50)
 
-            if !folderVm.captionFolderStorage.isEmpty {
+            if showApplyButton {
                 ApplyButtonView(isLoading: $isLoading, onApplyClick: onApplyClick)
-            } else if folderVm.captionFolderStorage.isEmpty && !isLoading && isSaved {
+            } else if !isLoading && isSaved {
                 SavedTagView()
             }
 
             FolderGridView(context: .saveToFolder, disableTap: $isLoading)
 
             Spacer()
+        }
+        .onReceive(FolderViewModel.shared.$captionFolderStorage) { captionFolderStorage in
+            if !captionFolderStorage.isEmpty {
+                showApplyButton = true
+            } else {
+                showApplyButton = false
+            }
         }
     }
 }
@@ -278,8 +302,8 @@ struct SocialMediaGridView: View {
                         UIPasteboard.general.string = String(captionVm.selectedCaption.captionDescription)
                         openSocialMediaLink(for: sp.title)
                         Haptics.shared.play(.soft)
-                        
-                        Heap.track("onClick CaptionOptimizationBottomSheet - Copy & Go clicked", withProperties: [ "social_media_platform": sp.title, "caption": captionVm.selectedCaption.captionDescription ])
+
+                        Heap.track("onClick CaptionOptimizationBottomSheet - Copy & Go clicked", withProperties: ["social_media_platform": sp.title, "caption": captionVm.selectedCaption.captionDescription])
                     } label: {
                         ZStack {
                             Circle()
@@ -306,7 +330,7 @@ struct ApplyButtonView: View {
         Button {
             Haptics.shared.play(.soft)
             onApplyClick()
-            
+
         } label: {
             Text("\(isLoading ? "" : "Apply")")
                 .font(.ui.headline)

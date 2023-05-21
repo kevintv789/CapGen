@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 2/24/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 struct EnterPromptView: View {
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
@@ -39,8 +39,8 @@ struct EnterPromptView: View {
                 VStack {
                     // header
                     GenerateCaptionsHeaderView(title: "Write your prompt") {
-                        Heap.track("onClick EnterPromptView - Next button tapped", withProperties: [ "prompt": genPromptVm.promptInput ])
-                        
+                        Heap.track("onClick EnterPromptView - Next button tapped", withProperties: ["prompt": genPromptVm.promptInput])
+
                         // on click next
                         self.navStack.push(PersonalizeOptionsView())
                     }
@@ -76,15 +76,14 @@ struct EnterPromptView: View {
                 }
             }
         }
-
         // Show erase text modal
         .modalView(horizontalPadding: 50, show: $showEraseModal) {
-            SimpleDeleteModal(showView: $showEraseModal) {
+            SimpleDeleteModal(showView: $showEraseModal, title: "This will erase all of your work. \n\nAre you sure?", buttonTitle: "Yes! Erase it all") {
                 // on delete
                 genPromptVm.resetInput()
             }
         }
-        .onAppear() {
+        .onAppear {
             Heap.track("onAppear EnterPromptView")
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -100,50 +99,6 @@ struct EnterPromptView_Previews: PreviewProvider {
             .environmentObject(GenerateByPromptViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
-    }
-}
-
-struct GenerateCaptionsHeaderView: View {
-    @ScaledMetric var scaledSize: CGFloat = 1
-    let title: String
-    var isOptional: Bool? = false
-    var isNextSubmit: Bool? = false
-    let nextAction: () -> Void
-
-    var body: some View {
-        // Header
-        HStack {
-            BackArrowView()
-
-            Spacer()
-
-            VStack(alignment: .center, spacing: 5) {
-                Text(title)
-                    .foregroundColor(.ui.richBlack.opacity(0.5))
-                    .font(.ui.title4)
-                    .fixedSize(horizontal: true, vertical: false)
-
-                if isOptional ?? false {
-                    Text("Optional")
-                        .font(.ui.subheadlineLarge)
-                        .foregroundColor(.ui.richBlack.opacity(0.5))
-                }
-            }
-            .padding(.top, isOptional ?? false ? 15 : 0)
-
-            Spacer()
-
-            // next/submit button
-            Button {
-                nextAction()
-            } label: {
-                Image(isNextSubmit ?? false ? "play-button" : "next")
-                    .resizable()
-                    .frame(width: 40, height: 40)
-            }
-        }
-        .padding(.bottom, 20)
-        .padding(.horizontal)
     }
 }
 

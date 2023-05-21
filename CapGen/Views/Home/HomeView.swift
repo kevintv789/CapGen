@@ -6,18 +6,18 @@
 //
 
 import FirebaseAuth
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 struct HomeView: View {
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var firestoreManager: FirestoreManager
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @EnvironmentObject var navStack: NavigationStackCompat
-    @EnvironmentObject var folderVm: FolderViewModel
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
     @EnvironmentObject var generateByPromptVm: GenerateByPromptViewModel
+    @EnvironmentObject var photoSelectionVm: PhotoSelectionViewModel
 
     // user data
     @State var userFirstName: String?
@@ -34,6 +34,7 @@ struct HomeView: View {
     // private instances
     @State var showCaptionDeleteModal: Bool = false
     @State var showCreditsDepletedBottomSheet: Bool = false
+    @State var showPaymentView: Bool = false
 
     var body: some View {
         ZStack {
@@ -59,33 +60,54 @@ struct HomeView: View {
                             Haptics.shared.play(.soft)
                         })
                     }
+                    .padding(.horizontal)
 
                     // Greetings view
                     GreetingsHomeView(userName: self.userFirstName ?? "user")
                         .padding()
+                        .padding(.horizontal)
 
                     // Credits view
                     Button {
                         Haptics.shared.play(.soft)
-                        self.showRefillModal = true
+                        self.showPaymentView = true
                     } label: {
                         CreditsView(creditAmount: self.creditAmount ?? 0)
                     }
+                    .padding(.horizontal)
 
-                    // Generate captions button
-                    GenerateCaptionsButtonView(title: "Create captions with a prompt", imgName: "gen_captions_robot") {
-                        self.generateByPromptVm.resetAll()
-                        
-                        if let creditAmount = self.creditAmount, creditAmount < 1 {
-                            self.showCreditsDepletedBottomSheet = true
-                        } else {
-                            // Navigate to generate captions views
-                            self.navStack.push(EnterPromptView())
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            // Generate catpions via Prompt button
+                            GenerateCaptionsButtonView(title: "Create captions with a prompt", imgName: "gen_captions_robot", requiredCredits: 1) {
+                                self.generateByPromptVm.resetAll()
+
+                                if let creditAmount = self.creditAmount, creditAmount < 1 {
+                                    self.showCreditsDepletedBottomSheet = true
+                                } else {
+                                    // Navigate to generate captions views
+                                    self.navStack.push(EnterPromptView())
+                                }
+                            }
+                            .padding(.trailing)
+
+                            // Generate captions via Images button
+                            GenerateCaptionsButtonView(title: "Create captions using your images", imgName: "camera_robot", requiredCredits: 2) {
+                                self.generateByPromptVm.resetAll()
+
+                                if let creditAmount = self.creditAmount, creditAmount < 2 {
+                                    self.showCreditsDepletedBottomSheet = true
+                                } else {
+                                    // Navigate to generate captions views
+                                    self.navStack.push(ImageSelectorView())
+                                }
+                            }
                         }
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
-                    .padding()
+                    .ignoresSafeArea(.all)
                 }
-                .padding(.horizontal)
 
                 Spacer()
             }
@@ -110,7 +132,7 @@ struct HomeView: View {
             if authManager.isSignedIn ?? false {
                 firestoreManager.fetchKey()
             }
-            
+
             Heap.track("onAppear HomeView")
         }
         .onReceive(firestoreManager.$appError, perform: { value in
@@ -129,15 +151,17 @@ struct HomeView: View {
                 // Retrieves user's credit amount
                 self.creditAmount = user.credits
                 
+                // Initialize folders
+                FolderViewModel.shared.folders = user.folders
+
                 // Map Firebase User ID to Heap
                 Heap.identify(user.id)
-                Heap.addUserProperties([ "email": user.email, "name": user.fullName ])
+                Heap.addUserProperties(["email": user.email, "name": user.fullName])
             }
         }
-        // show the depleted credit amount modal
-        .sheet(isPresented: $showCreditsDepletedBottomSheet) {
-            CreditsDepletedModalView(isViewPresented: $showCreditsDepletedBottomSheet)
-                .presentationDetents([.fraction(SCREEN_HEIGHT < 700 ? 0.75 : 0.5)])
+        // show the payment view if not enough credits
+        .fullScreenCover(isPresented: $showCreditsDepletedBottomSheet) {
+            PaymentView(title: "Oops! You don't have enough credits", subtitle: "Get more to keep creating amazing captions")
         }
         // Show credits refill modal
         .modalView(horizontalPadding: 40, show: $showRefillModal) {
@@ -158,18 +182,18 @@ struct HomeView: View {
         // Show folder delete modal
         .modalView(horizontalPadding: 40, show: $showFolderDeleteModal) {
             DeleteModalView(title: "Remove folder", subTitle: "Deleting this folder will permanently erase all of its contents. Are you sure you want to proceed? 🫢", lottieFile: "crane_hand_lottie", showView: $showFolderDeleteModal, onDelete: {
-                if !folderVm.currentFolder.id.isEmpty {
+                if !FolderViewModel.shared.currentFolder.id.isEmpty {
                     let uid = AuthManager.shared.userManager.user?.id ?? nil
                     let currentFolders = authManager.userManager.user?.folders ?? []
-                    
-                    firestoreManager.onFolderDelete(for: uid, curFolder: folderVm.currentFolder, currentFolders: currentFolders) {
+
+                    firestoreManager.onFolderDelete(for: uid, curFolder: FolderViewModel.shared.currentFolder, currentFolders: currentFolders) {
                         withAnimation {
                             self.showFolderDeleteModal = false
-                            Heap.track("onClick HomeView - Successfully deleted folder", withProperties: [ "folder_to_delete": folderVm.currentFolder ])
+                            Heap.track("onClick HomeView - Successfully deleted folder", withProperties: ["folder_to_delete": FolderViewModel.shared.currentFolder])
                         }
                     }
                 }
-                
+
             })
         } onClickExit: {
             withAnimation {
@@ -179,14 +203,14 @@ struct HomeView: View {
         // Show caption delete modal
         .modalView(horizontalPadding: 40, show: $showCaptionDeleteModal) {
             DeleteModalView(title: "Delete caption", subTitle: "Are you sure you want to delete this caption? 🫢 This action cannot be undone.", lottieFile: "crane_hand_lottie", showView: $showCaptionDeleteModal, onDelete: {
-                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = folderVm.captionToBeDeleted {
+                if let user = AuthManager.shared.userManager.user, let captionToBeRemoved = FolderViewModel.shared.captionToBeDeleted {
                     let uid = user.id
                     firestoreManager.deleteSingleCaption(for: uid, captionToBeRemoved: captionToBeRemoved) {
                         withAnimation {
-                            folderVm.resetCaptionToBeDeleted()
+                            FolderViewModel.shared.resetCaptionToBeDeleted()
                             self.showCaptionDeleteModal = false
-                            
-                            Heap.track("onClick HomeView - Successfully deleted caption", withProperties: [ "caption_to_delete": captionToBeRemoved ])
+
+                            Heap.track("onClick HomeView - Successfully deleted caption", withProperties: ["caption_to_delete": captionToBeRemoved])
                         }
                     }
                 }
@@ -196,15 +220,25 @@ struct HomeView: View {
                 self.showCaptionDeleteModal = false
             }
         }
-        .onReceive(folderVm.$isDeleting) { value in
+        .onReceive(FolderViewModel.shared.$isDeleting) { value in
             // Assign published value to a State to use in the onClickExit() function from modalView
             // This is a necessary work around for modifying published state during a view update
             self.showFolderDeleteModal = value
         }
         .onChange(of: self.showFolderDeleteModal) { newValue in
             // Resets the published value back to original state when the delete modal disappears
-            folderVm.isDeleting = newValue
+            FolderViewModel.shared.isDeleting = newValue
         }
+        // show full image on click
+        .overlay(
+            FullScreenImageOverlay(isFullScreenImage: $photoSelectionVm.showImageInFullScreen, image: photoSelectionVm.fullscreenImageClicked, imageHeight: .constant(nil))
+        )
+        // show payment view
+        .fullScreenCover(isPresented: $showPaymentView) {
+            // Present the CameraViewController, binding the captured image to the capturedImage property.
+            PaymentView()
+        }
+        
     }
 }
 
@@ -242,20 +276,22 @@ struct Wave: Shape {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
             .environmentObject(GenerateByPromptViewModel())
-
+            .environmentObject(PhotoSelectionViewModel())
+        
         HomeView()
-            .environmentObject(FirestoreManager())
+            .environmentObject(FirestoreManager(folderViewModel: FolderViewModel.shared))
             .environmentObject(NavigationStackCompat())
             .environmentObject(AuthManager.shared)
             .environmentObject(FolderViewModel())
             .environmentObject(SavedCaptionHomeViewModel())
             .environmentObject(GenerateByPromptViewModel())
+            .environmentObject(PhotoSelectionViewModel())
             .previewDevice("iPhone SE (3rd generation)")
             .previewDisplayName("iPhone SE (3rd generation)")
     }
@@ -343,6 +379,7 @@ struct CreditsTextView: View {
 struct GenerateCaptionsButtonView: View {
     let title: String
     let imgName: String
+    let requiredCredits: Int
     let action: () -> Void
 
     var body: some View {
@@ -350,49 +387,50 @@ struct GenerateCaptionsButtonView: View {
             Haptics.shared.play(.soft)
             action()
         } label: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(Color.ui.middleBluePurple)
-                    .frame(width: 220, height: 220)
-                    .shadow(color: Color.ui.richBlack.opacity(0.45), radius: 4, x: 2, y: 4)
-                    .overlay(
-                        VStack(spacing: 0) {
-                            HStack {
-                                Text(title)
-                                    .font(.ui.headline)
-                                    .foregroundColor(.ui.cultured)
-                                    .multilineTextAlignment(.leading)
-
-                                Spacer()
-                                    .frame(width: 20)
-
-                                Image(systemName: "plus")
-                                    .resizable()
-                                    .frame(width: 15, height: 15)
-                                    .foregroundColor(.ui.cultured)
-                                    .background(
-                                        Circle()
-                                            .fill(Color.ui.lavenderBlue)
-                                            .frame(width: 30, height: 30)
-                                    )
-                            }
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color.ui.middleBluePurple)
+                .frame(width: 220, height: 220)
+                .shadow(color: Color.ui.richBlack.opacity(0.45), radius: 4, x: 2, y: 4)
+                .overlay(
+                    VStack(spacing: 0) {
+                        Text(title)
+                            .font(.ui.headline)
+                            .foregroundColor(.ui.cultured)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
                             .padding()
 
-                            Spacer()
-                        }
-                    )
+                        ZStack {
+                            Circle()
+                                .fill(Color.ui.lavenderBlue)
+                                .frame(width: 135, height: 135)
+                                .blur(radius: 35)
 
-                Image(imgName)
-                    .resizable()
-                    .frame(width: 170, height: 170)
-                    .background(
-                        Circle()
-                            .fill(Color.ui.lavenderBlue)
-                            .frame(width: 150, height: 150)
-                            .blur(radius: 35)
-                    )
-                    .padding(.top, 45)
-            }
+                            Image(imgName)
+                                .resizable()
+                                .frame(width: 135, height: 135)
+                        }
+                        .padding(-20)
+
+                        // Coin image
+                        if requiredCredits > 0 {
+                            VStack {
+                                Spacer()
+
+                                HStack(spacing: -10) {
+                                    Spacer()
+
+                                    ForEach(0 ..< requiredCredits, id: \.self) { _ in
+                                        Image("coin-icon")
+                                            .resizable()
+                                            .frame(width: 50, height: 45)
+                                            .padding(.bottom, 10)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                )
         }
     }
 }

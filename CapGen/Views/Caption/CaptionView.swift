@@ -5,9 +5,9 @@
 //  Created by Kevin Vu on 1/2/23.
 //
 
+import Heap
 import NavigationStack
 import SwiftUI
-import Heap
 
 func mapShareableData(caption: String, platform: String?) -> ShareableData {
     var item: String {
@@ -37,9 +37,11 @@ struct CaptionView: View {
     @EnvironmentObject var navStack: NavigationStackCompat
     @EnvironmentObject var captionVm: CaptionViewModel
     @EnvironmentObject var genPromptVm: GenerateByPromptViewModel
+    @EnvironmentObject var photosSelectionVm: PhotoSelectionViewModel
 
     // navigation
     @State var router: Router? = nil
+    var navContext: NavigationContext = .prompt
 
     // for sharing within custom menu
     @State var shareableData: ShareableData?
@@ -52,6 +54,10 @@ struct CaptionView: View {
     @State var saveError: Bool = false
     @State var showCaptionsGuideModal: Bool = false
     @State var isEditingTitle: Bool = false
+    
+    @State var isFullScreenImage: Bool = false
+    
+    @State var showImagePrefModal: Bool = false
 
     // Variables below are specifically for going through saved captions screen
     var isEditing: Bool?
@@ -77,7 +83,7 @@ struct CaptionView: View {
      */
     private func mapCaptionToBeEdited(index: Int, caption: String) {
         // Create caption model object with required elements
-        captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "")
+        captionVm.selectedCaption = CaptionModel(captionLength: genPromptVm.captionLengthType, captionDescription: caption, includeEmojis: genPromptVm.includeEmojis, includeHashtags: genPromptVm.includeHashtags, prompt: genPromptVm.promptInput, title: openAiConnector.captionGroupTitle, tones: genPromptVm.selectdTones, color: cardColorFill[index].toHex() ?? "", completePrompt: openAiConnector.prompt)
 
         // On click, store a reference to the caption that will potentially be edited
         captionVm.editedCaption = EditedCaption(index: index, text: caption)
@@ -85,8 +91,7 @@ struct CaptionView: View {
 
     var body: some View {
         ZStack(alignment: .leading) {
-            Color.ui.cultured.ignoresSafeArea()
-            Color.ui.lighterLavBlue.ignoresSafeArea().opacity(0.5)
+            Color.ui.cultured.ignoresSafeArea(.all)
 
             VStack(alignment: .leading) {
                 BackArrowView {
@@ -96,12 +101,47 @@ struct CaptionView: View {
 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 5) {
-                        EditableTitleView(isError: $saveError, isEditing: self.$isEditingTitle)
-                            .padding(.bottom, 15)
+                        HStack {
+                            if navContext == .image, let uiImage = photosSelectionVm.uiImage {
+                                ImageThumbnailView(uiImage: uiImage) {
+                                    // on thumbnail press, show full image
+                                    withAnimation {
+                                        isFullScreenImage.toggle()
+                                    }
+                                }
+                               
+                                Spacer()
+                            }
+                            
+                            
+                            EditableTitleView(isError: $saveError, isEditing: self.$isEditingTitle, context: navContext)
+                                .padding(.bottom, 15)
+                        }
 
                         VStack(alignment: .leading, spacing: 5) {
                             // Animatable instructional text
                             AnimatableInstructionView()
+                            
+                            // Preferences button
+                            if navContext == .image {
+                                Button {
+                                    showImagePrefModal.toggle()
+                                } label: {
+                                    HStack(spacing: 5) {
+                                        Text("Image Preferences")
+                                            .foregroundColor(.ui.middleBluePurple)
+                                            .font(.ui.title4)
+                                        
+                                        Image("cogwheel-purple")
+                                            .resizable()
+                                            .frame(width: 24, height: 24)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top)
+                                .padding(.leading, 5)
+                            }
+                          
 
                             Spacer()
 
@@ -116,14 +156,13 @@ struct CaptionView: View {
                                             self.captionVm.isCaptionSelected = true
                                         }
 
-                                        Heap.track("onClick CaptionView - Clicked on caption card, show Optimzation bottom sheet view", withProperties: [ "caption": caption, "index": index ])
+                                        Heap.track("onClick CaptionView - Clicked on caption card, show Optimzation bottom sheet view", withProperties: ["caption": caption, "index": index])
                                         Haptics.shared.play(.soft)
                                     }
                                 } label: {
                                     if index < Constants.TOTAL_CAPTIONS_GENERATED {
                                         CaptionCard(caption: caption, colorFilled: $cardColorFill[index], shareableData: self.$shareableData,
                                                     edit: {
-                                                    
                                                         // edit
                                                         self.mapCaptionToBeEdited(index: index, caption: caption)
 
@@ -148,13 +187,21 @@ struct CaptionView: View {
                 }
             }
         }
+        // show full image on click
+        .overlay(
+            FullScreenImageOverlay(isFullScreenImage: $isFullScreenImage, image: photosSelectionVm.uiImage, imageHeight: .constant(nil))
+        )
         .sheet(isPresented: $captionVm.isCaptionSelected) {
-            CaptionOptimizationBottomSheetView()
+            CaptionOptimizationBottomSheetView(context: navContext)
                 .presentationDetents([.large])
         }
+        .sheet(isPresented: $showImagePrefModal) {
+            ImagePreferenceModalView()
+                .presentationDetents([.fraction(0.7)])
+        }
         .onAppear {
-            Heap.track("onAppear CaptionView - Captions generated", withProperties: [ "captions": openAiConnector.captionsGroupParsed, "total_captions": openAiConnector.captionsGroupParsed.count ])
-            
+            Heap.track("onAppear CaptionView - Captions generated", withProperties: ["captions": openAiConnector.captionsGroupParsed, "total_captions": openAiConnector.captionsGroupParsed.count])
+
             // Initialize router
             self.router = Router(navStack: self.navStack)
 
@@ -173,6 +220,7 @@ struct CaptionView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(CaptionViewModel())
             .environmentObject(GenerateByPromptViewModel())
+            .environmentObject(PhotoSelectionViewModel())
 
         CaptionView()
             .previewDevice("iPhone SE (3rd generation)")
@@ -181,6 +229,7 @@ struct CaptionView_Previews: PreviewProvider {
             .environmentObject(NavigationStackCompat())
             .environmentObject(CaptionViewModel())
             .environmentObject(GenerateByPromptViewModel())
+            .environmentObject(PhotoSelectionViewModel())
     }
 }
 
@@ -188,19 +237,22 @@ struct EditableTitleView: View {
     @EnvironmentObject var openAiConnector: OpenAIConnector
     @FocusState var isFocusOn: Bool
     @Binding var isError: Bool
-
     @Binding var isEditing: Bool
+    var context: NavigationContext = .image
 
     var body: some View {
         HStack {
             if !isEditing && !isError {
-                Text("\(self.openAiConnector.captionGroupTitle)")
+                Text(openAiConnector.captionGroupTitle)
                     .font(.ui.title)
                     .foregroundColor(.ui.richBlack)
-                    .scaledToFit()
-                    .minimumScaleFactor(0.5)
-                    .frame(width: SCREEN_WIDTH * 0.8, alignment: .leading)
-                    .lineLimit(1)
+                    .frame(maxWidth: context == .prompt ? SCREEN_WIDTH * 0.8 : SCREEN_WIDTH * 0.7, alignment: .leading)
+                    .lineLimit(context == .prompt ? 1 : 2)
+                    .if(context == .prompt) { view in
+                        return view
+                            .scaledToFit()
+                            .minimumScaleFactor(0.5)
+                    }
             } else {
                 RoundedRectangle(cornerRadius: 4)
                     .strokeBorder(style: StrokeStyle(lineWidth: 1))
@@ -211,7 +263,7 @@ struct EditableTitleView: View {
                             .font(.ui.title)
                             .foregroundColor(.ui.shadowGray)
                             .minimumScaleFactor(0.5)
-                            .frame(width: SCREEN_WIDTH * 0.8, alignment: .leading)
+                            .frame(maxWidth: context == .prompt ? SCREEN_WIDTH * 0.8 : SCREEN_WIDTH * 0.7, alignment: .leading)
                             .lineLimit(1)
                             .submitLabel(.done)
                             .onSubmit {
@@ -297,20 +349,20 @@ struct CaptionCard: View {
                         .foregroundColor(.ui.richBlack)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
+
                     CustomMenuPopup(menuTheme: .dark, shareableData: $shareableData,
                                     socialMediaPlatform: .constant(nil), edit: {
-                        Heap.track("onClick CaptionView Custom Menu - Edit caption", withProperties: [ "caption": caption ])
-                        edit?()
-                    }, onMenuOpen: {
-                        onMenuOpen?()
-                    }, onCopyAndGo: {
-                        Heap.track("onClick CaptionView Custom Menu - Copy & Go action", withProperties: [ "caption": caption ])
-                        onCopyAndGo?()
-                    })
-                    .onTapGesture {}
-                    .frame(maxHeight: .infinity, alignment: .topTrailing)
-                    .padding(.trailing, -10)
+                                        Heap.track("onClick CaptionView Custom Menu - Edit caption", withProperties: ["caption": caption])
+                                        edit?()
+                                    }, onMenuOpen: {
+                                        onMenuOpen?()
+                                    }, onCopyAndGo: {
+                                        Heap.track("onClick CaptionView Custom Menu - Copy & Go action", withProperties: ["caption": caption])
+                                        onCopyAndGo?()
+                                    })
+                                    .onTapGesture {}
+                                    .frame(maxHeight: .infinity, alignment: .topTrailing)
+                                    .padding(.trailing, -10)
                 }
             }
         }

@@ -5,14 +5,14 @@
 //  Created by Kevin Vu on 2/21/23.
 //
 
-import SwiftUI
-import NavigationStack
 import Heap
+import NavigationStack
+import SwiftUI
 
 struct SavedCaptionsHomeView: View {
     @EnvironmentObject var savedCaptionHomeVm: SavedCaptionHomeViewModel
     @EnvironmentObject var navStack: NavigationStackCompat
-    
+
     @Binding var showCaptionDeleteModal: Bool
 
     var body: some View {
@@ -38,7 +38,7 @@ struct SavedCaptionsHomeView: View {
                     ImageButtonView(imgName: "magnifier") {
                         Haptics.shared.play(.soft)
                         navStack.push(SearchView())
-                        
+
                         Heap.track("onClick SavedCaptionsHomeView - Search button clicked")
                     }
 
@@ -47,7 +47,7 @@ struct SavedCaptionsHomeView: View {
                         withAnimation {
                             Haptics.shared.play(.soft)
                             savedCaptionHomeVm.isGridView.toggle()
-                            
+
                             Heap.track("onClick SavedCaptionsHomeView - show \(savedCaptionHomeVm.isGridView ? "Grid" : "List") view")
                         }
                     }
@@ -57,7 +57,7 @@ struct SavedCaptionsHomeView: View {
                         withAnimation {
                             Haptics.shared.play(.soft)
                             savedCaptionHomeVm.isViewExpanded.toggle()
-                            
+
                             Heap.track("onClick SavedCaptionsHomeView - \(savedCaptionHomeVm.isViewExpanded ? "Expand" : "Minimize") button clicked")
                         }
                     }

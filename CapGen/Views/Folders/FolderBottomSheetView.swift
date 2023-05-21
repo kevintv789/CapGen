@@ -5,13 +5,12 @@
 //  Created by Kevin Vu on 2/22/23.
 //  Used for creation and editing a folder
 
-import SwiftUI
 import Heap
+import SwiftUI
 
 struct FolderBottomSheetView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var firestoreMan: FirestoreManager
-    @EnvironmentObject var folderVm: FolderViewModel
 
     @State var title: String = "Create your folder"
 
@@ -45,19 +44,21 @@ struct FolderBottomSheetView: View {
                 // Creating a new folder
                 firestoreMan.saveFolder(for: userId, folder: newFolder) {
                     self.isLoading = false
+                    FolderViewModel.shared.folders.append(newFolder)
                     Heap.track("Successfully created folder", withProperties: ["folderId": newFolder.id, "folderName": newFolder.name, "folderType": newFolder.folderType.rawValue])
                     dismiss()
                 }
             } else {
                 // Editing a folder
                 if let curFolder = folder {
-                    let currFolders = AuthManager.shared.userManager.user?.folders ?? []
+                    var currFolders = AuthManager.shared.userManager.user?.folders ?? []
                     let updatedFolder = FolderModel(id: curFolder.id, name: folderName, dateCreated: curFolder.dateCreated, folderType: selectedPlatform, captions: curFolder.captions, index: curFolder.index)
 
-                    firestoreMan.updateFolder(for: userId, newFolder: updatedFolder, currentFolders: currFolders) { updatedFolder in
+                    firestoreMan.updateFolder(for: userId, newFolder: updatedFolder, currentFolders: &currFolders) { updatedFolder in
                         if let updatedFolder = updatedFolder {
-                            folderVm.editedFolder = updatedFolder
-                            folderVm.updatedFolder = updatedFolder
+                            FolderViewModel.shared.editedFolder = updatedFolder
+                            FolderViewModel.shared.updatedFolder = updatedFolder
+                            FolderViewModel.shared.folders = currFolders
                         }
 
                         self.isLoading = false
@@ -79,7 +80,7 @@ struct FolderBottomSheetView: View {
                             .font(.ui.largeTitleSm)
                             .foregroundColor(.ui.richBlack)
                             .padding(.bottom, 40)
-                        
+
                         // Folder name input
                         FolderNameInput(folderName: $folderName, isError: $isFolderNameError)
                             .padding(.bottom, 20)
@@ -88,10 +89,10 @@ struct FolderBottomSheetView: View {
                                     scrollProxy.scrollTo("submit-btn", anchor: .bottom)
                                 }
                             }
-                        
+
                         // Choose a platform 3x3 grid
                         PlatformGridView(selectedPlatform: $selectedPlatform)
-                        
+
                         // Submit button
                         PrimaryButtonView(title: "Create", isLoading: $isLoading) {
                             // Run API to create the specified folder
@@ -100,14 +101,14 @@ struct FolderBottomSheetView: View {
                         .id("submit-btn")
                         .frame(width: SCREEN_WIDTH * 0.8, height: 55)
                         .padding(.top)
-                        
+
                         Spacer()
                     }
                     .padding()
                 }
             }
         }
-        .onReceive(folderVm.$currentFolder) { folder in
+        .onReceive(FolderViewModel.shared.$currentFolder) { folder in
             if !folder.name.isEmpty, isEditing {
                 self.folder = folder
                 self.title = "Edit folder"

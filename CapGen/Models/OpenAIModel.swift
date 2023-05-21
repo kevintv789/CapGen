@@ -45,4 +45,3 @@ struct GeneratedCaptions: Codable, Identifiable, Hashable {
     var id: String = UUID().uuidString
     var description: String
 }
-

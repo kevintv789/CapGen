@@ -20,12 +20,16 @@ class FolderViewModel: ObservableObject {
     @Published var captionFolderStorage: [DestinationFolder] = []
     @Published var updatedFolder: FolderModel? = nil
     @Published var captionToBeDeleted: CaptionModel? = nil
-
+    @Published var folders: [FolderModel] = []
+    
+    // Singleton instance of FolderViewModel
+    static let shared = FolderViewModel()
+    
     func resetFolder() {
         currentFolder = FolderModel()
         editedFolder = FolderModel()
     }
-
+    
     func resetFolderStorage() {
         captionFolderStorage.removeAll()
     }

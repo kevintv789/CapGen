@@ -24,21 +24,33 @@ struct LaunchView: View {
             Color.ui.cultured
                 .ignoresSafeArea(.all)
 
-            VStack(spacing: 0) {
-                LottieView(name: "robot_lottie", loopMode: .loop, isAnimating: true)
-                    .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT / 2)
-
-                AnimatedTextView(initialText: $initialText, finalText: self.finalText, isRepeat: false, timeInterval: 10, typingSpeed: 0.01)
-                    .font(.ui.headline)
-                    .foregroundColor(.ui.richBlack)
-                    .frame(width: SCREEN_WIDTH * 0.9, height: 100)
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(10)
-
-                Spacer()
-
-                SSOLoginView()
-                    .ignoresSafeArea(.all)
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 0) {
+                    LottieView(name: "robot_lottie", loopMode: .loop, isAnimating: true)
+                        .frame(width: SCREEN_WIDTH, height: SCREEN_HEIGHT / 2)
+                    
+                    AnimatedTextView(initialText: $initialText, finalText: self.finalText, isRepeat: false, timeInterval: 10, typingSpeed: 0.01)
+                        .font(.ui.headline)
+                        .foregroundColor(.ui.richBlack)
+                        .frame(width: SCREEN_WIDTH * 0.9, height: 100)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(10)
+                    
+                    Spacer()
+                    
+                    SSOLoginView()
+                        .ignoresSafeArea(.all)
+                    
+                    Spacer()
+                    
+                    Text("By logging in and using this app, you agree to our [End User License Agreement](https://capgen.app/eula), [Terms of Service](https://capgen.app/terms-conditions), and [Privacy Policy](https://capgen.app/privacy-policy).")
+                        .font(.ui.headlineLightSm)
+                        .multilineTextAlignment(.center)
+                        .frame(width: SCREEN_WIDTH * 0.85)
+                        .lineSpacing(10)
+                        .padding(.vertical)
+                        .foregroundColor(.ui.richBlack)
+                }
             }
         }
     }
@@ -47,6 +59,10 @@ struct LaunchView: View {
 struct LaunchView_Previews: PreviewProvider {
     static var previews: some View {
         LaunchView()
+        
+        LaunchView()
+            .previewDevice("iPhone SE (3rd generation)")
+            .previewDisplayName("iPhone SE (3rd generation)")
     }
 }
 

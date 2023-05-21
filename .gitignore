@@ -85,4 +85,6 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+Assets.xcassets/test_pictures/*
+
 # End of https://www.toptal.com/developers/gitignore/api/swift
